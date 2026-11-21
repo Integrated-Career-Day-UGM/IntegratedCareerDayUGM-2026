@@ -9,7 +9,9 @@ export default function BoothDetail() {
   const selectedBoothId = useMapStore((s) => s.selectedBoothId);
   const selectBooth = useMapStore((s) => s.selectBooth);
   const toggleBookmark = useMapStore((s) => s.toggleBookmark);
-  const isBookmarked = useMapStore((s) => s.isBookmarked);
+  // Subscribe to the array itself: isBookmarked() reads it at call time, so
+  // without this selector the button renders once and never flips.
+  const bookmarkedIds = useMapStore((s) => s.bookmarkedIds);
   const { share, feedback: shareFeedback } = useShareBooth();
 
   // Hooks before the early return. Lookups are linear scans over the JSON
@@ -43,70 +45,78 @@ export default function BoothDetail() {
   );
 
   if (!selectedBoothId) return null;
+  const saved = bookmarkedIds.includes(selectedBoothId);
 
   return (
     <div className="space-y-4">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <div className="sidebar-section-title !mt-0">
-            {ui.boothDetail.selectedLabel}
-          </div>
-          <h2 className="font-heading text-[19px] font-extrabold leading-tight tracking-[-0.4px] text-white">
-            {company?.name ?? booth?.label}
-          </h2>
-          <div className="mt-2 flex flex-wrap items-center gap-2">
-            <span
-              className="px-2 py-0.5 text-xs font-bold text-white"
-              style={{ backgroundColor: zone?.color ?? '#27272a' }}
-            >
-              {booth?.code}
+      {/* Title block owns the FULL column width — side-by-side action
+          buttons squeezed the name into 3-line wraps. */}
+      <div>
+        <div className="sidebar-section-title !mt-0">
+          {ui.boothDetail.selectedLabel}
+        </div>
+        <h2 className="font-heading text-[22px] font-extrabold leading-[1.1] tracking-[-0.4px] text-white">
+          {company?.name ?? booth?.label}
+        </h2>
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          <span
+            className="px-2 py-0.5 text-xs font-bold text-white"
+            style={{ backgroundColor: zone?.color ?? '#27272a' }}
+          >
+            {booth?.code}
+          </span>
+          {session && (
+            <span className="flex items-center gap-1 bg-[#ff2d6f] px-2 py-0.5 text-xs font-bold text-white">
+              {new Date(session.start).toLocaleTimeString(event.locale, {
+                hour: '2-digit',
+                minute: '2-digit',
+              })}{' '}
+              WIB
             </span>
-            {session && (
-              <span className="flex items-center gap-1 bg-[#ff2d6f] px-2 py-0.5 text-xs font-bold text-white">
-                {new Date(session.start).toLocaleTimeString(event.locale, {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}{' '}
-                WIB
-              </span>
-            )}
-            {trackInfo && (
-              <span className="bg-[#575757] px-2 py-0.5 text-xs font-medium text-white">
-                {trackInfo.label}
-              </span>
-            )}
-          </div>
+          )}
+          {trackInfo && (
+            <span className="bg-[#575757] px-2 py-0.5 text-xs font-medium text-white">
+              {trackInfo.label}
+            </span>
+          )}
         </div>
-        <div className="flex gap-1">
-          <button
-            type="button"
-            onClick={() => toggleBookmark(selectedBoothId)}
-            className={`p-2 transition-[transform,colors] active:scale-95 ${
-              isBookmarked(selectedBoothId)
-                ? 'bg-[#ff2d6f]/20 text-[#ff2d6f]'
-                : 'bg-[#4a4a4a] text-[#9b9b9b] hover:bg-[#555]'
-            }`}
-            aria-label={ui.boothDetail.bookmarkLabel}
-          >
-            <Bookmark size={18} fill={isBookmarked(selectedBoothId) ? 'currentColor' : 'none'} />
-          </button>
-          <button
-            type="button"
-            onClick={() => share(selectedBoothId)}
-            className="bg-[#4a4a4a] p-2 text-[#9b9b9b] transition-[transform,colors] hover:bg-[#555] hover:text-white active:scale-95"
-            aria-label={ui.boothDetail.shareLabel}
-          >
-            <Share2 size={18} />
-          </button>
-          <button
-            type="button"
-            onClick={() => selectBooth(null)}
-            className="bg-[#4a4a4a] p-2 text-[#9b9b9b] transition-[transform,colors] hover:bg-[#555] hover:text-white active:scale-95"
-            aria-label={ui.boothDetail.closeLabel}
-          >
-            <X size={18} />
-          </button>
-        </div>
+      </div>
+
+      {/* Action row: three equal, full-width targets below the title.
+          Idle = flat surface; saved = pink tint + filled glyph. */}
+      <div className="grid grid-cols-3 gap-2">
+        <button
+          type="button"
+          onClick={() => toggleBookmark(selectedBoothId)}
+          className={`flex items-center justify-center gap-1.5 px-3 py-2.5 text-[12px] font-semibold transition-[transform,colors] active:scale-[0.98] ${
+            saved
+              ? 'bg-[#ff2d6f]/20 text-[#ff2d6f]'
+              : 'bg-[#4a4a4a] text-[#9b9b9b] hover:bg-[#555] hover:text-white'
+          }`}
+          aria-label={ui.boothDetail.bookmarkLabel}
+          aria-pressed={saved}
+        >
+          <Bookmark size={16} fill={saved ? 'currentColor' : 'none'} />
+          {ui.boothDetail.bookmarkLabel}
+        </button>
+        <button
+          type="button"
+          onClick={() => share(selectedBoothId)}
+          className="flex items-center justify-center gap-1.5 bg-[#4a4a4a] px-3 py-2.5 text-[12px] font-semibold text-[#9b9b9b] transition-[transform,colors] hover:bg-[#555] hover:text-white active:scale-[0.98]"
+          aria-label={ui.boothDetail.shareLabel}
+        >
+          <Share2 size={16} />
+          {ui.boothDetail.shareLabel}
+        </button>
+        <button
+          type="button"
+          onClick={() => selectBooth(null)}
+          className="flex items-center justify-center gap-1.5 bg-[#4a4a4a] px-3 py-2.5 text-[12px] font-semibold text-[#9b9b9b] transition-[transform,colors] hover:bg-[#555] hover:text-white active:scale-[0.98]"
+          aria-label={ui.boothDetail.closeLabel}
+        >
+          <X size={16} />
+          {ui.boothDetail.closeLabel}
+        </button>
       </div>
 
       {company?.tags.length ? (

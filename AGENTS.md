@@ -24,3 +24,80 @@ Rules for all agents working in this repo.
 
 - Every design/implementation decision must be inspired by or based on the **user's prompt** and the **Figma file**. Do not invent designs from general taste.
 - To reduce token usage: when a user refers to "the current frame" or a screen in Figma, **first list the candidate nodes** (names + node IDs) and ask which one they mean. Only fetch the full design context/screenshot for the node the user confirms.
+## Debugging and Map Island Rules (MapLibre + React + Zustand)
+
+### 1. Never pass `undefined` into library option objects
+- Optional options must be OMITTED, not set to `undefined`.
+- Use the spread pattern:
+    map.easeTo({ center, zoom, ...(cond ? { offset: [0, 188] } : {}) });
+- Applies to every MapLibre camera call (easeTo, flyTo, fitBounds, jumpTo)
+  and to any third-party API with validators.
+- Before adding a ternary to an options object, check that no branch yields
+  `undefined` or `null`.
+
+### 2. Every WebGL island needs a safety net
+- `MapLibreMap` must be wrapped in an error boundary that logs the error and
+  renders a visible fallback (never a silent blank stage).
+- Any useEffect that calls a `map.*` method must wrap its body in try/catch
+  and call console.error with a "[maplibre] <effect name>" prefix.
+- A thrown exception in an effect unmounts the island and runs
+  `map.remove()`. Treat that as the first suspect for "map went black".
+
+### 3. No silent failures
+- Keep `map.on('error')`, `webglcontextlost` and `webglcontextrestored`
+  handlers registered. Do not remove them to "clean up".
+- Thrown exceptions do NOT reach `map.on('error')`. Also add a window-level
+  `error` and `unhandledrejection` trap in dev when diagnosing.
+
+### 4. Zustand: selectors only
+- Never call `useMapStore()` without a selector.
+- Subscribe per field: `useMapStore((s) => s.field)`.
+- Per-frame or per-pointer state (hover, view) must not re-render other islands.
+- Write view state on `moveend`, never per render frame.
+
+### 5. One camera owner
+- Only one code path may move the camera for a given user action.
+- Any effect that moves the camera must check whether a higher-priority owner
+  (selected booth) is active and return early.
+- Do not add `map.stop()` as a bandaid for a race. Find and remove the
+  second owner instead.
+- Never leave persistent `padding` on the map. Use a transient `offset`.
+
+### 6. Debugging protocol (mandatory order)
+1. Reproduce the bug first (script the clicks, use the probe Chrome).
+2. Capture the actual stack trace with an error trap.
+3. Only then form a hypothesis, and state which observation it explains.
+4. Apply one fix, then re-run the same repro and report pass or fail.
+- Do not "fix" GC, timing, tiles or collision behaviour without a captured
+  trace pointing at it.
+- Use platform differences as evidence. If it works on mobile but not on
+  desktop, diff the code paths that branch on breakpoint first.
+- Vite dev sourcemap line numbers are unreliable. Identify a throw by its
+  message and call site, not by line number. Different line numbers can be
+  the same error.
+
+### 7. Verification before declaring done
+- Run typecheck.
+- Run the click repro on desktop AND mobile viewport sizes.
+- Confirm there are no uncaught errors in the console.
+- Run `__icdMapDebug()` after the interaction and confirm canvas size and
+  layer count are sane.
+- If the final verification run is interrupted, say so explicitly and list it
+  as the first pending task in the handoff notes.
+
+### 8. Handoff notes
+- End each session with: current state, what is verified, what is NOT
+  verified, and the exact next command to run.
+
+<!-- context7 -->
+Use Context7 MCP to fetch current documentation whenever the user asks about a library, framework, SDK, API, CLI tool, or cloud service — even well-known ones like React, Next.js, Prisma, Express, Tailwind, Django, or Spring Boot. This includes API syntax, configuration, version migration, porting code between libraries, platforms, or SQL dialects, library-specific debugging, setup instructions, and CLI tool usage. Use even when you think you know the answer — your training data may not reflect recent changes. Prefer this over web search for library docs.
+
+Do not use for: refactoring, debugging, or reviewing code that does not depend on a library or platform API, or general programming concepts.
+
+## Steps
+
+1. Always start with `resolve-library-id` using the library name and what to look up in the library's documentation, unless the user provides an exact library ID in `/org/project` format
+2. Pick the best match (ID format: `/org/project`) by: exact name match, description relevance, code snippet count, source reputation (High/Medium preferred), and benchmark score (higher is better). If results don't look right, try alternate names or queries (e.g., "next.js" not "nextjs", or rephrase the question). Use version-specific IDs when the user mentions a version
+3. `query-docs` with the selected library ID and what to look up in the library's documentation (not single words), scoped to a single concept. If the question spans multiple distinct concepts (e.g. routing and auth and caching), make a separate `query-docs` call per concept with the same library ID, unless the question is about how the concepts interact — combined queries dilute ranking and return shallow results for each topic
+4. Answer using the fetched docs
+<!-- context7 -->

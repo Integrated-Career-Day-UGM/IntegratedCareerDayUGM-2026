@@ -73,7 +73,9 @@ export default function HappeningNow() {
   const selectedDayId = useMapStore((s) => s.selectedDayId);
   const setSelectedArea = useMapStore((s) => s.setSelectedArea);
   const toggleBookmark = useMapStore((s) => s.toggleBookmark);
-  const isBookmarked = useMapStore((s) => s.isBookmarked);
+  // The array itself, not the isBookmarked() helper: without it the icon
+  // renders once and never flips when toggled.
+  const bookmarkedIds = useMapStore((s) => s.bookmarkedIds);
   // Tick every 30s so live status / countdown stay honest.
   const [, setTick] = useState(0);
   useEffect(() => {
@@ -121,6 +123,7 @@ export default function HappeningNow() {
   const area = getArea(event.defaultVenueId, session.areaId);
   // Save targets the company's booth in the session's area (bookmarks are booth-based).
   const booth = getBoothsByArea(session.areaId).find((b) => b.companyId === session.companyId);
+  const saved = booth ? bookmarkedIds.includes(booth.id) : false;
   const next = daySessions[idx + 1];
   const nextCompany = next ? getCompany(next.companyId) : null;
 
@@ -180,14 +183,14 @@ export default function HappeningNow() {
             <button
               type="button"
               onClick={() => toggleBookmark(booth.id)}
-              aria-label={isBookmarked(booth.id) ? ui.happeningNow.saved : ui.happeningNow.save}
-              title={isBookmarked(booth.id) ? ui.happeningNow.saved : ui.happeningNow.save}
+              aria-label={saved ? ui.happeningNow.saved : ui.happeningNow.save}
+              title={saved ? ui.happeningNow.saved : ui.happeningNow.save}
               className="flex size-[33px] items-center justify-center bg-[#414141] transition-colors hover:bg-[#4d4d4d] active:scale-[0.98]"
             >
               <Bookmark
                 size={16}
                 strokeWidth={2}
-                className={isBookmarked(booth.id) ? 'fill-current text-white' : 'fill-none text-white'}
+                className={saved ? 'fill-current text-white' : 'fill-none text-white'}
               />
             </button>
           )}

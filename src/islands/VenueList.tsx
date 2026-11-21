@@ -68,7 +68,9 @@ export default function VenueList() {
   const selectedBoothId = useMapStore((s) => s.selectedBoothId);
   const searchQuery = useMapStore((s) => s.searchQuery);
   const toggleBookmark = useMapStore((s) => s.toggleBookmark);
-  const isBookmarked = useMapStore((s) => s.isBookmarked);
+  // The array itself, not the isBookmarked() helper: without it the row
+  // icons render once and never flip when toggled.
+  const bookmarkedIds = useMapStore((s) => s.bookmarkedIds);
 
   const handleSelectBooth = (boothId: string) => {
     track('item.click', { boothId, context: searchQuery ? 'search' : 'venue-list' });
@@ -113,7 +115,7 @@ export default function VenueList() {
                   name={company?.name ?? booth.label}
                   selected={selectedBoothId === booth.id}
                   onClick={() => handleSelectBooth(booth.id)}
-                  bookmarked={isBookmarked(booth.id)}
+                  bookmarked={bookmarkedIds.includes(booth.id)}
                   onToggleBookmark={() => toggleBookmark(booth.id)}
                   bookmarkLabel={ui.boothDetail.bookmarkLabel}
                 />

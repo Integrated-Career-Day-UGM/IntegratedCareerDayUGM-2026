@@ -34,7 +34,7 @@ const BASE_STYLE_URL = 'https://tiles.openfreemap.org/styles/dark';
 /** GIK overview zoom — the entry camera on both breakpoints and the target
  *  of the track-switcher's GIK tab. Tune this one number after previewing
  *  candidates with `__icdMap.easeTo({ zoom: N })` in the console. */
-const GIK_ZOOM = 17.3;
+const GIK_ZOOM = 23.3;
 
 /** Granite colour pass over the dark basemap (id → paint overrides). */
 const GRANITE_PAINT: Array<[string, Record<string, string>]> = [
