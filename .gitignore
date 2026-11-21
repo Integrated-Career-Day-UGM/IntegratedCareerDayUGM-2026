@@ -98,3 +98,16 @@ $RECYCLE.BIN/
 /*.ttf
 /*.woff
 /*.woff2
+
+
+# Dependencies & environments
+node_modules/
+.venv/
+venv/
+__pycache__/
+
+# Build & output directories
+dist/
+build/
+.next/
+graphify-out/
