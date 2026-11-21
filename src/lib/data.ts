@@ -56,20 +56,35 @@ export function getZone(zoneId: string): Zone | undefined {
  */
 let cachedTodayDayId: string | null | undefined;
 
-export function getTodayDayId(): string | null {
-  if (cachedTodayDayId !== undefined) return cachedTodayDayId;
-  cachedTodayDayId = null;
+/**
+ * "Today" in the event's timezone as an ISO date (YYYY-MM-DD), resolved lazily
+ * ONCE per page load and cached at module scope — never recalculated on
+ * re-render or affected by later state changes.
+ */
+let cachedTodayIso: string | undefined;
+
+export function getTodayIso(): string | null {
+  if (cachedTodayIso !== undefined) return cachedTodayIso;
+  cachedTodayIso = null;
   try {
-    const todayIso = new Intl.DateTimeFormat('en-CA', {
+    cachedTodayIso = new Intl.DateTimeFormat('en-CA', {
       timeZone: event.timezone,
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
     }).format(new Date());
-    cachedTodayDayId = event.days.find((d) => d.date === todayIso)?.id ?? null;
   } catch {
-    cachedTodayDayId = null;
+    cachedTodayIso = null;
   }
+  return cachedTodayIso;
+}
+
+export function getTodayDayId(): string | null {
+  if (cachedTodayDayId !== undefined) return cachedTodayDayId;
+  const todayIso = getTodayIso();
+  cachedTodayDayId = todayIso
+    ? (event.days.find((d) => d.date === todayIso)?.id ?? null)
+    : null;
   return cachedTodayDayId;
 }
 

@@ -1,10 +1,17 @@
 import { useState, useRef, useEffect } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Store, Handshake, MessagesSquare, Route } from 'lucide-react';
 import { useMapStore } from '../stores/mapStore';
 import { event, getVenue, getSessionsByArea, getCompany } from '../lib/data';
 
+// One icon per track, keyed by track id from event.json.
+const trackIcons: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
+  'career-expo': Store,
+  'walk-in-interview': Handshake,
+  'career-counseling': MessagesSquare,
+};
+
 export default function TrackSwitcher() {
-  const { selectedVenueId, selectedAreaId, setSelectedArea } = useMapStore();
+  const { selectedVenueId, selectedAreaId, setSelectedArea, gikMode, setGikMode } = useMapStore();
   const [openTrackId, setOpenTrackId] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const venue = getVenue(selectedVenueId);
@@ -20,12 +27,16 @@ export default function TrackSwitcher() {
   }, []);
 
   return (
-    <div ref={containerRef} className="flex flex-nowrap items-start gap-1.5">
+    <div
+      ref={containerRef}
+      className="flex w-[250px] max-w-full flex-nowrap items-center gap-0.5 overflow-x-auto rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] p-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:w-auto"
+    >
       {event.tracks.map((track, index) => {
         const areas = venue?.areas.filter((a) => a.trackId === track.id) ?? [];
         const activeArea = areas.find((a) => a.id === selectedAreaId);
-        const active = !!activeArea || (index === 0 && !selectedAreaId);
+        const active = !gikMode && (!!activeArea || (index === 0 && !selectedAreaId));
         const isOpen = openTrackId === track.id;
+        const TrackIcon = trackIcons[track.id];
 
         if (areas.length === 0) return null;
 
@@ -33,8 +44,10 @@ export default function TrackSwitcher() {
           <div key={track.id} className="relative shrink-0">
             <button
               type="button"
+              aria-label={track.label}
               onClick={(e) => {
                 e.stopPropagation();
+                setGikMode(false);
                 if (areas.length === 1) {
                   setSelectedArea(areas[0].id);
                   setOpenTrackId(null);
@@ -42,24 +55,27 @@ export default function TrackSwitcher() {
                   setOpenTrackId(isOpen ? null : track.id);
                 }
               }}
-              className={`relative inline-flex h-9 items-center gap-1.5 px-3 text-[19px] font-semibold tracking-[-0.3px] shadow-sm transition-colors ${
+              className={`flex shrink-0 items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[12px] font-semibold transition-colors sm:px-3 sm:text-[13px] ${
                 active
-                  ? 'bg-[#3a3a3a] text-white'
-                  : 'bg-[#161616] text-white hover:bg-[#222]'
+                  ? 'bg-[#1c1c1c] text-white shadow-[inset_0_-2px_0_#ff2d6f]'
+                  : 'text-[#8f8f8f] hover:bg-[#161616] hover:text-white'
               }`}
             >
-              {track.label}
+              {TrackIcon && <TrackIcon size={13} className="shrink-0" />}
+              {/* Mobile: inactive tracks collapse to their icon; tapping
+                  selects (expands) them. Desktop always shows labels. */}
+              <span className={active ? '' : 'hidden sm:inline'}>{track.label}</span>
               {areas.length > 1 && (
                 <ChevronDown
-                  size={14}
+                  size={13}
                   className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
                 />
               )}
             </button>
 
-            {/* Dropdown */}
+            {/* Dropdown — prototype .menu styling */}
             {areas.length > 1 && isOpen && (
-              <div className="track-dropdown absolute left-0 top-full z-50 mt-1.5 w-56 origin-top-left overflow-hidden bg-[#8e8e8e] shadow-xl">
+              <div className="track-dropdown absolute left-[-1px] top-full z-50 mt-[7px] w-[236px] rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]">
                 {areas.map((a) => {
                   const sessions = getSessionsByArea(a.id);
                   const firstSession = sessions[0];
@@ -74,21 +90,20 @@ export default function TrackSwitcher() {
                         setSelectedArea(a.id);
                         setOpenTrackId(null);
                       }}
-                      className={`flex w-full items-start gap-2 py-1.5 pl-11 pr-3 text-left transition-colors ${
-                        isActive
-                          ? 'bg-[#ff2d6f] text-white'
-                          : 'text-white hover:bg-[#7a7a7a]'
+                      className={`block w-full px-3 py-2 text-left transition-colors ${
+                        isActive ? 'bg-[#ff2d6f] text-white' : 'text-[#ededed] hover:bg-[#161616]'
                       }`}
                     >
-                      <span className="absolute left-3 top-1 text-[28px] font-normal leading-none">↳</span>
-                      <div>
-                        <div className="text-base font-semibold leading-tight">{a.name}</div>
-                        {company && (
-                          <div className={`text-[10px] font-semibold opacity-80 ${isActive ? 'text-white' : 'text-white'}`}>
-                            {company.name}
-                          </div>
-                        )}
-                      </div>
+                      <div className="text-[13px] font-semibold leading-tight">{a.name}</div>
+                      {company && (
+                        <small
+                          className={`block text-[11px] font-normal ${
+                            isActive ? 'text-white/80' : 'text-[#8f8f8f]'
+                          }`}
+                        >
+                          {company.name}
+                        </small>
+                      )}
                     </button>
                   );
                 })}
@@ -97,6 +112,28 @@ export default function TrackSwitcher() {
           </div>
         );
       })}
+
+      {/* GIK — event overview / (later) geojson pathfinding to parking.
+          A sibling tab of the tracks: activating it zooms out to the whole
+          event location; picking any track returns to the hall fit. */}
+      <button
+        type="button"
+        aria-label="GIK"
+        onClick={(e) => {
+          e.stopPropagation();
+          setGikMode(true);
+          setOpenTrackId(null);
+        }}
+        className={`flex shrink-0 items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[12px] font-semibold transition-colors sm:px-3 sm:text-[13px] ${
+          gikMode
+            ? 'bg-[#1c1c1c] text-white shadow-[inset_0_-2px_0_#ff2d6f]'
+            : 'text-[#8f8f8f] hover:bg-[#161616] hover:text-white'
+        }`}
+      >
+        <Route size={13} className="shrink-0" />
+        {/* Mobile: icon-only unless selected, like the track tabs */}
+        <span className={gikMode ? '' : 'hidden sm:inline'}>GIK</span>
+      </button>
     </div>
   );
 }

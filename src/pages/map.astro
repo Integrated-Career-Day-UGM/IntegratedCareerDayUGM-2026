@@ -3,12 +3,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import MapSidebar from '../islands/MapSidebar';
 import MapLibreMap from '../islands/MapLibreMap';
 import TrackSwitcher from '../islands/TrackSwitcher';
+import QuickFind from '../islands/QuickFind';
+import SearchBar from '../islands/SearchBar';
 import MobileBottomSheet from '../islands/MobileBottomSheet';
 import '../styles/base/global.css';
 ---
 
 <BaseLayout title="Peta Lokasi - Integrated Career Day 2026">
-  <main class="fixed inset-0 flex overflow-hidden bg-[#09090b]">
+  <main class="app-viewport fixed inset-x-0 top-0 flex overflow-hidden bg-[#09090b]">
     {/* Desktop sidebar */}
     <aside class="hidden h-full w-[390px] shrink-0 border-r-2 border-black/40 sm:flex">
       <MapSidebar client:only="react" />
@@ -16,10 +18,32 @@ import '../styles/base/global.css';
 
     {/* Map area */}
     <section class="relative flex h-full min-w-0 flex-1 flex-col">
-      {/* Top track switcher */}
-      <div class="pointer-events-none absolute left-0 right-0 top-0 z-10 p-3 sm:left-4 sm:right-auto">
-        <div class="pointer-events-auto inline-flex max-w-full bg-black p-1.5">
+      {/* Top chrome. Mobile: search bar on top, track switcher under it,
+          quick find just under the switcher (reference layout). Desktop:
+          track switcher only (search lives in the sidebar). */}
+      <div class="pointer-events-none absolute inset-x-0 top-0 z-10 flex flex-col gap-2 p-3 sm:block sm:p-4">
+        {/* Mobile search — top mode */}
+        <div class="pointer-events-auto sm:hidden">
+          <SearchBar client:only="react" />
+        </div>
+
+        {/* Track switcher (island owns its bar chrome) */}
+        <div class="pointer-events-auto inline-flex max-w-full">
           <TrackSwitcher client:only="react" />
+        </div>
+
+        {/* Quick find — mobile only, directly under the track switcher.
+            Frameless: chips wrap and hug the left edge so they don't clutter
+            the strip. */}
+        <div class="pointer-events-auto sm:hidden">
+          <QuickFind client:only="react" />
+        </div>
+      </div>
+
+      {/* Floating quick-find bar (bottom-left, desktop) */}
+      <div class="pointer-events-none absolute bottom-3 left-3 z-10 hidden sm:block">
+        <div class="pointer-events-auto">
+          <QuickFind client:only="react" />
         </div>
       </div>
 

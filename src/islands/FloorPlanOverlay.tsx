@@ -50,7 +50,7 @@ const FloorPlanOverlay = forwardRef<HTMLDivElement>(function FloorPlanOverlay(_,
               <img
                 alt=""
                 src="/maps/assets/hall-outline.svg"
-                className="block size-full max-w-none"
+                className="block size-full max-w-none opacity-70"
                 draggable={false}
               />
             </div>

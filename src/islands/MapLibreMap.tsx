@@ -1,13 +1,11 @@
-import { useLayoutEffect, useEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useEffect, useRef, useState, useCallback } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useMapStore } from '../stores/mapStore';
-import CompassButton from '../components/map/CompassButton';
-import ZoomButtons from '../components/map/ZoomButtons';
-import FullscreenButton from '../components/map/FullscreenButton';
-import MapTooltip from '../components/map/MapTooltip';
 import FloorPlanOverlay from './FloorPlanOverlay';
-import SelectionFrame from '../components/ui/SelectionFrame';
+import ZoomButtons from '../components/map/ZoomButtons';
+import MapTooltip from '../components/map/MapTooltip';
+import CompassButton from '../components/map/CompassButton';
 import { ui, getVenue, getTrack } from '../lib/data';
 import {
   BOOTH_LNGLATS,
@@ -70,7 +68,6 @@ function boothAtFramePoint(p: Point2D): string | null {
 }
 
 export default function MapLibreMap() {
-  const stageRef = useRef<HTMLDivElement>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const overlayRootRef = useRef<HTMLDivElement>(null);
   /** Current frame→screen homography (updated every rendered frame). */
@@ -81,9 +78,45 @@ export default function MapLibreMap() {
   const lastTipTransformRef = useRef<string>('');
   const positionTooltipRef = useRef<() => void>(() => {});
   const [mapLoaded, setMapLoaded] = useState(false);
-  const { setMapView, selectedBoothId, hoveredBoothId, selectedVenueId, selectedTrackId } =
-    useMapStore();
+  const {
+    setMapView,
+    selectedBoothId,
+    hoveredBoothId,
+    selectedVenueId,
+    selectedAreaId,
+    selectedTrackId,
+    gikMode,
+  } = useMapStore();
   const activeBoothId = hoveredBoothId ?? selectedBoothId;
+
+  /** Re-fit the hall into view. Mobile keeps the top chrome and the tray
+      clear via asymmetric padding; desktop uses an even margin. */
+  const fitHall = useCallback((duration = 600) => {
+    const map = mapRef.current;
+    if (!map) return;
+    // Camera moves that used `padding` leave it PERSISTENTLY set on the map
+    // (verified: easeTo padding sticks), and a later fitBounds then computes
+    // negative free space and silently aborts — the "disappearing map" bug.
+    // Reset it before fitting.
+    map.setPadding({ top: 0, bottom: 0, left: 0, right: 0 });
+    const isMobile = window.matchMedia('(max-width: 640px)').matches;
+    const box = map.getContainer();
+    // Belt-and-braces: fit padding must stay well under half the canvas or
+    // MapLibre aborts the fit ("Map cannot fit within canvas").
+    const clamp = (want: number, size: number) => Math.min(want, Math.max(24, Math.floor(size / 2) - 24));
+    map.fitBounds(HALL_BOUNDS as maplibregl.LngLatBoundsLike, {
+      padding: isMobile
+        ? {
+            top: clamp(158, box.clientHeight),
+            bottom: clamp(210, box.clientHeight),
+            left: clamp(24, box.clientWidth),
+            right: clamp(24, box.clientWidth),
+          }
+        : 96,
+      maxZoom: 20.6,
+      duration,
+    });
+  }, []);
 
   // Current venue / tab card (top-right, SelectionFrame styling).
   const venue = getVenue(selectedVenueId);
@@ -110,8 +143,10 @@ export default function MapLibreMap() {
       container,
       style: BASE_STYLE_URL,
       center: HALL_CENTER,
-      zoom: 17,
-      minZoom: 15,
+      // Entry state (both breakpoints): zoomed-out event overview — the GIK
+      // tab's default. Picking a track tab fits the hall instead.
+      zoom: 16.3,
+      minZoom: 14.5,
       maxZoom: 21.5,
       bearing: 0,
       pitch: 0,
@@ -165,28 +200,10 @@ export default function MapLibreMap() {
       root.style.transform = css;
     };
 
-    // Initial fit only once the container actually has layout — MapLibre's
-    // stylesheet can override our positioning classes, so we never trust a
-    // zero-height measurement.
-    let fitted = false;
-    const fitToHall = () => {
-      if (fitted || container.clientHeight < 100) return;
-      fitted = true;
-      const isMobile = window.matchMedia('(max-width: 640px)').matches;
-      map.fitBounds(HALL_BOUNDS as maplibregl.LngLatBoundsLike, {
-        padding: isMobile
-          ? { top: 64, bottom: 248, left: 24, right: 24 }
-          : 96,
-        maxZoom: 20.6,
-        duration: 0,
-      });
-    };
-
-    // Keep the canvas glued to the container's real box and re-attempt the
-    // initial fit whenever the layout settles.
+    // Entry state is the zoomed-out overview (no initial hall fit). The
+    // observer only keeps the canvas glued to the container's real box.
     const resizeObserver = new ResizeObserver(() => {
       map.resize();
-      fitToHall();
     });
     resizeObserver.observe(container);
 
@@ -210,7 +227,6 @@ export default function MapLibreMap() {
         paint: { 'fill-color': '#ff316b', 'fill-opacity': 0.08 },
       });
 
-      fitToHall();
       syncOverlay();
       setMapLoaded(true);
     });
@@ -265,27 +281,74 @@ export default function MapLibreMap() {
       map.remove();
       mapRef.current = null;
     };
-  }, [setMapView]);
+  }, [setMapView, fitHall]);
 
-  /* ---------------------------------------------------------------- */
-  /* Fly to the selected booth (from the sidebar, URL, or the map)      */
-  /* ---------------------------------------------------------------- */
-
+  /* Fly to the selected booth (from the sidebar, the tray, the URL, or the
+     map). On mobile with the detail card open, use a transient `offset` —
+     NOT `padding`: easeTo padding sticks to the map and every later
+     fitBounds then aborts with "Map cannot fit within canvas" (the
+     disappearing-map bug). Offset shifts only this camera move. */
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !mapLoaded || !selectedBoothId) return;
     const target = BOOTH_LNGLATS[selectedBoothId];
     if (!target) return;
+    const isMobile = window.matchMedia('(max-width: 640px)').matches;
+    const detailOpen = useMapStore.getState().sidebarMode === 'detail';
     map.easeTo({
       center: target,
       zoom: Math.max(map.getZoom(), 19.4),
       duration: 650,
+      offset:
+        isMobile && detailOpen
+          ? [0, Math.min(188, Math.floor(map.getContainer().clientHeight * 0.3))]
+          : undefined,
     });
   }, [selectedBoothId, mapLoaded]);
 
+  /* Zoom to the hall whenever the venue state changes — track switcher,
+     area dropdown, hall card tap — no matter where it came from. The first
+     run after load is skipped (fitToHall already handles the initial fit). */
+  const lastAreaKeyRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!mapLoaded) {
+      lastAreaKeyRef.current = null;
+      return;
+    }
+    const key = `${selectedVenueId}|${selectedAreaId}|${selectedTrackId}`;
+    if (lastAreaKeyRef.current === null || lastAreaKeyRef.current === key) {
+      lastAreaKeyRef.current = key;
+      return;
+    }
+    lastAreaKeyRef.current = key;
+    fitHall();
+  }, [selectedVenueId, selectedAreaId, selectedTrackId, mapLoaded, fitHall]);
+
+  /* GIK camera mode: the overview (zoomed-out event location) is the ENTRY
+     state of the map on both breakpoints; picking any track tab returns to
+     the hall fit. GIK is owned by the track switcher via the store. Only
+     real transitions act — never on mount (the init camera already starts
+     in the overview). */
+  const prevGikRef = useRef<boolean | null>(null);
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapLoaded) {
+      prevGikRef.current = null;
+      return;
+    }
+    const prev = prevGikRef.current;
+    prevGikRef.current = gikMode;
+    if (prev === null || prev === gikMode) return;
+    if (gikMode) {
+      map.setPadding({ top: 0, bottom: 0, left: 0, right: 0 });
+      map.easeTo({ center: HALL_CENTER, zoom: 16.3, duration: 700 });
+    } else {
+      fitHall();
+    }
+  }, [gikMode, mapLoaded, fitHall]);
+
   return (
     <div
-      ref={stageRef}
       className="map-stage relative h-full w-full overflow-hidden bg-[#09090b]"
       style={{ contain: 'size layout' }}
     >
@@ -301,8 +364,10 @@ export default function MapLibreMap() {
         <FloorPlanOverlay ref={overlayRootRef} />
       </div>
 
-      {/* Zoom + Compass controls */}
-      <div className="absolute bottom-6 left-6 z-10 flex flex-col gap-2">
+      {/* Zoom + Compass controls — right rail, vertically centered (the
+          default spot, both breakpoints; keeps top clear for the chrome
+          stack and the hall card, bottom clear for the sheet). */}
+      <div className="absolute right-3 top-1/2 z-10 flex -translate-y-1/2 flex-col gap-2">
         <ZoomButtons
           onZoomIn={() => mapRef.current?.zoomIn({ duration: 200 })}
           onZoomOut={() => mapRef.current?.zoomOut({ duration: 200 })}
@@ -315,31 +380,26 @@ export default function MapLibreMap() {
         />
       </div>
 
-      {/* Current venue / tab card — top-right, Figma selection-frame styling */}
-      <div className="absolute top-6 right-3 z-10">
-        <SelectionFrame>
-          <div className="flex items-center gap-3 bg-[rgba(18,18,21,0.92)] px-4 py-3 text-white shadow-lg backdrop-blur-sm">
-            <img
-              src="/images/arrow-ne.svg"
-              alt=""
-              className="h-5 w-5 shrink-0"
-              draggable={false}
-            />
-            <div>
-              <div className="text-base leading-tight font-semibold">{areaName}</div>
-              <div className="text-xs text-zinc-400">{trackLabel}</div>
-            </div>
+      {/* Current venue / tab card. Desktop: sits directly above the
+          quick-find bar. Mobile: hovers just above the tray's default
+          (peek) position. Tappable: re-fits the hall into view. */}
+      <div className="absolute inset-x-3 bottom-[172px] z-10 flex justify-end sm:inset-x-auto sm:bottom-[56px] sm:left-3 sm:justify-start">
+        <button
+          type="button"
+          onClick={() => fitHall()}
+          className="flex cursor-pointer items-center gap-2 rounded-lg border border-[#34343a] bg-[rgba(18,18,21,0.92)] px-3 py-2 text-left text-white shadow-lg backdrop-blur-sm transition-colors hover:border-[#4a4a52] hover:bg-[rgba(28,28,32,0.95)] active:scale-[0.98]"
+        >
+          <img
+            src="/images/arrow-ne.svg"
+            alt=""
+            className="h-4 w-4 shrink-0"
+            draggable={false}
+          />
+          <div>
+            <div className="text-sm leading-tight font-semibold">{areaName}</div>
+            <div className="text-[11px] text-zinc-400">{trackLabel}</div>
           </div>
-        </SelectionFrame>
-      </div>
-
-      {/* Fullscreen — the whole stage (tiles + overlay + controls) */}
-      <div className="absolute top-[108px] right-3 z-10">
-        <FullscreenButton
-          targetRef={stageRef}
-          enterLabel={ui.map.fullscreenEnterLabel}
-          exitLabel={ui.map.fullscreenExitLabel}
-        />
+        </button>
       </div>
 
       {/* Screen-space booth tooltip (upright — outside the plan warp).

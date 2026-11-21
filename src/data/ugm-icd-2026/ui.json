@@ -17,6 +17,7 @@
     "search": "Search",
     "saved": "saved",
     "stats": "Stats",
+    "gik": "GIK",
     "info": "Info",
     "help": "Help"
   },
@@ -37,7 +38,15 @@
   "happeningNow": {
     "badge": "Now",
     "sessionSuffix": "Session",
-    "title": "Happening Now"
+    "title": "Happening Now",
+    "liveLabel": "Live session",
+    "nextLabel": "Next",
+    "endedLabel": "Ended",
+    "showOnMap": "Show on map",
+    "save": "Save",
+    "saved": "Saved",
+    "upNext": "Up next",
+    "noMoreSessions": "No more sessions today"
   },
   "boothDetail": {
     "selectedLabel": "Selected company / event / venue",
@@ -112,8 +121,6 @@
     "hallSublabel": "Career Expo",
     "compassLabel": "Reset bearing to north",
     "zoomInLabel": "Zoom in",
-    "zoomOutLabel": "Zoom out",
-    "fullscreenEnterLabel": "Enter fullscreen",
-    "fullscreenExitLabel": "Exit fullscreen"
+    "zoomOutLabel": "Zoom out"
   }
 }

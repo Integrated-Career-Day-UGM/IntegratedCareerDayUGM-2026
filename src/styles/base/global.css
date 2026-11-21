@@ -22,7 +22,7 @@
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
-  --font-heading: 'Archivo', 'Priego', system-ui, sans-serif;
+  --font-heading: 'Priego', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
@@ -68,6 +68,16 @@ button {
   }
 }
 
+/* Live-session blinking indicator (steps for the Persona 5 tick) */
+.blink-dot {
+  animation: blink-steps 1.4s steps(2, jump-none) infinite;
+}
+@keyframes blink-steps {
+  50% {
+    opacity: 0.2;
+  }
+}
+
 /* Map tooltip animation */
 .map-tooltip {
   opacity: 1;
@@ -110,10 +120,12 @@ button {
   }
 }
 
-/* Fullscreen stage: tiles + floor-plan overlay + controls travel together */
-.map-stage:fullscreen {
-  width: 100%;
-  height: 100%;
+/* Mobile browsers: `fixed inset-0` sizes to the LARGE layout viewport, so
+   bottom chrome (sheet + tab bar) ends up behind the URL bar. dvh tracks
+   the visible viewport instead. */
+.app-viewport {
+  height: 100vh;
+  height: 100dvh;
 }
 
 /* Pulsing highlight for the hovered/selected floor-plan booth. The zone
@@ -163,11 +175,11 @@ button {
   margin: 8px 0;
 }
 
-/* Rotated "Jelajahi Denah" ribbon */
+/* Rotated "Jelajahi Denah" ribbon — Priego Bold per the Figma header */
 .tag-ribbon {
   font-family: var(--font-heading);
   font-size: 23px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.5px;
   color: #fff;
   background: #ff2d6f;

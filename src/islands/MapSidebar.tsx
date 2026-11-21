@@ -6,12 +6,11 @@ import {
   Info,
   CircleHelp,
 } from 'lucide-react';
-import { Fragment, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useMapStore } from '../stores/mapStore';
 import { useBoothFromUrl } from '../hooks/useBoothFromUrl';
 import { trackPageView } from '../lib/analytics';
 import SearchBar from './SearchBar';
-import QuickFind from './QuickFind';
 import HappeningNow from './HappeningNow';
 import VenueList from './VenueList';
 import BoothDetail from './BoothDetail';
@@ -19,7 +18,7 @@ import BookmarkList from './BookmarkList';
 import Insights from './Insights';
 import EventInfo from './EventInfo';
 import SelectionFrame from '../components/ui/SelectionFrame';
-import { event, getTodayDayId, ui } from '../lib/data';
+import { event, getTodayDayId, getTodayIso, ui } from '../lib/data';
 
 const mainNavItems: { id: 'home' | 'search' | 'saved' | 'stats'; icon: typeof Home }[] = [
   { id: 'home', icon: Home },
@@ -27,6 +26,10 @@ const mainNavItems: { id: 'home' | 'search' | 'saved' | 'stats'; icon: typeof Ho
   { id: 'saved', icon: Bookmark },
   { id: 'stats', icon: BarChart3 },
 ];
+
+// "Integrated Career Days" → two stacked lines in the header lockup.
+const [lockupLine1, ...lockupRest] = ui.event.titleLine2.split(' ');
+const lockupLine2 = lockupRest.join(' ');
 
 export default function MapSidebar() {
   const { selectedDayId, setSelectedDay, sidebarMode, sidebarTab, setSidebarTab } = useMapStore();
@@ -38,6 +41,30 @@ export default function MapSidebar() {
 
   // Resolved once per page load, client-side, then cached — stable forever after.
   const todayDayId = getTodayDayId();
+  const todayIso = getTodayIso();
+
+  // Days remaining until each event day (negative once a day has passed).
+  const countdownByDayId: Record<string, number> = {};
+  if (todayIso) {
+    for (const day of event.days) {
+      countdownByDayId[day.id] = Math.round(
+        (Date.parse(`${day.date}T00:00:00Z`) - Date.parse(`${todayIso}T00:00:00Z`)) /
+          86_400_000,
+      );
+    }
+  }
+  // First event day that hasn't passed yet — gets the T-X countdown chip.
+  const upcomingDayId = todayIso
+    ? (event.days.find((d) => d.date >= todayIso)?.id ?? null)
+    : null;
+
+  // Header chip: "Today" during the event, otherwise a T-X countdown to the
+  // next upcoming day; empty slot once the event is over.
+  const chip = todayDayId
+    ? ui.event.todayBadge
+    : upcomingDayId && countdownByDayId[upcomingDayId] > 0
+      ? `T-${countdownByDayId[upcomingDayId]}`
+      : null;
 
   const renderMainContent = () => {
     if (sidebarTab === 'saved') return <BookmarkList />;
@@ -45,12 +72,7 @@ export default function MapSidebar() {
     if (sidebarTab === 'info') return <EventInfo />;
 
     if (sidebarMode === 'detail') return <BoothDetail />;
-    return (
-      <div className="space-y-3">
-        <div className="sidebar-section-title">{ui.venueList.title}</div>
-        <VenueList />
-      </div>
-    );
+    return <VenueList />;
   };
 
   return (
@@ -99,51 +121,66 @@ export default function MapSidebar() {
 
       {/* Main sidebar content */}
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden bg-[#1d1d1d]">
-        {/* Header */}
-        <div className="relative h-[150px] shrink-0 px-3.5 pt-8">
+        {/* Header — lockup and day picker are independently positioned
+            (prototype/Figma geometry) so neither can squeeze the other */}
+        <div className="relative h-[150px] shrink-0">
           {/* Rotated badge */}
           <div className="tag-ribbon absolute left-3.5 top-9 z-10">
             {ui.event.exploreBadge}
           </div>
 
-          {/* Lockup + day picker share one flex row so they can never overlap */}
-          <div className="flex items-start justify-between gap-2 pt-9">
-            {/* UGM lockup + selection box (top title) */}
-            <div className="mt-1 min-w-0 pl-1">
-              <SelectionFrame>
-                <div className="px-0.5 py-0.5">
-                  <img
-                    src="/images/ugm-lockup.svg"
-                    alt="UGM Integrated Career Days"
-                    className="h-[52px] w-auto"
-                    draggable={false}
-                  />
-                </div>
-              </SelectionFrame>
-            </div>
+          {/* UGM lockup + selection box (Figma 1742:24528); the frame
+              extends past the text on the right and below, per design */}
+          <div className="absolute left-4 top-[84px]">
+            <SelectionFrame frameClassName="-left-[4px] -top-[5px] -right-[22px] -bottom-[7px]">
+              <div
+                className="flex items-center gap-[2px]"
+                aria-label={ui.event.titleLine1 + ' ' + ui.event.titleLine2}
+              >
+                <span className="font-heading shrink-0 text-[44px] font-bold leading-[0.8] tracking-[-2px] text-white">
+                  {ui.event.titleLine1}
+                </span>
+                <span className="font-heading shrink-0 whitespace-nowrap text-[18px] font-bold leading-[0.95] tracking-[-0.5px] text-white">
+                  {lockupLine1}
+                  <br />
+                  {lockupLine2}
+                </span>
+              </div>
+            </SelectionFrame>
+          </div>
 
-            {/* Day picker */}
-            <div className="flex w-[64px] shrink-0 flex-col items-center pt-1">
-              {event.days.map((day) => (
-                <Fragment key={day.id}>
+          {/* Day picker — 2×2 staircase of fixed 1:1 boxes: 28 top-left,
+              29 bottom-right. Every box is a constant-size square (pink fills
+              it when selected), so switching days never changes the layout. */}
+          <div className="absolute right-3.5 top-[66px]">
+            <div className="grid grid-cols-2">
+              {event.days.map((day, i) => (
+                <div
+                  key={day.id}
+                  className={i === 0 ? 'col-start-1 row-start-1' : 'col-start-2 row-start-2'}
+                >
                   <button
                     type="button"
                     onClick={() => setSelectedDay(day.id)}
-                    className={`font-heading text-[21px] font-extrabold leading-[1.1] transition-all ${
+                    className={`flex size-[26px] items-center justify-center text-center font-heading text-[17px] font-bold leading-none transition-all ${
                       selectedDayId === day.id
-                        ? 'bg-[#ff2d6f] px-2.5 text-white'
-                        : 'ml-3 text-[#9b9b9b] hover:text-white'
+                        ? 'bg-[#ff2d6f] text-white'
+                        : 'text-[#9b9b9b] hover:text-white'
                     }`}
                   >
                     {day.label}
                   </button>
-                  {day.id === todayDayId && (
-                    <span className="mt-0.5 bg-white px-2 py-0.5 font-heading text-[12px] font-semibold text-black">
-                      {ui.event.todayBadge}
-                    </span>
-                  )}
-                </Fragment>
+                </div>
               ))}
+            </div>
+            {/* Chip lives in its own container below the grid; fixed size so
+                the label ("Today" ↔ "T-X") never shifts anything */}
+            <div
+              className={`mt-0.5 bg-white py-[1px] text-center font-heading text-[10px] font-semibold leading-[1.3] text-black ${
+                chip ? '' : 'invisible'
+              }`}
+            >
+              {chip === ui.event.todayBadge ? chip : chip && `${chip} Days`}
             </div>
           </div>
         </div>
@@ -153,12 +190,9 @@ export default function MapSidebar() {
           <SearchBar />
         </div>
 
-        {/* Quick find + now */}
+        {/* Live session card (full width) */}
         {sidebarTab === 'home' && sidebarMode !== 'detail' && (
-          <div className="flex gap-0 border-t-2 border-black/40 px-3.5 py-3">
-            <div className="flex-1 pr-2">
-              <QuickFind />
-            </div>
+          <div className="px-3.5 pb-4 pt-3">
             <HappeningNow />
           </div>
         )}

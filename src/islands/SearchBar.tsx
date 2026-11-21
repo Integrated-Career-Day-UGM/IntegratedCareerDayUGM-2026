@@ -18,7 +18,7 @@ export default function SearchBar() {
   );
 
   return (
-    <div className="relative h-[42px] border-[3px] border-[#6a6a6a] bg-[#444]">
+    <div className="relative h-[42px] rounded-2xl border-[3px] border-[#6a6a6a]/80 bg-[#444]/80 sm:rounded-none sm:border-[#6a6a6a] sm:bg-[#444]">
       <div className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 text-[#bbb]">
         <Search size={20} strokeWidth={1.8} />
       </div>

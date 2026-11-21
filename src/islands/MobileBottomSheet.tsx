@@ -1,8 +1,6 @@
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import { Home, Search, Bookmark, BarChart3, Info } from 'lucide-react';
 import { useMapStore } from '../stores/mapStore';
-import SearchBar from './SearchBar';
-import QuickFind from './QuickFind';
 import HappeningNow from './HappeningNow';
 import VenueList from './VenueList';
 import BoothDetail from './BoothDetail';
@@ -15,6 +13,10 @@ import { ui } from '../lib/data';
 const SNAP_PEEK = 110;
 const SNAP_HALF = 320;
 const SNAP_FULL_RATIO = 0.82;
+/** Room kept above the fully-raised sheet: the top chrome (search +
+    switcher + quick find) plus margin, so the drag hook never slides up
+    under it and stays grabbable. */
+const TOP_CLEAR = 168;
 
 const mobileTabs: { id: 'home' | 'search' | 'saved' | 'stats' | 'info'; icon: typeof Home }[] = [
   { id: 'home', icon: Home },
@@ -32,10 +34,14 @@ export default function MobileBottomSheet() {
   const startHeight = useRef(0);
   const sheetRef = useRef<HTMLDivElement>(null);
 
-  const getMaxHeight = () => window.innerHeight * SNAP_FULL_RATIO;
+  const getMaxHeight = () => {
+    // Detail mode (booth card open) never takes more than half the screen.
+    if (useMapStore.getState().sidebarMode === 'detail') return SNAP_HALF;
+    return Math.min(window.innerHeight - TOP_CLEAR, window.innerHeight * SNAP_FULL_RATIO);
+  };
 
   const snapTo = useCallback((target: number) => {
-    const max = window.innerHeight * SNAP_FULL_RATIO;
+    const max = getMaxHeight();
     setHeight(Math.max(SNAP_PEEK, Math.min(max, target)));
   }, []);
 
@@ -66,8 +72,29 @@ export default function MobileBottomSheet() {
 
   const setTab = (tab: typeof sidebarTab) => {
     setSidebarTab(tab);
-    if (height < SNAP_HALF) snapTo(SNAP_HALF);
   };
+
+  // Raise the sheet when the content context changes — a tab switch (the
+  // top search bar focuses 'search' too) or a booth detail opening — but
+  // ONLY on the transition itself. An unconditional effect would re-fire on
+  // every height change and fight the drag, making tabs behave
+  // inconsistently (collapsible on 'home', stuck open on 'search').
+  const prevTabRef = useRef(sidebarTab);
+  const prevModeRef = useRef(sidebarMode);
+  useEffect(() => {
+    if (prevTabRef.current !== sidebarTab && height < SNAP_HALF) snapTo(SNAP_HALF);
+    prevTabRef.current = sidebarTab;
+  }, [sidebarTab, height, snapTo]);
+  useEffect(() => {
+    if (
+      prevModeRef.current !== sidebarMode &&
+      sidebarMode === 'detail' &&
+      height < SNAP_HALF
+    ) {
+      snapTo(SNAP_HALF);
+    }
+    prevModeRef.current = sidebarMode;
+  }, [sidebarMode, height, snapTo]);
 
   const renderContent = () => {
     if (sidebarTab === 'saved') return <BookmarkList />;
@@ -75,36 +102,53 @@ export default function MobileBottomSheet() {
     if (sidebarTab === 'info') return <EventInfo />;
 
     if (sidebarMode === 'detail') return <BoothDetail />;
-    return (
-      <div className="space-y-3">
-        <div className="text-xs font-medium text-zinc-500">{ui.venueList.title}</div>
-        <VenueList />
-      </div>
-    );
+    return <VenueList />;
   };
 
   return (
-    <div
-      ref={sheetRef}
-      className="pointer-events-auto flex flex-col rounded-t-xl border-t border-zinc-800 bg-[#0c0c0f]/98 shadow-[0_-8px_40px_rgba(0,0,0,0.5)] backdrop-blur-md will-change-[height]"
-      style={{
-        height,
-        transition: isDragging ? 'none' : 'height 350ms cubic-bezier(0.32, 0.72, 0, 1)',
-      }}
-    >
-      {/* Drag handle */}
+    <>
+      {/* Draggable card — content only; the tab rail lives outside it so
+          the tabs never travel with the drag (persistent bottom bar).
+          Solid, no blur: translucent/blur layers over a scrollable child
+          break touch scrolling on mobile WebKit — same reason Google Maps'
+          sheet is fully opaque. */}
       <div
-        className="flex cursor-grab items-center justify-center py-2 active:cursor-grabbing"
-        style={{ touchAction: 'none' }}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
+        ref={sheetRef}
+        className="pointer-events-auto flex flex-col rounded-t-xl border-t border-zinc-800 bg-[#0c0c0f] shadow-[0_-8px_40px_rgba(0,0,0,0.5)]"
+        style={{
+          height,
+          transition: isDragging ? 'none' : 'height 350ms cubic-bezier(0.32, 0.72, 0, 1)',
+        }}
       >
-        <div className="h-1 w-10 rounded-full bg-zinc-700" />
+        {/* Drag handle */}
+        <div
+          className="flex cursor-grab items-center justify-center py-2 active:cursor-grabbing"
+          style={{ touchAction: 'none' }}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+        >
+          <div className="h-1 w-10 rounded-full bg-zinc-700" />
+        </div>
+
+        {/* Sheet content — explicit touch affordances: pan-y only (vertical
+            scroll), contain the overscroll so it never chains into the map,
+            and momentum scrolling on iOS. */}
+        <div
+          className="flex min-h-0 flex-1 touch-pan-y flex-col gap-3 overflow-y-auto overscroll-contain px-4 pb-6 pt-3"
+          style={{ WebkitOverflowScrolling: 'touch' }}
+        >
+          {sidebarTab === 'home' && sidebarMode !== 'detail' && <HappeningNow />}
+          {renderContent()}
+        </div>
       </div>
 
-      {/* Mobile tab rail */}
-      <div className="flex items-center justify-around border-b border-zinc-800 px-2 pb-2">
+      {/* Persistent bottom tab bar — fixed chrome, excluded from the drag */}
+      <nav
+        className="pointer-events-auto flex h-14 shrink-0 items-center justify-around border-t border-zinc-800 bg-[#0c0c0f] px-2"
+        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+        aria-label="Sheet sections"
+      >
         {mobileTabs.map((item) => {
           const Icon = item.icon;
           const active = sidebarTab === item.id;
@@ -113,29 +157,16 @@ export default function MobileBottomSheet() {
               key={item.id}
               type="button"
               onClick={() => setTab(item.id)}
-              className={`flex h-10 w-10 items-center justify-center rounded-sm transition-colors ${
+              className={`flex h-10 w-12 items-center justify-center rounded-sm transition-colors ${
                 active ? 'text-white' : 'text-zinc-500'
               }`}
-              aria-label={item.id}
+              aria-label={ui.tabs[item.id]}
             >
               <Icon size={20} strokeWidth={active ? 2 : 1.5} />
             </button>
           );
         })}
-      </div>
-
-      {/* Sheet content */}
-      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-4 pb-6 pt-3" style={{ paddingBottom: 'max(24px, env(safe-area-inset-bottom))' }}>
-        {sidebarTab === 'home' && sidebarMode !== 'detail' && (
-          <>
-            <SearchBar />
-            <QuickFind />
-            <HappeningNow />
-          </>
-        )}
-        {sidebarTab === 'search' && sidebarMode !== 'detail' && <SearchBar />}
-        {renderContent()}
-      </div>
-    </div>
+      </nav>
+    </>
   );
 }

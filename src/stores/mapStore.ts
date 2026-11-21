@@ -21,6 +21,8 @@ interface MapState {
   sidebarTab: SidebarTab;
   searchQuery: string;
   isMobileSheetOpen: boolean;
+  /** GIK mode: zoomed-out event overview; will host geojson pathfinding. */
+  gikMode: boolean;
 
   // Map view
   mapView: MapViewState;
@@ -38,6 +40,7 @@ interface MapState {
   setSearchQuery: (query: string) => void;
   setSidebarMode: (mode: SidebarMode) => void;
   setSidebarTab: (tab: SidebarTab) => void;
+  setGikMode: (on: boolean) => void;
   openMobileSheet: () => void;
   closeMobileSheet: () => void;
   setMapView: (view: Partial<MapViewState>) => void;
@@ -64,6 +67,7 @@ export const useMapStore = create<MapState>()(
       sidebarTab: 'home',
       searchQuery: '',
       isMobileSheetOpen: false,
+      gikMode: true,
       mapView: {
         center: [110.3761, -7.7743],
         zoom: 19,
@@ -143,6 +147,11 @@ export const useMapStore = create<MapState>()(
         if (tab !== 'home' && tab !== 'search') {
           set({ searchQuery: '', sidebarMode: 'list' });
         }
+      },
+
+      setGikMode: (on) => {
+        track('gik.mode', { on });
+        set({ gikMode: on });
       },
 
       openMobileSheet: () => set({ isMobileSheetOpen: true }),
