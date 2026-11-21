@@ -15,9 +15,9 @@ permissions:
   contents: read
 
 env:
-  NEXT_PUBLIC_APP_URL: http://localhost:3000
-  NEXT_PUBLIC_API_URL: http://localhost:3000/api
-  NEXT_TELEMETRY_DISABLED: "1"
+  PUBLIC_APP_URL: http://localhost:4321
+  PUBLIC_API_URL: http://localhost:4321/api
+  ASTRO_TELEMETRY_DISABLED: "1"
 
 jobs:
   # Stage 1: install dependencies and audit them
@@ -79,8 +79,8 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
 
-  react-doctor:
-    name: React Doctor
+  astro-check:
+    name: Astro check
     needs: install
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -91,7 +91,7 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      - run: npx -y react-doctor@latest . --score
+      - run: npm run check
 
   unit-test:
     name: Unit tests
@@ -110,7 +110,7 @@ jobs:
   # Stage 4: production build, only after every quality check passes
   build:
     name: Build
-    needs: [lint, typecheck, react-doctor, unit-test]
+    needs: [lint, typecheck, astro-check, unit-test]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -121,20 +121,20 @@ jobs:
           cache: npm
       - uses: actions/cache@v4
         with:
-          path: .next/cache
-          key: nextjs-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ hashFiles('src/**') }}
+          path: node_modules/.astro
+          key: astro-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ hashFiles('src/**') }}
           restore-keys: |
-            nextjs-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-
+            astro-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-
       - run: npm ci
       - run: npm run build
       - uses: actions/upload-artifact@v4
         with:
-          name: next-build
-          path: .next
+          name: astro-dist
+          path: dist
           include-hidden-files: true
           retention-days: 1
 
-  # Stage 5: end-to-end tests against the build from stage 4
+  # Stage 5: end-to-end tests against the static build from stage 4
   e2e:
     name: End-to-end tests
     needs: build
@@ -149,14 +149,18 @@ jobs:
       - run: npm ci
       - uses: actions/download-artifact@v4
         with:
-          name: next-build
-          path: .next
+          name: astro-dist
+          path: dist
       - name: Cache Playwright browsers
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
       - run: npx playwright install --with-deps chromium
+      - name: Start preview server
+        run: npx astro preview &
+      - name: Wait for preview
+        run: npx --yes wait-on http://localhost:4321
       - run: npm run test:e2e
       - uses: actions/upload-artifact@v4
         if: failure()
@@ -172,7 +176,7 @@ jobs:
   ci-passed:
     name: CI passed
     if: always()
-    needs: [install, dependency-review, lint, typecheck, react-doctor, unit-test, build, e2e]
+    needs: [install, dependency-review, lint, typecheck, astro-check, unit-test, build, e2e]
     runs-on: ubuntu-latest
     steps:
       - name: Verify all stages

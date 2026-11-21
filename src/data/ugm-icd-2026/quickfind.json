@@ -1,0 +1,8 @@
+[
+  { "id": "toilet", "label": "Toilet", "icon": "toilet", "category": "facility" },
+  { "id": "mushola", "label": "Mushola", "icon": "mosque", "category": "facility" },
+  { "id": "pusat-bantuan", "label": "Pusat Bantuan", "icon": "hand", "category": "facility" },
+  { "id": "entrance", "label": "Entrance", "icon": "door-open", "category": "waypoint" },
+  { "id": "exit", "label": "Exit", "icon": "log-out", "category": "waypoint" },
+  { "id": "information-center", "label": "Information Center", "icon": "info", "category": "facility" }
+]

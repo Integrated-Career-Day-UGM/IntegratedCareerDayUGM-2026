@@ -1,0 +1,124 @@
+export type Day = {
+  id: string;
+  date: string;
+  label: string;
+};
+
+export type TrackType = 'booth' | 'session';
+
+export type Track = {
+  id: string;
+  label: string;
+  type: TrackType;
+};
+
+export type EventConfig = {
+  id: string;
+  name: string;
+  shortName: string;
+  timezone: string;
+  days: Day[];
+  tracks: Track[];
+  defaultVenueId: string;
+  locale: string;
+};
+
+export type AreaMap = {
+  svg: string;
+  viewBox: [number, number, number, number];
+  defaultZoom: number;
+  minZoom: number;
+  maxZoom: number;
+} | null;
+
+export type AreaKind = 'hall' | 'room';
+
+export type Area = {
+  id: string;
+  name: string;
+  kind: AreaKind;
+  trackId: string;
+  map: AreaMap;
+};
+
+export type Venue = {
+  id: string;
+  name: string;
+  areas: Area[];
+};
+
+export type Zone = {
+  id: string;
+  areaId: string;
+  name: string;
+  color: string;
+  boothIds: string[];
+};
+
+export type Booth = {
+  id: string;
+  areaId: string;
+  zoneId: string;
+  code: string;
+  label: string;
+  companyId: string | null;
+};
+
+export type JobOpening = {
+  title: string;
+  type: string;
+};
+
+export type Company = {
+  id: string;
+  name: string;
+  shortName: string;
+  tags: string[];
+  websiteUrl: string | null;
+  programUrl: string | null;
+  logoUrl: string | null;
+  openings: JobOpening[];
+};
+
+export type Session = {
+  id: string;
+  areaId: string;
+  companyId: string;
+  trackId: string;
+  dayId: string;
+  start: string;
+  end: string;
+  title: string;
+};
+
+export type QuickFindItem = {
+  id: string;
+  label: string;
+  icon: string;
+  category: 'facility' | 'waypoint';
+};
+
+export type UiStrings = {
+  event: Record<string, string>;
+  search: Record<string, string>;
+  tabs: Record<string, string>;
+  quickFind: { title: string; items: Record<string, string> };
+  venueList: Record<string, string>;
+  happeningNow: Record<string, string>;
+  boothDetail: Record<string, string> & { shareLabel: string };
+  saved: Record<string, string>;
+  insights: {
+    title: string;
+    subtitle: string;
+    cards: Record<string, { label: string; value: string; change?: string; caption: string }>;
+  };
+  info: { title: string; helpTitle: string; sections: Record<string, { heading: string; body: string }> };
+  map: Record<string, string>;
+};
+
+export type MapViewState = {
+  center: [number, number];
+  zoom: number;
+  bearing: number;
+  pitch: number;
+};

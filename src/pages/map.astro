@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MapSidebar from '../islands/MapSidebar';
+import MapLibreMap from '../islands/MapLibreMap';
+import TrackSwitcher from '../islands/TrackSwitcher';
+import MobileBottomSheet from '../islands/MobileBottomSheet';
+import '../styles/base/global.css';
+---
+
+<BaseLayout title="Peta Lokasi - Integrated Career Day 2026">
+  <main class="fixed inset-0 flex overflow-hidden bg-[#09090b]">
+    {/* Desktop sidebar */}
+    <aside class="hidden h-full w-[390px] shrink-0 border-r-2 border-black/40 sm:flex">
+      <MapSidebar client:only="react" />
+    </aside>
+
+    {/* Map area */}
+    <section class="relative flex h-full min-w-0 flex-1 flex-col">
+      {/* Top track switcher */}
+      <div class="pointer-events-none absolute left-0 right-0 top-0 z-10 p-3 sm:left-4 sm:right-auto">
+        <div class="pointer-events-auto inline-flex max-w-full bg-black p-1.5">
+          <TrackSwitcher client:only="react" />
+        </div>
+      </div>
+
+      {/* Mobile bottom sheet */}
+      <div class="absolute inset-x-0 bottom-0 z-20 h-auto sm:hidden">
+        <MobileBottomSheet client:only="react" />
+      </div>
+
+      <div class="h-full w-full">
+        <MapLibreMap client:only="react" />
+      </div>
+    </section>
+  </main>
+</BaseLayout>

@@ -1,0 +1,277 @@
+[
+  {
+    "id": "toyota-astra",
+    "name": "PT Toyota Astra Motor",
+    "shortName": "Toyota Astra",
+    "tags": ["Tech", "FMCG", "Automotive", "Multi-national"],
+    "websiteUrl": "https://www.toyota.astra.co.id",
+    "programUrl": "https://careers.toyota.astra.co.id",
+    "logoUrl": null,
+    "openings": [
+      { "title": "Software Engineer", "type": "Full-time" },
+      { "title": "Software Engineer Internship", "type": "Internship" },
+      { "title": "Data Analyst", "type": "Internship" }
+    ]
+  },
+  {
+    "id": "huawei",
+    "name": "PT Huawei Tech Investment",
+    "shortName": "Huawei",
+    "tags": ["Tech", "Telecommunication", "Multi-national"],
+    "websiteUrl": "https://www.huawei.com",
+    "programUrl": "https://career.huawei.com",
+    "logoUrl": null,
+    "openings": [
+      { "title": "Network Engineer", "type": "Full-time" },
+      { "title": "AI Research Intern", "type": "Internship" }
+    ]
+  },
+  {
+    "id": "surya-semesta",
+    "name": "PT Surya Semesta Internusa Tbk",
+    "shortName": "Surya Semesta",
+    "tags": ["Construction", "Property"],
+    "websiteUrl": "https://www.suryasemesta.com",
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      { "title": "Project Engineer", "type": "Full-time" },
+      { "title": "Quantity Surveyor", "type": "Full-time" }
+    ]
+  },
+  {
+    "id": "btn",
+    "name": "Bank Tabungan Negara",
+    "shortName": "BTN",
+    "tags": ["Banking", "BUMN"],
+    "websiteUrl": "https://www.btn.co.id",
+    "programUrl": "https://rekrutmen.btn.co.id",
+    "logoUrl": null,
+    "openings": [
+      { "title": "IT Development Program", "type": "Full-time" },
+      { "title": "Relationship Manager", "type": "Full-time" }
+    ]
+  },
+  {
+    "id": "bni",
+    "name": "PT Bank Negara Indonesia (Persero) Tbk",
+    "shortName": "BNI",
+    "tags": ["Banking", "BUMN"],
+    "websiteUrl": "https://www.bni.co.id",
+    "programUrl": "https://rekrutmen.bni.co.id",
+    "logoUrl": null,
+    "openings": [
+      { "title": "IT Specialist", "type": "Full-time" },
+      { "title": "Management Trainee", "type": "Full-time" }
+    ]
+  },
+  {
+    "id": "united-tractors",
+    "name": "PT United Tractors Tbk",
+    "shortName": "United Tractors",
+    "tags": ["Heavy Equipment", "Mining"],
+    "websiteUrl": "https://www.unitedtractors.com",
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      { "title": "Mechanical Engineer", "type": "Full-time" },
+      { "title": "Sales Engineer", "type": "Full-time" }
+    ]
+  },
+  {
+    "id": "pertamina",
+    "name": "PT Pertamina (Persero)",
+    "shortName": "Pertamina",
+    "tags": ["Energy", "BUMN"],
+    "websiteUrl": "https://www.pertamina.com",
+    "programUrl": "https://recruitment.pertamina.com",
+    "logoUrl": null,
+    "openings": [
+      { "title": "Engineer Program", "type": "Full-time" },
+      { "title": "HSSE Specialist", "type": "Full-time" }
+    ]
+  },
+  {
+    "id": "telkom",
+    "name": "PT Telkom Indonesia (Persero) Tbk",
+    "shortName": "Telkom",
+    "tags": ["Telecommunication", "BUMN", "Tech"],
+    "websiteUrl": "https://www.telkom.co.id",
+    "programUrl": "https://rekrutmen.telkom.co.id",
+    "logoUrl": null,
+    "openings": [
+      { "title": "Software Developer", "type": "Full-time" },
+      { "title": "Product Manager", "type": "Full-time" },
+      { "title": "Data Engineer Intern", "type": "Internship" }
+    ]
+  },
+  {
+    "id": "astra-international",
+    "name": "PT Astra International Tbk",
+    "shortName": "Astra International",
+    "tags": ["Automotive", "Finance", "Heavy Equipment"],
+    "websiteUrl": "https://www.astra.co.id",
+    "programUrl": "https://career.astra.co.id",
+    "logoUrl": null,
+    "openings": [
+      { "title": "Management Trainee", "type": "Full-time" },
+      { "title": "Digital Marketing", "type": "Full-time" }
+    ]
+  },
+  {
+    "id": "samsung",
+    "name": "Samsung Electronics Indonesia",
+    "shortName": "Samsung",
+    "tags": ["Tech", "Electronics", "Multi-national"],
+    "websiteUrl": "https://www.samsung.com/id",
+    "programUrl": "https://www.samsung.com/id/about-us/careers/",
+    "logoUrl": null,
+    "openings": [
+      { "title": "Mobile Engineer", "type": "Full-time" },
+      { "title": "UX Researcher", "type": "Full-time" }
+    ]
+  },
+  {
+    "id": "shopee",
+    "name": "Shopee Indonesia",
+    "shortName": "Shopee",
+    "tags": ["E-commerce", "Tech"],
+    "websiteUrl": "https://shopee.co.id",
+    "programUrl": "https://careers.shopee.co.id",
+    "logoUrl": null,
+    "openings": [
+      { "title": "Backend Engineer", "type": "Full-time" },
+      { "title": "Business Analyst", "type": "Full-time" }
+    ]
+  },
+  {
+    "id": "tokopedia",
+    "name": "Tokopedia",
+    "shortName": "Tokopedia",
+    "tags": ["E-commerce", "Tech"],
+    "websiteUrl": "https://www.tokopedia.com",
+    "programUrl": "https://www.tokopedia.com/careers",
+    "logoUrl": null,
+    "openings": [
+      { "title": "Software Engineer", "type": "Full-time" },
+      { "title": "Product Designer", "type": "Full-time" }
+    ]
+  },
+  {
+    "id": "gojek",
+    "name": "Gojek",
+    "shortName": "Gojek",
+    "tags": ["Tech", "Transportation", "On-demand"],
+    "websiteUrl": "https://www.gojek.com",
+    "programUrl": "https://career.gojek.com",
+    "logoUrl": null,
+    "openings": [
+      { "title": "Android Engineer", "type": "Full-time" },
+      { "title": "Data Scientist", "type": "Full-time" }
+    ]
+  },
+  {
+    "id": "grab",
+    "name": "Grab Indonesia",
+    "shortName": "Grab",
+    "tags": ["Tech", "Transportation", "On-demand", "Multi-national"],
+    "websiteUrl": "https://www.grab.com/id",
+    "programUrl": "https://grab.careers",
+    "logoUrl": null,
+    "openings": [
+      { "title": "iOS Engineer", "type": "Full-time" },
+      { "title": "Operations Analyst", "type": "Full-time" }
+    ]
+  },
+  {
+    "id": "traveloka",
+    "name": "Traveloka",
+    "shortName": "Traveloka",
+    "tags": ["Travel", "Tech"],
+    "websiteUrl": "https://www.traveloka.com",
+    "programUrl": "https://www.traveloka.com/en/careers",
+    "logoUrl": null,
+    "openings": [
+      { "title": "Full-stack Engineer", "type": "Full-time" },
+      { "title": "Marketing Analyst", "type": "Full-time" }
+    ]
+  },
+  {
+    "id": "bca",
+    "name": "PT Bank Central Asia Tbk",
+    "shortName": "BCA",
+    "tags": ["Banking", "Finance"],
+    "websiteUrl": "https://www.bca.co.id",
+    "programUrl": "https://karir.bca.co.id",
+    "logoUrl": null,
+    "openings": [
+      { "title": "IT Developer", "type": "Full-time" },
+      { "title": "Credit Analyst", "type": "Full-time" }
+    ]
+  },
+  {
+    "id": "mandiri",
+    "name": "PT Bank Mandiri (Persero) Tbk",
+    "shortName": "Mandiri",
+    "tags": ["Banking", "BUMN"],
+    "websiteUrl": "https://www.bankmandiri.co.id",
+    "programUrl": "https://recruitment.bankmandiri.co.id",
+    "logoUrl": null,
+    "openings": [
+      { "title": "IT Officer", "type": "Full-time" },
+      { "title": "Management Trainee", "type": "Full-time" }
+    ]
+  },
+  {
+    "id": "bri",
+    "name": "PT Bank Rakyat Indonesia (Persero) Tbk",
+    "shortName": "BRI",
+    "tags": ["Banking", "BUMN"],
+    "websiteUrl": "https://www.bri.co.id",
+    "programUrl": "https://rekrutmen.bri.co.id",
+    "logoUrl": null,
+    "openings": [
+      { "title": "IT Auditor", "type": "Full-time" },
+      { "title": "Relationship Manager", "type": "Full-time" }
+    ]
+  },
+  {
+    "id": "danamon",
+    "name": "PT Bank Danamon Indonesia Tbk",
+    "shortName": "Danamon",
+    "tags": ["Banking", "Finance"],
+    "websiteUrl": "https://www.danamon.co.id",
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      { "title": "Branch Sales", "type": "Full-time" },
+      { "title": "IT Support", "type": "Full-time" }
+    ]
+  },
+  {
+    "id": "ocbc",
+    "name": "OCBC Indonesia",
+    "shortName": "OCBC",
+    "tags": ["Banking", "Finance", "Multi-national"],
+    "websiteUrl": "https://www.ocbc.id",
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      { "title": "Business Development", "type": "Full-time" },
+      { "title": "Risk Analyst", "type": "Full-time" }
+    ]
+  },
+  {
+    "id": "cimb",
+    "name": "CIMB Niaga",
+    "shortName": "CIMB Niaga",
+    "tags": ["Banking", "Finance"],
+    "websiteUrl": "https://www.cimbniaga.co.id",
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      { "title": "Treasury Analyst", "type": "Full-time" },
+      { "title": "IT Business Analyst", "type": "Full-time" }
+    ]
+  }
+]

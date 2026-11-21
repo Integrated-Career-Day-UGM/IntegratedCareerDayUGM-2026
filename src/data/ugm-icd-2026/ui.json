@@ -1,0 +1,119 @@
+{
+  "event": {
+    "exploreBadge": "Jelajahi Denah",
+    "titleLine1": "UGM",
+    "titleLine2": "Integrated Career Days",
+    "todayBadge": "Today"
+  },
+  "search": {
+    "placeholder": "Search company, role, booth...",
+    "shortcutHint": "Ctrl",
+    "shortcutKey": "K",
+    "resultsLabel": "{count} result{plural}",
+    "emptyResults": "No companies or booths match your search."
+  },
+  "tabs": {
+    "home": "Home",
+    "search": "Search",
+    "saved": "saved",
+    "stats": "Stats",
+    "info": "Info",
+    "help": "Help"
+  },
+  "quickFind": {
+    "title": "Quick Find",
+    "items": {
+      "toilet": "Toilet",
+      "mushola": "Mushola",
+      "pusat-bantuan": "Help Desk",
+      "entrance": "Entrance",
+      "exit": "Exit",
+      "information-center": "Information Center"
+    }
+  },
+  "venueList": {
+    "title": "Venue List"
+  },
+  "happeningNow": {
+    "badge": "Now",
+    "sessionSuffix": "Session",
+    "title": "Happening Now"
+  },
+  "boothDetail": {
+    "selectedLabel": "Selected company / event / venue",
+    "tagsLabel": "Tags",
+    "websiteCta": "Company Website",
+    "programCta": "Program URL",
+    "opportunitiesLabel": "Available Opportunity",
+    "opportunityType": "Internship",
+    "bookmarkLabel": "Bookmark",
+    "shareLabel": "Share",
+    "closeLabel": "Close"
+  },
+  "saved": {
+    "title": "saved",
+    "listTitle": "Venue/company/event tersimpan",
+    "empty": "You haven’t bookmarked any booths or sessions yet."
+  },
+  "insights": {
+    "title": "Insights",
+    "subtitle": "Event overview in real-time",
+    "kpiSectionTitle": "Job Market Pulse",
+    "kpiSectionSubtitle": "Recruitment trends from visitor activity and company data (coming soon).",
+    "kpiEmptyLabel": "No data yet",
+    "cards": {
+      "attendance": {
+        "label": "Attendance",
+        "value": "2.2K",
+        "change": "+12%",
+        "caption": "vs. yesterday"
+      },
+      "companies": {
+        "label": "Companies",
+        "value": "48",
+        "caption": "registered booths"
+      },
+      "sessions": {
+        "label": "Sessions",
+        "value": "16",
+        "caption": "today"
+      },
+      "bookmarks": {
+        "label": "Your Bookmarks",
+        "value": "{count}",
+        "caption": "saved booths"
+      }
+    }
+  },
+  "info": {
+    "title": "Info",
+    "helpTitle": "Help",
+    "sections": {
+      "venue": {
+        "heading": "Venue",
+        "body": "Gedung Industri Kreatif (GIK), Universitas Gadjah Mada. Hall C1 hosts the Career Expo, Hall B hosts Walk-in Interviews, and Ruang C001-002 hosts Career Counseling."
+      },
+      "hours": {
+        "heading": "Event Hours",
+        "body": "08:00 – 17:00 WIB. Registration opens at 07:30 WIB. Last admission at 16:30 WIB."
+      },
+      "whatToBring": {
+        "heading": "What to bring",
+        "body": "Updated CV, portfolio, KTP or student ID, and vaccination certificate. Dress code is smart casual."
+      },
+      "help": {
+        "heading": "Need help?",
+        "body": "Visit the Information Center near the entrance, the Help Desk (Pusat Bantuan) next to the Mushola, or ask any committee member in a pink vest."
+      }
+    }
+  },
+  "map": {
+    "hallLabel": "Hall C1",
+    "hallSublabel": "Career Expo",
+    "compassLabel": "Reset bearing to north",
+    "zoomInLabel": "Zoom in",
+    "zoomOutLabel": "Zoom out",
+    "fullscreenEnterLabel": "Enter fullscreen",
+    "fullscreenExitLabel": "Exit fullscreen"
+  }
+}

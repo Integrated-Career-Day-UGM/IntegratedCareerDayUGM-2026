@@ -1,0 +1,61 @@
+# Keep the Docker build context minimal: only what `bun run build` needs
+# (src/, public/, astro.config.mjs, tsconfig.json, package.json, .npmrc).
+# Lockfiles (package-lock.json, bun.lockb) must stay visible — the image
+# install step depends on them.
+
+# ---------- Version control, CI, agent workspaces ----------
+.git
+.github
+.agents
+.codex
+.impeccable
+.claude
+.cursor
+.vscode
+.idea
+
+# ---------- Dependencies (installed inside the image) ----------
+node_modules
+**/node_modules
+
+# ---------- Build output & caches ----------
+dist
+build
+out
+.astro
+*.tsbuildinfo
+.cache
+.turbo
+.eslintcache
+.vercel
+.netlify
+coverage
+*.trace
+
+# ---------- Environment & secrets (never bake into an image) ----------
+.env
+.env.*
+!.env.example
+
+# ---------- Tests, screenshots, docs, working notes ----------
+e2e
+docs
+playwright-report
+test-results
+blob-report
+*.test.*
+*.spec.*
+/*.md
+
+# ---------- Docker & deployment files (not needed inside the image) ----------
+Dockerfile*
+docker-compose*
+.dockerignore
+helm-charts
+
+# ---------- Logs & OS noise ----------
+logs
+*.log
+.DS_Store
+Thumbs.db
+Desktop.ini
