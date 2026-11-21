@@ -116,6 +116,18 @@ button {
   height: 100%;
 }
 
+/* Pulsing highlight for the hovered/selected floor-plan booth. The zone
+   colour is passed down as --glow from FloorPlanOverlay. */
+@keyframes booth-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px var(--glow, #ff316b), 0 0 22px var(--glow, #ff316b);
+  }
+  50% {
+    box-shadow: 0 0 0 6px var(--glow, #ff316b), 0 0 44px var(--glow, #ff316b);
+  }
+}
+
 /* MapLibre popup & control overrides */
 .maplibregl-ctrl-group {
   background: var(--surface);

@@ -18,7 +18,6 @@ import {
 const FloorPlanOverlay = forwardRef<HTMLDivElement>(function FloorPlanOverlay(_, ref) {
   const { hoveredBoothId, selectedBoothId } = useMapStore();
   const activeBoothId = hoveredBoothId ?? selectedBoothId;
-  const activeShape = BOOTH_SHAPES.find((s) => s.id === activeBoothId);
 
   const boothMeta = (shape: BoothShape) => {
     const booth = getBooth(shape.id);
@@ -30,8 +29,6 @@ const FloorPlanOverlay = forwardRef<HTMLDivElement>(function FloorPlanOverlay(_,
       companyName: company?.name ?? booth?.label ?? shape.code,
     };
   };
-
-  const activeMeta = activeShape ? boothMeta(activeShape) : null;
 
   return (
     <div
@@ -291,9 +288,12 @@ const FloorPlanOverlay = forwardRef<HTMLDivElement>(function FloorPlanOverlay(_,
                   background: shape.bg,
                   border: `${shape.borderWidth}px solid #ffffff`,
                   padding: shape.padding,
-                  boxShadow: active
-                    ? `0 0 0 3px ${zoneColor}, 0 0 26px ${zoneColor}`
-                    : undefined,
+                  ...(active
+                    ? {
+                        animation: 'booth-pulse 1.6s ease-in-out infinite',
+                        ['--glow' as string]: zoneColor,
+                      }
+                    : { boxShadow: undefined }),
                   filter: active ? 'brightness(1.12)' : undefined,
                 }}
               >
@@ -312,34 +312,6 @@ const FloorPlanOverlay = forwardRef<HTMLDivElement>(function FloorPlanOverlay(_,
           </div>
         );
       })}
-
-      {/* Hover tooltip, anchored above the active booth in frame space */}
-      {activeShape && activeMeta && (
-        <div
-          className="absolute z-20"
-          style={{
-            left: activeShape.left + activeShape.w / 2,
-            top: activeShape.top - 10,
-            transform: 'translate(-50%, -100%)',
-          }}
-        >
-          <div
-            className="min-w-[130px] rounded-md border border-zinc-700 bg-[#1c1c20] px-3 py-2 shadow-xl"
-            style={{ borderRightWidth: '3px', borderRightColor: activeMeta.zoneColor }}
-          >
-            <div className="text-[13px] leading-tight font-bold text-white">
-              {activeMeta.companyName}
-            </div>
-            <div className="mt-0.5 text-[11px] font-medium" style={{ color: activeMeta.zoneColor }}>
-              {activeMeta.zoneName} · {activeShape.code}
-            </div>
-          </div>
-          <div
-            className="absolute -bottom-[5px] left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 border-r border-b border-zinc-700 bg-[#1c1c20]"
-            style={{ borderRightColor: activeMeta.zoneColor }}
-          />
-        </div>
-      )}
     </div>
   );
 });

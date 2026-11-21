@@ -6,7 +6,7 @@ import {
   Info,
   CircleHelp,
 } from 'lucide-react';
-import { useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
 import { useMapStore } from '../stores/mapStore';
 import { useBoothFromUrl } from '../hooks/useBoothFromUrl';
 import { trackPageView } from '../lib/analytics';
@@ -18,7 +18,8 @@ import BoothDetail from './BoothDetail';
 import BookmarkList from './BookmarkList';
 import Insights from './Insights';
 import EventInfo from './EventInfo';
-import { event, ui } from '../lib/data';
+import SelectionFrame from '../components/ui/SelectionFrame';
+import { event, getTodayDayId, ui } from '../lib/data';
 
 const mainNavItems: { id: 'home' | 'search' | 'saved' | 'stats'; icon: typeof Home }[] = [
   { id: 'home', icon: Home },
@@ -35,7 +36,8 @@ export default function MapSidebar() {
     trackPageView();
   }, []);
 
-  const isToday = (dayId: string) => dayId === event.days[0].id;
+  // Resolved once per page load, client-side, then cached — stable forever after.
+  const todayDayId = getTodayDayId();
 
   const renderMainContent = () => {
     if (sidebarTab === 'saved') return <BookmarkList />;
@@ -104,62 +106,45 @@ export default function MapSidebar() {
             {ui.event.exploreBadge}
           </div>
 
-          {/* UGM lockup + selection box */}
-          <div className="absolute left-4 top-20">
-            <div className="relative inline-flex items-start gap-1">
-              {/* Pink selection outline */}
-              <div className="selection-box pointer-events-none absolute -inset-x-1 -inset-y-1.5 z-0">
-                <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 overflow-visible">
-                  <rect x="0" y="0" width="100" height="100" fill="none" stroke="#ff2d6f" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
-                  <rect x="-2" y="-2" width="6" height="6" fill="#ff2d6f" />
-                  <rect x="96" y="-2" width="6" height="6" fill="#ff2d6f" />
-                  <rect x="-2" y="96" width="6" height="6" fill="#ff2d6f" />
-                  <rect x="96" y="96" width="6" height="6" fill="#ff2d6f" />
-                </svg>
-                {/* Cursor */}
-                <svg className="absolute -right-5 -top-5 h-8 w-8 text-[#ff2d6f]" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M3 3l7.2 18.6 2.9-8.7L21.6 10.3 3 3z" />
-                  <path d="M11.5 13.5l8.5 8.5" stroke="white" strokeWidth="1.5" />
-                </svg>
-              </div>
-
-              <div className="relative z-10">
-                <h1 className="font-heading text-[54px] font-black leading-[0.8] tracking-[-4px] text-white">
-                  {ui.event.titleLine1}
-                </h1>
-              </div>
-              <div className="relative z-10 pt-1">
-                <div className="font-heading text-[21px] font-semibold leading-[0.95] tracking-[-0.5px] text-white">
-                  {ui.event.titleLine2.split(' ')[0]}
-                  <br />
-                  {ui.event.titleLine2.split(' ').slice(1).join(' ')}
+          {/* Lockup + day picker share one flex row so they can never overlap */}
+          <div className="flex items-start justify-between gap-2 pt-9">
+            {/* UGM lockup + selection box (top title) */}
+            <div className="mt-1 min-w-0 pl-1">
+              <SelectionFrame>
+                <div className="px-0.5 py-0.5">
+                  <img
+                    src="/images/ugm-lockup.svg"
+                    alt="UGM Integrated Career Days"
+                    className="h-[52px] w-auto"
+                    draggable={false}
+                  />
                 </div>
-              </div>
+              </SelectionFrame>
             </div>
-          </div>
 
-          {/* Day picker with offsets */}
-          <div className="absolute right-3.5 top-[76px] flex w-[60px] flex-col items-center">
-            {event.days.map((day, index) => (
-              <button
-                key={day.id}
-                type="button"
-                onClick={() => setSelectedDay(day.id)}
-                className={`font-heading text-[21px] font-extrabold leading-[1.1] transition-all ${
-                  selectedDayId === day.id
-                    ? 'bg-[#ff2d6f] px-2.5 text-white'
-                    : 'ml-3 text-[#9b9b9b] hover:text-white'
-                }`}
-                style={{ marginTop: index === 0 ? 0 : -2 }}
-              >
-                {day.label}
-              </button>
-            ))}
-            {isToday(selectedDayId) && (
-              <span className="mt-1 bg-white px-2 py-0.5 font-heading text-[12px] font-semibold text-black">
-                {ui.event.todayBadge}
-              </span>
-            )}
+            {/* Day picker */}
+            <div className="flex w-[64px] shrink-0 flex-col items-center pt-1">
+              {event.days.map((day) => (
+                <Fragment key={day.id}>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedDay(day.id)}
+                    className={`font-heading text-[21px] font-extrabold leading-[1.1] transition-all ${
+                      selectedDayId === day.id
+                        ? 'bg-[#ff2d6f] px-2.5 text-white'
+                        : 'ml-3 text-[#9b9b9b] hover:text-white'
+                    }`}
+                  >
+                    {day.label}
+                  </button>
+                  {day.id === todayDayId && (
+                    <span className="mt-0.5 bg-white px-2 py-0.5 font-heading text-[12px] font-semibold text-black">
+                      {ui.event.todayBadge}
+                    </span>
+                  )}
+                </Fragment>
+              ))}
+            </div>
           </div>
         </div>
 

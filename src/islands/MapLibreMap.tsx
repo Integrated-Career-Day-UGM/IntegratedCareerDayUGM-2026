@@ -1,12 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useMapStore } from '../stores/mapStore';
 import CompassButton from '../components/map/CompassButton';
 import ZoomButtons from '../components/map/ZoomButtons';
 import FullscreenButton from '../components/map/FullscreenButton';
+import MapTooltip from '../components/map/MapTooltip';
 import FloorPlanOverlay from './FloorPlanOverlay';
-import { ui } from '../lib/data';
+import SelectionFrame from '../components/ui/SelectionFrame';
+import { ui, getVenue, getTrack } from '../lib/data';
 import {
   BOOTH_LNGLATS,
   BOOTH_SHAPES,
@@ -15,6 +17,7 @@ import {
   HALL_BOUNDS,
   HALL_CENTER,
   HALL_GEOJSON,
+  frameToLngLat,
 } from '../lib/floorplan';
 import {
   homographyToMatrix3d,
@@ -74,8 +77,26 @@ export default function MapLibreMap() {
   const frameToScreenRef = useRef<number[] | null>(null);
   const lastMatrixRef = useRef<string>('');
   const mapRef = useRef<maplibregl.Map | null>(null);
+  const tooltipRef = useRef<HTMLDivElement>(null);
+  const lastTipTransformRef = useRef<string>('');
+  const positionTooltipRef = useRef<() => void>(() => {});
   const [mapLoaded, setMapLoaded] = useState(false);
-  const { setMapView, selectedBoothId } = useMapStore();
+  const { setMapView, selectedBoothId, hoveredBoothId, selectedVenueId, selectedTrackId } =
+    useMapStore();
+  const activeBoothId = hoveredBoothId ?? selectedBoothId;
+
+  // Current venue / tab card (top-right, SelectionFrame styling).
+  const venue = getVenue(selectedVenueId);
+  const area = venue?.areas.find((a) => a.trackId === selectedTrackId);
+  const areaName = area?.name ?? ui.map.hallLabel;
+  const trackLabel = getTrack(selectedTrackId)?.label ?? ui.map.hallSublabel;
+
+  /* Screen-space tooltip: lives OUTSIDE the floor-plan warp so it never
+     inherits the plan's skew. Positioned imperatively per rendered frame.
+     Shows for the hovered booth AND the selected one (click → bubble stays). */
+  useLayoutEffect(() => {
+    positionTooltipRef.current();
+  }, [hoveredBoothId, selectedBoothId]);
 
   /* ---------------------------------------------------------------- */
   /* Map init                                                          */
@@ -103,7 +124,30 @@ export default function MapLibreMap() {
       (window as unknown as Record<string, unknown>).__icdMap = map;
     }
 
+    const positionTooltip = () => {
+      const el = tooltipRef.current;
+      if (!el) return;
+      const store = useMapStore.getState();
+      const id = store.hoveredBoothId ?? store.selectedBoothId;
+      const shape = BOOTH_SHAPES.find((s) => s.id === id);
+      if (!shape) {
+        if (el.style.opacity !== '0') el.style.opacity = '0';
+        return;
+      }
+      // Anchor: the booth's top edge in frame space → world → screen.
+      const anchor = frameToLngLat([shape.left + shape.w / 2, shape.top]);
+      const p = map.project(anchor as maplibregl.LngLatLike);
+      const transform = `translate(${p.x.toFixed(1)}px, ${p.y.toFixed(1)}px)`;
+      if (transform !== lastTipTransformRef.current) {
+        lastTipTransformRef.current = transform;
+        el.style.transform = transform;
+      }
+      if (el.style.opacity !== '1') el.style.opacity = '1';
+    };
+    positionTooltipRef.current = positionTooltip;
+
     const syncOverlay = () => {
+      positionTooltip();
       const root = overlayRootRef.current;
       if (!root) return;
       const screen = FRAME_ANCHOR_LNGLATS.map((lngLat) => map.project(lngLat));
@@ -155,24 +199,15 @@ export default function MapLibreMap() {
         }
       }
 
-      // Real building footprint under the floor-plan — subtle cadastral ring.
+      // Real building footprint under the floor-plan — soft "location aura".
+      // The ring is an approximate hand-traced anchor (the footprint is not
+      // in OSM), so no crisp outline: it would advertise the 3–5 m slop.
       map.addSource('hall-footprint', { type: 'geojson', data: HALL_GEOJSON });
       map.addLayer({
         id: 'hall-footprint-glow',
         source: 'hall-footprint',
         type: 'fill',
         paint: { 'fill-color': '#ff316b', 'fill-opacity': 0.08 },
-      });
-      map.addLayer({
-        id: 'hall-footprint-line',
-        source: 'hall-footprint',
-        type: 'line',
-        paint: {
-          'line-color': '#ff316b',
-          'line-width': 1.5,
-          'line-opacity': 0.35,
-          'line-dasharray': [3, 2],
-        },
       });
 
       fitToHall();
@@ -280,8 +315,26 @@ export default function MapLibreMap() {
         />
       </div>
 
+      {/* Current venue / tab card — top-right, Figma selection-frame styling */}
+      <div className="absolute top-6 right-3 z-10">
+        <SelectionFrame>
+          <div className="flex items-center gap-3 bg-[rgba(18,18,21,0.92)] px-4 py-3 text-white shadow-lg backdrop-blur-sm">
+            <img
+              src="/images/arrow-ne.svg"
+              alt=""
+              className="h-5 w-5 shrink-0"
+              draggable={false}
+            />
+            <div>
+              <div className="text-base leading-tight font-semibold">{areaName}</div>
+              <div className="text-xs text-zinc-400">{trackLabel}</div>
+            </div>
+          </div>
+        </SelectionFrame>
+      </div>
+
       {/* Fullscreen — the whole stage (tiles + overlay + controls) */}
-      <div className="absolute top-6 right-6 z-10">
+      <div className="absolute top-[108px] right-3 z-10">
         <FullscreenButton
           targetRef={stageRef}
           enterLabel={ui.map.fullscreenEnterLabel}
@@ -289,22 +342,18 @@ export default function MapLibreMap() {
         />
       </div>
 
-      {/* Floating hall label */}
-      <div className="pointer-events-none absolute right-6 bottom-6 z-10 flex items-center gap-3 rounded-md bg-[rgba(18,18,21,0.92)] px-4 py-3 text-white shadow-lg ring-1 ring-white/10 backdrop-blur-sm">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-zinc-400">
-          <path
-            d="M7 17L17 7M17 7H7M17 7V17"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-        <div>
-          <div className="text-base leading-tight font-semibold">{ui.map.hallLabel}</div>
-          <div className="text-xs text-zinc-400">{ui.map.hallSublabel}</div>
+      {/* Screen-space booth tooltip (upright — outside the plan warp).
+          Shows on hover AND on selection, so the clicked venue keeps its
+          bubble while the sidebar shows the detail. */}
+      {activeBoothId && (
+        <div
+          ref={tooltipRef}
+          className="absolute top-0 left-0 z-20"
+          style={{ opacity: 0, willChange: 'transform' }}
+        >
+          <MapTooltip boothId={activeBoothId} x={0} y={0} />
         </div>
-      </div>
+      )}
 
       {/* Basemap attribution (OSM license) */}
       <div className="pointer-events-none absolute right-3 bottom-0.5 z-10 text-[10px] leading-none text-zinc-500">

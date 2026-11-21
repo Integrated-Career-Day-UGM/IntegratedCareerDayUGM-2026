@@ -71,98 +71,152 @@ function lngLatFromMercator(merc: Point): [number, number] {
 }
 
 /* ------------------------------------------------------------------ */
-/* Least-squares homography (normalised DLT, h22 = 1)                  */
+/* Frame → mercator fitting                                            */
 /* ------------------------------------------------------------------ */
 
 type Matrix3 = number[]; // row-major 3x3
-
-function mul(a: Matrix3, b: Matrix3): Matrix3 {
-  const c = new Array(9).fill(0);
-  for (let i = 0; i < 3; i++)
-    for (let j = 0; j < 3; j++)
-      for (let k = 0; k < 3; k++) c[i * 3 + j] += a[i * 3 + k] * b[k * 3 + j];
-  return c;
-}
 
 function apply(M: Matrix3, p: Point) {
   const w = M[6] * p[0] + M[7] * p[1] + M[8];
   return [(M[0] * p[0] + M[1] * p[1] + M[2]) / w, (M[3] * p[0] + M[4] * p[1] + M[5]) / w];
 }
 
-function normalise(pts: Point[]) {
-  const cx = pts.reduce((s, p) => s + p[0], 0) / pts.length;
-  const cy = pts.reduce((s, p) => s + p[1], 0) / pts.length;
-  const meanDist = pts.reduce((s, p) => s + Math.hypot(p[0] - cx, p[1] - cy), 0) / pts.length;
-  const s = Math.SQRT2 / meanDist;
-  return {
-    T: [s, 0, -s * cx, 0, s, -s * cy, 0, 0, 1] as Matrix3,
-    Ti: [1 / s, 0, cx, 0, 1 / s, cy, 0, 0, 1] as Matrix3,
-  };
-}
-
-function solveLinear(A: number[][], b: number[]): number[] | null {
-  const n = b.length;
-  const M = A.map((row, i) => [...row, b[i]]);
-  for (let i = 0; i < n; i++) {
-    let maxRow = i;
-    for (let k = i + 1; k < n; k++)
-      if (Math.abs(M[k][i]) > Math.abs(M[maxRow][i])) maxRow = k;
-    if (Math.abs(M[maxRow][i]) < 1e-12) return null;
-    [M[i], M[maxRow]] = [M[maxRow], M[i]];
-    for (let k = i + 1; k < n; k++) {
-      const f = M[k][i] / M[i][i];
-      for (let j = i; j <= n; j++) M[k][j] -= f * M[i][j];
-    }
-  }
-  const x = new Array(n).fill(0);
-  for (let i = n - 1; i >= 0; i--) {
-    let sum = M[i][n];
-    for (let j = i + 1; j < n; j++) sum -= M[i][j] * x[j];
-    x[i] = sum / M[i][i];
-  }
-  return x;
-}
-
-/** Least-squares projective transform mapping `src` onto `dst` (N >= 4). */
-export function fitHomography(src: Point[], dst: Point[]): Matrix3 | null {
-  const ns = normalise(src);
-  const nd = normalise(dst);
-  const s = src.map((p) => apply(ns.T, p));
-  const d = dst.map((p) => apply(nd.T, p));
-
-  const A: number[][] = [];
-  const b: number[] = [];
-  for (let i = 0; i < s.length; i++) {
-    const [x, y] = s[i];
-    const [X, Y] = d[i];
-    A.push([x, y, 1, 0, 0, 0, -x * X, -y * X]);
-    b.push(X);
-    A.push([0, 0, 0, x, y, 1, -x * Y, -y * Y]);
-    b.push(Y);
-  }
-
-  const n = 8;
-  const ata: number[][] = Array.from({ length: n }, () => new Array(n).fill(0));
-  const atb: number[] = new Array(n).fill(0);
-  for (let i = 0; i < A.length; i++)
-    for (let j = 0; j < n; j++) {
-      atb[j] += A[i][j] * b[i];
-      for (let k = 0; k < n; k++) ata[j][k] += A[i][j] * A[i][k];
-    }
-
-  const h8 = solveLinear(ata, atb);
-  if (!h8) return null;
-  const Hn = [h8[0], h8[1], h8[2], h8[3], h8[4], h8[5], h8[6], h8[7], 1];
-  return mul(nd.Ti, mul(Hn, ns.T));
-}
-
 /* ------------------------------------------------------------------ */
 /* Frame → world transform                                            */
 /* ------------------------------------------------------------------ */
 
-const FRAME_TO_MERCATOR =
-  fitHomography(HALL_FRAME_CORNERS, GEO_HALL_RING.slice(0, 5).map(mercatorFromLngLat)) ??
+/**
+ * How strictly the GeoJSON ring shapes the plan:
+ *  - 'affine': rotation + scale + mild shear — hugs the ring corners (~3–5 m),
+ *    may stretch the frame ≤ ~10 % along one axis.
+ *  - 'similarity': rotation + uniform scale only — Figma proportions 100 %
+ *    intact, corners may drift ~6–8 m (invisible once the outline layer is
+ *    removed, since nothing on screen references the ring).
+ */
+export const FIT_MODE: 'affine' | 'similarity' = 'similarity';
+
+/**
+ * Manual pose corrections on top of the fit (user-tuned). Rotation is
+ * screen-clockwise degrees; scale multiplies the fitted size. Pivoted on the
+ * hall centre so the plan stays put while turning/shrinking.
+ */
+export const POSE_OVERRIDE = {
+  rotateDeg: 10,
+  scale: 0.85,
+  /** Post-fit nudge in metres, map-aligned: [east, north]. */
+  offsetMeters: [4, -3] as [number, number],
+};
+
+/** Least-squares affine: x' = a·x + b·y + c, y' = d·x + e·y + f. */
+function fitAffine(src: Point[], dst: Point[]): Matrix3 | null {
+  let Sx = 0, Sy = 0, Sxx = 0, Sxy = 0, Syy = 0;
+  const tX = [0, 0, 0];
+  const tY = [0, 0, 0];
+  for (let i = 0; i < src.length; i++) {
+    const [x, y] = src[i];
+    const [X, Y] = dst[i];
+    Sx += x; Sy += y; Sxx += x * x; Sxy += x * y; Syy += y * y;
+    tX[0] += x * X; tX[1] += y * X; tX[2] += X;
+    tY[0] += x * Y; tY[1] += y * Y; tY[2] += Y;
+  }
+  const n = src.length;
+  const M = [
+    [Sxx, Sxy, Sx],
+    [Sxy, Syy, Sy],
+    [Sx, Sy, n],
+  ];
+  const solve = (b: number[]): number[] | null => {
+    const A = M.map((row, i) => [...row, b[i]]);
+    for (let i = 0; i < 3; i++) {
+      let mx = i;
+      for (let k = i + 1; k < 3; k++)
+        if (Math.abs(A[k][i]) > Math.abs(A[mx][i])) mx = k;
+      if (Math.abs(A[mx][i]) < 1e-12) return null;
+      [A[i], A[mx]] = [A[mx], A[i]];
+      for (let k = i + 1; k < 3; k++) {
+        const f = A[k][i] / A[i][i];
+        for (let j = i; j <= 3; j++) A[k][j] -= f * A[i][j];
+      }
+    }
+    const out = [0, 0, 0];
+    for (let i = 2; i >= 0; i--) {
+      let s = A[i][3];
+      for (let j = i + 1; j < 3; j++) s -= A[i][j] * out[j];
+      out[i] = s / A[i][i];
+    }
+    return out;
+  };
+  const cx = solve(tX);
+  const cy = solve(tY);
+  if (!cx || !cy) return null;
+  return [cx[0], cx[1], cx[2], cy[0], cy[1], cy[2], 0, 0, 1] as Matrix3;
+}
+
+/** Least-squares similarity (Kabsch, 2D): rotation + uniform scale only. */
+function fitSimilarity(src: Point[], dst: Point[]): Matrix3 | null {
+  const n = src.length;
+  const ms: Point = [
+    src.reduce((s, p) => s + p[0], 0) / n,
+    src.reduce((s, p) => s + p[1], 0) / n,
+  ];
+  const md: Point = [
+    dst.reduce((s, p) => s + p[0], 0) / n,
+    dst.reduce((s, p) => s + p[1], 0) / n,
+  ];
+  let a = 0, b = 0, norm = 0;
+  for (let i = 0; i < n; i++) {
+    const ux = src[i][0] - ms[0];
+    const uy = src[i][1] - ms[1];
+    const vx = dst[i][0] - md[0];
+    const vy = dst[i][1] - md[1];
+    a += vx * ux + vy * uy;
+    b += vx * uy - vy * ux;
+    norm += ux * ux + uy * uy;
+  }
+  if (norm < 1e-9) return null;
+  const scale = Math.hypot(a, b) / norm;
+  const theta = Math.atan2(b, a);
+  const c = Math.cos(theta);
+  const s = Math.sin(theta);
+  const tx = md[0] - scale * (c * ms[0] - s * ms[1]);
+  const ty = md[1] - scale * (s * ms[0] + c * ms[1]);
+  return [scale * c, -scale * s, tx, scale * s, scale * c, ty, 0, 0, 1] as Matrix3;
+}
+
+const ringMercator = GEO_HALL_RING.slice(0, 5).map(mercatorFromLngLat);
+
+const baseFit =
+  (FIT_MODE === 'similarity'
+    ? fitSimilarity(HALL_FRAME_CORNERS, ringMercator)
+    : fitAffine(HALL_FRAME_CORNERS, ringMercator)) ??
   ([1, 0, 0, 0, 1, 0, 0, 0, 1] as Matrix3);
+
+/** Compose a screen-clockwise rotation + uniform scale about the hall centre. */
+function applyPoseOverride(M: Matrix3): Matrix3 {
+  const th = (POSE_OVERRIDE.rotateDeg * Math.PI) / 180;
+  const k = POSE_OVERRIDE.scale;
+  const c = Math.cos(th);
+  const s = Math.sin(th);
+  const pivot = apply(M, [FRAME_WIDTH / 2, FRAME_HEIGHT / 2]);
+  const a = M[0], b = M[1], d = M[3], e = M[4];
+  const dx = M[2] - pivot[0];
+  const dy = M[5] - pivot[1];
+  // Map-aligned nudge (metres → mercator units).
+  const kMerc = 1 / (2 * Math.PI * 6378137);
+  return [
+    k * (c * a - s * d),
+    k * (c * b - s * e),
+    k * (c * dx - s * dy) + pivot[0] + POSE_OVERRIDE.offsetMeters[0] * kMerc,
+    k * (s * a + c * d),
+    k * (s * b + c * e),
+    k * (s * dx + c * dy) + pivot[1] + POSE_OVERRIDE.offsetMeters[1] * kMerc,
+    0,
+    0,
+    1,
+  ] as Matrix3;
+}
+
+const FRAME_TO_MERCATOR = applyPoseOverride(baseFit);
 
 /** Map a point in Figma-frame pixels to [lng, lat]. */
 export function frameToLngLat(p: Point): [number, number] {

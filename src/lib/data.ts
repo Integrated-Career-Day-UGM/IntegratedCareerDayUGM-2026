@@ -49,6 +49,30 @@ export function getZone(zoneId: string): Zone | undefined {
   return zones.find((z) => z.id === zoneId);
 }
 
+/**
+ * "Today" in the event's timezone, resolved lazily ONCE per page load (the
+ * client island runs after the HTML arrives) and cached at module scope —
+ * never recalculated on re-render or affected by later state changes.
+ */
+let cachedTodayDayId: string | null | undefined;
+
+export function getTodayDayId(): string | null {
+  if (cachedTodayDayId !== undefined) return cachedTodayDayId;
+  cachedTodayDayId = null;
+  try {
+    const todayIso = new Intl.DateTimeFormat('en-CA', {
+      timeZone: event.timezone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(new Date());
+    cachedTodayDayId = event.days.find((d) => d.date === todayIso)?.id ?? null;
+  } catch {
+    cachedTodayDayId = null;
+  }
+  return cachedTodayDayId;
+}
+
 export function getBoothsByArea(areaId: string): Booth[] {
   return booths.filter((b) => b.areaId === areaId);
 }
