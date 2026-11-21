@@ -63,14 +63,12 @@ function BoothRow({
 }
 
 export default function VenueList() {
-  const {
-    selectedAreaId,
-    selectBooth,
-    selectedBoothId,
-    searchQuery,
-    toggleBookmark,
-    isBookmarked,
-  } = useMapStore();
+  const selectedAreaId = useMapStore((s) => s.selectedAreaId);
+  const selectBooth = useMapStore((s) => s.selectBooth);
+  const selectedBoothId = useMapStore((s) => s.selectedBoothId);
+  const searchQuery = useMapStore((s) => s.searchQuery);
+  const toggleBookmark = useMapStore((s) => s.toggleBookmark);
+  const isBookmarked = useMapStore((s) => s.isBookmarked);
 
   const handleSelectBooth = (boothId: string) => {
     track('item.click', { boothId, context: searchQuery ? 'search' : 'venue-list' });

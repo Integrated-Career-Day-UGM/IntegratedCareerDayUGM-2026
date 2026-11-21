@@ -110,6 +110,9 @@ export type UiStrings = {
   insights: {
     title: string;
     subtitle: string;
+    kpiSectionTitle: string;
+    kpiSectionSubtitle: string;
+    kpiEmptyLabel: string;
     cards: Record<string, { label: string; value: string; change?: string; caption: string }>;
   };
   info: { title: string; helpTitle: string; sections: Record<string, { heading: string; body: string }> };

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { MapViewState } from '../types/map';
-import { event, getVenue, getArea, getBooth } from '../lib/data';
+import { event, venues, getVenue, getArea, getBooth } from '../lib/data';
 import { track } from '../lib/analytics';
 
 type SidebarMode = 'list' | 'detail' | 'search';
@@ -119,11 +119,32 @@ export const useMapStore = create<MapState>()(
       },
 
       selectBooth: (boothId) => {
-        if (boothId) {
-          const booth = getBooth(boothId);
-          track('booth.select', { boothId, companyId: booth?.companyId });
+        if (!boothId) {
+          set({ selectedBoothId: null, sidebarMode: 'list' });
+          return;
         }
-        set({ selectedBoothId: boothId, sidebarMode: boothId ? 'detail' : 'list' });
+        const booth = getBooth(boothId);
+        track('booth.select', { boothId, companyId: booth?.companyId });
+        if (!booth) {
+          // Unknown id (bad ?booth= URL, removed booth) — fall back to the
+          // home state instead of a half-applied selection.
+          set({ selectedBoothId: null, sidebarMode: 'list' });
+          return;
+        }
+        // The venue/track state follows the booth: the tab switcher must
+        // reflect the venue the clicked item belongs to. Saved rows, search
+        // results and ?booth= links can all cross tracks, and without this
+        // the sidebar shows a booth while the map stays on another venue.
+        const venue = venues.find((v) => v.areas.some((a) => a.id === booth.areaId));
+        const area = venue?.areas.find((a) => a.id === booth.areaId);
+        set({
+          selectedBoothId: boothId,
+          selectedVenueId: venue?.id ?? get().selectedVenueId,
+          selectedAreaId: area?.id ?? get().selectedAreaId,
+          selectedTrackId: area?.trackId ?? get().selectedTrackId,
+          gikMode: false,
+          sidebarMode: 'detail',
+        });
       },
 
       hoverBooth: (boothId) => set({ hoveredBoothId: boothId }),

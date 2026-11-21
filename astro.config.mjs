@@ -21,6 +21,9 @@ export default defineConfig({
     allowedHosts: isDev ? ['.kiri.localhost', '.kiri.local'] : [],
   },
   vite: {
-    plugins: [tailwindcss()],
+    // @tailwindcss/vite ships Vite plugin typings built against a different
+    // Vite minor than Astro pins; the runtime API is compatible, so cast at
+    // the seam to keep `astro check`/tsc quiet.
+    plugins: [/** @type {any} */ (tailwindcss())],
   },
 });

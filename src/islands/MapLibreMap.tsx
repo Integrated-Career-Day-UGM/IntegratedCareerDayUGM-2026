@@ -31,6 +31,11 @@ import {
  */
 const BASE_STYLE_URL = 'https://tiles.openfreemap.org/styles/dark';
 
+/** GIK overview zoom — the entry camera on both breakpoints and the target
+ *  of the track-switcher's GIK tab. Tune this one number after previewing
+ *  candidates with `__icdMap.easeTo({ zoom: N })` in the console. */
+const GIK_ZOOM = 17.3;
+
 /** Granite colour pass over the dark basemap (id → paint overrides). */
 const GRANITE_PAINT: Array<[string, Record<string, string>]> = [
   ['background', { 'background-color': '#17181c' }],
@@ -78,15 +83,17 @@ export default function MapLibreMap() {
   const lastTipTransformRef = useRef<string>('');
   const positionTooltipRef = useRef<() => void>(() => {});
   const [mapLoaded, setMapLoaded] = useState(false);
-  const {
-    setMapView,
-    selectedBoothId,
-    hoveredBoothId,
-    selectedVenueId,
-    selectedAreaId,
-    selectedTrackId,
-    gikMode,
-  } = useMapStore();
+  // Field selectors, not a whole-store subscription: hoveredBoothId and
+  // mapView change at pointer/moveend rate, and a whole-store subscribe
+  // re-rendered this island (and every other island) on each — the GC churn
+  // that starved MapLibre's render loop and blacked the canvas.
+  const setMapView = useMapStore((s) => s.setMapView);
+  const selectedBoothId = useMapStore((s) => s.selectedBoothId);
+  const hoveredBoothId = useMapStore((s) => s.hoveredBoothId);
+  const selectedVenueId = useMapStore((s) => s.selectedVenueId);
+  const selectedAreaId = useMapStore((s) => s.selectedAreaId);
+  const selectedTrackId = useMapStore((s) => s.selectedTrackId);
+  const gikMode = useMapStore((s) => s.gikMode);
   const activeBoothId = hoveredBoothId ?? selectedBoothId;
 
   /** Re-fit the hall into view. Mobile keeps the top chrome and the tray
@@ -99,6 +106,9 @@ export default function MapLibreMap() {
     // negative free space and silently aborts — the "disappearing map" bug.
     // Reset it before fitting.
     map.setPadding({ top: 0, bottom: 0, left: 0, right: 0 });
+    // Single camera owner: any in-flight easeTo/flyTo is cancelled here so
+    // two moves fired back-to-back (booth fly + hall fit) can never race.
+    map.stop();
     const isMobile = window.matchMedia('(max-width: 640px)').matches;
     const box = map.getContainer();
     // Belt-and-braces: fit padding must stay well under half the canvas or
@@ -143,10 +153,13 @@ export default function MapLibreMap() {
       container,
       style: BASE_STYLE_URL,
       center: HALL_CENTER,
-      // Entry state (both breakpoints): zoomed-out event overview — the GIK
-      // tab's default. Picking a track tab fits the hall instead.
-      zoom: 16.3,
-      minZoom: 14.5,
+      // Entry state (both breakpoints): the GIK overview. Picking a track
+      // tab fits the hall instead.
+      zoom: GIK_ZOOM,
+      // Zoom-out floor just under the overview: any further out and the
+      // floor-plan overlay drowns in campus context (user report: zoom ran
+      // from 16 down to 4). Raise toward the entry zoom, verified on device.
+      minZoom: 15.5,
       maxZoom: 21.5,
       bearing: 0,
       pitch: 0,
@@ -157,7 +170,39 @@ export default function MapLibreMap() {
     mapRef.current = map;
     if (import.meta.env.DEV) {
       (window as unknown as Record<string, unknown>).__icdMap = map;
+      // Black-canvas diagnosis probe: run from the console the moment the
+      // map goes black to distinguish camera/GL/tile failure shapes.
+      (window as unknown as Record<string, unknown>).__icdMapDebug = () => {
+        const canvas = map.getCanvas();
+        return {
+          canvasInDom: canvas.isConnected,
+          canvasPixelSize: [canvas.width, canvas.height],
+          containerSize: [
+            map.getContainer().clientWidth,
+            map.getContainer().clientHeight,
+          ],
+          zoom: map.getZoom(),
+          moving: map.isMoving(),
+          layerCount: map.getStyle().layers?.length ?? 0,
+        };
+      };
     }
+
+    // Never silent: a swallowed MapLibre error (e.g. the fitBounds abort
+    // behind the "disappearing map" bug) used to leave the canvas black
+    // with no trace. Context loss is logged so GL resets are visible.
+    map.on('error', (e) => {
+      // eslint-disable-next-line no-console
+      console.error('[maplibre]', e.error ?? e);
+    });
+    map.on('webglcontextlost', (e) => {
+      // eslint-disable-next-line no-console
+      console.error('[maplibre] WebGL context lost', (e as unknown as { originalEvent?: Event }).originalEvent);
+    });
+    map.on('webglcontextrestored', () => {
+      // eslint-disable-next-line no-console
+      console.warn('[maplibre] WebGL context restored');
+    });
 
     const positionTooltip = () => {
       const el = tooltipRef.current;
@@ -172,6 +217,9 @@ export default function MapLibreMap() {
       // Anchor: the booth's top edge in frame space → world → screen.
       const anchor = frameToLngLat([shape.left + shape.w / 2, shape.top]);
       const p = map.project(anchor as maplibregl.LngLatLike);
+      // Same crash class as syncOverlay: project() can return an unusable
+      // point mid-transition; bail instead of throwing into the render loop.
+      if (!p || !Number.isFinite(p.x) || !Number.isFinite(p.y)) return;
       const transform = `translate(${p.x.toFixed(1)}px, ${p.y.toFixed(1)}px)`;
       if (transform !== lastTipTransformRef.current) {
         lastTipTransformRef.current = transform;
@@ -186,6 +234,14 @@ export default function MapLibreMap() {
       const root = overlayRootRef.current;
       if (!root) return;
       const screen = FRAME_ANCHOR_LNGLATS.map((lngLat) => map.project(lngLat));
+      // Defensive guard: while the map is in an unstable state (style
+      // transition, tiles/glyphs still loading after a camera move),
+      // project() can return undefined or non-finite points. Throwing here
+      // kills the `render` callback — MapLibre stops painting and the
+      // canvas stays black. Skip the frame instead.
+      if (screen.some((p) => !p || !Number.isFinite(p.x) || !Number.isFinite(p.y))) {
+        return;
+      }
       const h = solveHomography(
         FRAME_ANCHOR_POINTS.map(([x, y]) => ({ x, y }) as Point2D),
         screen.map((p) => ({ x: p.x, y: p.y }) as Point2D),
@@ -227,13 +283,42 @@ export default function MapLibreMap() {
         paint: { 'fill-color': '#ff316b', 'fill-opacity': 0.08 },
       });
 
+      // Collision relief during camera flights: symbol placement dominated
+      // render frames while the camera moved (DevTools profile: ~127ms of a
+      // 200ms frame in placeCollisionCircles). While flying, symbols skip
+      // symbol-vs-symbol collision work; static placement resumes on
+      // moveend. The layer list is cached once — flights don't change it.
+      const symbolLayerIds = (map.getStyle().layers ?? [])
+        .filter((l) => l.type === 'symbol')
+        .map((l) => l.id);
+      const setCollisionRelief = (on: boolean) => {
+        for (const id of symbolLayerIds) {
+          if (!map.getLayer(id)) continue;
+          map.setLayoutProperty(id, 'icon-ignore-placement', on);
+          map.setLayoutProperty(id, 'text-ignore-placement', on);
+        }
+      };
+      map.on('movestart', () => setCollisionRelief(true));
+      map.on('moveend', () => setCollisionRelief(false));
+
       syncOverlay();
       setMapLoaded(true);
     });
 
     // Keep the DOM floor-plan glued to the map on every rendered frame.
-    map.on('render', syncOverlay);
-    map.on('resize', syncOverlay);
+    // Wrapped: an exception escaping this callback used to end the render
+    // loop for good (the persistent black map). Now one bad frame logs and
+    // the next one paints.
+    const safeSyncOverlay = () => {
+      try {
+        syncOverlay();
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error('[maplibre] syncOverlay failed', err);
+      }
+    };
+    map.on('render', safeSyncOverlay);
+    map.on('resize', safeSyncOverlay);
 
     // Store wiring: push the view state at the END of a gesture instead of
     // on every move frame (the old per-frame write re-rendered islands and
@@ -295,14 +380,25 @@ export default function MapLibreMap() {
     if (!target) return;
     const isMobile = window.matchMedia('(max-width: 640px)').matches;
     const detailOpen = useMapStore.getState().sidebarMode === 'detail';
+    // Cancel any in-flight camera move first — two overlapping moves are
+    // how the camera race (§ black-map) starts.
+    map.stop();
+    // NOTE: never pass `offset: undefined` — MapLibre's option validation
+    // runs Point.convert(undefined) which throws "reading 'x'", killing
+    // this effect and unmounting the island (the desktop black-map bug).
+    // Only include the key when there is an offset.
     map.easeTo({
       center: target,
       zoom: Math.max(map.getZoom(), 19.4),
       duration: 650,
-      offset:
-        isMobile && detailOpen
-          ? [0, Math.min(188, Math.floor(map.getContainer().clientHeight * 0.3))]
-          : undefined,
+      ...(isMobile && detailOpen
+        ? {
+            offset: [
+              0,
+              Math.min(188, Math.floor(map.getContainer().clientHeight * 0.3)),
+            ],
+          }
+        : {}),
     });
   }, [selectedBoothId, mapLoaded]);
 
@@ -321,6 +417,10 @@ export default function MapLibreMap() {
       return;
     }
     lastAreaKeyRef.current = key;
+    // A selected booth owns the camera (booth fly-to); fitting the hall
+    // here would cancel that flight via fitHall's map.stop(). Booth
+    // selection can switch area/track since the store change — skip.
+    if (useMapStore.getState().selectedBoothId) return;
     fitHall();
   }, [selectedVenueId, selectedAreaId, selectedTrackId, mapLoaded, fitHall]);
 
@@ -341,8 +441,13 @@ export default function MapLibreMap() {
     if (prev === null || prev === gikMode) return;
     if (gikMode) {
       map.setPadding({ top: 0, bottom: 0, left: 0, right: 0 });
-      map.easeTo({ center: HALL_CENTER, zoom: 16.3, duration: 700 });
+      map.stop();
+      map.easeTo({ center: HALL_CENTER, zoom: GIK_ZOOM, duration: 700 });
     } else {
+      // A selected booth owns the camera — its fly-to must not be cancelled
+      // by this hall fit (selectBooth leaves GIK mode and switches area in
+      // the same commit).
+      if (useMapStore.getState().selectedBoothId) return;
       fitHall();
     }
   }, [gikMode, mapLoaded, fitHall]);

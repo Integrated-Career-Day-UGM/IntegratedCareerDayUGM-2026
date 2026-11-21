@@ -1,23 +1,48 @@
 import { ArrowUpRight, Bookmark, Share2, X } from 'lucide-react';
+import { useMemo } from 'react';
 import { useMapStore } from '../stores/mapStore';
 import { useShareBooth } from '../hooks/useShareBooth';
 import { track } from '../lib/analytics';
 import { getBooth, getCompanyForBooth, getZonesByArea, getSessionsByArea, getTrack, event, ui } from '../lib/data';
 
 export default function BoothDetail() {
-  const { selectedBoothId, selectBooth, toggleBookmark, isBookmarked } = useMapStore();
+  const selectedBoothId = useMapStore((s) => s.selectedBoothId);
+  const selectBooth = useMapStore((s) => s.selectBooth);
+  const toggleBookmark = useMapStore((s) => s.toggleBookmark);
+  const isBookmarked = useMapStore((s) => s.isBookmarked);
   const { share, feedback: shareFeedback } = useShareBooth();
 
-  if (!selectedBoothId) return null;
-
-  const booth = getBooth(selectedBoothId);
-  const company = getCompanyForBooth(selectedBoothId);
-  const zone = getZonesByArea(booth?.areaId ?? '').find((z) => z.id === booth?.zoneId);
-  const areaSessions = getSessionsByArea(booth?.areaId ?? '').filter(
-    (s) => s.companyId === booth?.companyId
+  // Hooks before the early return. Lookups are linear scans over the JSON
+  // arrays, so memoizing them keeps the render cheap without re-scanning on
+  // unrelated store churn (hover, moveend).
+  const booth = useMemo(
+    () => (selectedBoothId ? getBooth(selectedBoothId) : undefined),
+    [selectedBoothId],
   );
-  const session = areaSessions[0];
-  const track = session ? getTrack(session.trackId) : null;
+  const company = useMemo(
+    () => (selectedBoothId ? getCompanyForBooth(selectedBoothId) : undefined),
+    [selectedBoothId],
+  );
+  const zone = useMemo(
+    () =>
+      booth
+        ? getZonesByArea(booth.areaId).find((z) => z.id === booth.zoneId)
+        : undefined,
+    [booth],
+  );
+  const session = useMemo(
+    () =>
+      booth
+        ? getSessionsByArea(booth.areaId).find((s) => s.companyId === booth.companyId)
+        : undefined,
+    [booth],
+  );
+  const trackInfo = useMemo(
+    () => (session ? getTrack(session.trackId) : null),
+    [session],
+  );
+
+  if (!selectedBoothId) return null;
 
   return (
     <div className="space-y-4">
@@ -45,9 +70,9 @@ export default function BoothDetail() {
                 WIB
               </span>
             )}
-            {track && (
+            {trackInfo && (
               <span className="bg-[#575757] px-2 py-0.5 text-xs font-medium text-white">
-                {track.label}
+                {trackInfo.label}
               </span>
             )}
           </div>

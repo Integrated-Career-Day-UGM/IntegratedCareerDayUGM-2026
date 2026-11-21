@@ -70,7 +70,10 @@ const minuteOf = (iso: string): number => {
 };
 
 export default function HappeningNow() {
-  const { selectedDayId, setSelectedArea, toggleBookmark, isBookmarked } = useMapStore();
+  const selectedDayId = useMapStore((s) => s.selectedDayId);
+  const setSelectedArea = useMapStore((s) => s.setSelectedArea);
+  const toggleBookmark = useMapStore((s) => s.toggleBookmark);
+  const isBookmarked = useMapStore((s) => s.isBookmarked);
   // Tick every 30s so live status / countdown stay honest.
   const [, setTick] = useState(0);
   useEffect(() => {

@@ -27,7 +27,7 @@ const emptyKpis: KpiData[] = [
 ];
 
 export default function Insights() {
-  const { bookmarkedIds } = useMapStore();
+  const bookmarkedIds = useMapStore((s) => s.bookmarkedIds);
   const { data: kpiData, loading: kpiLoading } = useKpiData();
   const cards = ui.insights.cards;
 

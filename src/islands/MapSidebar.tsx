@@ -32,7 +32,11 @@ const [lockupLine1, ...lockupRest] = ui.event.titleLine2.split(' ');
 const lockupLine2 = lockupRest.join(' ');
 
 export default function MapSidebar() {
-  const { selectedDayId, setSelectedDay, sidebarMode, sidebarTab, setSidebarTab } = useMapStore();
+  const selectedDayId = useMapStore((s) => s.selectedDayId);
+  const setSelectedDay = useMapStore((s) => s.setSelectedDay);
+  const sidebarMode = useMapStore((s) => s.sidebarMode);
+  const sidebarTab = useMapStore((s) => s.sidebarTab);
+  const setSidebarTab = useMapStore((s) => s.setSidebarTab);
   useBoothFromUrl();
 
   useEffect(() => {

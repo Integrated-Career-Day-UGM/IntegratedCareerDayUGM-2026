@@ -61,7 +61,7 @@ let cachedTodayDayId: string | null | undefined;
  * ONCE per page load and cached at module scope — never recalculated on
  * re-render or affected by later state changes.
  */
-let cachedTodayIso: string | undefined;
+let cachedTodayIso: string | null | undefined;
 
 export function getTodayIso(): string | null {
   if (cachedTodayIso !== undefined) return cachedTodayIso;

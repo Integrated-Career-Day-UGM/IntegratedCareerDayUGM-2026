@@ -5,7 +5,9 @@ import { useKeyboardShortcut } from '../hooks/useKeyboardShortcut';
 import { ui } from '../lib/data';
 
 export default function SearchBar() {
-  const { searchQuery, setSearchQuery, setSidebarTab } = useMapStore();
+  const searchQuery = useMapStore((s) => s.searchQuery);
+  const setSearchQuery = useMapStore((s) => s.setSearchQuery);
+  const setSidebarTab = useMapStore((s) => s.setSidebarTab);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useKeyboardShortcut(

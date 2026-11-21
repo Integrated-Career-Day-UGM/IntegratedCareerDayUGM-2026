@@ -2,10 +2,14 @@ import { Bookmark, Share2 } from 'lucide-react';
 import { useMapStore } from '../stores/mapStore';
 import { useShareBooth } from '../hooks/useShareBooth';
 import { track } from '../lib/analytics';
+import type { Booth, Company } from '../types/map';
 import { getBooth, getCompanyForBooth, getZonesByArea, getSessionsByArea, getTrack, event, ui } from '../lib/data';
 
 export default function BookmarkList() {
-  const { bookmarkedIds, selectBooth, toggleBookmark, isBookmarked } = useMapStore();
+  const bookmarkedIds = useMapStore((s) => s.bookmarkedIds);
+  const selectBooth = useMapStore((s) => s.selectBooth);
+  const toggleBookmark = useMapStore((s) => s.toggleBookmark);
+  const isBookmarked = useMapStore((s) => s.isBookmarked);
   const { share, feedback: shareFeedback } = useShareBooth();
 
   const handleSelectBooth = (boothId: string) => {
@@ -14,13 +18,12 @@ export default function BookmarkList() {
   };
 
   const items = bookmarkedIds
-    .map((id) => {
+    .map((id): { id: string; booth: Booth; company: Company | undefined } | null => {
       const booth = getBooth(id);
-      const company = getCompanyForBooth(id);
       if (!booth) return null;
-      return { id, booth, company };
+      return { id, booth, company: getCompanyForBooth(id) };
     })
-    .filter(Boolean) as { id: string; booth: ReturnType<typeof getBooth>; company: ReturnType<typeof getCompanyForBooth> }[];
+    .filter((item): item is NonNullable<typeof item> => item !== null);
 
   return (
     <div className="space-y-3">

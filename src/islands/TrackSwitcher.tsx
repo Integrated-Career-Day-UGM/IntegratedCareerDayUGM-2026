@@ -11,7 +11,11 @@ const trackIcons: Record<string, React.ComponentType<{ size?: number; className?
 };
 
 export default function TrackSwitcher() {
-  const { selectedVenueId, selectedAreaId, setSelectedArea, gikMode, setGikMode } = useMapStore();
+  const selectedVenueId = useMapStore((s) => s.selectedVenueId);
+  const selectedAreaId = useMapStore((s) => s.selectedAreaId);
+  const setSelectedArea = useMapStore((s) => s.setSelectedArea);
+  const gikMode = useMapStore((s) => s.gikMode);
+  const setGikMode = useMapStore((s) => s.setGikMode);
   const [openTrackId, setOpenTrackId] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const venue = getVenue(selectedVenueId);

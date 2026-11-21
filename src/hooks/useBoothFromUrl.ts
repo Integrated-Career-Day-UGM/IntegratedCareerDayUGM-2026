@@ -3,7 +3,7 @@ import { useMapStore } from '../stores/mapStore';
 import { getBooth } from '../lib/data';
 
 export function useBoothFromUrl() {
-  const { selectBooth } = useMapStore();
+  const selectBooth = useMapStore((s) => s.selectBooth);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;

@@ -27,7 +27,9 @@ const mobileTabs: { id: 'home' | 'search' | 'saved' | 'stats' | 'info'; icon: ty
 ];
 
 export default function MobileBottomSheet() {
-  const { sidebarMode, sidebarTab, setSidebarTab } = useMapStore();
+  const sidebarMode = useMapStore((s) => s.sidebarMode);
+  const sidebarTab = useMapStore((s) => s.sidebarTab);
+  const setSidebarTab = useMapStore((s) => s.setSidebarTab);
   const [height, setHeight] = useState<number>(SNAP_PEEK);
   const [isDragging, setIsDragging] = useState(false);
   const dragStartY = useRef(0);

@@ -3,7 +3,10 @@ import { Toilet, Hand, CircleHelp, LogOut, DoorOpen, Info } from 'lucide-react';
 import { track } from '../lib/analytics';
 import { quickfind, ui } from '../lib/data';
 
-const iconMap: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
+const iconMap: Record<
+  string,
+  React.ComponentType<{ size?: number; className?: string; strokeWidth?: number }>
+> = {
   toilet: Toilet,
   mosque: ({ size, className }: { size?: number; className?: string }) => (
     <svg

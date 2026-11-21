@@ -13,6 +13,7 @@ export type AnalyticsEventType =
   | 'item.click'
   | 'facility.click'
   | 'cta.click'
+  | 'gik.mode'
   | 'page.view';
 
 export type AnalyticsPayload = Record<string, unknown>;
