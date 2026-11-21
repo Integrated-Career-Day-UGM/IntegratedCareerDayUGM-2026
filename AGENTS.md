@@ -2,6 +2,12 @@
 
 Rules for all agents working in this repo.
 
+## 0. Documentation map
+
+- Product and process records live in `docs/`: `PRODUCT.md` (confirmed product truth — do NOT re-run impeccable init to recreate it), `PRD.md`, `BACKLOG.md`, `TODO.md`, `todo-polish.md` (the active polish plan).
+- `DESIGN.md` stays at the repo root — impeccable tooling resolves it there.
+- Future pages (landing + its sections) are scaffolded as empty folders with `.gitkeep`: `src/views/landing/` and `src/features/{sponsors,gallery,schedule,registration,faq,companies}/`.
+
 ## 1. Run processes in the container, not on the host
 
 - All dev servers, type checks, tests, linting, and builds run **inside the dev container** — never directly on the host machine.
