@@ -11,8 +11,9 @@ import '../styles/base/global.css';
 
 <BaseLayout title="Peta Lokasi - Integrated Career Day 2026">
   <main class="app-viewport fixed inset-x-0 top-0 flex overflow-hidden bg-[#09090b]">
-    {/* Desktop sidebar */}
-    <aside class="hidden h-full w-[390px] shrink-0 border-r-2 border-black/40 sm:flex">
+    {/* Desktop sidebar — narrower step at md (360px) widening to 390px at
+        lg, so 768–1023px screens keep more map (§6). */}
+    <aside class="hidden h-full w-[360px] shrink-0 border-r-2 border-black/40 md:flex lg:w-[390px]">
       <MapSidebar client:only="react" />
     </aside>
 
@@ -21,9 +22,9 @@ import '../styles/base/global.css';
       {/* Top chrome. Mobile: search bar on top, track switcher under it,
           quick find just under the switcher (reference layout). Desktop:
           track switcher only (search lives in the sidebar). */}
-      <div class="pointer-events-none absolute inset-x-0 top-0 z-10 flex flex-col gap-2 p-3 sm:block sm:p-4">
+      <div class="pointer-events-none absolute inset-x-0 top-0 z-10 flex flex-col gap-2 p-3 md:block md:p-4">
         {/* Mobile search — top mode */}
-        <div class="pointer-events-auto sm:hidden">
+        <div class="pointer-events-auto md:hidden">
           <SearchBar client:only="react" />
         </div>
 
@@ -35,20 +36,20 @@ import '../styles/base/global.css';
         {/* Quick find — mobile only, directly under the track switcher.
             Frameless: chips wrap and hug the left edge so they don't clutter
             the strip. */}
-        <div class="pointer-events-auto sm:hidden">
+        <div class="pointer-events-auto md:hidden">
           <QuickFind client:only="react" />
         </div>
       </div>
 
       {/* Floating quick-find bar (bottom-left, desktop) */}
-      <div class="pointer-events-none absolute bottom-3 left-3 z-10 hidden sm:block">
+      <div class="pointer-events-none absolute bottom-3 left-3 z-10 hidden md:block">
         <div class="pointer-events-auto">
           <QuickFind client:only="react" />
         </div>
       </div>
 
       {/* Mobile bottom sheet */}
-      <div class="absolute inset-x-0 bottom-0 z-20 h-auto sm:hidden">
+      <div class="absolute inset-x-0 bottom-0 z-20 h-auto md:hidden">
         <MobileBottomSheet client:only="react" />
       </div>
 

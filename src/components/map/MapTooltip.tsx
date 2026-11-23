@@ -18,7 +18,7 @@ export default function MapTooltip({ boothId, x, y }: MapTooltipProps) {
         left: x,
         top: y,
         borderRightWidth: '3px',
-        borderRightColor: zone?.color ?? '#ff316b',
+        borderRightColor: zone?.color ?? 'var(--accent-pink)',
       }}
     >
       <div className="text-sm font-bold leading-tight text-white">
@@ -26,7 +26,7 @@ export default function MapTooltip({ boothId, x, y }: MapTooltipProps) {
       </div>
       <div
         className="mt-0.5 text-xs font-medium"
-        style={{ color: zone?.color ?? '#ff316b' }}
+        style={{ color: zone?.color ?? 'var(--accent-pink)' }}
       >
         {booth?.code}
       </div>
@@ -34,7 +34,7 @@ export default function MapTooltip({ boothId, x, y }: MapTooltipProps) {
       <div
         className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 border-b border-r border-zinc-700 bg-[#1c1c20]"
         style={{
-          borderRightColor: zone?.color ?? '#ff316b',
+          borderRightColor: zone?.color ?? 'var(--accent-pink)',
         }}
       />
     </div>

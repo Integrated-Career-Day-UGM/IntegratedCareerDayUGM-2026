@@ -13,13 +13,13 @@ export default function EventInfo() {
           return (
             <div
               key={key}
-              className="bg-[#4a4a4a] p-3 transition-colors hover:bg-[#555]"
+              className="bg-card p-3 transition-colors hover:bg-card-hover"
             >
               <div className="mb-1 flex items-center gap-2">
-                <Icon size={14} className="text-[#9b9b9b]" />
+                <Icon size={14} className="text-ink-muted" />
                 <div className="font-heading text-sm font-semibold text-white">{section.heading}</div>
               </div>
-              <p className="text-sm leading-relaxed text-[#bbb]">{section.body}</p>
+              <p className="text-sm leading-relaxed text-[#d4d4d8]">{section.body}</p>
             </div>
           );
         })}

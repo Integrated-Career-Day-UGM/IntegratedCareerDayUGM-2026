@@ -2,6 +2,20 @@
 
 Rules for all agents working in this repo.
 
+
+## -1. Figma MCP & Asset Export Protocol (Persona 5–Inspired Landing Page)always ask user to screenshot or point to the node before u query urself which burn too much token 
+
+- **Landing page exemption from `DESIGN.md`:** The landing page (`src/views/landing/` and `src/features/*`) is a bespoke, Persona 5–inspired showcase that intentionally breaks away from `DESIGN.md` system tokens, standard grids, and boxed component rules. Do **not** sanitize, straighten, or constrain the layout into neat cards—strictly follow the Figma frames.
+- **Rotated & out-of-container composition rules:**
+  - **Embrace intentional bleed & rotation:** Elements that rotate (`transform: rotate(...)`), overlap adjacent sections, or break outside container boundaries in Figma are intentional. Match their exact angles, z-index stacking, and edge offsets.
+  - **Prevent unwanted horizontal scrollbars without clipping art:** Never slap `overflow: hidden` on inner section containers if it chops off elements meant to bleed across section boundaries. Only apply `overflow-x: clip` at the top-level page wrapper so off-canvas edges don't trigger horizontal page scroll.
+- **Desktop + Mobile parity required:** Both desktop and mobile frames exist in Figma for the landing page. Always inspect and implement **both** viewports together—do not infer mobile angles, crops, or out-of-bounds offsets by simply shrinking desktop CSS.
+- **Pixel-perfect CSS vs. Figma MCP export:**
+  - Use clean HTML + CSS (`transform: rotate()`, `clip-path` polygons, skewed panels, bold typography) only when it reproduces the Figma node pixel-for-pixel across both desktop and mobile.
+  - **Never hand-code complex art or decals:** Halftone textures, jagged splatter shapes, custom brush strokes, irregular stickers, and multi-layered vector graphics must **not** be recreated with hand-written SVG paths or hacky CSS.
+  - **Immediate export threshold:** If a rotated decal, background shape, or graphic overlay cannot be modeled cleanly and pixel-perfectly in standard CSS, immediately export that node via Figma MCP (`.svg` for crisp vectors, `.png` for textures/raster art), save it under `public/landing/` (or `public/`), and position it cleanly as an asset.
+
+
 ## 0. Documentation map
 
 - Product and process records live in `docs/`: `PRODUCT.md` (confirmed product truth — do NOT re-run impeccable init to recreate it), `PRD.md`, `BACKLOG.md`, `TODO.md`, `todo-polish.md` (the active polish plan).
@@ -114,3 +128,5 @@ Rules:
 - If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
 - Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
 - After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
+
+

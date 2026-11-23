@@ -1,6 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { ChevronDown, Store, Handshake, MessagesSquare, Route } from 'lucide-react';
 import { useMapStore } from '../stores/mapStore';
+import { useFluidHover } from '../hooks/use-fluid-hover';
+import { FluidHoverHighlight } from '../components/ui/fluid-hover-highlight';
+import { ScrollArea } from '../components/ui/scroll-area';
+import { MapFluidRoot } from '../components/map/map-fluid-root';
+import { Elevated } from '@/lib/elevated';
 import { event, getVenue, getSessionsByArea, getCompany } from '../lib/data';
 
 // One icon per track, keyed by track id from event.json.
@@ -20,6 +25,20 @@ export default function TrackSwitcher() {
   const containerRef = useRef<HTMLDivElement>(null);
   const venue = getVenue(selectedVenueId);
 
+  // One gliding hover highlight across the strip (§0), replacing the
+  // per-pill hover classes.
+  const stripRef = useRef<HTMLDivElement>(null);
+  const hover = useFluidHover(stripRef, { axis: 'x' });
+
+  // Tracks that actually render (a venue may have no area for a track).
+  // Precomputed so hover indices are stable across React double-renders.
+  const visibleTracks = event.tracks
+    .map((track) => ({
+      track,
+      areas: venue?.areas.filter((a) => a.trackId === track.id) ?? [],
+    }))
+    .filter(({ areas }) => areas.length > 0);
+
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
       if (!containerRef.current?.contains(e.target as Node)) {
@@ -31,113 +50,126 @@ export default function TrackSwitcher() {
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      className="flex w-[250px] max-w-full flex-nowrap items-center gap-0.5 overflow-x-auto rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] p-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:w-auto"
-    >
-      {event.tracks.map((track, index) => {
-        const areas = venue?.areas.filter((a) => a.trackId === track.id) ?? [];
-        const activeArea = areas.find((a) => a.id === selectedAreaId);
-        const active = !gikMode && (!!activeArea || (index === 0 && !selectedAreaId));
-        const isOpen = openTrackId === track.id;
-        const TrackIcon = trackIcons[track.id];
+    <MapFluidRoot>
+      <ScrollArea
+        orientation="horizontal"
+        className="w-[250px] max-w-full md:w-auto rounded-lg border border-line bg-[#0a0a0a]"
+        viewportClassName="scroll-fade-x"
+      >
+        <div
+          ref={stripRef}
+          className="relative flex w-max flex-nowrap items-center gap-0.5 p-1"
+          {...hover.handlers}
+        >
+          <FluidHoverHighlight hover={hover} className="bg-[#161616]" />
+          {visibleTracks.map(({ track, areas }, i) => {
+            const activeArea = areas.find((a) => a.id === selectedAreaId);
+            const active = !gikMode && (!!activeArea || (i === 0 && !selectedAreaId));
+            const isOpen = openTrackId === track.id;
+            const TrackIcon = trackIcons[track.id];
 
-        if (areas.length === 0) return null;
+            return (
+              <div key={track.id} className="relative shrink-0">
+                <button
+                  type="button"
+                  aria-label={track.label}
+                  ref={(el) => hover.registerItem(i, el)}
+                  onFocus={() => hover.setActiveIndex(i)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setGikMode(false);
+                    if (areas.length === 1) {
+                      setSelectedArea(areas[0].id);
+                      setOpenTrackId(null);
+                    } else {
+                      setOpenTrackId(isOpen ? null : track.id);
+                    }
+                  }}
+                  className={`flex shrink-0 items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[12px] font-semibold transition-colors md:px-3 md:text-[13px] ${
+                    active
+                      ? 'bg-[#1c1c1c] text-white shadow-[inset_0_-2px_0_var(--accent-pink)]'
+                      : 'text-ink-dim'
+                  }`}
+                >
+                  {TrackIcon && <TrackIcon size={13} className="shrink-0" />}
+                  {/* Mobile: inactive tracks collapse to their icon; tapping
+                      selects (expands) them. Desktop always shows labels. */}
+                  <span className={active ? '' : 'hidden md:inline'}>{track.label}</span>
+                  {areas.length > 1 && (
+                    <ChevronDown
+                      size={13}
+                      className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                    />
+                  )}
+                </button>
 
-        return (
-          <div key={track.id} className="relative shrink-0">
-            <button
-              type="button"
-              aria-label={track.label}
-              onClick={(e) => {
-                e.stopPropagation();
-                setGikMode(false);
-                if (areas.length === 1) {
-                  setSelectedArea(areas[0].id);
-                  setOpenTrackId(null);
-                } else {
-                  setOpenTrackId(isOpen ? null : track.id);
-                }
-              }}
-              className={`flex shrink-0 items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[12px] font-semibold transition-colors sm:px-3 sm:text-[13px] ${
-                active
-                  ? 'bg-[#1c1c1c] text-white shadow-[inset_0_-2px_0_#ff2d6f]'
-                  : 'text-[#8f8f8f] hover:bg-[#161616] hover:text-white'
-              }`}
-            >
-              {TrackIcon && <TrackIcon size={13} className="shrink-0" />}
-              {/* Mobile: inactive tracks collapse to their icon; tapping
-                  selects (expands) them. Desktop always shows labels. */}
-              <span className={active ? '' : 'hidden sm:inline'}>{track.label}</span>
-              {areas.length > 1 && (
-                <ChevronDown
-                  size={13}
-                  className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-                />
-              )}
-            </button>
-
-            {/* Dropdown — prototype .menu styling */}
-            {areas.length > 1 && isOpen && (
-              <div className="track-dropdown absolute left-[-1px] top-full z-50 mt-[7px] w-[236px] rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]">
-                {areas.map((a) => {
-                  const sessions = getSessionsByArea(a.id);
-                  const firstSession = sessions[0];
-                  const company = firstSession ? getCompany(firstSession.companyId) : null;
-                  const isActive = a.id === selectedAreaId;
-                  return (
-                    <button
-                      key={a.id}
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedArea(a.id);
-                        setOpenTrackId(null);
-                      }}
-                      className={`block w-full px-3 py-2 text-left transition-colors ${
-                        isActive ? 'bg-[#ff2d6f] text-white' : 'text-[#ededed] hover:bg-[#161616]'
-                      }`}
-                    >
-                      <div className="text-[13px] font-semibold leading-tight">{a.name}</div>
-                      {company && (
-                        <small
-                          className={`block text-[11px] font-normal ${
-                            isActive ? 'text-white/80' : 'text-[#8f8f8f]'
+                {/* Dropdown — FF Surfaces: level 3 above the chrome so it
+                    never melts into the strip or the tiles behind it. */}
+                {areas.length > 1 && isOpen && (
+                  <Elevated offset={2} className="track-dropdown absolute left-[-1px] top-full z-50 mt-[7px] w-[236px] rounded-lg border border-line">
+                    {areas.map((a) => {
+                      const sessions = getSessionsByArea(a.id);
+                      const firstSession = sessions[0];
+                      const company = firstSession ? getCompany(firstSession.companyId) : null;
+                      const isActive = a.id === selectedAreaId;
+                      return (
+                        <button
+                          key={a.id}
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedArea(a.id);
+                            setOpenTrackId(null);
+                          }}
+                          className={`block w-full px-3 py-2 text-left transition-colors ${
+                            isActive ? 'bg-[var(--accent-pink)] text-white' : 'text-ink-body hover:bg-[#161616]'
                           }`}
                         >
-                          {company.name}
-                        </small>
-                      )}
-                    </button>
-                  );
-                })}
+                          <div className="text-[13px] font-semibold leading-tight">{a.name}</div>
+                          {company && (
+                            <small
+                              className={`block text-[11px] font-normal ${
+                                isActive ? 'text-white/80' : 'text-ink-dim'
+                              }`}
+                            >
+                              {company.name}
+                            </small>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </Elevated>
+                )}
               </div>
-            )}
-          </div>
-        );
-      })}
+            );
+          })}
 
-      {/* GIK — event overview / (later) geojson pathfinding to parking.
-          A sibling tab of the tracks: activating it zooms out to the whole
-          event location; picking any track returns to the hall fit. */}
-      <button
-        type="button"
-        aria-label="GIK"
-        onClick={(e) => {
-          e.stopPropagation();
-          setGikMode(true);
-          setOpenTrackId(null);
-        }}
-        className={`flex shrink-0 items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[12px] font-semibold transition-colors sm:px-3 sm:text-[13px] ${
-          gikMode
-            ? 'bg-[#1c1c1c] text-white shadow-[inset_0_-2px_0_#ff2d6f]'
-            : 'text-[#8f8f8f] hover:bg-[#161616] hover:text-white'
-        }`}
-      >
-        <Route size={13} className="shrink-0" />
-        {/* Mobile: icon-only unless selected, like the track tabs */}
-        <span className={gikMode ? '' : 'hidden sm:inline'}>GIK</span>
-      </button>
-    </div>
+          {/* GIK — event overview / (later) geojson pathfinding to parking.
+              A sibling tab of the tracks: activating it zooms out to the
+              whole event location; picking any track returns to the hall
+              fit. */}
+          <button
+            type="button"
+            aria-label="GIK"
+            ref={(el) => hover.registerItem(visibleTracks.length, el)}
+            onFocus={() => hover.setActiveIndex(visibleTracks.length)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setGikMode(true);
+              setOpenTrackId(null);
+            }}
+            className={`flex shrink-0 items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[12px] font-semibold transition-colors md:px-3 md:text-[13px] ${
+              gikMode
+                ? 'bg-[#1c1c1c] text-white shadow-[inset_0_-2px_0_var(--accent-pink)]'
+                : 'text-ink-dim'
+            }`}
+          >
+            <Route size={13} className="shrink-0" />
+            {/* Mobile: icon-only unless selected, like the track tabs */}
+            <span className={gikMode ? '' : 'hidden md:inline'}>GIK</span>
+          </button>
+        </div>
+      </ScrollArea>
+    </MapFluidRoot>
   );
 }

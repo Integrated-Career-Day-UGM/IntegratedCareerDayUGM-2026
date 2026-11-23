@@ -30,7 +30,7 @@ export default function BookmarkList() {
       <div className="sidebar-section-title">{ui.saved.listTitle}</div>
 
       {items.length === 0 && (
-        <div className="bg-[#4a4a4a] px-3 py-4 text-sm text-[#9b9b9b]">
+        <div className="bg-card px-3 py-4 text-sm text-ink-muted">
           {ui.saved.empty}
         </div>
       )}
@@ -44,7 +44,7 @@ export default function BookmarkList() {
           return (
             <div
               key={id}
-              className="relative bg-[#4a4a4a] p-3 transition-colors hover:bg-[#555]"
+              className="relative bg-card p-3 transition-colors hover:bg-card-hover"
             >
               <div className="flex items-start justify-between gap-3">
                 <button
@@ -63,7 +63,7 @@ export default function BookmarkList() {
                       {booth.code}
                     </span>
                     {session && (
-                      <span className="bg-[#ff2d6f] px-1.5 py-0.5 text-[10px] font-bold text-white">
+                      <span className="bg-[var(--accent-pink)] px-1.5 py-0.5 text-[10px] font-bold text-white">
                         {new Date(session.start).toLocaleTimeString(event.locale, {
                           hour: '2-digit',
                           minute: '2-digit',
@@ -72,7 +72,7 @@ export default function BookmarkList() {
                       </span>
                     )}
                     {track && (
-                      <span className="bg-[#575757] px-1.5 py-0.5 text-[10px] text-white">
+                      <span className="bg-chip px-1.5 py-0.5 text-[10px] text-white">
                         {track.label}
                       </span>
                     )}
@@ -81,7 +81,7 @@ export default function BookmarkList() {
                 <button
                   type="button"
                   onClick={() => share(id)}
-                  className="shrink-0 p-1.5 text-[#9b9b9b] transition-[transform,colors] hover:text-white active:scale-95"
+                  className="shrink-0 p-1.5 text-ink-muted transition-[transform,colors] hover:text-white active:scale-95"
                   aria-label={ui.boothDetail.shareLabel}
                 >
                   <Share2 size={16} />
@@ -89,14 +89,14 @@ export default function BookmarkList() {
                 <button
                   type="button"
                   onClick={() => toggleBookmark(id)}
-                  className="shrink-0 text-[#ff2d6f] transition-[transform,colors] active:scale-95"
+                  className="shrink-0 text-[var(--accent-pink)] transition-[transform,colors] active:scale-95"
                   aria-label={ui.boothDetail.bookmarkLabel}
                 >
                   <Bookmark size={18} fill={isBookmarked(id) ? 'currentColor' : 'none'} />
                 </button>
               </div>
               {shareFeedback && (
-                <div className="mt-1.5 text-xs text-[#bbb]">{shareFeedback}</div>
+                <div className="mt-1.5 text-xs text-[#d4d4d8]">{shareFeedback}</div>
               )}
             </div>
           );

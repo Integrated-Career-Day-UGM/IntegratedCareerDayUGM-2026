@@ -6,10 +6,14 @@ import {
   Info,
   CircleHelp,
 } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useMapStore } from '../stores/mapStore';
 import { useBoothFromUrl } from '../hooks/useBoothFromUrl';
 import { trackPageView } from '../lib/analytics';
+import { useFluidHover } from '../hooks/use-fluid-hover';
+import { FluidHoverHighlight } from '../components/ui/fluid-hover-highlight';
+import { ScrollArea } from '../components/ui/scroll-area';
+import { MapFluidRoot } from '../components/map/map-fluid-root';
 import SearchBar from './SearchBar';
 import HappeningNow from './HappeningNow';
 import VenueList from './VenueList';
@@ -38,6 +42,12 @@ export default function MapSidebar() {
   const sidebarTab = useMapStore((s) => s.sidebarTab);
   const setSidebarTab = useMapStore((s) => s.setSidebarTab);
   useBoothFromUrl();
+
+  // One gliding hover highlight for the whole rail (§0), replacing the
+  // per-button hover classes. Keyboard focus lights it too.
+  const railRef = useRef<HTMLElement>(null);
+  const hover = useFluidHover(railRef, { axis: 'y' });
+  const infoIndex = mainNavItems.length;
 
   useEffect(() => {
     trackPageView();
@@ -80,48 +90,59 @@ export default function MapSidebar() {
   };
 
   return (
-    <div className="flex h-full w-full">
-      {/* Left icon rail */}
-      <nav className="hidden w-[72px] shrink-0 flex-col items-center border-r-2 border-black/40 bg-[#262626] pt-14 sm:flex">
-        {mainNavItems.map((item) => {
-          const Icon = item.icon;
-          const active = sidebarTab === item.id;
-          return (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => setSidebarTab(item.id)}
-              className={`mt-2 flex h-[46px] w-[50px] items-center justify-center rounded-sm transition-colors ${
-                active
-                  ? 'bg-[#3b3b3b] text-white'
-                  : 'text-[#9b9b9b] hover:bg-[#333] hover:text-zinc-300'
-              }`}
-              aria-label={ui.tabs[item.id]}
-            >
-              <Icon size={22} strokeWidth={active ? 2 : 1.6} />
-            </button>
-          );
-        })}
-
-        <div className="flex-1" />
-
-        <button
-          type="button"
-          onClick={() => setSidebarTab('info')}
-          className={`mb-6 flex h-[46px] w-[50px] items-center justify-center rounded-sm transition-colors ${
-            sidebarTab === 'info'
-              ? 'bg-[#3b3b3b] text-white'
-              : 'text-[#9b9b9b] hover:bg-[#333] hover:text-zinc-300'
-          }`}
-          aria-label={ui.tabs.info}
+    <MapFluidRoot>
+      <div className="flex h-full w-full">
+        {/* Left icon rail — one gliding highlight per rail, not per-button
+            hover styles. Active item: white icon + 2px pink left rule. */}
+        <nav
+          ref={railRef}
+          className="relative hidden w-[72px] shrink-0 flex-col items-center border-r-2 border-black/40 bg-[#262626] pt-14 md:flex"
+          {...hover.handlers}
         >
-          {sidebarTab === 'info' ? (
-            <Info size={22} strokeWidth={2} />
-          ) : (
-            <CircleHelp size={22} strokeWidth={1.6} />
-          )}
-        </button>
-      </nav>
+          <FluidHoverHighlight hover={hover} className="bg-[#333333]" />
+          {mainNavItems.map((item, i) => {
+            const Icon = item.icon;
+            const active = sidebarTab === item.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                ref={(el) => hover.registerItem(i, el)}
+                onFocus={() => hover.setActiveIndex(i)}
+                onClick={() => setSidebarTab(item.id)}
+                className={`relative mt-2 flex h-[46px] w-[50px] items-center justify-center rounded-sm transition-colors ${
+                  active
+                    ? 'bg-[#3b3b3b] text-white shadow-[inset_2px_0_0_var(--accent-pink)]'
+                    : 'text-ink-muted'
+                }`}
+                aria-label={ui.tabs[item.id]}
+              >
+                <Icon size={22} strokeWidth={active ? 2 : 1.6} />
+              </button>
+            );
+          })}
+
+          <div className="flex-1" />
+
+          <button
+            type="button"
+            ref={(el) => hover.registerItem(infoIndex, el)}
+            onFocus={() => hover.setActiveIndex(infoIndex)}
+            onClick={() => setSidebarTab('info')}
+            className={`relative mb-6 flex h-[46px] w-[50px] items-center justify-center rounded-sm transition-colors ${
+              sidebarTab === 'info'
+                ? 'bg-[#3b3b3b] text-white shadow-[inset_2px_0_0_var(--accent-pink)]'
+                : 'text-ink-muted'
+            }`}
+            aria-label={ui.tabs.info}
+          >
+            {sidebarTab === 'info' ? (
+              <Info size={22} strokeWidth={2} />
+            ) : (
+              <CircleHelp size={22} strokeWidth={1.6} />
+            )}
+          </button>
+        </nav>
 
       {/* Main sidebar content */}
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden bg-[#1d1d1d]">
@@ -168,8 +189,8 @@ export default function MapSidebar() {
                     onClick={() => setSelectedDay(day.id)}
                     className={`flex size-[26px] items-center justify-center text-center font-heading text-[17px] font-bold leading-none transition-all ${
                       selectedDayId === day.id
-                        ? 'bg-[#ff2d6f] text-white'
-                        : 'text-[#9b9b9b] hover:text-white'
+                        ? 'bg-[var(--accent-pink)] text-white'
+                        : 'text-ink-muted hover:text-white'
                     }`}
                   >
                     {day.label}
@@ -201,11 +222,13 @@ export default function MapSidebar() {
           </div>
         )}
 
-        {/* Scrollable content */}
-        <div className="min-h-0 flex-1 overflow-y-auto px-3.5 pb-6 pt-2">
-          {renderMainContent()}
-        </div>
+        {/* Scrollable content — FF ScrollArea: the bar paints only while
+            scrolling (scroll-fade cue); touch keeps native overflow. */}
+        <ScrollArea className="min-h-0 flex-1" viewportClassName="scroll-fade">
+          <div className="@container px-3.5 pb-6 pt-2">{renderMainContent()}</div>
+        </ScrollArea>
       </div>
-    </div>
+      </div>
+    </MapFluidRoot>
   );
 }

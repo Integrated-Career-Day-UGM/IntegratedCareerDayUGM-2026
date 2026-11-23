@@ -3,6 +3,71 @@
 Execution order is top-down. Sources: impeccable polish audit (breakpoints /
 padding / type / color) and the Fluid Functionalism stack read.
 
+> **SPRINT ORDER (user, Nov 22):** the doc below was too broad. The next
+> sprint is **§18 (IA + sidebar unification) — the 90%**. Sections §3–§17
+> are **PARKED in backlog**: do not execute until §18 lands and the user
+> prompts. Done already: §0 (FF wiring), §1 (responsive spine), §2 (color
+> tokens/surfaces), §10-zoom floor, §12 black-map fix, BoothDetail header,
+> bookmark-state subscriptions.
+
+---
+
+## 18 — NEXT SPRINT: IA eye-flow + sidebar unification (the 90%)
+
+The main issue is **grouping and where the eye will look**. The sidebar
+currently reads as boxes-in-boxes; the fix is one flat surface per region,
+dividers for grouping, a strict sizing ladder, and surface levels that say
+what floats.
+
+### A. Sidebar unification (flat surface + dividers, uniform color)
+- [ ] **One surface per region, no nested cards.** Kill the box-in-box
+      pattern: zone cards (`border-line bg-cardbg` blocks), detail-view
+      sub-boxes (tags row, Bookmark/Share/Close trio, opportunity rows all
+      sit in their own `bg-card` boxes). Replace with: the panel's own
+      surface + hairline dividers (`border-line` 1px) between groups.
+- [ ] **List view:** zone cards → single list; zone headers ("ZONE C · 6")
+      become *divider rows* (label above a hairline), rows separated by
+      hairlines, no per-zone boxes.
+- [ ] **Detail view:** one column on the panel surface — title block →
+      hairline → meta chips (text-level, not boxed) → hairline → actions
+      (ghost/text buttons, not three boxes; the white CTA pair stays boxed
+      white = destination) → hairline → opportunities as divider-separated
+      rows, not boxed cards.
+- [ ] **Uniform color:** collapse the remaining one-off grays
+      (`#111`, `#0c0c0f`, `#0e0e0e`, `#1d1d1d`…) onto the surface ladder +
+      the two ink steps; the panel, not the cards, carries the color.
+- [ ] **Surface levels (FF):** the sidebar panel = one level; anything
+      that floats over the map (dropdown, Hall card, tooltip) keeps its
+      ladder level; nothing inside the sidebar gets a shadow.
+
+### B. Sizing + reading order (§9 condensed — this IS the IA job)
+- [ ] **One dominant element per view, steps ≥3px between roles:**
+      - Home: the live-session card dominates (title 17px + pink accent),
+        search recedes below it, list rows 13px.
+      - Detail: the **company name** is the largest element (22px); CTA
+        row (white, 14px) is the scan's terminus at the bottom.
+      - Map: floor plan owns everything; only the Hall card + track
+        switcher are chrome.
+- [ ] **Pink trail (§9 order):** ribbon → live-card accents → selected
+      row's left bar / rail rule → day chip + booth glow → **white CTA**.
+      Audit every pink use against that order; stray pinks go gray.
+- [ ] **Grouping test:** squint at 1440/768/375 — exactly ONE thing should
+      pop per region; dividers group, never decorate.
+
+### C. Known visual bugs to catch while in here
+- [ ] Detail h2 shows a strikethrough-like artifact through part of the
+      company name (screenshot, "Bank Tabungan ~~Negara~~") — reproduce and
+      fix (suspect the FluidHoverHighlight or a text node boundary).
+
+### Acceptance
+- [ ] Screenshots 375 / 768 / 1440; sidebar reads as ONE surface with
+      dividers; the dominant element matches the table above per view.
+- [ ] Console clean; typecheck green; `graphify update .` after.
+
+---
+
+# PARKED (backlog — see docs/BACKLOG.md)
+
 > AGENTS.md rule: dev server, typecheck, lint, and builds run **inside the
 > container** (`docker compose -f docker-compose.dev.yaml exec app npm run …`).
 > Static file edits happen on the host.
@@ -18,96 +83,173 @@ of it**. Do not re-install; wire + repair.
 
 - [ ] Write `PRODUCT.md` from the confirmed init interview — **DONE** (this
       repo root). Commit it before visual work starts.
-- [ ] One-time stack repair (blocks future FF installs/updates):
-      - `npx shadcn@latest init` (no `components.json` yet) — configure for
-        Tailwind v4 + `@/` alias, base flavor.
-      - Map the granite/pink palette onto shadcn theme tokens in
-        `src/styles/base/global.css` (`--background #09090b`,
-        `--foreground #fafafa`, `--primary #ff2d6f`, `--border #27272a`,
-        `--muted-foreground #8f8f8f`, plus `--hover` / `--active` grays).
-        This merges with the color-token task in §2 — do them together.
-      - Verify `MotionConfig reducedMotion="user"` in
-        `src/lib/fluid-provider.tsx` wraps the **whole app root**, not just
-        FF blocks (mount it in `BaseLayout.astro`'s React root).
-- [ ] Wire `useFluidHover` + `FluidHoverHighlight` (one gliding highlight per
-      list, replacing per-row hover classes):
-      - `VenueList` booth rows — `useFluidHover(container, { axis: "y" })`;
-        the pink `inset 3px 0` selection bar stays a static selected style;
-        the hover highlight glides. Keyboard focus calls `setActiveIndex`.
-      - `MapSidebar` icon rail (5 buttons) — `axis: "y"`. While there, fix
-        the near-invisible active state (`#3b3b3b` on `#262626`): white icon
-        + 2px pink left rule.
-      - `MobileBottomSheet` tab rail — `axis: "x"`.
-      - `TrackSwitcher` pills — `axis: "x"`.
-      - `QuickFind` — `axis: "x"`.
-- [ ] Replace `overflow-y-auto` in the sidebar scroll region with
-      `<ScrollArea viewportClassName="scroll-fade">`; replace
-      `overflow-x-auto` in `TrackSwitcher` with
-      `<ScrollArea orientation="horizontal" viewportClassName="scroll-fade-x">`.
-- [ ] Size ladder: `SizeProvider size="compact"` around sidebar/sheet content
-      so FF components (badge, button, KpiTile) inherit the 28px step.
-- [ ] Motion tokens: import `spring` from `@/lib/springs` for tooltip /
-      dropdown / press motion in the islands; remove hand-written
-      `150ms`/`200ms`/`350ms` durations where a spring token fits.
-- [ ] Shortcut caps: replace hand-built `<kbd>` in `SearchBar` / `QuickFind`
-      with `KeyCaps` from `@/lib/key-cap` (`tone="inverted"` on dark).
-- [ ] Record DECISIONS (where the project keeps intent):
-      1. FF type rules (no uppercase / no letter-spacing / no raw px) do NOT
-         apply to the map islands — the Figma Persona-5 type world stays
-         local. FF motion/hover/scroll/size systems apply fully.
-      2. Accent pink = `#ff2d6f` (`global.css` wins over `DESIGN.md`'s
-         `#f63d6e` and the overlay fallback `#ff316b`).
+- [x] One-time stack repair — DONE: `components.json` written by hand
+      (Tailwind v4 + `@/` alias, new-york); registry installs verified
+      working (`reveal.json` pulled non-interactively). Palette mapped onto
+      shadcn/FF theme tokens in `global.css @theme` (background/foreground/
+      primary/border/muted-foreground/hover + the 8-level surface ladder).
+      `MotionConfig reducedMotion="user"` wraps every island root via
+      `MapFluidRoot` (islands are separate client:only React roots — a
+      BaseLayout provider would wrap nothing). Registry quirk fixed: the
+      CLI rewired skeleton.tsx to an npm `cn` package — reverted to
+      `@/lib/utils` and the dep removed.
+- [x] Wire `useFluidHover` + `FluidHoverHighlight` (one gliding highlight
+      per list, replacing per-row hover classes):
+      - `VenueList` booth rows — flat indices across zone groups; pink
+        inset bar is selected-only; keyboard focus calls `setActiveIndex`.
+      - `MapSidebar` icon rail — axis y; active state fixed (white icon +
+        2px pink left rule, `#333` gliding highlight).
+      - `MobileBottomSheet` tab rail — axis x.
+      - `TrackSwitcher` pills — axis x.
+      - `QuickFind` chips — gliding fill (user decision over ring).
+- [x] Replace `overflow-y-auto` in the sidebar scroll region with
+      `<ScrollArea viewportClassName="scroll-fade">`; `TrackSwitcher` strip
+      → `<ScrollArea orientation="horizontal" viewportClassName="scroll-fade-x">`
+      (the `[scrollbar-width:none]` hack is gone).
+- [x] Size ladder: `MapFluidRoot` mounts `FluidProvider size="compact"` —
+      the SizeProvider step wraps every island subtree; FF components
+      (ScrollArea, KeyCaps, highlight) inherit the 28px step.
+- [x] Motion tokens — MOVED to §14: spring tokens are `motion/react`
+      configs; the current animations are CSS transitions, so consuming
+      them is §14's refactor, not §0 wiring.
+- [x] Shortcut caps: SearchBar uses `KeyCaps` (default tone — FF's
+      `inverted` assumes a light theme bg). QuickFind's inline kbd stays
+      local on purpose: an 18px cap would bloat the Figma-sized chips
+      (visual integrity rule).
+- [x] Record DECISIONS — `docs/PRODUCT.md` (type rules local to map
+      islands; pink #ff2d6f; KeyCaps tone; §0→§14 motion move; shadcn
+      deferred→done; QuickFind fill).
 
 ## 1 — P0: Responsive spine
 
-- [ ] Move the desktop/mobile switch from `sm:` (640px) to `md:` (768px)
+- [x] Move the desktop/mobile switch from `sm:` (640px) to `md:` (768px)
       everywhere in the app surfaces: `map.astro` sidebar/quick-find/sheet,
-      `MapSidebar` rail, `MapLibreMap` control rails, `TrackSwitcher` pill
-      padding/size, `SearchBar` Ctrl+K hint, `Insights` grid trigger.
-      At 641–767px today, 462px of chrome leaves ~180px of map.
-- [ ] Add a compact mobile header to `MobileBottomSheet`: brand lockup +
-      the 2×2 day picker + Today/T-X chip. **Day switching is currently
-      impossible on mobile.** Show the lockup at half/full snaps.
-- [ ] Replace magic-number couplings:
-      - `bottom-[178px]` (zoom/compass) → derive from the sheet's actual
-        peek height (export `SNAP_PEEK` + tab rail height as shared
-        constants, or read the sheet ref).
-      - `top-[64px]` (venue card) → measure the track switcher height or
-        move the card into the switcher row.
-- [ ] Container queries: `Insights` 2×2 grid and `BoothDetail` CTA row
-      respond to the sidebar/sheet width (`@container`), not the viewport —
-      today the 2×2 grid fires on a 390px desktop sidebar but not a
-      full-width mobile sheet (exactly backwards).
+      `MapSidebar` rail, `MapLibreMap` control rails + both `matchMedia`
+      checks, `TrackSwitcher` pill padding/size, `SearchBar` Ctrl+K hint,
+      Insights grid. Remaining `sm:` usages live only in FF-vendored
+      generic components (not map surfaces).
+- [x] ~~Add a compact mobile header to `MobileBottomSheet`~~ — **DELETED
+      (user decision): no brand header on mobile, it clutters the viewport.**
+      The brand lockup returns later as a View Transitions shared element
+      during the skeleton/map-loading pass (§16-C) — it "sweeps" into the
+      map, it never becomes a header. Mobile day switching is still
+      unsolved → tracked in `docs/BACKLOG.md` (prompt the user before
+      implementing; a sheet-internal day control is the likely shape).
+- [x] Replace magic-number couplings:
+      - Hall card's mobile offset now derives from the sheet's exported
+        `SNAP_PEEK` + `TAB_RAIL_H` constants (was hard-coded 172px).
+        `bottom-[178px]`/`top-[64px]` from the audit no longer exist in
+        code (stale after the chrome repositions).
+      - Map tap on empty space now deselects → the tray lowers back to
+        peek; booth tap still raises it to half (user-requested flow).
+- [x] Container queries: `Insights` KPI grid (`@[20rem]:grid-cols-2`) and
+      `BoothDetail` CTA row (`@[18rem]:grid-cols-2`) respond to the
+      sidebar/sheet width (`@container` on both content regions), not the
+      viewport.
 
 ## 2 — P0: Color tokens that guide the eye
 
-- [ ] Reconcile pink to one value (`#ff2d6f`) and use `var(--accent-pink)`
-      (or the shadcn `--primary` mapping from §0) everywhere; fix
-      `DESIGN.md` and the `FloorPlanOverlay` fallback to match.
-- [ ] Collapse ~35 hard-coded hexes onto one ladder:
-      `bg #09090b → elevated #121215 → surface #1c1c20 → interactive
-      #3b3b3b → hover` and 3 text steps (`#fafafa / #a1a1aa / #8f8f8f`).
-      `#4a4a4a`/`#575757`/`#414141`/`#444`/`#333` all become surface roles.
-- [ ] Accent discipline:
-      - Yellow `#f5b400` keeps ONE meaning: time-critical countdown.
-      - Rail active state gets the pink treatment (see §0 rail item).
-      - Zone-colored booth-code chips per list row (DESIGN.md already
-        specifies them; currently only a 3px `borderTop` carries zone
-        color) — links list rows to colored map booths.
-      - Primary CTA stays white (`bg-white text-black`) = destination;
-        pink = state. Reading order: pink tells you where you are, white
-        tells you where to go.
-- [ ] Contrast fixes: search placeholder `#bbb` on `#444` (≈3.6:1) → lift
-      field bg or placeholder; `#71717a` text on `#4a4a4a` chips; booth
-      count `#5f5f5f` → `#8f8f8f`.
-- [ ] Hover gating: wrap hover styles in `@media (hover: hover) and
-      (pointer: fine)` — touch tablets ≥640px currently latch hover states.
-      (The fluid-hover system handles this natively once wired in §0.)
-- [ ] Focus-visible: pink 2px focus ring globally on interactive elements.
-- [ ] Boxiness as part of this pass: audit radii (max 4/6px, sharp allowed
-      per the pixel aesthetic), 1px borders, hard offset shadows — remove
-      any soft/glassy leftovers (`backdrop-blur` on the sheet may stay
-      unless it reads glassy; judge on screen).
+- [x] Reconcile pink to one value (`#ff2d6f`) — done: `DESIGN.md` fixed,
+      FloorPlanOverlay/MapTooltip/MapLibreMap glow/booth-pulse fallbacks all
+      use `#ff2d6f` / `var(--accent-pink)`.
+- [x] Hex collapse **respecting the FF Surfaces system** (partial, by
+      design): the ~13 most frequent fills are ROLE tokens now (`bg-card`,
+      `bg-chip`, `bg-chipfill`, `bg-field`, `border-line`, `bg-cardbg`,
+      `text-ink-dim/muted/body` — 1:1 with the Figma hexes, zero visual
+      change); elevation uses `surface-1..8`. Remaining one-offs
+      (`#0c0c0f` sheet, `#0a0a0a` strip, `#1d1d1d` sidebar, rail grays)
+      collapse in a later pass — they're single-use, so no inconsistency
+      today.
+- [x] Accent discipline (this pass):
+      - Yellow keeps ONE meaning: the live card's yellow border is gone
+        (neutral `border-line`); `#f5b400` remains only on the countdown.
+      - Rail active state got the pink treatment (§0).
+      - Zone-colored booth-code chips per list row (DESIGN.md's
+        wayfinding unit) — zone identity moved off the `borderTop` strip
+        (§8 remediation) onto the chips.
+      - Primary CTA stays white = destination.
+- [x] Contrast fixes: search placeholder lifted to `#d4d4d8`, Insights
+      subtitles `#71717a → #a1a1aa`, booth count `#5f5f5f → #8f8f8f`,
+      share feedback `#bbb → #d4d4d8`.
+- [x] Hover gating: one `@custom-variant hover` override gates EVERY
+      `hover:` utility behind `(hover: hover) and (pointer: fine)` — touch
+      devices stop latching hover states.
+- [x] Focus-visible: pink 2px ring globally on interactive elements.
+
+- [ ] Ladder implementation = FF Surfaces system (vendored `Elevated` /
+      `surfaceClasses`; the 8-level `surface-1..8` + `shadow-surface-1..8`
+      tokens now live in `global.css @theme`). Migrate the hard-coded hexes
+      onto it: `Elevated offset={2}` for dropdowns/popovers, offset 4 for
+      dialogs, `surfaceClasses(n)` for non-div elements. Applied so far:
+      TrackSwitcher dropdown (level 3), Hall C1 card (fixed level 3).
+      Frameless chrome (QuickFind chips, track strip) stays surface-less by
+      design — Google-Maps-style standalone pills, no box-in-a-box.
+
+## 2.5 — P0: Breathing room (spacing as hierarchy)
+
+User report (Nov 22 screenshots): the desktop sidebar reads **cramped**, and
+the split between the icon dock (rail) and the content column is muddy —
+`#262626` rail against `#1d1d1d` content (`MapSidebar.tsx:85,127`) are two
+near-identical grays propped apart by a heavy `border-r-2 border-black/40`
+instead of real surface separation. This section is the spacing layer under
+§9's IA eye-flow: §9 decides WHAT dominates; this decides the air that makes
+the dominance legible.
+
+Principles (Emil / impeccable):
+
+- **Proximity = hierarchy.** Related things sit tight; groups are separated
+  by clearly MORE space than the gaps inside them. Today the ratios barely
+  differ (4–12px within groups, 8–16px between), so nothing visually groups.
+- **Spacing replaces chrome.** Every border/box removed in the §2 boxiness
+  pass must have whitespace doing the same job in its place — the two passes
+  land together or the page reads both cramped and naked.
+- **One rhythm, not per-component guesses.** An 8px base scale; IA groups
+  step at 24/32px. No more `pb-3` vs `pt-3` vs `pb-4` one-offs.
+
+### Rail ⇄ content distinction (the "huh" fix)
+
+- [ ] Depth ladder, not a fat border: rail on `#09090b`, content column on
+      the §2 elevated/surface step (`#121215`/`#1c1c20`), and the 2px
+      black/40 divider becomes 1px `var(--border)` (already §8 — do them
+      together). The rail should read as *dock*, the content as *page*;
+      today they read as one slab with a scratch in it.
+- [ ] Rail breathing + identity: restore DESIGN.md's "icons with labels" —
+      11px label under each icon, `#8f8f8f` (white + pink left rule when
+      active, per §0/§8). Label-less 46×50 squares are why the rail feels
+      both cramped AND anonymous; a 72px rail has room for both.
+- [ ] Rail vertical rhythm: replace the `mt-2` accumulation with a single
+      8px gap between items, ≥24px between the nav group and the pinned
+      info button, and ≥16px top/bottom padding inside the rail.
+
+### Content column rhythm
+
+- [ ] Header: extend §6's header-grid item with explicit row spacing —
+      badge row / lockup+day-picker row separated by 16px on shared
+      baselines, replacing the 150px absolute-position collage
+      (`top-9` / `top-[66px]` / `top-[84px]`) whose dead band is the main
+      cramp source.
+- [ ] One vertical scale for the column: 8px between related lines,
+      16px inside a card's padding zone, **24px between IA groups**
+      (search → live card → venue list). Retire the current mix
+      (`px-3.5 pb-3`, `pb-4 pt-3`, `pb-6 pt-2` at `MapSidebar.tsx:193–205`).
+- [ ] Group separation without lines: 24px + the section label separates
+      groups; never a divider AND a big gap. In `VenueList`, 8px inside a
+      zone, 20–24px between zones, so each zone header owns its rows.
+- [ ] Amend §4's gutter token: sidebar gutter 14px → 16px (`px-4`), matching
+      the desktop map-edge inset rule; sheet stays 16px. One value per role,
+      no `px-3.5` stragglers.
+- [ ] Width before density: if list rows + chips need more than ~360px of
+      content width at md, take §6's narrower sidebar step (360px at md →
+      390px at lg) rather than shaving paddings — cramped padding is the
+      symptom, fixed 390px at every breakpoint is the cause.
+- [ ] §6's search-bar slimming (42px → 36–38px) counts toward this pass:
+      the freed height goes to the header band's air, not to more content.
+
+### Verify
+
+- [ ] Squint test at 768 / 1440: the three IA groups (live card, search,
+      list) must read as three islands, and rail vs content as two planes —
+      screenshot pass alongside §9's.
 
 ## 3 — P1: Type scale
 
@@ -149,20 +291,15 @@ of it**. Do not re-install; wire + repair.
 ## 6 — Layout de-clunk (from Nov 21 screenshots)
 
 ### Desktop
-- [ ] Compress the sidebar header: replace the four floating fragments
-      (ribbon / lockup / day-picker / chip) with one header grid on shared
-      baselines; reclaim ~40px of dead band above the search bar
-- [ ] Slim the search bar: h-[42px] + 3px border → 36–38px, 2px border,
-      move the Ctrl K hint out of the truncation path; placeholder must
-      not truncate
+
+
 - [ ] De-densify the live-session card: keep ONE accent (pink hard
       shadow), demote the yellow border to the countdown only, merge the
       two meta rows into one line, footer row into the card's bottom edge
 - [ ] Fix map chrome collisions: move zoom/compass rail clear of the E/F
       label band (hug the right edge below the Hall C1 card), lift
       quick-find off the bottom edge (it clips), separate attribution
-- [ ] Consider a narrower sidebar step at md (360px) widening to 390px at
-      lg, so 768–1024px screens keep more map
+
 
 ### Mobile
 - [ ] Reorder sheet content: map + live session first; search lives in the
@@ -172,8 +309,9 @@ of it**. Do not re-install; wire + repair.
       + live-session card header, so the card never beheads
 - [ ] Track switcher: full-width ScrollArea with scroll-fade-x so
       "Career Counseli" truncation gets a fade cue, not a hard cut
-- [ ] Add the mobile day-picker/brand header (already §1 P0 — the
-      screenshots confirm it)
+- [x] ~~Add the mobile day-picker/brand header~~ — deleted with the §1
+      item (no brand header on mobile); day switching tracked in
+      `docs/BACKLOG.md`.
 
 ## 7 — Fluid Functionalism rules on remaining surfaces (explicit, for later)
 - [ ] Scroller rule: FF ScrollArea + scroll-fade / scroll-fade-x on EVERY

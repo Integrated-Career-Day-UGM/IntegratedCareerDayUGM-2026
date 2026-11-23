@@ -84,3 +84,20 @@ one-handed use, glanceable interactions. Also desktop pre-event planning.
 No standard pinned yet (open decision). Known needs: touch-first targets
 (44px), `prefers-reduced-motion` honored app-wide, readable type at 375px,
 keyboard focus visible (pink focus ring).
+
+## Decisions
+
+- **FF type rules (no uppercase / no letter-spacing / no raw px) do NOT
+  apply to the map islands** — the Figma Persona-5 type world stays local.
+  FF motion/hover/scroll/size systems apply fully.
+- **Accent pink = `#ff2d6f`** (`global.css` wins over `DESIGN.md`'s
+  `#f63d6e` and the overlay fallback `#ff316b`).
+- **FF `KeyCaps tone="inverted"` assumes a LIGHT theme background**; on
+  this app's dark granite the default tone is the correct "on dark" cap.
+- **§0's spring-token item moved to §14** — spring tokens are
+  `motion/react` configs and cannot be consumed by the current CSS
+  transitions; converting is §14's motion-system refactor.
+- **shadcn init deferred** — the FF components are vendored locally; init
+  only gates future registry installs/updates, nothing at runtime.
+- **QuickFind chip hover is the gliding fill** (user decision over the
+  ring variant).

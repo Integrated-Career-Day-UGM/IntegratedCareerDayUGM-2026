@@ -24,7 +24,7 @@ const FloorPlanOverlay = forwardRef<HTMLDivElement>(function FloorPlanOverlay(_,
     const zone = getZone(booth?.zoneId ?? '');
     const company = getCompanyForBooth(shape.id);
     return {
-      zoneColor: zone?.color ?? '#ff316b',
+      zoneColor: zone?.color ?? 'var(--accent-pink)',
       zoneName: zone?.name ?? '',
       companyName: company?.name ?? booth?.label ?? shape.code,
     };
@@ -226,7 +226,7 @@ const FloorPlanOverlay = forwardRef<HTMLDivElement>(function FloorPlanOverlay(_,
       <div className="absolute flex h-[102.326px] items-center justify-center top-[77.97px] left-[186.71px] w-[80.545px]">
         <div className="flex-none rotate-[55.58deg]">
           <div
-            className="relative flex h-[23.819px] w-[107.725px] items-center justify-center bg-[#ff316b] px-[6.37px] pt-[6.552px] pb-[6.37px]"
+            className="relative flex h-[23.819px] w-[107.725px] items-center justify-center bg-[var(--accent-pink)] px-[6.37px] pt-[6.552px] pb-[6.37px]"
             style={{ fontFamily: 'Poppins, sans-serif' }}
           >
             <span className="text-[15.531px] leading-none tracking-[-1.2425px] whitespace-nowrap text-black">

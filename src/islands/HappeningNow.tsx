@@ -128,20 +128,20 @@ export default function HappeningNow() {
   const nextCompany = next ? getCompany(next.companyId) : null;
 
   return (
-    <section className="relative border border-[#f5b400] bg-[#0e0e0e] px-3 pb-2.5 pt-2 shadow-[4px_4px_0_#ff2d6f]">
+    <section className="relative border border-line bg-[#0e0e0e] px-3 pb-2.5 pt-2 shadow-[4px_4px_0_var(--accent-pink)]">
       {/* Status chip floats on the top border, like the design */}
       <span
         className={`absolute right-3 top-[-10px] px-3 py-px font-heading text-[12px] font-bold ${
-          live ? 'bg-white text-black' : 'bg-[#1c1c1c] text-[#ededed]'
+          live ? 'bg-white text-black' : 'bg-[#1c1c1c] text-ink-body'
         }`}
       >
         {label}
       </span>
 
       {/* Header row: blinking marker + label | time range */}
-      <div className="flex items-center justify-between font-heading text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8f8f8f]">
+      <div className="flex items-center justify-between font-heading text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-dim">
         <span className="flex items-center">
-          <i className="blink-dot mr-[7px] h-[7px] w-[7px] shrink-0 bg-[#ff2d6f]" />
+          <i className="blink-dot mr-[7px] h-[7px] w-[7px] shrink-0 bg-[var(--accent-pink)]" />
           {ui.happeningNow.liveLabel}
         </span>
         <span>
@@ -155,9 +155,9 @@ export default function HappeningNow() {
           <h3 className="font-heading text-[17px] font-bold leading-tight tracking-[-0.3px] text-white">
             {session.title}
           </h3>
-          <p className="text-[11px] leading-snug text-[#8f8f8f]">{company?.name}</p>
+          <p className="text-[11px] leading-snug text-ink-dim">{company?.name}</p>
           <div className="mt-1 flex items-baseline justify-between gap-2 text-[11px] font-semibold">
-            <span className="truncate text-[#ededed]">{area?.name}</span>
+            <span className="truncate text-ink-body">{area?.name}</span>
             {countdown && <span className="shrink-0 text-[#f5b400]">{countdown}</span>}
           </div>
         </div>
@@ -170,7 +170,7 @@ export default function HappeningNow() {
             onClick={() => setSelectedArea(session.areaId)}
             aria-label={ui.happeningNow.showOnMap}
             title={ui.happeningNow.showOnMap}
-            className="flex size-[33px] items-center justify-center bg-[#414141] transition-colors hover:bg-[#4d4d4d] active:scale-[0.98]"
+            className="flex size-[33px] items-center justify-center bg-chipfill transition-colors hover:bg-field-hover active:scale-[0.98]"
           >
             <img
               src="/images/arrow-ne.svg"
@@ -185,7 +185,7 @@ export default function HappeningNow() {
               onClick={() => toggleBookmark(booth.id)}
               aria-label={saved ? ui.happeningNow.saved : ui.happeningNow.save}
               title={saved ? ui.happeningNow.saved : ui.happeningNow.save}
-              className="flex size-[33px] items-center justify-center bg-[#414141] transition-colors hover:bg-[#4d4d4d] active:scale-[0.98]"
+              className="flex size-[33px] items-center justify-center bg-chipfill transition-colors hover:bg-field-hover active:scale-[0.98]"
             >
               <Bookmark
                 size={16}
@@ -200,13 +200,13 @@ export default function HappeningNow() {
       {/* Progress — fill only, no track, so it never reads as a divider */}
       <div className="my-1.5 h-[2px]">
         <div
-          className="h-full bg-[#ff2d6f] transition-[width] duration-500"
+          className="h-full bg-[var(--accent-pink)] transition-[width] duration-500"
           style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
         />
       </div>
 
       {/* Footer: up next, or the end-of-day line */}
-      <div className="mt-2 border-t border-[#2a2a2a] pt-1.5 text-[11px] text-[#8f8f8f]">
+      <div className="mt-2 border-t border-line pt-1.5 text-[11px] text-ink-dim">
         {next
           ? `${ui.happeningNow.upNext} ${formatTime(next.start)}  ${next.title}${
               nextCompany ? `, ${nextCompany.name}` : ''

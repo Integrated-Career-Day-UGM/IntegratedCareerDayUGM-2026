@@ -66,10 +66,10 @@ export default function Insights() {
   const kpis = kpiData?.items && kpiData.items.length > 0 ? kpiData.items : emptyKpis;
 
   return (
-    <div className="space-y-5">
+    <div className="@container space-y-5">
       <div>
-        <div className="font-heading text-xs font-medium text-[#9b9b9b]">{ui.insights.title}</div>
-        <div className="text-[10px] text-[#71717a]">{ui.insights.subtitle}</div>
+        <div className="font-heading text-xs font-medium text-ink-muted">{ui.insights.title}</div>
+        <div className="text-[10px] text-[#a1a1aa]">{ui.insights.subtitle}</div>
       </div>
 
       <div className="grid grid-cols-2 gap-2">
@@ -78,17 +78,17 @@ export default function Insights() {
           return (
             <div
               key={stat.key}
-              className="bg-[#4a4a4a] p-3 transition-colors hover:bg-[#555]"
+              className="bg-card p-3 transition-colors hover:bg-card-hover"
             >
               <div className="mb-2 flex items-center justify-between">
-                <span className="font-heading text-[10px] font-medium uppercase tracking-wide text-[#9b9b9b]">
+                <span className="font-heading text-[10px] font-medium uppercase tracking-wide text-ink-muted">
                   {stat.label}
                 </span>
-                <Icon size={14} className="text-[#9b9b9b]" />
+                <Icon size={14} className="text-ink-muted" />
               </div>
               <div className="font-heading text-2xl font-bold text-white">{stat.value}</div>
-              <div className="mt-1 text-[10px] text-[#9b9b9b]">
-                {stat.change && <span className="mr-1 text-[#ff2d6f]">{stat.change}</span>}
+              <div className="mt-1 text-[10px] text-ink-muted">
+                {stat.change && <span className="mr-1 text-[var(--accent-pink)]">{stat.change}</span>}
                 {stat.caption}
               </div>
             </div>
@@ -98,13 +98,16 @@ export default function Insights() {
 
       <div className="space-y-2">
         <div className="flex items-center gap-2">
-          <Briefcase size={14} className="text-[#9b9b9b]" />
+          <Briefcase size={14} className="text-ink-muted" />
           <div>
-            <div className="font-heading text-xs font-medium text-[#9b9b9b]">{ui.insights.kpiSectionTitle}</div>
-            <div className="text-[10px] text-[#71717a]">{ui.insights.kpiSectionSubtitle}</div>
+            <div className="font-heading text-xs font-medium text-ink-muted">{ui.insights.kpiSectionTitle}</div>
+            <div className="text-[10px] text-[#a1a1aa]">{ui.insights.kpiSectionSubtitle}</div>
           </div>
         </div>
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+        {/* Container query, not viewport: the 2-col KPI grid must fire in a
+            390px mobile sheet AND the ~330px sidebar — wherever the region
+            is at least ~20rem wide (§1; the old sm: fired exactly backwards). */}
+        <div className="grid grid-cols-1 gap-2 @[20rem]:grid-cols-2">
           {kpis.map((kpi, index) => (
             <KpiTile
               key={`${kpi.label}-${index}`}

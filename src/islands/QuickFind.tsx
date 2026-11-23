@@ -1,6 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Toilet, Hand, CircleHelp, LogOut, DoorOpen, Info } from 'lucide-react';
 import { track } from '../lib/analytics';
+import { useFluidHover } from '../hooks/use-fluid-hover';
+import { FluidHoverHighlight } from '../components/ui/fluid-hover-highlight';
+import { MapFluidRoot } from '../components/map/map-fluid-root';
 import { quickfind, ui } from '../lib/data';
 
 const iconMap: Record<
@@ -32,6 +35,10 @@ const shortcutKeys = ['T', 'M', 'H'];
 
 export default function QuickFind() {
   const visible = quickfind.slice(0, 3);
+  // Gliding hover highlight across the chips (§0). Hit-testing is exact
+  // containment (no `nearest`), so the wrapping row needs no axis hint.
+  const chipsRef = useRef<HTMLDivElement>(null);
+  const hover = useFluidHover(chipsRef);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -49,28 +56,38 @@ export default function QuickFind() {
   }, [visible]);
 
   return (
-    <div className="flex w-max max-w-[15rem] flex-wrap items-center justify-start gap-1 sm:max-w-full sm:gap-0.5">
-      {visible.map((item, i) => {
-        const Icon = iconMap[item.icon] ?? Info;
-        const label = ui.quickFind.items[item.id] ?? item.label;
-        return (
-          <button
-            key={item.id}
-            type="button"
-            onClick={() => track('facility.click', { facilityId: item.id, label: item.label })}
-            className="flex h-6 shrink-0 items-center gap-1 rounded-full border border-[#5a5a5a] bg-[#414141]/90 px-1.5 text-[10px] font-semibold text-[#ededed] transition-colors hover:bg-[#4d4d4d] active:scale-[0.98] sm:h-[33px] sm:gap-[7px] sm:rounded-md sm:border-[#5a5a5a] sm:bg-[#414141] sm:px-[10px] sm:text-[12px]"
-          >
-            <span className="flex h-[11px] w-[11px] shrink-0 items-center justify-center rounded-full border-[1.5px] border-current sm:h-[14px] sm:w-[14px]">
-              <Icon size={7} strokeWidth={2.5} className="sm:hidden" />
-              <Icon size={8} strokeWidth={2.5} className="hidden sm:block" />
-            </span>
-            {label}
-            <kbd className="hidden border border-[#575757] px-1 py-px font-heading text-[9px] font-semibold text-[#cfcfcf] sm:inline-block">
-              {shortcutKeys[i]}
-            </kbd>
-          </button>
-        );
-      })}
-    </div>
+    <MapFluidRoot>
+      <div
+        ref={chipsRef}
+        className="relative flex w-max max-w-[15rem] flex-wrap items-center justify-start gap-1 md:max-w-full md:gap-0.5"
+        {...hover.handlers}
+      >
+        {/* Gliding fill behind the chips (user preference over the ring). */}
+        <FluidHoverHighlight hover={hover} className="bg-field-hover rounded-full md:rounded-md" />
+        {visible.map((item, i) => {
+          const Icon = iconMap[item.icon] ?? Info;
+          const label = ui.quickFind.items[item.id] ?? item.label;
+          return (
+            <button
+              key={item.id}
+              type="button"
+              ref={(el) => hover.registerItem(i, el)}
+              onFocus={() => hover.setActiveIndex(i)}
+              onClick={() => track('facility.click', { facilityId: item.id, label: item.label })}
+              className="relative flex h-6 shrink-0 items-center gap-1 rounded-full border border-[#5a5a5a] bg-chipfill/90 px-1.5 text-[10px] font-semibold text-ink-body transition-colors active:scale-[0.98] md:h-[33px] md:gap-[7px] md:rounded-md md:border-[#5a5a5a] md:bg-chipfill md:px-[10px] md:text-[12px]"
+            >
+              <span className="flex h-[11px] w-[11px] shrink-0 items-center justify-center rounded-full border-[1.5px] border-current md:h-[14px] md:w-[14px]">
+                <Icon size={7} strokeWidth={2.5} className="md:hidden" />
+                <Icon size={8} strokeWidth={2.5} className="hidden md:block" />
+              </span>
+              {label}
+              <kbd className="hidden border border-[#575757] px-1 py-px font-heading text-[9px] font-semibold text-[#cfcfcf] md:inline-block">
+                {shortcutKeys[i]}
+              </kbd>
+            </button>
+          );
+        })}
+      </div>
+    </MapFluidRoot>
   );
 }

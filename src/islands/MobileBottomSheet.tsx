@@ -1,6 +1,9 @@
 import { useRef, useState, useCallback, useEffect } from 'react';
 import { Home, Search, Bookmark, BarChart3, Info } from 'lucide-react';
 import { useMapStore } from '../stores/mapStore';
+import { useFluidHover } from '../hooks/use-fluid-hover';
+import { FluidHoverHighlight } from '../components/ui/fluid-hover-highlight';
+import { MapFluidRoot } from '../components/map/map-fluid-root';
 import HappeningNow from './HappeningNow';
 import VenueList from './VenueList';
 import BoothDetail from './BoothDetail';
@@ -10,13 +13,16 @@ import EventInfo from './EventInfo';
 import { ui } from '../lib/data';
 
 
-const SNAP_PEEK = 110;
+export const SNAP_PEEK = 110;
 const SNAP_HALF = 320;
 const SNAP_FULL_RATIO = 0.82;
 /** Room kept above the fully-raised sheet: the top chrome (search +
     switcher + quick find) plus margin, so the drag hook never slides up
     under it and stays grabbable. */
 const TOP_CLEAR = 168;
+/** Tab rail height (h-14). Exported with SNAP_PEEK so map chrome can sit
+    above the tray's peek state without hard-coding its height (§1). */
+export const TAB_RAIL_H = 56;
 
 const mobileTabs: { id: 'home' | 'search' | 'saved' | 'stats' | 'info'; icon: typeof Home }[] = [
   { id: 'home', icon: Home },
@@ -30,6 +36,9 @@ export default function MobileBottomSheet() {
   const sidebarMode = useMapStore((s) => s.sidebarMode);
   const sidebarTab = useMapStore((s) => s.sidebarTab);
   const setSidebarTab = useMapStore((s) => s.setSidebarTab);
+  // Gliding hover highlight across the tab rail (§0).
+  const railRef = useRef<HTMLElement>(null);
+  const hover = useFluidHover(railRef, { axis: 'x' });
   const [height, setHeight] = useState<number>(SNAP_PEEK);
   const [isDragging, setIsDragging] = useState(false);
   const dragStartY = useRef(0);
@@ -88,14 +97,13 @@ export default function MobileBottomSheet() {
     prevTabRef.current = sidebarTab;
   }, [sidebarTab, height, snapTo]);
   useEffect(() => {
-    if (
-      prevModeRef.current !== sidebarMode &&
-      sidebarMode === 'detail' &&
-      height < SNAP_HALF
-    ) {
-      snapTo(SNAP_HALF);
-    }
+    const prev = prevModeRef.current;
     prevModeRef.current = sidebarMode;
+    if (prev === sidebarMode) return;
+    if (sidebarMode === 'detail' && height < SNAP_HALF) snapTo(SNAP_HALF);
+    // Detail closed (close button or a map tap on empty space): lower the
+    // tray back to peek so the map is the hero again.
+    if (prev === 'detail' && sidebarMode !== 'detail') snapTo(SNAP_PEEK);
   }, [sidebarMode, height, snapTo]);
 
   const renderContent = () => {
@@ -108,7 +116,7 @@ export default function MobileBottomSheet() {
   };
 
   return (
-    <>
+    <MapFluidRoot>
       {/* Draggable card — content only; the tab rail lives outside it so
           the tabs never travel with the drag (persistent bottom bar).
           Solid, no blur: translucent/blur layers over a scrollable child
@@ -137,7 +145,7 @@ export default function MobileBottomSheet() {
             scroll), contain the overscroll so it never chains into the map,
             and momentum scrolling on iOS. */}
         <div
-          className="flex min-h-0 flex-1 touch-pan-y flex-col gap-3 overflow-y-auto overscroll-contain px-4 pb-6 pt-3"
+          className="@container flex min-h-0 flex-1 touch-pan-y flex-col gap-3 overflow-y-auto overscroll-contain px-4 pb-6 pt-3"
           style={{ WebkitOverflowScrolling: 'touch' }}
         >
           {sidebarTab === 'home' && sidebarMode !== 'detail' && <HappeningNow />}
@@ -147,19 +155,24 @@ export default function MobileBottomSheet() {
 
       {/* Persistent bottom tab bar — fixed chrome, excluded from the drag */}
       <nav
-        className="pointer-events-auto flex h-14 shrink-0 items-center justify-around border-t border-zinc-800 bg-[#0c0c0f] px-2"
+        ref={railRef}
+        className="pointer-events-auto relative flex h-14 shrink-0 items-center justify-around border-t border-zinc-800 bg-[#0c0c0f] px-2"
         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
         aria-label="Sheet sections"
+        {...hover.handlers}
       >
-        {mobileTabs.map((item) => {
+        <FluidHoverHighlight hover={hover} className="bg-[#262626]" />
+        {mobileTabs.map((item, i) => {
           const Icon = item.icon;
           const active = sidebarTab === item.id;
           return (
             <button
               key={item.id}
               type="button"
+              ref={(el) => hover.registerItem(i, el)}
+              onFocus={() => hover.setActiveIndex(i)}
               onClick={() => setTab(item.id)}
-              className={`flex h-10 w-12 items-center justify-center rounded-sm transition-colors ${
+              className={`relative flex h-10 w-12 items-center justify-center rounded-sm transition-colors ${
                 active ? 'text-white' : 'text-zinc-500'
               }`}
               aria-label={ui.tabs[item.id]}
@@ -169,6 +182,6 @@ export default function MobileBottomSheet() {
           );
         })}
       </nav>
-    </>
+    </MapFluidRoot>
   );
 }

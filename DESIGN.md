@@ -13,7 +13,7 @@ This document captures design decisions, assumptions, and conventions used while
 
 1. **Dark granite foundation** — background is `#09090b` (granite). Map tiles are OpenFreeMap dark. The UI floats on this dark surface.
 2. **Swiss / Vercel-like UI** — minimal rounded corners (`radius-sm: 4px`, `radius-md: 6px`), tight tracking, high contrast, clear hierarchy, restrained color.
-3. **Pink accent** — `#f63d6e` is the primary action/accent color (badges, active states, selection glow, CTAs).
+3. **Pink accent** - `#ff2d6f` is the primary action/accent color (badges, active states,selection glow, CTAs).
 4. **Data-driven colors** — zone colors come from `zones.json`; venue/area changes drive map overlay colors.
 5. **No mascot artwork** — per user instruction, mascot illustration in Figma is ignored.
 6. **Responsive** — desktop uses a fixed left sidebar with icon rail; mobile uses a draggable bottom sheet.
@@ -51,7 +51,7 @@ This document captures design decisions, assumptions, and conventions used while
 | `--text-primary` | `#fafafa` | Headings, primary text |
 | `--text-secondary` | `#a1a1aa` | Secondary text |
 | `--text-muted` | `#71717a` | Muted labels |
-| `--accent-pink` | `#f63d6e` | Primary accent, badges, selection glow, CTAs |
+| `--accent-pink` | `#ff2d6f` | Primary accent, badges, selection glow, CTAs |
 | `--accent-cyan` | `#45d7c9` | Zone C / center booths |
 | `--accent-purple` | `#6949ff` | Zone E / east booths |
 | `--accent-magenta` | `#fd19e5` | Zone D |

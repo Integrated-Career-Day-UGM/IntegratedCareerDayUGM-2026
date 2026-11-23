@@ -66,7 +66,7 @@ export default function BoothDetail() {
             {booth?.code}
           </span>
           {session && (
-            <span className="flex items-center gap-1 bg-[#ff2d6f] px-2 py-0.5 text-xs font-bold text-white">
+            <span className="flex items-center gap-1 bg-[var(--accent-pink)] px-2 py-0.5 text-xs font-bold text-white">
               {new Date(session.start).toLocaleTimeString(event.locale, {
                 hour: '2-digit',
                 minute: '2-digit',
@@ -75,7 +75,7 @@ export default function BoothDetail() {
             </span>
           )}
           {trackInfo && (
-            <span className="bg-[#575757] px-2 py-0.5 text-xs font-medium text-white">
+            <span className="bg-chip px-2 py-0.5 text-xs font-medium text-white">
               {trackInfo.label}
             </span>
           )}
@@ -90,8 +90,8 @@ export default function BoothDetail() {
           onClick={() => toggleBookmark(selectedBoothId)}
           className={`flex items-center justify-center gap-1.5 px-3 py-2.5 text-[12px] font-semibold transition-[transform,colors] active:scale-[0.98] ${
             saved
-              ? 'bg-[#ff2d6f]/20 text-[#ff2d6f]'
-              : 'bg-[#4a4a4a] text-[#9b9b9b] hover:bg-[#555] hover:text-white'
+              ? 'bg-(--accent-pink)/20 text-[var(--accent-pink)]'
+              : 'bg-card text-ink-muted hover:bg-card-hover hover:text-white'
           }`}
           aria-label={ui.boothDetail.bookmarkLabel}
           aria-pressed={saved}
@@ -102,7 +102,7 @@ export default function BoothDetail() {
         <button
           type="button"
           onClick={() => share(selectedBoothId)}
-          className="flex items-center justify-center gap-1.5 bg-[#4a4a4a] px-3 py-2.5 text-[12px] font-semibold text-[#9b9b9b] transition-[transform,colors] hover:bg-[#555] hover:text-white active:scale-[0.98]"
+          className="flex items-center justify-center gap-1.5 bg-card px-3 py-2.5 text-[12px] font-semibold text-ink-muted transition-[transform,colors] hover:bg-card-hover hover:text-white active:scale-[0.98]"
           aria-label={ui.boothDetail.shareLabel}
         >
           <Share2 size={16} />
@@ -111,7 +111,7 @@ export default function BoothDetail() {
         <button
           type="button"
           onClick={() => selectBooth(null)}
-          className="flex items-center justify-center gap-1.5 bg-[#4a4a4a] px-3 py-2.5 text-[12px] font-semibold text-[#9b9b9b] transition-[transform,colors] hover:bg-[#555] hover:text-white active:scale-[0.98]"
+          className="flex items-center justify-center gap-1.5 bg-card px-3 py-2.5 text-[12px] font-semibold text-ink-muted transition-[transform,colors] hover:bg-card-hover hover:text-white active:scale-[0.98]"
           aria-label={ui.boothDetail.closeLabel}
         >
           <X size={16} />
@@ -124,7 +124,7 @@ export default function BoothDetail() {
           {company.tags.map((tag) => (
             <span
               key={tag}
-              className="bg-[#575757] px-2 py-0.5 text-[11px] text-white"
+              className="bg-chip px-2 py-0.5 text-[11px] text-white"
             >
               {tag}
             </span>
@@ -132,7 +132,10 @@ export default function BoothDetail() {
         </div>
       ) : null}
 
-      <div className="grid grid-cols-2 gap-2">
+      {/* CTA pair collapses to a column only in genuinely narrow regions
+          (container query, §1) — desktop sidebar and mobile sheet both fit
+          two across. */}
+      <div className="grid grid-cols-1 gap-2 @[18rem]:grid-cols-2">
         {company?.websiteUrl && (
           <a
             href={company.websiteUrl}
@@ -164,7 +167,7 @@ export default function BoothDetail() {
       </div>
 
       {shareFeedback && (
-        <div className="bg-[#4a4a4a] px-3 py-1.5 text-xs font-medium text-[#bbb]">
+        <div className="bg-card px-3 py-1.5 text-xs font-medium text-[#d4d4d8]">
           {shareFeedback}
         </div>
       )}
@@ -176,10 +179,10 @@ export default function BoothDetail() {
             {company.openings.map((role, i) => (
               <div
                 key={i}
-                className="bg-[#4a4a4a] px-3 py-2.5 text-sm text-white transition-colors hover:bg-[#555]"
+                className="bg-card px-3 py-2.5 text-sm text-white transition-colors hover:bg-card-hover"
               >
                 {role.title}
-                <div className="text-xs text-[#bbb]">{role.type}</div>
+                <div className="text-xs text-[#d4d4d8]">{role.type}</div>
               </div>
             ))}
           </div>

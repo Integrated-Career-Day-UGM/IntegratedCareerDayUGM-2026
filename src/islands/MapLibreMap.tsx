@@ -7,6 +7,8 @@ import ZoomButtons from '../components/map/ZoomButtons';
 import MapTooltip from '../components/map/MapTooltip';
 import CompassButton from '../components/map/CompassButton';
 import { ui, getVenue, getTrack } from '../lib/data';
+import { surfaceClasses } from '../lib/surface-classes';
+import { SNAP_PEEK, TAB_RAIL_H } from './MobileBottomSheet';
 import {
   BOOTH_LNGLATS,
   BOOTH_SHAPES,
@@ -109,7 +111,9 @@ export default function MapLibreMap() {
     // Single camera owner: any in-flight easeTo/flyTo is cancelled here so
     // two moves fired back-to-back (booth fly + hall fit) can never race.
     map.stop();
-    const isMobile = window.matchMedia('(max-width: 640px)').matches;
+    // The mobile camera branch follows the LAYOUT breakpoint (md, 768px) —
+    // same value the chrome uses (§1).
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
     const box = map.getContainer();
     // Belt-and-braces: fit padding must stay well under half the canvas or
     // MapLibre aborts the fit ("Map cannot fit within canvas").
@@ -280,7 +284,7 @@ export default function MapLibreMap() {
         id: 'hall-footprint-glow',
         source: 'hall-footprint',
         type: 'fill',
-        paint: { 'fill-color': '#ff316b', 'fill-opacity': 0.08 },
+        paint: { 'fill-color': 'var(--accent-pink)', 'fill-opacity': 0.08 },
       });
 
       // Collision relief during camera flights: symbol placement dominated
@@ -358,7 +362,13 @@ export default function MapLibreMap() {
     map.on('click', (e) => {
       // MapLibre suppresses click after a drag, so pan-then-release is safe.
       const id = boothFromEvent(e);
-      if (id) useMapStore.getState().selectBooth(id);
+      if (id) {
+        useMapStore.getState().selectBooth(id);
+      } else if (useMapStore.getState().selectedBoothId) {
+        // Tapping anywhere that is not a booth deselects (Maps behavior):
+        // the tooltip clears and the mobile tray lowers back to peek.
+        useMapStore.getState().selectBooth(null);
+      }
     });
 
     return () => {
@@ -378,7 +388,7 @@ export default function MapLibreMap() {
     if (!map || !mapLoaded || !selectedBoothId) return;
     const target = BOOTH_LNGLATS[selectedBoothId];
     if (!target) return;
-    const isMobile = window.matchMedia('(max-width: 640px)').matches;
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
     const detailOpen = useMapStore.getState().sidebarMode === 'detail';
     // Cancel any in-flight camera move first — two overlapping moves are
     // how the camera race (§ black-map) starts.
@@ -485,14 +495,22 @@ export default function MapLibreMap() {
         />
       </div>
 
-      {/* Current venue / tab card. Desktop: sits directly above the
-          quick-find bar. Mobile: hovers just above the tray's default
-          (peek) position. Tappable: re-fits the hall into view. */}
-      <div className="absolute inset-x-3 bottom-[172px] z-10 flex justify-end sm:inset-x-auto sm:bottom-[56px] sm:left-3 sm:justify-start">
+      {/* Current venue / tab card. Mobile: hovers just above the tray's
+          peek position — derived from the sheet's SNAP_PEEK + tab rail
+          constants instead of a hard-coded 172 (§1). Desktop: sits above
+          the quick-find bar. Tappable: re-fits the hall into view. */}
+      <div
+        className="absolute inset-x-3 z-10 flex justify-end bottom-(--hall-card-bottom) md:inset-x-auto md:bottom-[56px] md:left-3 md:justify-start"
+        style={{ '--hall-card-bottom': `calc(${SNAP_PEEK}px + ${TAB_RAIL_H}px + 6px)` } as React.CSSProperties}
+      >
         <button
           type="button"
           onClick={() => fitHall()}
-          className="flex cursor-pointer items-center gap-2 rounded-lg border border-[#34343a] bg-[rgba(18,18,21,0.92)] px-3 py-2 text-left text-white shadow-lg backdrop-blur-sm transition-colors hover:border-[#4a4a52] hover:bg-[rgba(28,28,32,0.95)] active:scale-[0.98]"
+          // FF Surfaces, fixed level 3 (manually — the element is a button,
+          // not a div): opaque surface + honest shadow replaces the
+          // translucent bg + backdrop-blur (less glassy, more contrast on
+          // the tiles).
+          className={`${surfaceClasses(3)} flex cursor-pointer items-center gap-2 rounded-lg border border-[#34343a] px-3 py-2 text-left text-white transition-colors hover:border-[#4a4a52] active:scale-[0.98]`}
         >
           <img
             src="/images/arrow-ne.svg"
