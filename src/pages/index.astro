@@ -1,6 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import LandingView from '../views/landing/LandingView.astro';
+
+// MVP gate: the landing is still WIP, so a deployment can choose to serve only
+// the map. Set PUBLIC_MVP_MAP_ONLY=true in the deployed environment (Vercel →
+// Environment Variables) and / becomes a redirect to /map; the landing HTML
+// is never generated. Unset (local dev) keeps the landing previewable at /.
+// Remove this gate when the landing is ready to ship.
+if (import.meta.env.PUBLIC_MVP_MAP_ONLY === 'true') {
+  return Astro.redirect('/map');
+}
 ---
 
 <BaseLayout title="Integrated Career Day 2026" description="Unity Spark, Ignite Vision — Integrated Career Day 2026.">
