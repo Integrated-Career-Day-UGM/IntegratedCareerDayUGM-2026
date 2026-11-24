@@ -100,7 +100,20 @@ export type QuickFindItem = {
 
 export type UiStrings = {
   event: Record<string, string>;
-  search: Record<string, string>;
+  search: {
+    placeholder: string;
+    shortcutHint: string;
+    shortcutKey: string;
+    resultsLabel: string;
+    emptyResults: string;
+    filters: {
+      trigger: string;
+      title: string;
+      clear: string;
+      sector: string;
+      role: string;
+    };
+  };
   tabs: Record<string, string>;
   quickFind: { title: string; items: Record<string, string> };
   venueList: Record<string, string>;
@@ -112,11 +125,31 @@ export type UiStrings = {
     subtitle: string;
     kpiSectionTitle: string;
     kpiSectionSubtitle: string;
+    sectorsLabel: string;
     kpiEmptyLabel: string;
     cards: Record<string, { label: string; value: string; change?: string; caption: string }>;
   };
-  info: { title: string; helpTitle: string; sections: Record<string, { heading: string; body: string }> };
+  info: {
+    title: string;
+    helpTitle: string;
+    registerLabel: string;
+    mapsCta: string;
+    mapsQuery: string;
+    sections: Record<
+      string,
+      { heading: string; headline?: string; body: string; items?: string[]; note?: string }
+    >;
+  };
   map: Record<string, string>;
+};
+
+export type FacilityInfo = {
+  title: string;
+  kind: string;
+  accent: string;
+  summary: string;
+  items: { heading: string; body: string }[];
+  tip?: string;
 };
 
 export type MapViewState = {

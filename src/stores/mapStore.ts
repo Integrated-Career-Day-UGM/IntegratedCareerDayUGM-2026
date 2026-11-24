@@ -4,8 +4,9 @@ import type { MapViewState } from '../types/map';
 import { event, venues, getVenue, getArea, getBooth } from '../lib/data';
 import { track } from '../lib/analytics';
 
-type SidebarMode = 'list' | 'detail' | 'search';
+type SidebarMode = 'list' | 'detail' | 'facility' | 'search';
 type SidebarTab = 'home' | 'search' | 'saved' | 'stats' | 'info';
+type SearchFilters = { tags: string[]; types: string[] };
 
 interface MapState {
   // Selection
@@ -14,12 +15,15 @@ interface MapState {
   selectedTrackId: string;
   selectedDayId: string;
   selectedBoothId: string | null;
+  selectedFacilityId: string | null;
   hoveredBoothId: string | null;
 
   // UI
   sidebarMode: SidebarMode;
   sidebarTab: SidebarTab;
   searchQuery: string;
+  /** Faceted search: company sectors (tags) and opening types. */
+  searchFilters: SearchFilters;
   isMobileSheetOpen: boolean;
   /** GIK mode: zoomed-out event overview; will host geojson pathfinding. */
   gikMode: boolean;
@@ -36,8 +40,11 @@ interface MapState {
   setSelectedTrack: (trackId: string) => void;
   setSelectedDay: (dayId: string) => void;
   selectBooth: (boothId: string | null) => void;
+  selectFacility: (facilityId: string | null) => void;
   hoverBooth: (boothId: string | null) => void;
   setSearchQuery: (query: string) => void;
+  toggleSearchFilter: (kind: keyof SearchFilters, value: string) => void;
+  clearSearchFilters: () => void;
   setSidebarMode: (mode: SidebarMode) => void;
   setSidebarTab: (tab: SidebarTab) => void;
   setGikMode: (on: boolean) => void;
@@ -62,10 +69,12 @@ export const useMapStore = create<MapState>()(
       selectedTrackId: defaultTrackId,
       selectedDayId: event.days[0].id,
       selectedBoothId: null,
+      selectedFacilityId: null,
       hoveredBoothId: null,
       sidebarMode: 'list',
       sidebarTab: 'home',
       searchQuery: '',
+      searchFilters: { tags: [], types: [] },
       isMobileSheetOpen: false,
       gikMode: true,
       mapView: {
@@ -84,6 +93,7 @@ export const useMapStore = create<MapState>()(
           selectedAreaId: firstArea?.id ?? '',
           selectedTrackId: firstArea?.trackId ?? '',
           selectedBoothId: null,
+          selectedFacilityId: null,
           sidebarMode: 'list',
         });
       },
@@ -96,6 +106,7 @@ export const useMapStore = create<MapState>()(
           selectedAreaId: areaId,
           selectedTrackId: area.trackId,
           selectedBoothId: null,
+          selectedFacilityId: null,
           sidebarMode: 'list',
         });
       },
@@ -109,6 +120,7 @@ export const useMapStore = create<MapState>()(
           selectedTrackId: trackId,
           selectedAreaId: area.id,
           selectedBoothId: null,
+          selectedFacilityId: null,
           sidebarMode: 'list',
         });
       },
@@ -120,7 +132,7 @@ export const useMapStore = create<MapState>()(
 
       selectBooth: (boothId) => {
         if (!boothId) {
-          set({ selectedBoothId: null, sidebarMode: 'list' });
+          set({ selectedBoothId: null, selectedFacilityId: null, sidebarMode: 'list' });
           return;
         }
         const booth = getBooth(boothId);
@@ -128,7 +140,7 @@ export const useMapStore = create<MapState>()(
         if (!booth) {
           // Unknown id (bad ?booth= URL, removed booth) — fall back to the
           // home state instead of a half-applied selection.
-          set({ selectedBoothId: null, sidebarMode: 'list' });
+          set({ selectedBoothId: null, selectedFacilityId: null, sidebarMode: 'list' });
           return;
         }
         // The venue/track state follows the booth: the tab switcher must
@@ -139,11 +151,30 @@ export const useMapStore = create<MapState>()(
         const area = venue?.areas.find((a) => a.id === booth.areaId);
         set({
           selectedBoothId: boothId,
+          selectedFacilityId: null,
           selectedVenueId: venue?.id ?? get().selectedVenueId,
           selectedAreaId: area?.id ?? get().selectedAreaId,
           selectedTrackId: area?.trackId ?? get().selectedTrackId,
           gikMode: false,
+          sidebarTab: 'home',
           sidebarMode: 'detail',
+        });
+      },
+
+      selectFacility: (facilityId) => {
+        if (!facilityId) {
+          set({
+            selectedFacilityId: null,
+            sidebarMode: get().selectedBoothId ? 'detail' : 'list',
+          });
+          return;
+        }
+        set({
+          selectedFacilityId: facilityId,
+          selectedBoothId: null,
+          gikMode: false,
+          sidebarTab: 'home',
+          sidebarMode: 'facility',
         });
       },
 
@@ -155,19 +186,57 @@ export const useMapStore = create<MapState>()(
         }
         set({
           searchQuery: query,
-          sidebarMode: query ? 'search' : get().selectedBoothId ? 'detail' : 'list',
+          sidebarMode: query
+            ? 'search'
+            : get().selectedBoothId
+              ? 'detail'
+              : get().selectedFacilityId
+                ? 'facility'
+                : 'list',
         });
       },
+
+      toggleSearchFilter: (kind, value) => {
+        const current = get().searchFilters[kind];
+        const next = current.includes(value)
+          ? current.filter((v) => v !== value)
+          : [...current, value];
+        set({ searchFilters: { ...get().searchFilters, [kind]: next } });
+      },
+
+      clearSearchFilters: () => set({ searchFilters: { tags: [], types: [] } }),
 
       setSidebarMode: (mode) => set({ sidebarMode: mode }),
 
       setSidebarTab: (tab) => {
         track('sidebar.tab.switch', { tab });
-        set({ sidebarTab: tab });
-        // Clear search when leaving search-centric contexts to avoid confusion.
-        if (tab !== 'home' && tab !== 'search') {
-          set({ searchQuery: '', sidebarMode: 'list' });
+        // Tabs are views, not overlays: never leave a hidden booth/facility
+        // selection behind a saved/stats/info/search surface (dead-end state).
+        if (tab === 'home') {
+          set({
+            sidebarTab: tab,
+            sidebarMode: 'list',
+            selectedBoothId: null,
+            selectedFacilityId: null,
+          });
+          return;
         }
+        if (tab === 'search') {
+          set({
+            sidebarTab: tab,
+            sidebarMode: 'list',
+            selectedBoothId: null,
+            selectedFacilityId: null,
+          });
+          return;
+        }
+        set({
+          sidebarTab: tab,
+          searchQuery: '',
+          sidebarMode: 'list',
+          selectedBoothId: null,
+          selectedFacilityId: null,
+        });
       },
 
       setGikMode: (on) => {

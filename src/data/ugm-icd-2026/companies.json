@@ -1,33 +1,163 @@
 [
   {
-    "id": "toyota-astra",
-    "name": "PT Toyota Astra Motor",
-    "shortName": "Toyota Astra",
-    "tags": ["Tech", "FMCG", "Automotive", "Multi-national"],
-    "websiteUrl": "https://www.toyota.astra.co.id",
-    "programUrl": "https://careers.toyota.astra.co.id",
+    "id": "a-nindya",
+    "name": "PT Nindya Karya (Persero)",
+    "shortName": "Nindya Karya",
+    "tags": ["Construction", "BUMN"],
+    "websiteUrl": "https://nindyakarya.co.id",
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      { "title": "Project Engineer", "type": "Full-time" },
+      { "title": "Quantity Surveyor", "type": "Full-time" }
+    ]
+  },
+  {
+    "id": "c1-hutama-infra",
+    "name": "PT Hutama Karya Infrastruktur",
+    "shortName": "Hutama Infra",
+    "tags": ["Construction", "BUMN"],
+    "websiteUrl": "https://hki.co.id",
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      { "title": "Civil Engineer", "type": "Full-time" },
+      { "title": "Site Engineer Intern", "type": "Internship" }
+    ]
+  },
+  {
+    "id": "c2-monee",
+    "name": "Monee Indonesia",
+    "shortName": "Monee",
+    "tags": ["Fintech", "Tech"],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      { "title": "Product Analyst", "type": "Full-time" },
+      { "title": "Growth Intern", "type": "Internship" }
+    ]
+  },
+  {
+    "id": "c3-astra",
+    "name": "PT Astra International Tbk",
+    "shortName": "Astra",
+    "tags": ["Automotive", "Multi-national"],
+    "websiteUrl": "https://www.astra.co.id",
+    "programUrl": "https://careers.astra.co.id",
+    "logoUrl": null,
+    "openings": [
+      { "title": "Management Trainee", "type": "Full-time" },
+      { "title": "Data Analyst Intern", "type": "Internship" }
+    ]
+  },
+  {
+    "id": "c4-odoo",
+    "name": "Odoo",
+    "shortName": "Odoo",
+    "tags": ["Tech", "Multi-national"],
+    "websiteUrl": "https://www.odoo.com",
+    "programUrl": "https://www.odoo.com/jobs",
     "logoUrl": null,
     "openings": [
       { "title": "Software Engineer", "type": "Full-time" },
-      { "title": "Software Engineer Internship", "type": "Internship" },
-      { "title": "Data Analyst", "type": "Internship" }
+      { "title": "Functional Consultant", "type": "Full-time" },
+      { "title": "Developer Intern", "type": "Internship" }
     ]
   },
   {
-    "id": "huawei",
-    "name": "PT Huawei Tech Investment",
-    "shortName": "Huawei",
-    "tags": ["Tech", "Telecommunication", "Multi-national"],
-    "websiteUrl": "https://www.huawei.com",
-    "programUrl": "https://career.huawei.com",
+    "id": "c5-hutama",
+    "name": "PT Hutama Karya (Persero)",
+    "shortName": "Hutama Karya",
+    "tags": ["Construction", "BUMN"],
+    "websiteUrl": "https://hutamakarya.com",
+    "programUrl": null,
     "logoUrl": null,
     "openings": [
-      { "title": "Network Engineer", "type": "Full-time" },
-      { "title": "AI Research Intern", "type": "Internship" }
+      { "title": "Management Trainee", "type": "Full-time" },
+      { "title": "Finance Intern", "type": "Internship" }
     ]
   },
   {
-    "id": "surya-semesta",
+    "id": "c6-zurich",
+    "name": "PT Zurich Indonesia Tbk",
+    "shortName": "Zurich",
+    "tags": ["Insurance", "Finance", "Multi-national"],
+    "websiteUrl": "https://www.zurich.co.id",
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      { "title": "Underwriter", "type": "Full-time" },
+      { "title": "Claims Intern", "type": "Internship" }
+    ]
+  },
+  {
+    "id": "d1-paragon",
+    "name": "Paragon Corps",
+    "shortName": "Paragon",
+    "tags": ["FMCG", "Consumer Goods"],
+    "websiteUrl": "https://www.paragon-corp.com",
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      { "title": "Brand Management Trainee", "type": "Full-time" },
+      { "title": "R&D Intern", "type": "Internship" }
+    ]
+  },
+  {
+    "id": "d2-bni",
+    "name": "PT Bank Negara Indonesia (Persero) Tbk",
+    "shortName": "BNI",
+    "tags": ["Banking", "BUMN"],
+    "websiteUrl": "https://www.bni.co.id",
+    "programUrl": "https://karir.bni.co.id",
+    "logoUrl": null,
+    "openings": [
+      { "title": "Management Trainee", "type": "Full-time" },
+      { "title": "IT Intern", "type": "Internship" }
+    ]
+  },
+  {
+    "id": "d3-polygon",
+    "name": "Polygon",
+    "shortName": "Polygon",
+    "tags": ["Manufacturing", "Consumer Goods"],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      { "title": "Industrial Designer", "type": "Full-time" },
+      { "title": "Marketing Intern", "type": "Internship" }
+    ]
+  },
+  {
+    "id": "d4-kagama",
+    "name": "PP KAGAMA",
+    "shortName": "PP KAGAMA",
+    "tags": ["Property", "Community"],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      { "title": "Program Officer", "type": "Full-time" },
+      { "title": "Event Intern", "type": "Internship" }
+    ]
+  },
+  {
+    "id": "e1-karya-hidup",
+    "name": "CV Karya Hidup Sentosa (Quick Traktor)",
+    "shortName": "Quick Traktor",
+    "tags": ["Agriculture", "Manufacturing"],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      { "title": "Mechanical Engineer", "type": "Full-time" },
+      { "title": "Sales Intern", "type": "Internship" }
+    ]
+  },
+  {
+    "id": "e2-surya",
     "name": "PT Surya Semesta Internusa Tbk",
     "shortName": "Surya Semesta",
     "tags": ["Construction", "Property"],
@@ -40,238 +170,159 @@
     ]
   },
   {
-    "id": "btn",
-    "name": "Bank Tabungan Negara",
-    "shortName": "BTN",
-    "tags": ["Banking", "BUMN"],
-    "websiteUrl": "https://www.btn.co.id",
-    "programUrl": "https://rekrutmen.btn.co.id",
-    "logoUrl": null,
-    "openings": [
-      { "title": "IT Development Program", "type": "Full-time" },
-      { "title": "Relationship Manager", "type": "Full-time" }
-    ]
-  },
-  {
-    "id": "bni",
-    "name": "PT Bank Negara Indonesia (Persero) Tbk",
-    "shortName": "BNI",
-    "tags": ["Banking", "BUMN"],
-    "websiteUrl": "https://www.bni.co.id",
-    "programUrl": "https://rekrutmen.bni.co.id",
-    "logoUrl": null,
-    "openings": [
-      { "title": "IT Specialist", "type": "Full-time" },
-      { "title": "Management Trainee", "type": "Full-time" }
-    ]
-  },
-  {
-    "id": "united-tractors",
-    "name": "PT United Tractors Tbk",
-    "shortName": "United Tractors",
-    "tags": ["Heavy Equipment", "Mining"],
-    "websiteUrl": "https://www.unitedtractors.com",
+    "id": "e3-surya-2",
+    "name": "PT Surya Semesta Internusa Tbk",
+    "shortName": "Surya Semesta",
+    "tags": ["Construction", "Property"],
+    "websiteUrl": "https://www.suryasemesta.com",
     "programUrl": null,
     "logoUrl": null,
     "openings": [
-      { "title": "Mechanical Engineer", "type": "Full-time" },
-      { "title": "Sales Engineer", "type": "Full-time" }
+      { "title": "Site Supervisor", "type": "Full-time" },
+      { "title": "Admin Intern", "type": "Internship" }
     ]
   },
   {
-    "id": "pertamina",
-    "name": "PT Pertamina (Persero)",
-    "shortName": "Pertamina",
-    "tags": ["Energy", "BUMN"],
-    "websiteUrl": "https://www.pertamina.com",
-    "programUrl": "https://recruitment.pertamina.com",
-    "logoUrl": null,
-    "openings": [
-      { "title": "Engineer Program", "type": "Full-time" },
-      { "title": "HSSE Specialist", "type": "Full-time" }
-    ]
-  },
-  {
-    "id": "telkom",
-    "name": "PT Telkom Indonesia (Persero) Tbk",
-    "shortName": "Telkom",
-    "tags": ["Telecommunication", "BUMN", "Tech"],
-    "websiteUrl": "https://www.telkom.co.id",
-    "programUrl": "https://rekrutmen.telkom.co.id",
-    "logoUrl": null,
-    "openings": [
-      { "title": "Software Developer", "type": "Full-time" },
-      { "title": "Product Manager", "type": "Full-time" },
-      { "title": "Data Engineer Intern", "type": "Internship" }
-    ]
-  },
-  {
-    "id": "astra-international",
-    "name": "PT Astra International Tbk",
-    "shortName": "Astra International",
-    "tags": ["Automotive", "Finance", "Heavy Equipment"],
-    "websiteUrl": "https://www.astra.co.id",
-    "programUrl": "https://career.astra.co.id",
-    "logoUrl": null,
-    "openings": [
-      { "title": "Management Trainee", "type": "Full-time" },
-      { "title": "Digital Marketing", "type": "Full-time" }
-    ]
-  },
-  {
-    "id": "samsung",
-    "name": "Samsung Electronics Indonesia",
-    "shortName": "Samsung",
-    "tags": ["Tech", "Electronics", "Multi-national"],
-    "websiteUrl": "https://www.samsung.com/id",
-    "programUrl": "https://www.samsung.com/id/about-us/careers/",
-    "logoUrl": null,
-    "openings": [
-      { "title": "Mobile Engineer", "type": "Full-time" },
-      { "title": "UX Researcher", "type": "Full-time" }
-    ]
-  },
-  {
-    "id": "shopee",
-    "name": "Shopee Indonesia",
-    "shortName": "Shopee",
-    "tags": ["E-commerce", "Tech"],
-    "websiteUrl": "https://shopee.co.id",
-    "programUrl": "https://careers.shopee.co.id",
-    "logoUrl": null,
-    "openings": [
-      { "title": "Backend Engineer", "type": "Full-time" },
-      { "title": "Business Analyst", "type": "Full-time" }
-    ]
-  },
-  {
-    "id": "tokopedia",
-    "name": "Tokopedia",
-    "shortName": "Tokopedia",
-    "tags": ["E-commerce", "Tech"],
-    "websiteUrl": "https://www.tokopedia.com",
-    "programUrl": "https://www.tokopedia.com/careers",
-    "logoUrl": null,
-    "openings": [
-      { "title": "Software Engineer", "type": "Full-time" },
-      { "title": "Product Designer", "type": "Full-time" }
-    ]
-  },
-  {
-    "id": "gojek",
-    "name": "Gojek",
-    "shortName": "Gojek",
-    "tags": ["Tech", "Transportation", "On-demand"],
-    "websiteUrl": "https://www.gojek.com",
-    "programUrl": "https://career.gojek.com",
-    "logoUrl": null,
-    "openings": [
-      { "title": "Android Engineer", "type": "Full-time" },
-      { "title": "Data Scientist", "type": "Full-time" }
-    ]
-  },
-  {
-    "id": "grab",
-    "name": "Grab Indonesia",
-    "shortName": "Grab",
-    "tags": ["Tech", "Transportation", "On-demand", "Multi-national"],
-    "websiteUrl": "https://www.grab.com/id",
-    "programUrl": "https://grab.careers",
-    "logoUrl": null,
-    "openings": [
-      { "title": "iOS Engineer", "type": "Full-time" },
-      { "title": "Operations Analyst", "type": "Full-time" }
-    ]
-  },
-  {
-    "id": "traveloka",
-    "name": "Traveloka",
-    "shortName": "Traveloka",
-    "tags": ["Travel", "Tech"],
-    "websiteUrl": "https://www.traveloka.com",
-    "programUrl": "https://www.traveloka.com/en/careers",
-    "logoUrl": null,
-    "openings": [
-      { "title": "Full-stack Engineer", "type": "Full-time" },
-      { "title": "Marketing Analyst", "type": "Full-time" }
-    ]
-  },
-  {
-    "id": "bca",
-    "name": "PT Bank Central Asia Tbk",
-    "shortName": "BCA",
-    "tags": ["Banking", "Finance"],
-    "websiteUrl": "https://www.bca.co.id",
-    "programUrl": "https://karir.bca.co.id",
-    "logoUrl": null,
-    "openings": [
-      { "title": "IT Developer", "type": "Full-time" },
-      { "title": "Credit Analyst", "type": "Full-time" }
-    ]
-  },
-  {
-    "id": "mandiri",
-    "name": "PT Bank Mandiri (Persero) Tbk",
-    "shortName": "Mandiri",
-    "tags": ["Banking", "BUMN"],
-    "websiteUrl": "https://www.bankmandiri.co.id",
-    "programUrl": "https://recruitment.bankmandiri.co.id",
-    "logoUrl": null,
-    "openings": [
-      { "title": "IT Officer", "type": "Full-time" },
-      { "title": "Management Trainee", "type": "Full-time" }
-    ]
-  },
-  {
-    "id": "bri",
-    "name": "PT Bank Rakyat Indonesia (Persero) Tbk",
-    "shortName": "BRI",
-    "tags": ["Banking", "BUMN"],
-    "websiteUrl": "https://www.bri.co.id",
-    "programUrl": "https://rekrutmen.bri.co.id",
-    "logoUrl": null,
-    "openings": [
-      { "title": "IT Auditor", "type": "Full-time" },
-      { "title": "Relationship Manager", "type": "Full-time" }
-    ]
-  },
-  {
-    "id": "danamon",
-    "name": "PT Bank Danamon Indonesia Tbk",
-    "shortName": "Danamon",
-    "tags": ["Banking", "Finance"],
-    "websiteUrl": "https://www.danamon.co.id",
+    "id": "e4-obi",
+    "name": "PT Outward Bound Indonesia (OBI)",
+    "shortName": "Outward Bound",
+    "tags": ["Education", "Non-profit"],
+    "websiteUrl": null,
     "programUrl": null,
     "logoUrl": null,
     "openings": [
-      { "title": "Branch Sales", "type": "Full-time" },
-      { "title": "IT Support", "type": "Full-time" }
+      { "title": "Instructor", "type": "Full-time" },
+      { "title": "Program Intern", "type": "Internship" }
     ]
   },
   {
-    "id": "ocbc",
-    "name": "OCBC Indonesia",
+    "id": "e5-bibit",
+    "name": "Bibit",
+    "shortName": "Bibit",
+    "tags": ["Fintech", "Investment"],
+    "websiteUrl": "https://bibit.id",
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      { "title": "Investment Analyst", "type": "Full-time" },
+      { "title": "Product Intern", "type": "Internship" }
+    ]
+  },
+  {
+    "id": "e6-ugm-online",
+    "name": "UGM Online",
+    "shortName": "UGM Online",
+    "tags": ["Education"],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      { "title": "Learning Designer", "type": "Full-time" },
+      { "title": "Content Intern", "type": "Internship" }
+    ]
+  },
+  {
+    "id": "e7-kemahasiswaan",
+    "name": "Direktorat Kemahasiswaan",
+    "shortName": "Direktorat",
+    "tags": ["Education"],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      { "title": "Student Affairs Officer", "type": "Full-time" },
+      { "title": "Program Intern", "type": "Internship" }
+    ]
+  },
+  {
+    "id": "e8-torrecid",
+    "name": "PT Torrecid Indonesia",
+    "shortName": "Torrecid",
+    "tags": ["Manufacturing", "Multi-national"],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      { "title": "Process Engineer", "type": "Full-time" },
+      { "title": "R&D Intern", "type": "Internship" }
+    ]
+  },
+  {
+    "id": "e9-app",
+    "name": "APP Group",
+    "shortName": "APP",
+    "tags": ["Manufacturing", "Forestry"],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      { "title": "Sustainability Analyst", "type": "Full-time" },
+      { "title": "Forestry Intern", "type": "Internship" }
+    ]
+  },
+  {
+    "id": "e10-cobra",
+    "name": "PT Cobra Dental Indonesia",
+    "shortName": "Cobra Dental",
+    "tags": ["Healthcare", "Manufacturing"],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      { "title": "Dental Product Specialist", "type": "Full-time" },
+      { "title": "QA Intern", "type": "Internship" }
+    ]
+  },
+  {
+    "id": "e11-emusa",
+    "name": "PT Emusa Petrofin",
+    "shortName": "Emusa",
+    "tags": ["Energy"],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      { "title": "Petroleum Engineer", "type": "Full-time" },
+      { "title": "HSE Intern", "type": "Internship" }
+    ]
+  },
+  {
+    "id": "e12-dynapack",
+    "name": "PT Dynapack Asia",
+    "shortName": "Dynapack",
+    "tags": ["Manufacturing", "Automotive"],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      { "title": "Manufacturing Engineer", "type": "Full-time" },
+      { "title": "Quality Intern", "type": "Internship" }
+    ]
+  },
+  {
+    "id": "e13-teachfirst",
+    "name": "Teach First Indonesia",
+    "shortName": "Teach First",
+    "tags": ["Education", "Non-profit"],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      { "title": "Teaching Fellow", "type": "Full-time" },
+      { "title": "Recruitment Intern", "type": "Internship" }
+    ]
+  },
+  {
+    "id": "e14-ocbc",
+    "name": "OCBC",
     "shortName": "OCBC",
-    "tags": ["Banking", "Finance", "Multi-national"],
+    "tags": ["Banking", "Multi-national"],
     "websiteUrl": "https://www.ocbc.id",
     "programUrl": null,
     "logoUrl": null,
     "openings": [
-      { "title": "Business Development", "type": "Full-time" },
-      { "title": "Risk Analyst", "type": "Full-time" }
-    ]
-  },
-  {
-    "id": "cimb",
-    "name": "CIMB Niaga",
-    "shortName": "CIMB Niaga",
-    "tags": ["Banking", "Finance"],
-    "websiteUrl": "https://www.cimbniaga.co.id",
-    "programUrl": null,
-    "logoUrl": null,
-    "openings": [
-      { "title": "Treasury Analyst", "type": "Full-time" },
-      { "title": "IT Business Analyst", "type": "Full-time" }
+      { "title": "Relationship Manager", "type": "Full-time" },
+      { "title": "Risk Intern", "type": "Internship" }
     ]
   }
 ]

@@ -1,0 +1,48 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="2954" height="4301.1" viewBox="0 0 2954 4301.1" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="Group 1171277078">
+<g id="Rectangle 9">
+<use xlink:href="#stroke0_0_4" fill="white"/>
+<mask id="stroke1_0_4" fill="white">
+<use xlink:href="#stroke0_0_4"/>
+</mask>
+<path d="M324.096 1722.09L300.349 3767.96C299.103 3875.38 376.431 3967.64 482.418 3985.18L2141.98 4259.84C2261.82 4279.68 2374.69 4197.56 2392.72 4077.44L2919.81 564.715C2938.37 441.033 2849.1 327.195 2724.56 315.724L1514.6 204.28C1438.4 197.262 1364.11 230.781 1318.95 292.557L366.014 1596.19C339.276 1632.77 324.622 1676.78 324.096 1722.09Z" stroke-width="48.3592" stroke="black" mask="url(#stroke1_0_4)"/>
+</g>
+<g id="Group 1171277076">
+<circle id="O" cx="649.696" cy="3769.69" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_2" cx="649.696" cy="3296.89" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_3" cx="633.25" cy="2877.58" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_4" cx="629.138" cy="2400.68" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_5" cx="608.584" cy="1849.56" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_6" cx="1377.37" cy="1853.67" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_7" cx="1385.6" cy="2388.35" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_8" cx="1426.7" cy="2869.36" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_9" cx="1455.48" cy="3296.89" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_10" cx="1496.6" cy="3769.69" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_11" cx="1924.16" cy="3769.69" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_12" cx="1985.83" cy="3296.89" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_13" cx="2047.49" cy="2861.13" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_14" cx="2121.49" cy="2388.35" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_15" cx="2203.72" cy="1853.67" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_16" cx="2277.72" cy="1331.55" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_17" cx="1689.82" cy="1294.55" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_18" cx="1122.48" cy="1269.88" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_19" cx="1159.48" cy="636.762" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_20" cx="1393.82" cy="373.647" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_21" cx="1681.6" cy="394.2" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_22" cx="2158.49" cy="447.646" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_23" cx="2026.94" cy="677.875" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_24" cx="2372.28" cy="702.542" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_25" cx="2812.17" cy="723.097" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_26" cx="2849.17" cy="513.426" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_27" cx="2717.62" cy="1348" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_28" cx="2643.61" cy="1866" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_29" cx="2561.39" cy="2376.01" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_30" cx="2491.5" cy="2857.02" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_31" cx="2425.72" cy="3292.78" r="49.4153" stroke-width="8.05986" stroke="black"/>
+<circle id="O_32" cx="2339.39" cy="3769.69" r="49.4153" stroke-width="8.05986" stroke="black"/>
+</g>
+</g>
+<defs>
+<path id="stroke0_0_4" d="M482.418 3985.18C376.431 3967.64 299.103 3875.38 300.349 3767.96L324.096 1722.09C324.622 1676.78 339.276 1632.77 366.014 1596.19L1318.95 292.557C1364.11 230.781 1438.4 197.262 1514.6 204.28L2724.56 315.724C2849.1 327.195 2938.37 441.033 2919.81 564.716L2392.72 4077.44C2374.69 4197.56 2261.82 4279.68 2141.98 4259.84L482.418 3985.18Z"/>
+</defs>
+</svg>

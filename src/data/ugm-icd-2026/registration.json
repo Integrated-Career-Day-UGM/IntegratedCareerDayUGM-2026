@@ -1,0 +1,12 @@
+{
+  "ugm": {
+    "label": "Daftar UGM",
+    "hint": "via Simaster UGM",
+    "url": "https://simaster.ugm.ac.id"
+  },
+  "nonUgm": {
+    "label": "Daftar Non UGM",
+    "hint": "via mitra.simaster",
+    "url": "https://mitra.simaster.ugm.ac.id"
+  }
+}

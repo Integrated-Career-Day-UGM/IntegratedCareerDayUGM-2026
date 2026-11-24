@@ -59,6 +59,302 @@ what floats.
       company name (screenshot, "Bank Tabungan ~~Negara~~") — reproduce and
       fix (suspect the FluidHoverHighlight or a text node boundary).
 
+### D. Nov 23 desktop pass — shipped
+
+- [x] **Rail:** shares the content surface (`#1d1d1d`) with a 1px divider,
+      44px targets on a 6px rhythm, 20px glyphs, active = solid square pink
+      field + white glyph. The field is one shared layout pill that travels
+      between Home/Search/Saved/Stats/Info on `spring.moderate` (0.16s) —
+      the FF sidebar's row-to-row glide, adapted to the icon rail.
+- [x] **Header: FROZEN (user).** The Persona-5 ribbon / lockup / day-picker
+      composition is intentional; do not restructure, respace or restyle it.
+- [x] **Detail = SaaS card shell** (user override of §18-A for this view):
+      one header card + one opportunities card on the panel surface. Title
+      gets the full card width so long names wrap to ≤2 lines; meta chips
+      and icon actions share one hairline-divided row.
+- [x] **Detail actions are icon-only:** Bookmark / Share / Close at 28px
+      with `aria-label` + `title`; no text descriptions in the row.
+- [x] **Live card = 5s carousel.** `lib/happening-carousel.ts` owns the deck
+      (which session, live state, progress, up-next) so mock or alternate
+      data is swapped there, never in the JSX. Auto-advances every 5s, off
+      under reduced motion. Hover-expand stays reverted. The NE "show on
+      map" button is gone — the card's title block now **opens the session's
+      company detail**; Bookmark is the only secondary action. A small
+      segment index at the bottom shows deck position, the active segment
+      filling over the 5s interval.
+- [x] **Help placement:** Help sits directly under Stats in the rail (the
+      bottom-pinned spacer is gone).
+- [x] **Home is the first state:** clicking Home clears a booth detail and
+      any search query before switching tabs, so the rail can always exit
+      detail.
+- [x] **Search field demoted again:** desktop 32px tall, 1px border,
+      13px text/16px icon, field fill at 30% (`bg-field/30`); placeholder
+      copy cut to `Search` (no more "company, role, booth…").
+- [x] **GIK → venue:** the Hall C1 card now leaves the GIK overview and
+      lights the venue's Career Expo tab (booth selection already did this
+      via `selectBooth`).
+- [x] **Detail media slot:** 56px cover strip with the grey gradient
+      skeleton (real logo via `company.logoUrl`). The booth code badge moved
+      into the strip (bottom-left), and Bookmark / Share / Close are inline
+      icon actions on its right edge — the title keeps the full width.
+      Eyebrow shrunk to 11px.
+- [x] **One list anatomy:** `.section-label` + `.panel-list` (11px label,
+      1px panel border, hairline-divided rows) now used by search results,
+      the venue list, Saved, Help and Stats. No more per-row card boxes.
+- [x] **Stats — Swift Charts direction:** one boxy bento panel: the 2×2
+      stat cells and the KPI tiles share the same hairline grid (the
+      "Openings" section label is gone; "Your Bookmarks" shortened to
+      "Bookmarks"). 24px values, 11px muted labels, hairline + two grays.
+      Hovered chart points can no longer resize a cell: the value has a
+      fixed `min-w-[4.5ch]` and tabular numerals, and the label/chart rows
+      have fixed heights. The sector bars use a Swift-Charts-like
+      categorical palette (blue / teal / orange / violet / rose / cyan).
+- [x] **CTA: white → accent pink.** Reverted the neutral fill per user:
+      white at rest, the page's pink accent wipes in from the left on hover
+      (300ms in / 150ms out), instant on keyboard focus.
+- [x] **Map tooltip rebuilt** for the visitor's actual question: a cover
+      strip (the same grey skeleton as the detail card) above the title,
+      then title (company / event), session line, hour, booth-code chip
+      (zone colour), track tag. No side accent, no `shadow-xl`; neutral
+      pointer.
+- [x] **GIK_ZOOM:** now **18.3**. The DEV tuning panel was removed on
+      request; use `__icdMap` in the console if a camera value needs a check.
+- [x] **Help = bento layout:** venue tile (wide) + Google Maps action,
+      hours tile, what-to-bring checklist tile (items split out of the
+      paragraph, pink check marks, dress-code note), help tile (wide).
+      Typography is now importance-scaled: 11px uppercase eyebrow, a Priego
+      bold key fact (venue `GIK`, hours `08:00 – 17:00 WIB`), then 12px
+      Poppins description. `ui.json` gained `mapsCta`, `mapsQuery`,
+      `headlines`, `whatToBring.items/note`.
+- [x] **CTA content colour:** label + arrow tile now flip to page white
+      while the pink fill is under them (150ms), and on keyboard focus.
+- [x] **Stats dev fixtures:** `useKpiData` returns mock KPI items (value +
+      delta + trend) under `import.meta.env.DEV`; prod stays empty.
+- [x] **Sector distribution:** Insights counts company tags (Tech / FMCG /
+      …), top 6, as **horizontal Swift-style bars** with the categorical
+      palette and no rotated labels (the 45° version was reverted). `useMemo`
+      over the static company list — one pass per mount, and the island only
+      mounts when the Stats tab opens, after the map has painted.
+- [x] **Sidebar hairline dividers:** full-width 1px `#232326` rules under
+      the header, search and live-card regions (Tailwind-homepage style),
+      so the content column reads in bands instead of one stack.
+- [x] **Registration menu:** the two entry points sit in a black bordered
+      panel at the map's bottom-right on desktop (and at the top of Help on
+      mobile). Rows scaled up to 48px/13px, plain arrow glyph (no bordered
+      tile), white → pink wipe retained.
+- [x] **Rail width:** 72 → **64px**, 44px targets unchanged.
+- [x] **Map camera values:** `HALL_CENTER` = `110.376329, -7.774125`
+      (Career Expo framing); the desktop Hall-card focus uses
+      `110.376266, -7.774241` (`DESKTOP_FOCUS_CENTER`).
+- [x] **Skeleton shimmer:** the boot/detail/tooltip skeletons now share one
+      `.skeleton-shimmer` (moving grey gradient), replacing the opacity
+      pulse.
+- [x] **Booth glow wave:** a third, fill-less low-alpha ring expands outside
+      the zone ring + black gap, so the pulse reads as a wave instead of a
+      neon halo.
+- [x] **Clickable facilities:** Entrance, Registration, Interactive, Photo
+      Wall, Information Center and Panggung are now buttons on the plan
+      (pointer/keyboard, hover pulse). They open `FacilityDetail` — one card
+      with a bento explanation inside it — in the sidebar or the 30% mobile
+      tray, with a star save placeholder and a white close icon. Empty map
+      clicks and Home close it.
+- [x] **Detail consolidation:** BoothDetail is one card now — cover, title,
+      meta/tags, CTAs, feedback and openings all inside, with padding and
+      hairlines instead of separate boxes. Actions are borderless and
+      larger (18px icons, 20px white X). The eyebrow is a pink Priego label
+      block (Jelajahi Denah treatment, not rotated).
+- [x] **Openings hierarchy:** programmes group by contract type (Full-time /
+      Internship) with counts, and one fluid-hover highlight glides across
+      the rows like the search list.
+- [x] **Rail + panel sizing:** rail 64 → 56px, buttons 40px, icons 18px;
+      desktop panel 360/390 → **400/430px** so content gets room.
+- [x] **Quick find:** pill chips with padding, filled icons, keyboard caps
+      removed.
+- [x] **Header divider art:** tick-mark hairline replaces the plain border;
+      the lockup and date are untouched.
+- [x] **Glow:** two soft fill-less layers (70% + 20%, the outer wider) with
+      no hard stroke; facility markers pulse the same way on hover.
+- [x] **Fourth KPI chart:** “Internships” fills the empty bento cell, and
+      each sparkline now has its own categorical accent.
+- [x] **Reveal system:** the vendored `.reveal-*` CSS is wired —
+      `reveal-product` on the sidebar's search/live/list stack (header
+      excluded) and `reveal-items` on venue/saved lists and the Insights
+      and Help roots. No CLI reinstall: the classes were already present in
+      `global.css`.
+- [x] **New denah data (Figma nodes 2032:22592 / 2034:22847 / 22840 /
+      22831):** companies, booths, zones and sessions replaced with the
+      latest participant list (25 booths: A, C1–C6, D1–D4, E1–E14). Zones:
+      C green, D pink, E orange, A teal. Legacy map SVGs copied to
+      `*-legacy.svg`; the hull is untouched per "only the inside changes".
+      B and E15 removed; D1/D2/D4 added; sessions remapped to live
+      companies.
+- [x] **Denah carbon-copy pass (Figma 2038 + 2041 + 2047:28177):**
+      the **hull + pillars are the exact Figma SVG export**
+      (`hall-pillars.svg`), placed by a similarity transform that maps its
+      long right edge onto the old sprite's right edge (760.6,181.9 →
+      454.6,786.9): scale 0.1909, rotate +18.3°, translate 265.3/−95.3.
+      D1–D4 are the codegen slabs at **0.6×** (80/79/75 × 26px, 1.6px white
+      border, Inter Bold 16 black, D1 -52.69°, D2–D4 -90°). Booth codes Inter Bold (D/E dark,
+      C/A white); A caption **“CAREER STAR”** Priego; Photobooth / Entrance
+      / Registration / Photo Wall Priego Bold white. Information Center
+      marker deleted. Selected frame = `color-mix(bg 40%, #3a2416)`.
+- [x] **No click glow:** selecting a booth draws a static dark-brown frame
+      (6px); the pulsing glow and facility hover pulse are gone.
+- [x] **Fixture sprites + GEOM editor (Figma 2063:22749):** toilet (5
+      stalls), mushola (2), panggung platform, horseshoe/tapal-kuda island
+      and the 80-seat grid are real SVG sprites (`toilet.svg`,
+      `stage-seats.svg`, `panggung.svg`, `horseshoe.svg`, `seats.svg`).
+      `PLAN_SPRITES` is the shared frame-space source of truth; the DEV-only
+      `GeometryEditor` draws the same sprites over a paper hull, supports
+      drag / numeric rotation / shift-group / scale handles, and exports
+      booths + banners + sprites + annotations as JSON. The old hand-drawn
+      Toilet/Stage/Seat polygons were removed because the real sprites now
+      occupy those positions.
+- [x] **Line pass + door glyphs:** C1–C3 and C4–C6 are aligned as two
+      separate lines (C2/C5 midpoints), E1–E3 as one line (E2 midpoint),
+      E4–E5 kept as their own pair; hull moved to `247.4/−105.7`. The
+      entrance/exit doors are the **exact Figma vectors** from node
+      `2086:22760` (`door-glyph-2086-22757.svg` and
+      `door-glyph-2086-22758.svg`); the established entrance arrow
+      (`arrow-entrance.svg`) is kept. The yellow arrow from node
+      `2087:22763` (`arrow-yellow-2087-22763.svg`) is imported **twice**;
+      the extra large top door and the invented double-door/door-arrow
+      sprites were removed.
+- [x] **DEV SVG picker:** every overlay SVG (`hull`, all `PLAN_SPRITES`,
+      and the remaining speaker-dots B) carries `data-svg-id` /
+      `data-svg-name` / `data-svg-src`. The picker is DEV-only and restored
+      by default: click any SVG to read its name/id/tag/class/src, copy its
+      id, then hide or restore it. Production builds never mount it.
+      Hidden ids persist in `localStorage` (`icd:hidden-svgs`).
+- [x] **Hull-parented editor:** changing the hull transform applies the
+      same similarity delta to every booth, label, sprite, and annotation,
+      so the hull can be moved/scaled/rotated as one unit. `dots-b` moved
+      into `PLAN_SPRITES`; `pin-a`, `pin-b`, `dots-a`, `arrow-info` and
+      `arrow-info-2` were removed from the overlay.
+- [x] **Grey splash + PixelTransition:** the Figma illustration was
+      discarded. The map loader is a grey skeleton surface with the real
+      header lockup centred; the **Jelajahi Denah** ribbon runs a reverse
+      CTA wipe (pink → white) with the text flipping to black while the map
+      reports ready. `PixelTransition` (randomised mask) reveals the live
+      map; the sidebar gets a server-rendered skeleton until hydration, and
+      the track switcher / quick find / mobile rail reveal after the splash.
+- [x] **Mobile chrome/UX pass:** the track switcher returns as a
+      **vertical left rail** on mobile; the filter trigger now matches the
+      search field chrome, the filter popover is smaller + scrollable and
+      sits above the list; the info rail item is grouped with the main nav;
+      bookmark/share actions share one aligned container; the sector bars
+      are one undivided chart with FF stagger; the active venue uses two
+      inherited-colour pulse rings (Pulse-inspired, 0/0.6s); the map tooltip
+      drops the skeleton and its pointer bobs; QuickFind opens
+      Toilet/Mushola/Help Desk details (copy in `facilities.json`); GEOM and
+      the SVG picker are DEV-only buttons.
+- [x] **Facility focus + registration CTA:** selected facility markers
+      pulse with an inherited-colour fill and a bouncing guide arrow;
+      QuickFind and marker clicks fly the map to the facility point.
+      Registration now has a large map tooltip plus sidebar CTA with
+      UGM/non-UGM register links. Map tooltips are scaled up. The splash
+      uses `Shuffle` on Jelajahi Denah, the Figma basemap WebP, grey
+      PixelTransition tiles with pink two-sided edges, and a single large
+      sidebar-card skeleton. GEOM (hull-parent drag) and SVG picker buttons
+      are restored in DEV.
+- [x] **Hull re-fit + cleanup:** hull moved to `242.5/−76.2` with all
+      booths/labels/sprites/annotations following the latest export.
+      `dots-b` removed from the plan + delete from `public`; map clicks now
+      clear `selectedFacilityId`; facility banner labels read from
+      `facilities.json` (photobooth copy is data too); compass is a simple
+      pink/white triangle; map tooltips scaled up; facility pulse uses
+      inherited-colour fill with a blinking guide arrow.
+- [x] **Header/rail polish:** Jelajahi Denah + UGM lockup nudged right;
+      tick-stripe divider removed (plain hairlines only, plus more of them
+      under section labels and above Help); rail 56px with a hairline
+      separator.
+- [x] **Search + quick find:** mobile-only frost on the field, the pink
+      global focus ring suppressed on the search input, quick-find pills
+      downsized again on mobile with more gap.
+- [x] **Mobile chrome/sheet:** track switcher hidden on mobile, full sheet
+      can open to ~92%, list scrolling moved to FF ScrollArea, and selecting
+      a venue/facility now **lowers** the tray to the 30% detail height.
+- [x] **Search facets (filter button):** a Sliders icon sits beside the
+      search field. It opens an origin-aware popover (right-top origin,
+      0.95 → 1 + fade, `spring.moderate`, faster exit) with two simple
+      groups — **Sector** (company tags) and **Role** (opening types) —
+      derived once at module load. Outside click / Esc closes, focus enters
+      the panel and returns to the trigger, an active-count badge sits on
+      the button, and Home clears the facets. `VenueList` applies them to
+      the results branch (works with or without a text query).
+- [x] **Quick find placement + scale:** moved from the desktop bottom-left
+      float to directly under the track switcher at both breakpoints. Chip
+      icons simplified (MoonStar for the prayer room, LifeBuoy for Help
+      Desk, plain glyphs — the framed mini-circle is gone). Desktop chips
+      are 28px tall / 11px text; mobile chips are ~15% smaller (20px / 9px)
+      and use the same `rounded-md` as desktop instead of `rounded-full`.
+- [x] **Track tabs — connected strip:** the switcher now follows the
+      shadcn/FF tab styling: square triggers with 1px dividers, active fill
+      (`#1c1c1c`) spanning the whole expanded tab, and a 2px pink bar on the
+      bottom edge. Mobile label-expand behaviour is retained.
+- [x] **Mobile sheet:** detail tray capped at **30%** of the viewport (was
+      a fixed 320px), tab switches raise to that height, closing detail
+      lowers to peek, and the scroll container was split from the
+      `@container` wrapper (min-h-0 + explicit `touch-action: pan-y`) so the
+      list scrolls again.
+- [x] **Compass:** custom dial (ring, cardinal ticks, pink north needle).
+      The needle rotates by `-map.getBearing()` via an imperative DOM write
+      on the map's `rotate` event — remember that bearing is clockwise from
+      north, so bearing 90 puts north on the left. Reset still animates to 0.
+- [x] **CTA elsewhere in the map:** the Google Maps link in Help uses the
+      same white → pink wipe and white content flip as the booth CTAs.
+- [x] **State map:** `docs/map-state-map.md` records fields, derived view
+      state, transitions, URL mapping, invariants, gaps and the test matrix
+      (map page only).
+- [x] **Registration entry points:** `data/ugm-icd-2026/registration.json`
+      drives two links — **Daftar UGM** (Simaster) and **Daftar Non UGM**
+      (mitra.simaster). Desktop: a floating pair over the map, bottom-right,
+      outside the sidebar. Mobile: a stacked pair at the top of the Help/Info
+      tab. Both reuse the white → pink CTA wipe.
+- [x] **Map-page layout tidy-up:** islands under `src/islands/map/`, map
+      hooks under `src/hooks/map/`, map utils under `src/lib/map/`, KPI
+      component under `src/components/map/kpi/`; imports rewired, no logic
+      changes.
+- [x] **GIK intro tuner (DEV):** plain-Astro panel at top-right with a
+      zoom slider, live map-zoom readout, Preview / Copy / Reset. Writes
+      `localStorage['icd-gik-zoom']`, which `resolveGikZoom()` reads in dev
+      (init + GIK tab), so a tuned value survives reloads until it is pasted
+      into `GIK_ZOOM`. `window.__icdGik` exposes the intro center.
+- [x] **Arrow icon:** the Hall C1 card now uses Lucide `MoveUpRight`
+      instead of `/images/arrow-ne.svg` (asset now unused).
+- [ ] Map SVG cohesion follow-ups (safe subset shipped: `#f6f6f6` whites,
+      black Info Center text on yellow, Poppins booth codes,
+      `shape-rendering: geometricPrecision` on every asset): decide on
+      2× supersampling vs a MapLibre image source for the floor plan,
+      unify the plan type family (Poppins / Sora), move the 80 seat dots
+      into one SVG, and tokenize the banner colours.
+- [x] **Plan surface pass:** removed the white booth borders (now a 1px
+      dark hairline, crisper under resampling), dropped the hall slab's
+      drop shadow, raised the hall fill to 90% so the **room** is the light
+      anchor on the granite, replaced the blurred booth glow with a crisp
+      double ring (zone colour + black), and enlarged the live dot to 10px.
+- [x] **Two-font system:** Priego (headings) + Poppins (everything else) as
+      tokens; the Google Fonts link loads Poppins 400–700 only. Sora and
+      Inter are gone from the map surfaces; `--font-inter` remains a legacy
+      alias to Poppins.
+- [x] **Floor-plan memoization:** the overlay now subscribes to
+      `hoveredBoothId`/`selectedBoothId` only (no whole-store render), and
+      the static art tree is built once with `useMemo` — hover/selection
+      re-renders just the booth chips.
+- [ ] Raster performance (deliberately NOT implemented yet): 2× supersample
+      costs 4× raster pixels and re-raster on zoom settle; the MapLibre
+      image-source route adds GPU filtering but loses DOM styling. Decide
+      after profiling, not now.
+- [x] **Map boot overlay:** server-rendered in `map.astro` so it paints
+      before the island hydrates and covers the **whole map sheet including
+      the chrome** (the island's own skeleton was trapped by its stacking
+      context). FF-surface breathing gradient + faint grid, a 42px map icon
+      above a Priego-grey “Map is loading” line. Lifts on the first `idle`
+      frame (3s island fallback, 6s no-hydration fallback), fades 500ms.
+- [ ] Verify long-name wrap at 360/390px, the CTA wipe on a real pointer,
+      the carousel cadence, mobile list scrolling, and the compass after a
+      two-finger map rotation.
+
 ### Acceptance
 - [ ] Screenshots 375 / 768 / 1440; sidebar reads as ONE surface with
       dividers; the dominant element matches the table above per view.
@@ -208,26 +504,25 @@ Principles (Emil / impeccable):
 
 ### Rail ⇄ content distinction (the "huh" fix)
 
-- [ ] Depth ladder, not a fat border: rail on `#09090b`, content column on
-      the §2 elevated/surface step (`#121215`/`#1c1c20`), and the 2px
-      black/40 divider becomes 1px `var(--border)` (already §8 — do them
-      together). The rail should read as *dock*, the content as *page*;
-      today they read as one slab with a scratch in it.
-- [ ] Rail breathing + identity: restore DESIGN.md's "icons with labels" —
-      11px label under each icon, `#8f8f8f` (white + pink left rule when
-      active, per §0/§8). Label-less 46×50 squares are why the rail feels
-      both cramped AND anonymous; a 72px rail has room for both.
-- [ ] Rail vertical rhythm: replace the `mt-2` accumulation with a single
-      8px gap between items, ≥24px between the nav group and the pinned
-      info button, and ≥16px top/bottom padding inside the rail.
+- [x] **Depth via border, not a second surface (user decision, Nov 23):**
+      rail and content share `#1d1d1d`; separation is the 1px `#2a2a2a`
+      divider plus the 16px gutters. The heavy 2px black/40 border is gone
+      from both the rail and `map.astro`'s `<aside>`.
+- [x] **Rail breathing (user decision):** 44×44 targets, one 6px gap
+      rhythm (`gap-1.5`), 20px icons (was 22px), 56px top / 20px bottom
+      padding. Labels were dropped by the user — icons stay label-less.
+- [x] **Rail active language — solid pink field + white glyph** (user,
+      Nov 23): replaces `#3b3b3b` + the 2px pink side rule. The field is a
+      shared `layoutId` pill that glides between sections on the FF
+      sidebar's `spring.moderate` (0.16s, critically damped), snapping only
+      on reflow; zero corner radius (user). No side accent anywhere in the
+      rail; the fluid-hover glide stays for idle hovers.
 
 ### Content column rhythm
 
-- [ ] Header: extend §6's header-grid item with explicit row spacing —
-      badge row / lockup+day-picker row separated by 16px on shared
-      baselines, replacing the 150px absolute-position collage
-      (`top-9` / `top-[66px]` / `top-[84px]`) whose dead band is the main
-      cramp source.
+- [ ] ~~Header: extend §6's header-grid item~~ — **FROZEN (user, Nov 23):
+      the Persona-5 header is intentional and must never be restructured.**
+      Only the content column below it is in scope for spacing work.
 - [ ] One vertical scale for the column: 8px between related lines,
       16px inside a card's padding zone, **24px between IA groups**
       (search → live card → venue list). Retire the current mix
@@ -235,15 +530,14 @@ Principles (Emil / impeccable):
 - [ ] Group separation without lines: 24px + the section label separates
       groups; never a divider AND a big gap. In `VenueList`, 8px inside a
       zone, 20–24px between zones, so each zone header owns its rows.
-- [ ] Amend §4's gutter token: sidebar gutter 14px → 16px (`px-4`), matching
-      the desktop map-edge inset rule; sheet stays 16px. One value per role,
-      no `px-3.5` stragglers.
-- [ ] Width before density: if list rows + chips need more than ~360px of
-      content width at md, take §6's narrower sidebar step (360px at md →
-      390px at lg) rather than shaving paddings — cramped padding is the
-      symptom, fixed 390px at every breakpoint is the cause.
-- [ ] §6's search-bar slimming (42px → 36–38px) counts toward this pass:
-      the freed height goes to the header band's air, not to more content.
+- [x] Amend §4's gutter token: sidebar gutter 14px → 16px (`px-4`) across
+      search, live card and the scroll region; sheet stays 16px. No
+      `px-3.5` stragglers left in the sidebar.
+- [x] Width before density: `map.astro` now uses the 360px step at md and
+      390px at lg, so 768–1023px screens keep more map.
+- [x] §6's search-bar slimming: desktop 42 → 32px height, 3 → 1px border,
+      text 15 → 13px, icon 20 → 16px, field fill at 30% — the freed height
+      goes to the header band's air, not to more content.
 
 ### Verify
 
@@ -277,8 +571,10 @@ Principles (Emil / impeccable):
 - [ ] Fold off-grid one-offs to the 4px scale: `py-[7px]`, `h-[33px]`,
       `gap-[7px]` — unless the Figma spec pins them (verify against Figma
       before flattening).
-- [ ] One gutter token per context (sidebar 14px, sheet 16px); stop mixing
+- [ ] One gutter token per context (sidebar 16px, sheet 16px); stop mixing
       `px-3.5` / `px-4` within the same role.
+      - [x] Sidebar gutters unified to 16px (`px-4`) in §2.5; the token is
+        now in use across search / live card / scroll region.
 
 ## 5 — P2: Sweep
 
@@ -361,22 +657,30 @@ selection state), `FloorPlanOverlay` zone fills (data-driven geometry).
       - VenueList rows keep it (already correct).
       - TrackSwitcher active pill: bottom underline → same left inset bar
         (3px, pink, inside the pill).
-      - Sidebar rail + mobile tab rail active state: pink left rule
-        (already planned in §0 rail item — same language).
+      - ~~Sidebar rail + mobile tab rail active state: pink left rule~~ —
+        **superseded Nov 23:** the desktop rail uses a solid pink field +
+        white glyph (user decision). Mobile tab rail may still take the
+        rule if it reads better at sheet scale.
 - [ ] **Zone color = chips and fills, never strips.**
       - VenueList zone card: remove the `borderTop` strip; zone identity
         moves to the colored booth-code chips (already planned in §2) and
         the zone header row.
-      - MapTooltip: right 3px border → left 3px bar (same orientation as
-        every other selection surface); fix the arrow corner so it stops
-        inheriting the odd width.
+      - MapTooltip: **redesigned Nov 23** — no side accent at all. Identity
+        row (logo / monogram), company or event title, session line, hour,
+        booth-code chip carrying the zone colour, and a track tag (e.g.
+        Career Counseling). Neutral pointer; the old right bar + arrow
+        inheritance is gone.
 - [ ] **Hard-offset shadow = HappeningNow only.** It's the Persona-5
       signature — keep it there as the ONE sanctioned offset shadow; other
       floating cards use 1px borders + the surface ladder (§2), not soft
       `shadow-lg`/`backdrop-blur` (see §2 boxiness item).
-- [ ] **Structural side borders: 2px black/40 → 1px `var(--border)`.**
-      Two heavy black side borders (rail, sidebar) add visual weight the
-      palette ladder should carry instead.
+- [x] **Structural side borders: 2px black/40 → 1px `var(--border)`.**
+      Done Nov 23: rail and `map.astro` aside both use `border-r` +
+      `#2a2a2a`; the rail also shares the content surface color (user).
+- [x] **Zone color strips removed:** the VenueList `borderTop` strip is
+      gone. Zone identity rides the booth-code chips only. (The zone *card*
+      itself is still a box — that is §18-A's flattening job, not an accent
+      issue.)
 - [ ] After fix: re-run the rendered scan for the element rules
       (`impeccable detect http://localhost:PORT` from the container, plus a
       390x844 mobile viewport pass) to confirm `border-accent-on-rounded`
@@ -409,8 +713,8 @@ at equal weight on arrival.
         14px CTA row).
       - Map: the **Hall C1 card + track switcher** are the only elevated
         chrome; the floor plan owns everything else.
-- [ ] The search bar demotes from loudest to quiet-first-class: 36–38px
-      height, 2px border, secondary surface (already in §6) — search is a
+- [x] The search bar demotes from loudest to quiet-first-class: desktop
+      32px height, 1px border, 13px text, 30% field fill — search is a
       tool, not a destination; the list and live card rank above it.
 - [ ] Section labels (11px uppercase) stay small and gray — they name
       groups, never compete with content. Footnotes stay 10px.
@@ -838,9 +1142,13 @@ future pages without importing map islands.
 - [ ] Copy stays in `ui.json` (existing rule) but gains a namespace per
       surface (`ui.map.*`, `ui.landing.*`, `ui.gallery.*`) so other pages
       don't inherit map copy.
-- [ ] Reorganize `src/islands/*` → feature folders (`features/map/…`)
-      with the `features/_template` scaffold that already exists; shared
-      UI stays in `components/`. No logic moves — just boundaries.
+- [x] Reorganize the map page's boundaries (user direction, Nov 23):
+      `src/islands/map/` (all map islands), `src/hooks/map/` (URL booth,
+      keyboard shortcut, share, KPI data — vendor FF hooks stay at the
+      root, `README.md` records why), `src/lib/map/` (floorplan,
+      happening-carousel, share, homography), and
+      `src/components/map/kpi/`. Shared UI/data stay in `components/` and
+      `lib/`. No logic changed.
 
 ### B. Copywriting: hunt AI-slop copy with the detector
 

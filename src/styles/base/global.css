@@ -48,6 +48,14 @@
   --shadow-surface-6: 0 10px 24px rgb(0 0 0 / 0.5);
   --shadow-surface-7: 0 14px 30px rgb(0 0 0 / 0.55);
   --shadow-surface-8: 0 18px 40px rgb(0 0 0 / 0.6);
+
+  /* Persona 5–inspired landing fonts (AGENTS.md -1 exemption from DESIGN.md).
+     Two families only: Priego for display, Poppins for everything else.
+     `--font-inter` stays as a legacy alias so existing landing utilities
+     keep resolving — it now points at Poppins. */
+  --font-priego: var(--font-heading);
+  --font-poppins: var(--font-body);
+  --font-inter: var(--font-body);
 }
 
 :root {
@@ -72,7 +80,7 @@
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
   --font-heading: 'Priego', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 html,
@@ -183,6 +191,103 @@ button {
   }
 }
 
+/* Tooltip pointer: keeps the diamond aimed at the venue with a tiny bob. */
+.map-tooltip-pointer {
+  animation: tooltip-pointer 2.4s ease-in-out infinite;
+}
+
+@keyframes tooltip-pointer {
+  0%,
+  100% {
+    transform: translateY(0) rotate(45deg);
+  }
+  50% {
+    transform: translateY(3px) rotate(45deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-tooltip-pointer {
+    animation: none;
+  }
+}
+
+/* Selected venue: two inherited-colour pulse rings, never scaling the slab. */
+.venue-ring {
+  position: absolute;
+  inset: 0;
+  border: 2px solid;
+  border-radius: 2px;
+  pointer-events: none;
+  opacity: 0;
+  animation: venue-ring 1.8s ease-out infinite;
+}
+
+@keyframes venue-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .venue-ring {
+    animation: none;
+  }
+}
+
+/* Facility focus: a bouncing guide arrow above its pulse. */
+.facility-guide-arrow {
+  position: absolute;
+  left: 50%;
+  top: -26px;
+  transform: translateX(-50%);
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+  animation: facility-arrow 1.2s ease-in-out infinite;
+}
+
+@keyframes facility-arrow {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, 7px);
+    opacity: 0.45;
+  }
+}
+
+/* Directional map arrows: a subtle guide blink. */
+.plan-sprite-arrow {
+  animation: plan-arrow-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes plan-arrow-pulse {
+  0%,
+  100% {
+    opacity: 0.78;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .facility-guide-arrow,
+  .plan-sprite-arrow {
+    animation: none;
+  }
+}
+
 /* Track switcher dropdown animation */
 .track-dropdown {
   opacity: 1;
@@ -212,16 +317,15 @@ button {
   height: 100dvh;
 }
 
-/* Pulsing highlight for the hovered/selected floor-plan booth. The zone
-   colour is passed down as --glow from FloorPlanOverlay. */
-@keyframes booth-pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 0 3px var(--glow, var(--accent-pink)), 0 0 22px var(--glow, var(--accent-pink));
-  }
-  50% {
-    box-shadow: 0 0 0 6px var(--glow, var(--accent-pink)), 0 0 44px var(--glow, var(--accent-pink));
-  }
+/* Pulsing highlight for the hovered/selected floor-plan booth. Crisp rings
+   only — no blur, no halo: a cheap neon glow reads as decoration, a hard
+   double ring reads as a selection state and stays crisp when the DOM layer
+   is resampled by the map warp. Zone colour comes in as --glow. */
+/* Pulsing highlight for the hovered/selected floor-plan booth: two soft,
+   fill-less layers (70% + 20% opacity, the second wider) instead of a hard
+   stroke. Same animation lights the facility markers on hover. */
+.facility-marker {
+  border-radius: 1px;
 }
 
 /* FF ScrollArea viewport edge fades: a bottom fade cue for vertical lists,
@@ -241,6 +345,154 @@ button {
     transparent
   );
   mask-image: linear-gradient(to right, transparent, #000 20px, #000 calc(100% - 20px), transparent);
+}
+
+/* Map boot skeleton — a breathing granite gradient with a faint grid so the
+   empty stage reads as "loading", not broken. FF surface steps:
+   #0c0c0f → #121215 → #1c1c20 → #26262b. */
+.map-skeleton {
+  background: linear-gradient(
+    90deg,
+    #141417 25%,
+    #26262b 50%,
+    #141417 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+/* Shared shimmer for every skeleton strip (map boot, detail cover, tooltip). */
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    #1a1a1d 25%,
+    #26262b 50%,
+    #1a1a1d 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.map-skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+  background-size: 40px 40px;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 35%, transparent 78%);
+  mask-image: radial-gradient(circle at 50% 50%, #000 35%, transparent 78%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-skeleton,
+  .skeleton-shimmer {
+    animation: none;
+  }
+}
+
+/* Map boot overlay: fades once MapLibre reports its first idle frame. */
+#map-boot {
+  transition: opacity 500ms var(--ease-out);
+}
+
+#map-boot.is-ready {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #map-boot {
+    transition: none;
+  }
+}
+
+/* CTA fill wipe — the Figma CTA's three stages: the fill grows from the
+   left edge on hover (300ms) and releases in 150ms. Real pointers only. */
+.cta-fill {
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 150ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .cta-fill {
+    transform: scaleX(1);
+    transition-duration: 300ms;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-fill {
+    transition: none;
+  }
+}
+
+/* CTA content flips to the page white while the pink fill is under it. */
+.cta-content {
+  transition: color 150ms var(--ease-out);
+}
+
+.cta-tile {
+  transition: border-color 150ms var(--ease-out), color 150ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .cta-content {
+    color: #fff;
+  }
+
+  .group:hover .cta-tile {
+    border-color: rgb(255 255 255 / 0.75);
+  }
+}
+
+.cta-bar:focus-visible .cta-content {
+  color: #fff;
+}
+
+.cta-bar:focus-visible .cta-tile {
+  border-color: rgb(255 255 255 / 0.75);
+}
+
+/* Live-session carousel content swap: a small enter so the 5s advance
+   doesn't blink. Transform + opacity only. */
+.happening-enter {
+  animation: happening-enter 220ms var(--ease-out) both;
+}
+
+@keyframes happening-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+/* Carousel segment fill: the active session's index bar drains over the
+   5s interval, straight linear (constant-time progress). */
+@keyframes carousel-fill {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .happening-enter {
+    animation: none;
+  }
 }
 
 /* MapLibre popup & control overrides */
@@ -276,6 +528,30 @@ button {
   font-weight: 600;
   color: #9b9b9b;
   margin: 8px 0;
+}
+
+/* One list anatomy across search / saved / stats / help: an 11px label above
+   a hairline-divided panel. Rows are `.panel-row` siblings. */
+.section-label {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8f8f8f;
+}
+
+.panel-list {
+  border: 1px solid var(--border);
+  background: #141416;
+}
+
+/* Tactical header divider removed — plain hairlines only. */
+
+/* The search field shows focus through its border, not the global pink ring
+   (native mobile search-bar behaviour). */
+.search-input:focus-visible {
+  outline: none;
 }
 
 /* Rotated "Jelajahi Denah" ribbon — Priego Bold per the Figma header */
@@ -470,4 +746,40 @@ button {
     animation-range: entry calc(var(--reveal-scroll-start) + var(--reveal-scroll) / 2) entry calc(var(--reveal-scroll) * 1.5), exit calc(100% - var(--reveal-scroll) * 1.5) exit calc(100% - var(--reveal-scroll-start) - var(--reveal-scroll) / 2), normal;
     animation-delay: 0s, 0s, calc(var(--reveal-load-delay) + var(--reveal-step));
   }
+}
+
+/* Persona 5–inspired landing page token scope (AGENTS.md -1 exemption).
+   The landing is a light, graphic showcase that intentionally breaks the
+   dark granite DESIGN.md system. Only elements inside .landing-page use
+   these bespoke tokens. */
+.landing-page {
+  --icd-paper: #f4faff;
+  --icd-ink: #1f2f48;
+  --icd-teal-dark: #164d5c;
+  --icd-teal: #249ea1;
+  --icd-lime: #d2ff58;
+  --icd-pink: #ff316b;
+  --icd-orange: #ffb42b;
+  --icd-black: #09090b;
+  --icd-stone: #343330;
+  --icd-panel: #262626;
+  --icd-booth-violet: #6949ff;
+  --icd-booth-mint: #45d7c9;
+  --background: var(--icd-paper);
+  --foreground: var(--icd-ink);
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.figma-link {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.figma-link:hover {
+  filter: brightness(0.95);
+}
+
+.figma-link:focus-visible {
+  outline-color: var(--icd-pink);
 }

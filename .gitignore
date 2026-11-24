@@ -111,3 +111,11 @@ dist/
 build/
 .next/
 graphify-out/
+.opencode/opencode.json
+.opencode/plugins/graphify.js
+components.json
+opencode.json
+package-lock.json
+skills-lock.json
+tsconfig.json
+.opencode/

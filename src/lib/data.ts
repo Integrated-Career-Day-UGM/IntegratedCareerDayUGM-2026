@@ -6,6 +6,8 @@ import companiesJson from '../data/ugm-icd-2026/companies.json';
 import sessionsJson from '../data/ugm-icd-2026/sessions.json';
 import quickfindJson from '../data/ugm-icd-2026/quickfind.json';
 import uiJson from '../data/ugm-icd-2026/ui.json';
+import registrationJson from '../data/ugm-icd-2026/registration.json';
+import facilitiesJson from '../data/ugm-icd-2026/facilities.json';
 import type {
   EventConfig,
   Venue,
@@ -17,6 +19,7 @@ import type {
   Area,
   Track,
   UiStrings,
+  FacilityInfo,
 } from '../types/map';
 
 export const event: EventConfig = eventJson as EventConfig;
@@ -27,6 +30,17 @@ export const companies: Company[] = companiesJson as Company[];
 export const sessions: Session[] = sessionsJson as Session[];
 export const quickfind: QuickFindItem[] = quickfindJson as QuickFindItem[];
 export const ui: UiStrings = uiJson as UiStrings;
+
+/** Registration entry points (outside the map's own state — pure links). */
+export type RegistrationLinks = {
+  ugm: { label: string; hint: string; url: string };
+  nonUgm: { label: string; hint: string; url: string };
+};
+export const registration = registrationJson as RegistrationLinks;
+
+/** Facility markers on the floor plan (entrance, registration, …). */
+export const facilities: Record<string, FacilityInfo> =
+  facilitiesJson as Record<string, FacilityInfo>;
 
 export function getVenue(id: string): Venue | undefined {
   return venues.find((v) => v.id === id);

@@ -1,0 +1,14 @@
+---
+// Hero content layer: header, title lockup, event info, CTAs.
+import Header from './header.tsx';
+import TitleLockup from './title-lockup.astro';
+import EventInfo from './event-info.astro';
+import CtaColumn from './cta-column.astro';
+---
+
+<div class="absolute inset-0 z-10" data-name="hero-content">
+  <Header client:load />
+  <TitleLockup />
+  <EventInfo />
+  <CtaColumn />
+</div>

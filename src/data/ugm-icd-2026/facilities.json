@@ -1,0 +1,138 @@
+{
+  "entrance": {
+    "title": "Entrance",
+    "kind": "Wayfinding",
+    "accent": "#00ff1e",
+    "summary": "Main entrance to Hall C1. Registration check and bag check happen here.",
+    "items": [
+      {
+        "heading": "Before you enter",
+        "body": "Have your Simaster confirmation or QR ready. Security checks bags at the door."
+      },
+      {
+        "heading": "Just inside",
+        "body": "The Information Center is on the left; the Career Expo floor starts ahead."
+      }
+    ],
+    "tip": "Queues peak at 09.00 — arrive 15 minutes early."
+  },
+  "registration": {
+    "title": "Registration",
+    "kind": "Check-in",
+    "accent": "#e5484d",
+    "summary": "Verify your registration and collect your visitor pass.",
+    "items": [
+      {
+        "heading": "What to show",
+        "body": "Simaster QR for UGM students, or the mitra confirmation email for non-UGM visitors."
+      },
+      {
+        "heading": "Other desks",
+        "body": "Walk-in interviews register at Hall B; this desk is for event entry."
+      }
+    ],
+    "tip": "Keep your pass visible for re-entry."
+  },
+  "photobooth": {
+    "title": "Photobooth",
+    "kind": "Photo spot",
+    "accent": "#ff2d6f",
+    "summary": "Photo booth for the event — take a shot, print it, or share it.",
+    "items": [
+      {
+        "heading": "What's here",
+        "body": "The booth setup, props and the official frame."
+      },
+      {
+        "heading": "Best time",
+        "body": "Short queues during the 09.00 session."
+      }
+    ],
+    "tip": "Tag the official account so we can repost."
+  },
+  "photo-wall": {
+    "title": "Photo Wall",
+    "kind": "Photo spot",
+    "accent": "#ff2d6f",
+    "summary": "The event photo wall — tag the official account to be featured.",
+    "items": [
+      {
+        "heading": "Lighting",
+        "body": "Best light is from the entrance side; avoid shooting into the hall."
+      },
+      {
+        "heading": "Queue",
+        "body": "Shorter during the 09.00 session."
+      }
+    ],
+    "tip": "Tag the official account so we can repost."
+  },
+  "panggung": {
+    "title": "Panggung",
+    "kind": "Stage",
+    "accent": "#d4d4d8",
+    "summary": "Main stage — talks, announcements and scheduled programme moments.",
+    "items": [
+      {
+        "heading": "What happens here",
+        "body": "Opening, company talks, announcements and closing."
+      },
+      {
+        "heading": "Best time",
+        "body": "Check the live card; programme moments are short and scheduled."
+      }
+    ],
+    "tip": "Seating is first come, first served."
+  },
+  "toilet": {
+    "title": "Toilet",
+    "kind": "Facility",
+    "accent": "#5b8def",
+    "summary": "Toilet and accessible washroom inside Hall C1.",
+    "items": [
+      {
+        "heading": "Location",
+        "body": "Follow the toilet glyphs on the plan; the nearest block is beside the Mushola."
+      },
+      {
+        "heading": "Accessibility",
+        "body": "An accessible cubicle is available in the same block."
+      }
+    ],
+    "tip": "Please keep the area clean for the next visitor."
+  },
+  "mushola": {
+    "title": "Mushola",
+    "kind": "Facility",
+    "accent": "#4fc3a1",
+    "summary": "Prayer room inside Hall C1.",
+    "items": [
+      {
+        "heading": "Location",
+        "body": "Next to the toilet block, marked with the crescent on the plan."
+      },
+      {
+        "heading": "Etiquette",
+        "body": "Please remove shoes before entering and keep voices low."
+      }
+    ],
+    "tip": "Wudhu facilities are available beside the room."
+  },
+  "pusat-bantuan": {
+    "title": "Pusat Bantuan",
+    "kind": "Help Desk",
+    "accent": "#f0c71d",
+    "summary": "Help Desk for directions, lost items and event questions.",
+    "items": [
+      {
+        "heading": "What we handle",
+        "body": "Wayfinding, lost and found, accessibility requests and general event info."
+      },
+      {
+        "heading": "Find us",
+        "body": "Look for the committee members in pink vests near the Information Center."
+      }
+    ],
+    "tip": "Ask any committee member if the desk is unattended."
+  }
+}

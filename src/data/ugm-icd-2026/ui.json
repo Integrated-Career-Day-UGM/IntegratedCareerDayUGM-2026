@@ -6,11 +6,18 @@
     "todayBadge": "Today"
   },
   "search": {
-    "placeholder": "Search company, role, booth...",
+    "placeholder": "Search",
     "shortcutHint": "Ctrl",
     "shortcutKey": "K",
     "resultsLabel": "{count} result{plural}",
-    "emptyResults": "No companies or booths match your search."
+    "emptyResults": "No companies or booths match your search.",
+    "filters": {
+      "trigger": "Filters",
+      "title": "Filters",
+      "clear": "Clear",
+      "sector": "Sector",
+      "role": "Role"
+    }
   },
   "tabs": {
     "home": "Home",
@@ -67,8 +74,9 @@
   "insights": {
     "title": "Insights",
     "subtitle": "Event overview in real-time",
-    "kpiSectionTitle": "Job Market Pulse",
+    "kpiSectionTitle": "Openings",
     "kpiSectionSubtitle": "Recruitment trends from visitor activity and company data (coming soon).",
+    "sectorsLabel": "Sectors",
     "kpiEmptyLabel": "No data yet",
     "cards": {
       "attendance": {
@@ -88,7 +96,7 @@
         "caption": "today"
       },
       "bookmarks": {
-        "label": "Your Bookmarks",
+        "label": "Bookmarks",
         "value": "{count}",
         "caption": "saved booths"
       }
@@ -97,18 +105,30 @@
   "info": {
     "title": "Info",
     "helpTitle": "Help",
+    "registerLabel": "Daftar",
+    "mapsCta": "Open in Google Maps",
+    "mapsQuery": "Gedung Industri Kreatif UGM",
     "sections": {
       "venue": {
         "heading": "Venue",
+        "headline": "GIK",
         "body": "Gedung Industri Kreatif (GIK), Universitas Gadjah Mada. Hall C1 hosts the Career Expo, Hall B hosts Walk-in Interviews, and Ruang C001-002 hosts Career Counseling."
       },
       "hours": {
         "heading": "Event Hours",
-        "body": "08:00 – 17:00 WIB. Registration opens at 07:30 WIB. Last admission at 16:30 WIB."
+        "headline": "08:00 – 17:00 WIB",
+        "body": "Registration opens at 07:30 WIB. Last admission at 16:30 WIB."
       },
       "whatToBring": {
         "heading": "What to bring",
-        "body": "Updated CV, portfolio, KTP or student ID, and vaccination certificate. Dress code is smart casual."
+        "body": "Bring your updated CV, portfolio, KTP or student ID, and vaccination certificate.",
+        "items": [
+          "Updated CV",
+          "Portfolio",
+          "KTP / student ID",
+          "Vaccination certificate"
+        ],
+        "note": "Smart casual dress code"
       },
       "help": {
         "heading": "Need help?",
@@ -120,6 +140,7 @@
     "hallLabel": "Hall C1",
     "hallSublabel": "Career Expo",
     "compassLabel": "Reset bearing to north",
+    "recenterLabel": "Recenter map",
     "zoomInLabel": "Zoom in",
     "zoomOutLabel": "Zoom out"
   }

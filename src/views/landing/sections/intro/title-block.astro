@@ -1,0 +1,43 @@
+---
+// "Selamat Datang" title + tagline with teal highlight bars.
+interface Props {
+  variant: 'desktop' | 'mobile';
+}
+
+const { variant } = Astro.props;
+const isDesktop = variant === 'desktop';
+---
+
+<div class={`z-20 flex flex-col items-center ${isDesktop ? 'absolute left-1/2 top-[128.69px] -translate-x-1/2' : 'relative px-4 pt-9'}`} data-name="intro-title">
+  {/* Selamat Datang */}
+  <div class={`flex items-center justify-center ${isDesktop ? 'h-[56.629px] w-[415.746px]' : 'h-auto w-full'}`}>
+    <p
+      class={`font-priego text-center font-bold text-white ${isDesktop ? 'rotate-[0.92deg] text-[50.457px]' : 'text-[32px]'}`}
+      style={isDesktop ? undefined : { WebkitTextStroke: '1.5px #164d5c' }}
+    >
+      Selamat Datang
+    </p>
+  </div>
+
+  {/* Tagline + highlight bars */}
+  <div class={`relative flex items-center justify-center ${isDesktop ? 'mt-[18px] h-[54.585px] w-[572.664px]' : 'mt-2 h-auto w-full'}`}>
+    {/* Main bar */}
+    <div class={`bg-[var(--icd-teal)] ${isDesktop ? 'h-[54.585px] w-[572.664px]' : 'h-[36px] w-[280px]'}`} />
+
+    {/* Decorative squares */}
+    {isDesktop && (
+      <>
+        <div class="absolute left-[calc(50%-306.12px)] top-[calc(33.33%+26.45px)] size-[47.882px] bg-[var(--icd-teal)]" />
+        <div class="absolute left-[calc(50%+301.98px)] top-[179px] size-[26.814px] bg-[var(--icd-teal)]" />
+        <div class="absolute left-[calc(50%+335.01px)] top-[205.82px] size-[39.263px] bg-[var(--icd-teal)]" />
+        <div class="absolute left-[calc(50%+292.4px)] top-[calc(33.33%+30.28px)] size-[19.153px] bg-[var(--icd-teal)]" />
+        <div class="absolute left-[calc(50%-335.33px)] top-[217.31px] size-[37.348px] bg-[var(--icd-teal)]" />
+        <div class="absolute left-[calc(50%-292.71px)] top-[181.87px] size-[21.068px] bg-[var(--icd-teal)]" />
+      </>
+    )}
+
+    <p class={`absolute text-center font-bold text-[#fdfdfd] ${isDesktop ? 'font-priego text-[47.882px]' : 'text-[18px]'}`}>
+      {isDesktop ? 'Unity Spark, Ignite Vision' : 'Unite Spark, Ignite Vision'}
+    </p>
+  </div>
+</div>

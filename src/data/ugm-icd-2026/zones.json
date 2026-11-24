@@ -3,28 +3,28 @@
     "id": "zone-c",
     "areaId": "hall-c1",
     "name": "Center",
-    "color": "#45d7c9",
+    "color": "#5b7f3a",
     "boothIds": ["c1", "c2", "c3", "c4", "c5", "c6"]
   },
   {
     "id": "zone-e",
     "areaId": "hall-c1",
     "name": "East",
-    "color": "#6949ff",
-    "boothIds": ["e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e10", "e11", "e12", "e13", "e14", "e15"]
+    "color": "#f0862a",
+    "boothIds": ["e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e10", "e11", "e12", "e13", "e14"]
   },
   {
     "id": "zone-d",
     "areaId": "hall-c1",
     "name": "D",
-    "color": "#fd19e5",
-    "boothIds": ["d3"]
+    "color": "#f06a95",
+    "boothIds": ["d1", "d2", "d3", "d4"]
   },
   {
-    "id": "zone-ab",
+    "id": "zone-a",
     "areaId": "hall-c1",
     "name": "Main",
-    "color": "#1c2e4a",
-    "boothIds": ["a", "b"]
+    "color": "#1f7f79",
+    "boothIds": ["a"]
   }
 ]

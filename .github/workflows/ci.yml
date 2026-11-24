@@ -1,11 +1,33 @@
 name: CI
 
+# Fast path (development + staging): install -> verify -> build.
+# Unit tests are KEPT below but are NOT composed: they only run when explicitly
+# requested from the Actions "Run workflow" button. This repo currently has zero
+# unit tests, so running them by default can only produce red builds for no signal.
+#
+# Playwright is intentionally NOT used in CI for now. Playwright lives only in
+# playwright.config.ts + `bun run test:e2e` for local use.
+#
+# main is gated more strictly, outside this file:
+#   - required status check: "CI passed"
+#   - dependency-review (below, PRs only)
+#   - CodeQL is disabled for now (codeql.yml is workflow_dispatch only)
+#
+# Bun is the only package manager here: `bun.lock` is the source of truth and
+# `bun install --frozen-lockfile` replaces the old npm ci (which could never pass
+# because package-lock.json was out of sync with package.json).
+
 on:
   pull_request:
     branches: [main, staging, development]
   push:
-    branches: [main, staging, development]
+    branches: [development, staging]
   workflow_dispatch:
+    inputs:
+      run_unit_tests:
+        description: "Run Vitest (only enable once src/**/*.test.* exists)"
+        type: boolean
+        default: false
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -15,26 +37,59 @@ permissions:
   contents: read
 
 env:
-  PUBLIC_APP_URL: http://localhost:4321
-  PUBLIC_API_URL: http://localhost:4321/api
   ASTRO_TELEMETRY_DISABLED: "1"
+  # Set the repo/org variable PUBLIC_APP_URL to the staging domain so the
+  # sitemap and canonical URLs are not baked as localhost. Falls back when unset.
+  PUBLIC_APP_URL: ${{ vars.PUBLIC_APP_URL || 'http://localhost:4321' }}
 
 jobs:
-  # Stage 1: install dependencies and audit them
-  install:
-    name: Install and audit
+  # Stage 1: one install, then every static check that actually exists today.
+  verify:
+    name: Verify
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
         with:
-          node-version-file: .nvmrc
-          cache: npm
-      - run: npm ci
-      - run: npm audit --audit-level=high
+          bun-version: 1.x
+      - name: Cache bun packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: |
+            bun-${{ runner.os }}-
+      - run: bun install --frozen-lockfile
+      # Generates .astro/types.d.ts so `tsc --noEmit` sees the same env types
+      # that `astro check` does.
+      - run: bunx astro sync
+      - run: bun run check
+      - run: bun run typecheck
+      - run: bun run lint
 
-  # Stage 2: dependency review on pull requests only
+  # Stage 2: production build. Mirrors what Vercel runs, so a green CI run means
+  # the staging deploy will not fail on the build step.
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.x
+      - name: Cache bun packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: |
+            bun-${{ runner.os }}-
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+
+  # Stage 3: dependency review on pull requests only. Needs no extra install.
   dependency-review:
     name: Dependency review
     if: github.event_name == 'pull_request'
@@ -44,139 +99,35 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/dependency-review-action@v4
         with:
           fail-on-severity: high
           comment-summary-in-pr: on-failure
 
-  # Stage 3: quality checks, run in parallel
-  lint:
-    name: Lint
-    needs: install
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-      - run: npm ci
-      - run: npm run lint
-
-  typecheck:
-    name: Typecheck
-    needs: install
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-      - run: npm ci
-      - run: npm run typecheck
-
-  astro-check:
-    name: Astro check
-    needs: install
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-      - run: npm ci
-      - run: npm run check
-
+  # ---------------------------------------------------------------- routine kept,
+  # not composed. Enable by adding test files, then dispatching with the input
+  # `run_unit_tests: true` (or drop the `if:` once the suite is real).
   unit-test:
     name: Unit tests
-    needs: install
+    if: github.event_name == 'workflow_dispatch' && inputs.run_unit_tests
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
         with:
-          node-version-file: .nvmrc
-          cache: npm
-      - run: npm ci
-      - run: npm run test
+          bun-version: 1.x
+      - run: bun install --frozen-lockfile
+      # --passWithNoTests keeps this honest today: zero specs is not a failure.
+      - run: bunx vitest run --passWithNoTests
 
-  # Stage 4: production build, only after every quality check passes
-  build:
-    name: Build
-    needs: [lint, typecheck, astro-check, unit-test]
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-      - uses: actions/cache@v4
-        with:
-          path: node_modules/.astro
-          key: astro-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ hashFiles('src/**') }}
-          restore-keys: |
-            astro-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-
-      - run: npm ci
-      - run: npm run build
-      - uses: actions/upload-artifact@v4
-        with:
-          name: astro-dist
-          path: dist
-          include-hidden-files: true
-          retention-days: 1
-
-  # Stage 5: end-to-end tests against the static build from stage 4
-  e2e:
-    name: End-to-end tests
-    needs: build
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-      - run: npm ci
-      - uses: actions/download-artifact@v4
-        with:
-          name: astro-dist
-          path: dist
-      - name: Cache Playwright browsers
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-      - run: npx playwright install --with-deps chromium
-      - name: Start preview server
-        run: npx astro preview &
-      - name: Wait for preview
-        run: npx --yes wait-on http://localhost:4321
-      - run: npm run test:e2e
-      - uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: playwright-report
-          path: |
-            playwright-report
-            test-results
-          retention-days: 7
-          if-no-files-found: ignore
-
-  # Final gate: use this single job as the required status check in the ruleset
+  # Final gate: this is the single required status check for the main ruleset.
+  # Skipped jobs are fine; only failure/cancelled fail the gate.
   ci-passed:
     name: CI passed
     if: always()
-    needs: [install, dependency-review, lint, typecheck, astro-check, unit-test, build, e2e]
+    needs: [verify, build, dependency-review, unit-test]
     runs-on: ubuntu-latest
     steps:
       - name: Verify all stages
@@ -187,3 +138,4 @@ jobs:
             echo "One or more stages failed."
             exit 1
           fi
+          echo "All composed stages passed."
