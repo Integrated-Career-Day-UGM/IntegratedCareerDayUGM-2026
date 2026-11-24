@@ -117,5 +117,15 @@ components.json
 opencode.json
 package-lock.json
 skills-lock.json
-tsconfig.json
 .opencode/
+
+# Poster originals are local only; the compressed WebP output in
+# public/posters/ is committed because it is served.
+/posters/source/*
+!/posters/source/.gitkeep
+
+# ---------- Local-only design scratch ----------
+# Raw screenshots (browser/agent captures) are working files, not source.
+# Promote the ones that matter into docs/screenshots/reference/ before
+# committing. The inbox itself never goes to the remote repo.
+/docs/screenshots/inbox/
