@@ -1,0 +1,25 @@
+---
+// Desktop intro content layer.
+import TitleBlock from './title-block.astro';
+import VideoCard from './VideoCard.astro';
+---
+
+<div class="absolute inset-0 z-10" data-name="desktop-intro-content">
+  <TitleBlock variant="desktop" />
+
+  {/* Video cards row */}
+  <div class="absolute left-[100px] top-[calc(33.33%+120.33px)] z-20 flex items-center gap-[38px]">
+    <VideoCard variant="desktop" buttonSrc="/landing/intro/button-base.svg" />
+    <VideoCard variant="desktop" buttonSrc="/landing/intro/button-base.svg" />
+    <VideoCard variant="desktop" buttonSrc="/landing/intro/button-base1.svg" />
+  </div>
+
+  {/* Decorative element bottom right */}
+  <div class="absolute left-[1219px] top-[calc(66.67%+85.67px)] z-10 flex h-[263.146px] w-[237.716px] items-center justify-center">
+    <div class="rotate-[30.4deg]">
+      <div class="relative h-[218.652px] w-[147.336px]">
+        <img alt="" src="/landing/intro/group1171276826.svg" class="absolute inset-[-6.42%_-8.53%_-6.63%_-9.55%] block max-w-none" />
+      </div>
+    </div>
+  </div>
+</div>

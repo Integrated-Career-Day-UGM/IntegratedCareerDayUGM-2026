@@ -1,0 +1,92 @@
+[
+  {
+    "id": "wi-f1-d1",
+    "dayId": "d1",
+    "companyId": "e13-teachfirst",
+    "companyName": "Teach First Indonesia",
+    "room": "F1",
+    "boothRef": "E13",
+    "start": "2026-11-28T13:00:00+07:00",
+    "end": "2026-11-28T14:00:00+07:00"
+  },
+  {
+    "id": "wi-f2-d1",
+    "dayId": "d1",
+    "companyId": "d2-bni",
+    "companyName": "PT Bank Negara Indonesia (Persero) Tbk",
+    "room": "F2",
+    "boothRef": "D2",
+    "start": "2026-11-28T11:00:00+07:00",
+    "end": "2026-11-28T12:00:00+07:00"
+  },
+  {
+    "id": "wi-f5-d1",
+    "dayId": "d1",
+    "companyId": null,
+    "companyName": "PT Hakaaston",
+    "room": "F5",
+    "boothRef": null,
+    "start": "2026-11-28T11:00:00+07:00",
+    "end": "2026-11-28T12:00:00+07:00"
+  },
+  {
+    "id": "wi-f1-d2",
+    "dayId": "d2",
+    "companyId": "e13-teachfirst",
+    "companyName": "Teach First Indonesia",
+    "room": "F1",
+    "boothRef": "E13",
+    "start": "2026-11-29T13:00:00+07:00",
+    "end": "2026-11-29T14:00:00+07:00"
+  },
+  {
+    "id": "wi-f2-d2",
+    "dayId": "d2",
+    "companyId": "d2-bni",
+    "companyName": "PT Bank Negara Indonesia (Persero) Tbk",
+    "room": "F2",
+    "boothRef": "D2",
+    "start": "2026-11-29T14:00:00+07:00",
+    "end": "2026-11-29T15:00:00+07:00"
+  },
+  {
+    "id": "wi-f3-d2",
+    "dayId": "d2",
+    "companyId": "d4-nindya",
+    "companyName": "PT Nindya Karya (Persero)",
+    "room": "F3",
+    "boothRef": "D4",
+    "start": "2026-11-29T10:00:00+07:00",
+    "end": "2026-11-29T15:00:00+07:00"
+  },
+  {
+    "id": "wi-f4-d2",
+    "dayId": "d2",
+    "companyId": "d4-nindya",
+    "companyName": "PT Nindya Karya (Persero)",
+    "room": "F4",
+    "boothRef": "D4",
+    "start": "2026-11-29T10:00:00+07:00",
+    "end": "2026-11-29T15:00:00+07:00"
+  },
+  {
+    "id": "wi-f5-d2",
+    "dayId": "d2",
+    "companyId": null,
+    "companyName": "PT Hakaaston",
+    "room": "F5",
+    "boothRef": null,
+    "start": "2026-11-29T11:00:00+07:00",
+    "end": "2026-11-29T12:00:00+07:00"
+  },
+  {
+    "id": "wi-f6-d2",
+    "dayId": "d2",
+    "companyId": null,
+    "companyName": "PT United Tractors Pandu Engineering (member of Astra)",
+    "room": "F6",
+    "boothRef": null,
+    "start": "2026-11-29T10:00:00+07:00",
+    "end": "2026-11-29T16:00:00+07:00"
+  }
+]

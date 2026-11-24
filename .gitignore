@@ -1,36 +1,131 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+#
+# This repo has two goals for this file:
+#   1. Keep generated tool output (builds, caches, logs, reports) out of git.
+#   2. Stop CLI tools and AI agents from littering the repository root.
+#      Fluid Functionalism (`npx fluidfunctionalism`) writes kit files to the
+#      working directory root; those patterns are blocked at the bottom so the
+#      litter never gets committed by accident. Kit code belongs in
+#      src/lib, src/hooks, and src/components/ui.
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# ---------- Dependencies ----------
+node_modules/
+.pnp
+.pnp.*
+.pnpm-store/
 
-# testing
-/coverage
+# ---------- Build output ----------
+dist/
+out/
+build/
+.astro/
+*.tsbuildinfo
 
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
+# ---------- Environment & secrets ----------
+.env
+.env.*
+!.env.example
 *.pem
+*.key
 
-# debug
+# ---------- Logs ----------
+logs/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# local env files
-.env*.local
-.env
+# ---------- Test & coverage artifacts ----------
+coverage/
+playwright-report/
+test-results/
+blob-report/
+playwright/.cache/
+*.lcov
 
-# vercel
-.vercel
+# ---------- Caches & platform state ----------
+.cache/
+.eslintcache
+.stylelintcache
+.turbo/
+.vercel/
+.netlify/
+.wrangler/
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# ---------- OS & editor noise ----------
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.swp
+*~
+.vscode/
+.idea/
+*.code-workspace
+
+# ---------- AI agent workspaces (local, never committed) ----------
+.agents/
+.codex/
+.impeccable/
+.claude/
+.cursor/
+.aider*
+.continue/
+.windsurf/
+.codeium/
+.github/skills/
+.github/agents/
+.github/hooks/
+
+# ---------- Root-level litter guards ----------
+# The Fluid Functionalism CLI dumps .tsx kit files into the repo root.
+# Real kit code lives under src/ — never accept a component file at the root.
+/*.tsx
+
+# Screenshots and design exports belong in docs/screenshots/ (see its README).
+/*.png
+/*.jpg
+/*.jpeg
+/*.gif
+/*.webp
+/*.svg
+/*.pdf
+
+# Font binaries belong in public/fonts/ (served) or docs/assets/fonts/ (source).
+/*.otf
+/*.ttf
+/*.woff
+/*.woff2
+
+
+# Dependencies & environments
+node_modules/
+.venv/
+venv/
+__pycache__/
+
+# Build & output directories
+dist/
+build/
+.next/
+graphify-out/
+.opencode/opencode.json
+.opencode/plugins/graphify.js
+components.json
+opencode.json
+package-lock.json
+skills-lock.json
+.opencode/
+
+# Poster originals are local only; the compressed WebP output in
+# public/posters/ is committed because it is served.
+/posters/source/*
+!/posters/source/.gitkeep
+
+# ---------- Local-only design scratch ----------
+# Raw screenshots (browser/agent captures) are working files, not source.
+# Promote the ones that matter into docs/screenshots/reference/ before
+# committing. The inbox itself never goes to the remote repo.
+/docs/screenshots/inbox/

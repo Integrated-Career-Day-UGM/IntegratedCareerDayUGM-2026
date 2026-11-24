@@ -1,0 +1,509 @@
+[
+  {
+    "id": "c1-hutama-infra",
+    "name": "PT Hutama Karya Infrastruktur",
+    "shortName": "Hutama Infra",
+    "tags": [
+      "Construction",
+      "BUMN"
+    ],
+    "websiteUrl": "https://hki.co.id",
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      {
+        "title": "Civil Engineer",
+        "type": "Full-time"
+      },
+      {
+        "title": "Site Engineer Intern",
+        "type": "Internship"
+      }
+    ],
+    "description": "PT Hutama Karya Infrastruktur is a construction subsidiary of state-owned Hutama Karya, specializing in toll roads and bridges, including sections of the Trans-Sumatra Toll Road."
+  },
+  {
+    "id": "c2-monee",
+    "name": "Monee Indonesia",
+    "shortName": "Monee",
+    "tags": [
+      "Fintech",
+      "Tech"
+    ],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      {
+        "title": "Product Analyst",
+        "type": "Full-time"
+      },
+      {
+        "title": "Growth Intern",
+        "type": "Internship"
+      }
+    ],
+    "description": "Monee is the digital financial services arm of Sea Limited, providing payments, lending, and digital banking through products such as ShopeePay and SeaBank across Southeast Asia."
+  },
+  {
+    "id": "c3-astra",
+    "name": "PT Astra International Tbk",
+    "shortName": "Astra",
+    "tags": [
+      "Automotive",
+      "Multi-national"
+    ],
+    "websiteUrl": "https://www.astra.co.id",
+    "programUrl": "https://careers.astra.co.id",
+    "logoUrl": null,
+    "openings": [
+      {
+        "title": "Management Trainee",
+        "type": "Full-time"
+      },
+      {
+        "title": "Data Analyst Intern",
+        "type": "Internship"
+      }
+    ],
+    "description": "PT Astra International Tbk is an Indonesian diversified group with businesses in automotive distribution and manufacturing, financial services, heavy equipment, mining, and agribusiness."
+  },
+  {
+    "id": "c4-odoo",
+    "name": "Odoo",
+    "shortName": "Odoo",
+    "tags": [
+      "Tech",
+      "Multi-national"
+    ],
+    "websiteUrl": "https://www.odoo.com",
+    "programUrl": "https://www.odoo.com/jobs",
+    "logoUrl": null,
+    "openings": [
+      {
+        "title": "Software Engineer",
+        "type": "Full-time"
+      },
+      {
+        "title": "Functional Consultant",
+        "type": "Full-time"
+      },
+      {
+        "title": "Developer Intern",
+        "type": "Internship"
+      }
+    ],
+    "description": "Odoo develops open-source business applications for CRM, sales, accounting, inventory, and operations, used by companies worldwide through its Belgium-based software platform."
+  },
+  {
+    "id": "c5-hutama",
+    "name": "PT Hutama Karya (Persero)",
+    "shortName": "Hutama Karya",
+    "tags": [
+      "Construction",
+      "BUMN"
+    ],
+    "websiteUrl": "https://hutamakarya.com",
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      {
+        "title": "Management Trainee",
+        "type": "Full-time"
+      },
+      {
+        "title": "Finance Intern",
+        "type": "Internship"
+      }
+    ],
+    "description": "PT Hutama Karya (Persero) is a state-owned Indonesian construction company responsible for the Trans-Sumatra Toll Road and other road, bridge, and building projects."
+  },
+  {
+    "id": "c6-zurich",
+    "name": "PT Zurich Indonesia Tbk",
+    "shortName": "Zurich",
+    "tags": [
+      "Insurance",
+      "Finance",
+      "Multi-national"
+    ],
+    "websiteUrl": "https://www.zurich.co.id",
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      {
+        "title": "Underwriter",
+        "type": "Full-time"
+      },
+      {
+        "title": "Claims Intern",
+        "type": "Internship"
+      }
+    ],
+    "description": "Zurich is a global insurance group whose Indonesian business provides life and general insurance products for individuals, families, and companies."
+  },
+  {
+    "id": "d1-paragon",
+    "name": "Paragon Corps",
+    "shortName": "Paragon",
+    "tags": [
+      "FMCG",
+      "Consumer Goods"
+    ],
+    "websiteUrl": "https://www.paragon-corp.com",
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      {
+        "title": "Brand Management Trainee",
+        "type": "Full-time"
+      },
+      {
+        "title": "R&D Intern",
+        "type": "Internship"
+      }
+    ],
+    "description": "ParagonCorp is an Indonesian cosmetics and personal-care manufacturer behind brands including Wardah, Make Over, Emina, and Kahf, sold domestically and in export markets."
+  },
+  {
+    "id": "d2-bni",
+    "name": "PT Bank Negara Indonesia (Persero) Tbk",
+    "shortName": "BNI",
+    "tags": [
+      "Banking",
+      "BUMN"
+    ],
+    "websiteUrl": "https://www.bni.co.id",
+    "programUrl": "https://karir.bni.co.id",
+    "logoUrl": null,
+    "openings": [
+      {
+        "title": "Management Trainee",
+        "type": "Full-time"
+      },
+      {
+        "title": "IT Intern",
+        "type": "Internship"
+      }
+    ],
+    "description": "PT Bank Negara Indonesia (Persero) Tbk is a state-owned Indonesian bank providing consumer, business, and corporate banking services through branches and overseas offices."
+  },
+  {
+    "id": "d3-polygon",
+    "name": "Polygon",
+    "shortName": "Polygon",
+    "tags": [
+      "Manufacturing",
+      "Consumer Goods"
+    ],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      {
+        "title": "Industrial Designer",
+        "type": "Full-time"
+      },
+      {
+        "title": "Marketing Intern",
+        "type": "Internship"
+      }
+    ],
+    "description": "Polygon is an Indonesian bicycle brand manufactured by PT Insera Sena in Sidoarjo, producing mountain, road, and urban bikes for domestic and export markets."
+  },
+  {
+    "id": "d4-nindya",
+    "name": "PT Nindya Karya (Persero)",
+    "shortName": "Nindya Karya",
+    "tags": [
+      "Construction",
+      "BUMN"
+    ],
+    "websiteUrl": "https://nindyakarya.co.id",
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      {
+        "title": "Project Engineer",
+        "type": "Full-time"
+      },
+      {
+        "title": "Quantity Surveyor",
+        "type": "Full-time"
+      }
+    ],
+    "description": "PT Nindya Karya (Persero) is an Indonesian state-owned construction company working on roads, bridges, buildings, and water infrastructure projects across the country."
+  },
+  {
+    "id": "e2-surya",
+    "name": "PT Surya Semesta Internusa Tbk",
+    "shortName": "Surya Semesta",
+    "tags": [
+      "Construction",
+      "Property"
+    ],
+    "websiteUrl": "https://www.suryasemesta.com",
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      {
+        "title": "Project Engineer",
+        "type": "Full-time"
+      },
+      {
+        "title": "Quantity Surveyor",
+        "type": "Full-time"
+      },
+      {
+        "title": "Site Supervisor",
+        "type": "Full-time"
+      },
+      {
+        "title": "Admin Intern",
+        "type": "Internship"
+      }
+    ],
+    "description": "PT Surya Semesta Internusa Tbk develops industrial estates and real estate, builds commercial and infrastructure projects, and operates hotels in Indonesia."
+  },
+  {
+    "id": "e4-obi",
+    "name": "PT Outward Bound Indonesia (OBI)",
+    "shortName": "Outward Bound",
+    "tags": [
+      "Education",
+      "Non-profit"
+    ],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      {
+        "title": "Instructor",
+        "type": "Full-time"
+      },
+      {
+        "title": "Program Intern",
+        "type": "Internship"
+      }
+    ],
+    "description": "PT Outward Bound Indonesia is an outdoor education provider and member of Outward Bound International, running experiential leadership, team-building, and character programs for schools and companies."
+  },
+  {
+    "id": "e5-blibli",
+    "name": "BLIBLI",
+    "shortName": "Blibli",
+    "tags": [
+      "E-commerce",
+      "Retail"
+    ],
+    "websiteUrl": "https://www.blibli.com",
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [],
+    "description": "Blibli is an Indonesian e-commerce platform operated by PT Global Digital Niaga Tbk, selling electronics, household goods, and groceries alongside travel and lifestyle services."
+  },
+  {
+    "id": "e6-ugm-online",
+    "name": "UGM Online",
+    "shortName": "UGM Online",
+    "tags": [
+      "Education"
+    ],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      {
+        "title": "Learning Designer",
+        "type": "Full-time"
+      },
+      {
+        "title": "Content Intern",
+        "type": "Internship"
+      }
+    ],
+    "description": "UGM Online is Universitas Gadjah Mada's open online learning platform, offering certified micro-credentials, MOOCs, and short courses to learners in Indonesia and abroad."
+  },
+  {
+    "id": "e7-kemahasiswaan",
+    "name": "Direktorat Kemahasiswaan",
+    "shortName": "Direktorat",
+    "tags": [
+      "Education"
+    ],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      {
+        "title": "Student Affairs Officer",
+        "type": "Full-time"
+      },
+      {
+        "title": "Program Intern",
+        "type": "Internship"
+      }
+    ],
+    "description": "Direktorat Kemahasiswaan is Universitas Gadjah Mada's student affairs directorate, managing scholarships, student welfare, counseling, and support for student organizations and activities."
+  },
+  {
+    "id": "e8-torrecid",
+    "name": "PT Torrecid Indonesia",
+    "shortName": "Torrecid",
+    "tags": [
+      "Manufacturing",
+      "Multi-national"
+    ],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      {
+        "title": "Process Engineer",
+        "type": "Full-time"
+      },
+      {
+        "title": "R&D Intern",
+        "type": "Internship"
+      }
+    ],
+    "description": "PT Torrecid Indonesia is the Indonesian subsidiary of Spain's Torrecid Group, supplying glazes, frits, inks, and digital decoration solutions to ceramic tile and glass manufacturers."
+  },
+  {
+    "id": "e9-app",
+    "name": "APP Group",
+    "shortName": "APP",
+    "tags": [
+      "Manufacturing",
+      "Forestry"
+    ],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      {
+        "title": "Sustainability Analyst",
+        "type": "Full-time"
+      },
+      {
+        "title": "Forestry Intern",
+        "type": "Internship"
+      }
+    ],
+    "description": "APP Group is an Indonesian pulp, paper, and packaging producer under the Sinar Mas group, supplying tissue, board, and packaging products to customers worldwide."
+  },
+  {
+    "id": "e10-cobra",
+    "name": "PT Cobra Dental Indonesia",
+    "shortName": "Cobra Dental",
+    "tags": [
+      "Healthcare",
+      "Manufacturing"
+    ],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      {
+        "title": "Dental Product Specialist",
+        "type": "Full-time"
+      },
+      {
+        "title": "QA Intern",
+        "type": "Internship"
+      }
+    ],
+    "description": "PT Cobra Dental Indonesia is a Yogyakarta-based distributor of dental equipment and materials, operating outlets across Indonesia and supplying brands such as 3M, GC, and W&H."
+  },
+  {
+    "id": "e11-elnusa",
+    "name": "PT Elnusa Petrofin",
+    "shortName": "Elnusa",
+    "tags": [
+      "Energy"
+    ],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      {
+        "title": "Petroleum Engineer",
+        "type": "Full-time"
+      },
+      {
+        "title": "HSE Intern",
+        "type": "Internship"
+      }
+    ],
+    "description": "PT Elnusa Petrofin is a fuel logistics subsidiary of Elnusa, part of Indonesia's Pertamina group, handling fuel transportation, storage, and distribution across the archipelago."
+  },
+  {
+    "id": "e12-dynapack",
+    "name": "PT Dynapack Asia",
+    "shortName": "Dynapack",
+    "tags": [
+      "Manufacturing",
+      "Automotive"
+    ],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      {
+        "title": "Manufacturing Engineer",
+        "type": "Full-time"
+      },
+      {
+        "title": "Quality Intern",
+        "type": "Internship"
+      }
+    ],
+    "description": "Dynapack Asia is an Indonesian rigid-plastic packaging manufacturer producing bottles, caps, jars, and components for consumer, pharmaceutical, and industrial customers across Asia."
+  },
+  {
+    "id": "e13-teachfirst",
+    "name": "Teach First Indonesia",
+    "shortName": "Teach First",
+    "tags": [
+      "Education",
+      "Non-profit"
+    ],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      {
+        "title": "Teaching Fellow",
+        "type": "Full-time"
+      },
+      {
+        "title": "Recruitment Intern",
+        "type": "Internship"
+      }
+    ],
+    "description": "Teach First Indonesia is a non-profit that recruits young professionals and graduates to teach for two years in underserved Indonesian schools, providing training and leadership development."
+  },
+  {
+    "id": "e14-ocbc",
+    "name": "OCBC",
+    "shortName": "OCBC",
+    "tags": [
+      "Banking",
+      "Multi-national"
+    ],
+    "websiteUrl": "https://www.ocbc.id",
+    "programUrl": null,
+    "logoUrl": null,
+    "openings": [
+      {
+        "title": "Relationship Manager",
+        "type": "Full-time"
+      },
+      {
+        "title": "Risk Intern",
+        "type": "Internship"
+      }
+    ],
+    "description": "OCBC is a Singapore-based banking group whose Indonesian arm, Bank OCBC NISP, offers consumer, small-business, and corporate banking services across the country."
+  }
+]

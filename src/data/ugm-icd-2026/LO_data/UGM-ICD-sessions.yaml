@@ -1,0 +1,130 @@
+# ugm-icd-sessions.yaml
+meta:
+  schema_version: 1
+  data_version: "2026.11.24-r1"
+  as_of: 2026-11-24
+  event: UGM Integrated Career Days
+  kind: company_session
+  slot_length_minutes: 30
+  changelog:
+    - version: "2026.11.24-r1"
+      date: 2026-11-24
+      note: Initial parse from the company session sheet. Liaison officer names excluded on purpose.
+
+# booth_ref links to booth ids in ugm-icd-booths.yaml
+# Speaker fields are the public-facing display info only (name, title, photo).
+# Material fields hold exactly what the sheet gives: filename, URL, or a name without a file.
+# play_order is the "URUTAN PENAYANGAN" column, normalised to keys: company_profile, ppt.
+
+sessions:
+  - booth_ref: C4
+    company: Odoo
+    day: 1
+    start: "11:30"
+    end: "12:00"
+    speakers:
+      - { name: Shafa Karina Nugraha, title: Talent Acquisition }
+      - { name: Elang Arkanaufa Azrien, title: Business Analyst }
+    photo: https://drive.google.com/drive/folders/1mQd5kna7nGYRQ_qYe0aF_uEk5aAI5iplYm_PLACEHOLDER
+    materials:
+      company_profile_video: https://youtu.be/SEbIJcqjLwY?si=ax-Ta93UYVpgcxUw
+      ppt: https://docs.google.com/presentation/d/1ghlo9vgUUJ-c8iQqvobLdft5cyM1lBv2uc8wt9F4ckA/edit?usp=drivesdk
+    play_order: [company_profile, ppt]
+
+  - booth_ref: C1
+    company: PT Hutama Karya Infrastruktur
+    day: 1
+    start: "12:00"
+    end: "12:30"
+    speakers:
+      - { name: "Dika Marantika, S.Psi", title: Sr. Analyst Center of Excellence }
+    photo: "PT Hutama Karya Infrastruktur - Dika Marantika, S.Psi"
+    materials:
+      company_profile_video: "UGM ICD"
+      ppt: "20261104 ICD UGM Company Session - HKI (1).pdf"
+    play_order: [company_profile, ppt]
+
+  - booth_ref: C3
+    company: PT Astra International Tbk
+    day: 1
+    start: "12:30"
+    end: "13:00"
+    speakers:
+      - { name: Risky Pratama Putra, title: Recruitment & Employer Branding Senior Analyst }
+    photo: "Foto Risky Pratama.jpg.jpeg"
+    materials:
+      company_profile_video: null
+      ppt: "PPT ICD UGM 2026.pptx"
+    play_order: [ppt]
+    note: "Ppt aja"
+
+  - booth_ref: D1
+    company: Paragon Corps
+    day: 1
+    start: "13:00"
+    end: "13:30"
+    speakers: []
+    photo: null
+    materials: { company_profile_video: null, ppt: null }
+    play_order: []
+
+  - booth_ref: D2
+    company: PT Bank Negara Indonesia (Persero) Tbk
+    day: 1
+    start: "13:30"
+    end: "14:00"
+    speakers:
+      - { name: Yosep Abdulhalim Wardani, title: "Regional Finance, Planning & Performance Management Head" }
+    photo: "foto pembicara BNI.jpeg"
+    materials:
+      company_profile_video: "BNI - Compro 2025 - 251209.mp4"
+      ppt: "PPT JF UGM NOV 2026 - NEW TEMPLATE.pdf"
+    play_order: [company_profile, ppt]
+
+  - booth_ref: D4
+    company: PT Nindya Karya (Persero)
+    day: 2
+    start: "11:00"
+    end: "11:30"
+    speakers:
+      - { name: Andri Rohim, title: SPV Human Capital }
+    photo: "Andri Rohim - SPV Human Capital PT Nindya Karya (Persero)"
+    materials: { company_profile_video: null, ppt: null }
+    play_order: []
+
+  - booth_ref: C6
+    company: PT Zurich Indonesia Tbk
+    day: 2
+    start: "11:30"
+    end: "12:00"
+    speakers:
+      - { name: Salsabila Senamelia, title: Talent Acquisition Head }
+    photo: "Zurich Speaker"                 # name only, no file extension in the sheet
+    materials:
+      company_profile_video: "Zurich Company Profile"   # name only, no file extension in the sheet
+      ppt: null
+    play_order: []
+
+  - booth_ref: C2
+    company: Monee Indonesia
+    day: 2
+    start: "12:00"
+    end: "12:30"
+    speakers:
+      - { name: Alberian Saefullah, title: HR Lead ShopeePay Indonesia }
+    photo: "FOTO PEMBICARA.png"             # generic filename, easy to collide with other uploads
+    materials:
+      company_profile_video: "[ID] Monee Introduction Video.mp4"
+      ppt: "Monee Introduction - UGM.pptx"
+    play_order: []
+
+  - booth_ref: C5
+    company: PT Hutama Karya (Persero)
+    day: 2
+    start: "12:30"
+    end: "13:00"
+    speakers:
+      - { name: Aditya Nur Rahadi, title: "Kepala Departemen HC, Pengembangan & IT" }
+    photo: "(PT Hutama Karya Persero) Aditya Nur Rahadi.jpeg"
+    materials: { company_profile_video: null, ppt: null }
+    play_order: []

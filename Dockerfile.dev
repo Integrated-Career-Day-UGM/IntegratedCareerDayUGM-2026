@@ -1,0 +1,31 @@
+FROM oven/bun:1
+
+#additional shell script to add functionality 
+RUN apt-get update \
+    && apt-get install -y curl git \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY package.json bun.lock* ./
+RUN bun install
+
+# esbuild's Linux binaries are optionalDependencies that bun skips when the
+# lockfile was generated on Windows. Vite needs them at runtime, so install
+# the matching @esbuild/linux-x64 next to every esbuild copy bun laid down.
+RUN set -e; \
+    for pj in $(find node_modules -path '*node_modules/esbuild/package.json'); do \
+      v=$(sed -n 's/^  "version": "\(.*\)".*$/\1/p' "$pj"); \
+      d=$(dirname "$pj"); \
+      mkdir -p "$d/../@esbuild"; \
+      rm -rf "$d/../@esbuild/linux-x64"; \
+      curl -fsSL "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-$v.tgz" | tar -xz -C /tmp; \
+      mv /tmp/package "$d/../@esbuild/linux-x64"; \
+      "$d/../@esbuild/linux-x64/bin/esbuild" --version; \
+    done
+
+ENV HOST=0.0.0.0
+ENV PORT=4321
+EXPOSE 4321
+
+CMD ["bun", "run", "dev"]

@@ -1,0 +1,313 @@
+# ugm-icd-booths.yaml
+meta:
+  schema_version: 1          # bump when the shape of the fields changes
+  data_version: "2026.11.24-r2"  # bump when the content changes
+  as_of: 2026-11-24
+  event: UGM Integrated Career Days
+  venue: GIK Hall C1
+  changelog:
+    - version: "2026.11.24-r2"
+      date: 2026-11-24
+      note: Added one-to-two sentence company descriptions for detail cards and tooltips.
+    - version: "2026.11.24-r1"
+      date: 2026-11-24
+      note: Reconciled against the raw booth sheet. A/B stay unassigned, D4 is Nindya Karya, E2/E3 share Surya Semesta, E5 is Blibli, E11 is Elnusa Petrofin, and E1 is not present.
+    - version: "2026.11.18-r1"
+      date: 2026-11-18
+      note: Initial parse from the booth tracking sheet.
+
+# Field notes
+# internal_pic    : name in parentheses in the sheet (our side)
+# reps[].logo     : TRUE/FALSE column after the tier/PIC columns
+# reps[].vacancy  : TRUE/FALSE column before the notes
+# logo.file/note  : filename if given, otherwise the free-text status
+# vacancy.note    : the sheet's last column, verbatim
+# vacancy.links   : to be filled by hand
+# description     : 1–2 sentence public-facing company summary (20–30 words)
+
+booths:
+  - booth: A
+    tier: PLATINUM
+    company: null
+    description: null
+    internal_pic: null
+    reps:
+      - { name: null, logo: false, vacancy: false }
+    logo: { file: null, note: null }
+    vacancy: { note: null, links: [] }
+
+  - booth: B
+    tier: PLATINUM
+    company: null
+    description: null
+    internal_pic: null
+    reps:
+      - { name: null, logo: false, vacancy: false }
+      - { name: null, logo: false, vacancy: false }
+    logo: { file: null, note: null }
+    vacancy: { note: null, links: [] }
+
+  - booth: C1
+    tier: GOLD
+    company: PT Hutama Karya Infrastruktur
+    description: PT Hutama Karya Infrastruktur is a construction subsidiary of state-owned Hutama Karya, specializing in toll roads and bridges, including sections of the Trans-Sumatra Toll Road.
+    internal_pic: Tita
+    reps:
+      - { name: Kuswadi Rafly Firmansyah, logo: true, vacancy: true }
+      - { name: Dewi Anisa Tsany Kurniadi, logo: true, vacancy: true }
+    logo: { file: "Logo HKI (1).png", note: null }
+    vacancy:
+      note: "(tidak ada lowongan, tapi minta untuk diupload bahwa HKI hadir di job fair)"
+      links: []
+
+  - booth: C2
+    tier: GOLD
+    company: Monee Indonesia
+    description: Monee is the digital financial services arm of Sea Limited, providing payments, lending, and digital banking through products such as ShopeePay and SeaBank across Southeast Asia.
+    internal_pic: Raissa
+    reps:
+      - { name: Irene Ime Berkha, logo: false, vacancy: false }
+      - { name: Rasendriya Evan M.W., logo: null, vacancy: null }
+    logo: { file: "Monee Indonesia logo.png", note: null }
+    vacancy:
+      note: "[Monee] Rekap Lowongan UGM ICD 2026 periode November.xlsx; POSTER SUDAH DIKIRIM VIA EMAIL"
+      links: []
+
+  - booth: C3
+    tier: GOLD
+    company: PT Astra International Tbk
+    description: PT Astra International Tbk is an Indonesian diversified group with businesses in automotive distribution and manufacturing, financial services, heavy equipment, mining, and agribusiness.
+    internal_pic: Tama
+    reps:
+      - { name: Adam Wahyu Nurfirmansyah, logo: true, vacancy: false }
+      - { name: Ratih Esti Mutiarahati, logo: true, vacancy: false }
+    logo: { file: "Astra Logo - (hires).png", note: null }
+    vacancy: { note: "masih akan segera diinfokan", links: [] }
+
+  - booth: C4
+    tier: GOLD
+    company: Odoo
+    description: Odoo develops open-source business applications for CRM, sales, accounting, inventory, and operations, used by companies worldwide through its Belgium-based software platform.
+    internal_pic: Pak Mirza
+    reps:
+      - { name: Reina Hilmina, logo: true, vacancy: true }
+      - { name: Pranaja Nabil, logo: true, vacancy: true }
+    logo: { file: "4. Logo Perusahaan - Odoo Software Indonesia .png", note: null }
+    vacancy: { note: "Sudah dikirim via Email", links: [] }
+
+  - booth: C5
+    tier: GOLD
+    company: PT Hutama Karya (Persero)
+    description: PT Hutama Karya (Persero) is a state-owned Indonesian construction company responsible for the Trans-Sumatra Toll Road and other road, bridge, and building projects.
+    internal_pic: Woro
+    reps:
+      - { name: Benny Dwi Chaniago, logo: true, vacancy: false }
+      - { name: Ade Yulia Rahmawati, logo: true, vacancy: false }
+    logo: { file: "HKA LOGO 2.0.png", note: null }
+    vacancy: { note: "Tidak ada lowongan", links: [] }
+
+  - booth: C6
+    tier: GOLD
+    company: PT Zurich Indonesia Tbk
+    description: Zurich is a global insurance group whose Indonesian business provides life and general insurance products for individuals, families, and companies.
+    internal_pic: Zulfa
+    reps:
+      - { name: Wan Lazio Farrel Akbar, logo: false, vacancy: false }
+      - { name: Najwa Farah Annisa, logo: true, vacancy: true }
+    logo: { file: Logo_Zurich, note: null }
+    vacancy: { note: "Poster Zurich", links: [] }
+
+  - booth: D1
+    tier: SILVER
+    company: Paragon Corps
+    description: ParagonCorp is an Indonesian cosmetics and personal-care manufacturer behind brands including Wardah, Make Over, Emina, and Kahf, sold domestically and in export markets.
+    internal_pic: Ayesha
+    reps:
+      - { name: Alvista Maula Zahra, logo: true, vacancy: true }
+    logo: { file: "Logo_Paragoncorp 2.png", note: null }
+    vacancy: { note: "sudah dikirim email", links: [] }
+
+  - booth: D2
+    tier: SILVER
+    company: PT Bank Negara Indonesia (Persero) Tbk
+    description: PT Bank Negara Indonesia (Persero) Tbk is a state-owned Indonesian bank providing consumer, business, and corporate banking services through branches and overseas offices.
+    internal_pic: Elvira
+    reps:
+      - { name: Keisha Zefanya Refilina Sihite, logo: true, vacancy: true }
+    logo: { file: "LOGO BNI.png", note: null }
+    vacancy:
+      note: "Drive folders: 19p3vKwSIbYPLGp0heVUq2sGs28EF0DhE, 1bQh_E69d0GbnA8DkDu6R237N2ZAFACvj"
+      links: []
+
+  - booth: D3
+    tier: SILVER
+    company: Polygon
+    description: Polygon is an Indonesian bicycle brand manufactured by PT Insera Sena in Sidoarjo, producing mountain, road, and urban bikes for domestic and export markets.
+    internal_pic: Vio
+    reps:
+      - { name: Adam Maulana Arif Hidayat, logo: true, vacancy: true }
+    logo: { file: null, note: "Sudah dikirim melalui email" }
+    vacancy: { note: "Sudah dikim melalui email", links: [] }
+
+  - booth: D4
+    tier: GOLD
+    company: PT Nindya Karya (Persero)
+    description: PT Nindya Karya (Persero) is an Indonesian state-owned construction company working on roads, bridges, buildings, and water infrastructure projects across the country.
+    internal_pic: Nindya
+    reps:
+      - { name: I Wayan Rangga Dananjaya, logo: true, vacancy: false }
+      - { name: Nur Alysa Saribanong, logo: null, vacancy: null }
+    logo: { file: null, note: "udah langsung ke kantor" }
+    vacancy: { note: "masih dalam proses fiksasi design", links: [] }
+
+  - booth: E2
+    tier: BRONZE
+    company: PT Surya Semesta Internusa Tbk
+    description: PT Surya Semesta Internusa Tbk develops industrial estates and real estate, builds commercial and infrastructure projects, and operates hotels in Indonesia.
+    internal_pic: Madeline
+    reps:
+      - { name: Nauly Mayo B, logo: true, vacancy: false }
+    logo: { file: null, note: "katanya udah dikirim melalui email tadi pagi" }
+    vacancy: { note: "poster dalam proses pengeditan (katanya besok kelar)", links: [] }
+
+  - booth: E3
+    tier: BRONZE
+    company: PT Surya Semesta Internusa Tbk
+    description: PT Surya Semesta Internusa Tbk develops industrial estates and real estate, builds commercial and infrastructure projects, and operates hotels in Indonesia.
+    internal_pic: null
+    reps:
+      - { name: Nailah Hana F., logo: true, vacancy: false }
+    logo: { file: null, note: null }
+    vacancy: { note: null, links: [] }
+
+  - booth: E4
+    tier: BRONZE
+    company: PT Outward Bound Indonesia (OBI)
+    description: PT Outward Bound Indonesia is an outdoor education provider and member of Outward Bound International, running experiential leadership, team-building, and character programs for schools and companies.
+    internal_pic: Neil
+    reps:
+      - { name: Asih Purnamasari, logo: true, vacancy: true }
+    logo: { file: null, note: "sudah dikirim via email" }
+    vacancy: { note: "sudah dikirim via email", links: [] }
+
+  - booth: E5
+    tier: BRONZE
+    company: BLIBLI
+    description: Blibli is an Indonesian e-commerce platform operated by PT Global Digital Niaga Tbk, selling electronics, household goods, and groceries alongside travel and lifestyle services.
+    internal_pic: Varrel
+    reps:
+      - { name: Muhammad Al Havist, logo: true, vacancy: true }
+    logo: { file: Logo Blibli, note: null }
+    vacancy: { note: null, links: [] }
+
+  - booth: E6
+    tier: BRONZE
+    company: UGM ONLINE
+    description: UGM Online is Universitas Gadjah Mada's open online learning platform, offering certified micro-credentials, MOOCs, and short courses to learners in Indonesia and abroad.
+    internal_pic: Mba Lala
+    internal_unit: true          # UGM unit, counted separately in the sheet summary
+    reps:
+      - { name: Rayya Asha Ahista, logo: false, vacancy: false }
+    logo: { file: null, note: null }
+    vacancy: { note: null, links: [] }
+
+  - booth: E7
+    tier: BRONZE
+    company: Direktorat Kemahasiswaan
+    description: Direktorat Kemahasiswaan is Universitas Gadjah Mada's student affairs directorate, managing scholarships, student welfare, counseling, and support for student organizations and activities.
+    internal_pic: null
+    internal_unit: true
+    reps:
+      - { name: M. Taufikur Rahman, logo: false, vacancy: false }
+    logo: { file: null, note: null }
+    vacancy: { note: null, links: [] }
+
+  - booth: E8
+    tier: BRONZE
+    company: PT Torrecid Indonesia
+    description: PT Torrecid Indonesia is the Indonesian subsidiary of Spain's Torrecid Group, supplying glazes, frits, inks, and digital decoration solutions to ceramic tile and glass manufacturers.
+    internal_pic: Yunita
+    reps:
+      - { name: Nabila Aulia Shafa, logo: true, vacancy: true }
+    logo: { file: null, note: "sudah email ke pihak UGM (career@ugm.ac.id)" }
+    vacancy: { note: "sudah email ke pihak UGM (career@ugm.ac.id)", links: [] }
+
+  - booth: E9
+    tier: BRONZE
+    company: APP Group
+    description: APP Group is an Indonesian pulp, paper, and packaging producer under the Sinar Mas group, supplying tissue, board, and packaging products to customers worldwide.
+    internal_pic: Jesika
+    reps:
+      - { name: Horis Sang Timur Harimurti, logo: true, vacancy: true }
+    logo: { file: null, note: "sudah email ke pihak UGM (career@ugm.ac.id)" }
+    vacancy: { note: "sudah email ke pihak UGM (career@ugm.ac.id)", links: [] }
+
+  - booth: E10
+    tier: BRONZE
+    company: PT Cobra Dental Indonesia
+    description: PT Cobra Dental Indonesia is a Yogyakarta-based distributor of dental equipment and materials, operating outlets across Indonesia and supplying brands such as 3M, GC, and W&H.
+    internal_pic: Nisa
+    reps:
+      - { name: Ahmad Zaki Ramadhani, logo: true, vacancy: true }
+    logo: { file: null, note: "sudah email ke pihak UGM (career@ugm.ac.id)" }
+    vacancy:
+      note: "Drive folder: 1DSsew133QyQ_qYe0aF_uEk5aAI5iplYm"
+      links: []
+
+  - booth: E11
+    tier: BRONZE
+    company: PT Elnusa Petrofin
+    description: PT Elnusa Petrofin is a fuel logistics subsidiary of Elnusa, part of Indonesia's Pertamina group, handling fuel transportation, storage, and distribution across the archipelago.
+    internal_pic: Mb Akza
+    reps:
+      - { name: Fatih Abiyu Ramadhan, logo: true, vacancy: true }
+    logo: { file: "EPN Logo New Polos.png", note: "Aset lainnya sudah terlampir" }
+    vacancy:
+      note: "Drive file: 1e-OIqrdXtCYQCCW1Ast_B6817DLw8Ysk"
+      links: []
+
+  - booth: E12
+    tier: BRONZE
+    company: PT Dynapack Asia
+    description: Dynapack Asia is an Indonesian rigid-plastic packaging manufacturer producing bottles, caps, jars, and components for consumer, pharmaceutical, and industrial customers across Asia.
+    internal_pic: Trixie
+    reps:
+      - { name: Najma Andira Putri K, logo: false, vacancy: false }
+    logo: { file: null, note: null }
+    vacancy: { note: null, links: [] }
+
+  - booth: E13
+    tier: BRONZE
+    company: Teach First Indonesia
+    description: Teach First Indonesia is a non-profit that recruits young professionals and graduates to teach for two years in underserved Indonesian schools, providing training and leadership development.
+    internal_pic: Putri
+    reps:
+      - { name: Laurensius Yuniarta, logo: false, vacancy: true }
+    logo: { file: "TFI Logo.png", note: null }
+    vacancy:
+      note: "Drive folder: 1ErUaiS3Ap3iHirbnquX9G97NXxd0iFXU"
+      links: []
+
+  - booth: E14
+    tier: BRONZE
+    company: OCBC
+    description: OCBC is a Singapore-based banking group whose Indonesian arm, Bank OCBC NISP, offers consumer, small-business, and corporate banking services across the country.
+    internal_pic: Rully
+    reps:
+      - { name: Muhammad Zahy Al Hafizh, logo: true, vacancy: true }
+    logo: { file: null, note: "sudah dikirim melalui email" }
+    vacancy: { note: "sudah dikirim melalui email", links: [] }
+
+summary:
+  declared_in_sheet:           # as written at the bottom of the sheet
+    platinum: 1
+    gold: 6
+    silver: 3
+    bronze: 12
+    bronze_ugm: 2
+  counted_from_rows:           # what the rows above actually give
+    platinum: 2                # A, B
+    gold: 7                    # C1-C6, D4
+    silver: 3                  # D1-D3
+    bronze_external: 11        # E2-E5, E8-E14
+    bronze_ugm: 2              # E6, E7

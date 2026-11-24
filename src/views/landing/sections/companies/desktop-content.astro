@@ -1,0 +1,63 @@
+---
+// Desktop companies content layer (1440px Figma frame).
+import WhatsInside from './whats-inside.astro';
+import CompanyLogoGrid from './CompanyLogoGrid.astro';
+---
+
+<div class="absolute inset-0 z-10" data-name="desktop-companies-content">
+  <WhatsInside variant="desktop" />
+
+  {/* Presenting Companies title */}
+  <div class="absolute left-[624px] top-[142px] z-20 flex h-[105.049px] w-[329.984px] items-center justify-center">
+    <p class="font-priego w-[325.478px] rotate-[-3.38deg] text-[42.561px] font-bold leading-normal text-[var(--icd-ink)]">
+      Presenting Companies
+    </p>
+  </div>
+
+  {/* Floating decorations */}
+  <img
+    alt=""
+    src="/landing/companies/group1171276825.svg"
+    class="absolute left-[10.45%] top-[21.63%] z-10 w-[150px] rotate-[9.97deg]"
+  />
+  <img
+    alt=""
+    src="/landing/companies/group1171276826.svg"
+    class="absolute left-[1319.84px] top-[83.87px] z-10 w-[200px] rotate-[30.4deg]"
+  />
+  <img
+    alt=""
+    src="/landing/companies/group1171276819.svg"
+    class="absolute left-[101.79px] top-[527.75px] z-10 w-[95px] rotate-[1.68deg]"
+  />
+
+  {/* Logo composition card */}
+  <div class="absolute left-[312px] top-[292.36px] z-20 h-[437.976px] w-[904px]">
+    {/* Card mask / grid background */}
+    <img
+      alt=""
+      src="/landing/companies/subtract.svg"
+      class="absolute inset-0 block size-full max-w-none"
+    />
+
+    {/* Grid line decorations inside card */}
+    <div class="absolute inset-0 opacity-40">
+      <img alt="" src="/landing/companies/line60.png" class="absolute left-0 top-0 h-full w-full object-cover opacity-30" />
+    </div>
+
+    {/* Folder / envelope stack on the right side of card */}
+    <div class="absolute right-[-60px] top-[100px] z-30 w-[120px]">
+      <img alt="" src="/landing/companies/rectangle40870.svg" class="absolute left-[10px] top-[20px] w-[80px] rotate-[24.96deg]" />
+      <img alt="" src="/landing/companies/union-stroke.svg" class="absolute left-0 top-0 w-[90px] rotate-[24.96deg]" />
+      <img alt="" src="/landing/companies/union1.svg" class="absolute left-[10px] top-[20px] w-[80px] rotate-[24.96deg]" />
+      <img alt="" src="/landing/companies/union2.svg" class="absolute left-[5px] top-[5px] w-[80px] rotate-[24.96deg]" />
+      <img alt="" src="/landing/companies/group1171276822.svg" class="absolute left-[30px] top-[50px] w-[30px] rotate-[24.96deg]" />
+      <img alt="" src="/landing/companies/mask-group.svg" class="absolute left-[8px] top-[8px] w-[75px] rotate-[24.96deg]" />
+    </div>
+
+    {/* Logo grid inside card */}
+    <CompanyLogoGrid
+      class="absolute inset-[60px_80px_60px_80px] grid grid-cols-5 items-center justify-items-center gap-x-6 gap-y-4"
+    />
+  </div>
+</div>

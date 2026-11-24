@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" fill="none">
+  <defs>
+    <style>
+      .hall { fill: #f6f6f6; stroke: #000; stroke-width: 6; }
+      .booth-c { fill: #45d7c9; stroke: #fff; stroke-width: 2; }
+      .booth-e { fill: #6949ff; stroke: #fff; stroke-width: 2; }
+      .booth-d { fill: #fd19e5; stroke: #fff; stroke-width: 2; }
+      .booth-ab { fill: #1c2e4a; stroke: #fff; stroke-width: 2; }
+      .label { font-family: Inter, sans-serif; font-weight: 700; fill: #fff; text-anchor: middle; dominant-baseline: central; font-size: 18px; }
+      .label-dark { font-family: Poppins, sans-serif; font-weight: 600; fill: #000; text-anchor: middle; dominant-baseline: central; font-size: 13px; }
+      .facility { font-family: Poppins, sans-serif; font-weight: 600; fill: #000; text-anchor: middle; dominant-baseline: central; font-size: 11px; }
+      .panggung { fill: #c0c0c0; stroke: #7b7b7b; stroke-width: 1; }
+      .inner { fill: none; stroke: #000; stroke-width: 3; }
+    </style>
+  </defs>
+
+  <!-- Main hall outline -->
+  <path class="hall" d="M 680 120 L 290 170 C 220 180 180 230 180 290 L 160 780 C 155 845 205 895 270 895 L 880 905 C 945 905 990 850 985 785 L 955 470 C 950 410 910 360 850 335 L 610 150 C 590 135 565 130 540 135 Z" />
+
+  <!-- Inner shapes -->
+  <path class="inner" d="M 720 260 L 780 290 L 785 380 L 735 380 L 730 315 L 690 330 L 685 430 L 835 440 L 830 280 Z" />
+  <path class="inner" d="M 520 240 L 600 240 L 600 340 L 520 340 Z M 535 255 L 585 255 L 585 325 L 535 325 Z" />
+
+  <!-- Seats / Panggung -->
+  <g fill="#d9d9d9" stroke="#7b7b7b" stroke-width="1">
+    <rect x="560" y="420" width="12" height="12" rx="2" /><rect x="580" y="420" width="12" height="12" rx="2" /><rect x="600" y="420" width="12" height="12" rx="2" /><rect x="620" y="420" width="12" height="12" rx="2" />
+    <rect x="560" y="440" width="12" height="12" rx="2" /><rect x="580" y="440" width="12" height="12" rx="2" /><rect x="600" y="440" width="12" height="12" rx="2" /><rect x="620" y="440" width="12" height="12" rx="2" />
+    <rect x="560" y="460" width="12" height="12" rx="2" /><rect x="580" y="460" width="12" height="12" rx="2" /><rect x="600" y="460" width="12" height="12" rx="2" /><rect x="620" y="460" width="12" height="12" rx="2" />
+    <rect x="660" y="420" width="12" height="12" rx="2" /><rect x="680" y="420" width="12" height="12" rx="2" /><rect x="700" y="420" width="12" height="12" rx="2" /><rect x="720" y="420" width="12" height="12" rx="2" />
+    <rect x="660" y="440" width="12" height="12" rx="2" /><rect x="680" y="440" width="12" height="12" rx="2" /><rect x="700" y="440" width="12" height="12" rx="2" /><rect x="720" y="440" width="12" height="12" rx="2" />
+    <rect x="660" y="460" width="12" height="12" rx="2" /><rect x="680" y="460" width="12" height="12" rx="2" /><rect x="700" y="460" width="12" height="12" rx="2" /><rect x="720" y="460" width="12" height="12" rx="2" />
+  </g>
+
+  <!-- Panggung -->
+  <rect class="panggung" x="580" y="360" width="90" height="40" rx="4" transform="rotate(-15 625 380)" />
+  <text class="facility" x="625" y="380" transform="rotate(-15 625 380)">PANGGUNG</text>
+
+  <!-- Center booths C1-C6 -->
+  <g id="booth-c1" data-booth="c1"><rect class="booth-c" x="430" y="560" width="45" height="55" rx="3" transform="rotate(-15 452 587)" /><text class="label" x="452" y="587" transform="rotate(-15 452 587)">C1</text></g>
+  <g id="booth-c2" data-booth="c2"><rect class="booth-c" x="485" y="545" width="45" height="55" rx="3" transform="rotate(-15 507 572)" /><text class="label" x="507" y="572" transform="rotate(-15 507 572)">C2</text></g>
+  <g id="booth-c3" data-booth="c3"><rect class="booth-c" x="540" y="530" width="45" height="55" rx="3" transform="rotate(-15 562 557)" /><text class="label" x="562" y="557" transform="rotate(-15 562 557)">C3</text></g>
+  <g id="booth-c4" data-booth="c4"><rect class="booth-c" x="410" y="630" width="45" height="55" rx="3" transform="rotate(-15 432 657)" /><text class="label" x="432" y="657" transform="rotate(-15 432 657)">C4</text></g>
+  <g id="booth-c5" data-booth="c5"><rect class="booth-c" x="465" y="615" width="45" height="55" rx="3" transform="rotate(-15 487 642)" /><text class="label" x="487" y="642" transform="rotate(-15 487 642)">C5</text></g>
+  <g id="booth-c6" data-booth="c6"><rect class="booth-c" x="520" y="600" width="45" height="55" rx="3" transform="rotate(-15 542 627)" /><text class="label" x="542" y="627" transform="rotate(-15 542 627)">C6</text></g>
+
+  <!-- Main A/B -->
+  <g id="booth-a" data-booth="a"><rect class="booth-ab" x="620" y="560" width="70" height="75" rx="3" transform="rotate(-15 655 597)" /><text class="label" x="655" y="597" transform="rotate(-15 655 597)" style="font-size: 32px;">A</text></g>
+  <g id="booth-b" data-booth="b"><rect class="booth-ab" x="595" y="655" width="70" height="75" rx="3" transform="rotate(-15 630 692)" /><text class="label" x="630" y="692" transform="rotate(-15 630 692)" style="font-size: 32px;">B</text></g>
+
+  <!-- East booths E1-E15 -->
+  <g id="booth-e1" data-booth="e1"><rect class="booth-e" x="280" y="780" width="40" height="35" rx="3" transform="rotate(-105 300 797)" /><text class="label" x="300" y="797" transform="rotate(-105 300 797)" style="font-size: 14px;">E1</text></g>
+  <g id="booth-e2" data-booth="e2"><rect class="booth-e" x="315" y="790" width="40" height="35" rx="3" transform="rotate(-105 335 807)" /><text class="label" x="335" y="807" transform="rotate(-105 335 807)" style="font-size: 14px;">E2</text></g>
+  <g id="booth-e3" data-booth="e3"><rect class="booth-e" x="350" y="800" width="40" height="35" rx="3" transform="rotate(-105 370 817)" /><text class="label" x="370" y="817" transform="rotate(-105 370 817)" style="font-size: 14px;">E3</text></g>
+  <g id="booth-e4" data-booth="e4"><rect class="booth-e" x="385" y="810" width="40" height="35" rx="3" transform="rotate(-105 405 827)" /><text class="label" x="405" y="827" transform="rotate(-105 405 827)" style="font-size: 14px;">E4</text></g>
+  <g id="booth-e5" data-booth="e5"><rect class="booth-e" x="420" y="820" width="40" height="35" rx="3" transform="rotate(-105 440 837)" /><text class="label" x="440" y="837" transform="rotate(-105 440 837)" style="font-size: 14px;">E5</text></g>
+
+  <g id="booth-e6" data-booth="e6"><rect class="booth-e" x="250" y="720" width="40" height="35" rx="3" transform="rotate(-105 270 737)" /><text class="label" x="270" y="737" transform="rotate(-105 270 737)" style="font-size: 14px;">E6</text></g>
+  <g id="booth-e7" data-booth="e7"><rect class="booth-e" x="285" y="730" width="40" height="35" rx="3" transform="rotate(-105 305 747)" /><text class="label" x="305" y="747" transform="rotate(-105 305 747)" style="font-size: 14px;">E7</text></g>
+  <g id="booth-e8" data-booth="e8"><rect class="booth-e" x="320" y="740" width="40" height="35" rx="3" transform="rotate(-105 340 757)" /><text class="label" x="340" y="757" transform="rotate(-105 340 757)" style="font-size: 14px;">E8</text></g>
+  <g id="booth-e9" data-booth="e9"><rect class="booth-e" x="355" y="750" width="40" height="35" rx="3" transform="rotate(-105 375 767)" /><text class="label" x="375" y="767" transform="rotate(-105 375 767)" style="font-size: 14px;">E9</text></g>
+  <g id="booth-e10" data-booth="e10"><rect class="booth-e" x="390" y="760" width="40" height="35" rx="3" transform="rotate(-105 410 777)" /><text class="label" x="410" y="777" transform="rotate(-105 410 777)" style="font-size: 12px;">E10</text></g>
+  <g id="booth-e11" data-booth="e11"><rect class="booth-e" x="425" y="770" width="40" height="35" rx="3" transform="rotate(-105 445 787)" /><text class="label" x="445" y="787" transform="rotate(-105 445 787)" style="font-size: 12px;">E11</text></g>
+  <g id="booth-e12" data-booth="e12"><rect class="booth-e" x="460" y="780" width="40" height="35" rx="3" transform="rotate(-105 480 797)" /><text class="label" x="480" y="797" transform="rotate(-105 480 797)" style="font-size: 12px;">E12</text></g>
+  <g id="booth-e13" data-booth="e13"><rect class="booth-e" x="495" y="790" width="40" height="35" rx="3" transform="rotate(-105 515 807)" /><text class="label" x="515" y="807" transform="rotate(-105 515 807)" style="font-size: 12px;">E13</text></g>
+  <g id="booth-e14" data-booth="e14"><rect class="booth-e" x="530" y="800" width="40" height="35" rx="3" transform="rotate(-105 550 817)" /><text class="label" x="550" y="817" transform="rotate(-105 550 817)" style="font-size: 12px;">E14</text></g>
+  <g id="booth-e15" data-booth="e15"><rect class="booth-e" x="565" y="810" width="40" height="35" rx="3" transform="rotate(-105 585 827)" /><text class="label" x="585" y="827" transform="rotate(-105 585 827)" style="font-size: 12px;">E15</text></g>
+
+  <!-- D3 -->
+  <g id="booth-d3" data-booth="d3"><rect class="booth-d" x="280" y="660" width="55" height="50" rx="3" transform="rotate(-15 307 685)" /><text class="label" x="307" y="685" transform="rotate(-15 307 685)">D3</text></g>
+
+  <!-- Facilities -->
+  <g transform="rotate(-15 260 520)">
+    <rect fill="#98fff5" x="230" y="500" width="110" height="24" rx="3" />
+    <text class="label-dark" x="285" y="512">INTERACTIVE</text>
+  </g>
+  <g transform="rotate(-15 220 600)">
+    <rect fill="#f0c71d" x="190" y="585" width="80" height="24" rx="3" />
+    <text class="label-dark" x="230" y="597" style="font-size: 9px;">Information</text>
+    <text class="label-dark" x="230" y="606" style="font-size: 9px;">Center</text>
+  </g>
+  <g transform="rotate(-75 210 680)">
+    <rect fill="#00ff1e" x="170" y="670" width="100" height="22" rx="3" />
+    <text class="label-dark" x="220" y="681" style="font-size: 11px;">ENTRANCE</text>
+  </g>
+  <g transform="rotate(-75 240 730)">
+    <rect fill="#999" x="210" y="720" width="100" height="22" rx="3" />
+    <text class="label" x="260" y="731" style="font-size: 11px; fill:#fff;">REGISTRATION</text>
+  </g>
+  <g transform="rotate(55 510 310)">
+    <rect fill="#f63d6e" x="490" y="300" width="55" height="22" rx="3" />
+    <text class="label" x="517" y="311" style="font-size: 11px;">EXIT</text>
+  </g>
+
+  <!-- North indicator -->
+  <g transform="translate(160 880)">
+    <path d="M 0 30 L 15 0 L 30 30 Z" fill="none" stroke="#f63d6e" stroke-width="3" />
+    <text x="15" y="42" text-anchor="middle" fill="#f63d6e" font-family="Poppins, sans-serif" font-weight="600" font-size="12">North</text>
+  </g>
+</svg>

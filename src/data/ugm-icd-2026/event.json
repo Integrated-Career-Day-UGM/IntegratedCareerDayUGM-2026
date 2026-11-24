@@ -1,0 +1,17 @@
+{
+  "id": "ugm-icd-2026",
+  "name": "UGM Integrated Career Days",
+  "shortName": "UGM ICD",
+  "timezone": "Asia/Jakarta",
+  "days": [
+    { "id": "d1", "date": "2026-11-28", "label": "28" },
+    { "id": "d2", "date": "2026-11-29", "label": "29" }
+  ],
+  "tracks": [
+    { "id": "career-expo", "label": "Career Expo", "type": "booth" },
+    { "id": "walk-in-interview", "label": "Walk-in Interview", "type": "session" },
+    { "id": "career-counseling", "label": "Career Counseling", "type": "session" }
+  ],
+  "defaultVenueId": "gik",
+  "locale": "id-ID"
+}
