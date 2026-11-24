@@ -1,0 +1,201 @@
+{
+  "event": {
+    "exploreBadge": "Jelajahi Denah",
+    "titleLine1": "UGM",
+    "titleLine2": "Integrated Career Days",
+    "todayBadge": "Today"
+  },
+  "search": {
+    "placeholder": "Search",
+    "shortcutHint": "Ctrl",
+    "shortcutKey": "K",
+    "resultsLabel": "{count} result{plural}",
+    "emptyResults": "No companies or booths match your search.",
+    "filters": {
+      "trigger": "Filters",
+      "title": "Filters",
+      "clear": "Clear",
+      "sector": "Sector",
+      "role": "Role"
+    }
+  },
+  "tabs": {
+    "home": "Home",
+    "search": "Search",
+    "saved": "saved",
+    "stats": "Stats",
+    "gik": "GIK",
+    "info": "Info",
+    "help": "Help"
+  },
+  "quickFind": {
+    "title": "Quick Find",
+    "items": {
+      "toilet": "Toilet",
+      "mushola": "Mushola",
+      "pusat-bantuan": "Help Desk",
+      "entrance": "Entrance",
+      "exit": "Exit",
+      "information-center": "Information Center"
+    }
+  },
+  "venueList": {
+    "title": "Venue List"
+  },
+  "happeningNow": {
+    "badge": "Now",
+    "sessionSuffix": "Session",
+    "title": "Happening Now",
+    "liveLabel": "Live session",
+    "nextLabel": "Next",
+    "endedLabel": "Ended",
+    "showOnMap": "Show on map",
+    "save": "Save",
+    "saved": "Saved",
+    "upNext": "Up next",
+    "noMoreSessions": "No more sessions today"
+  },
+  "boothDetail": {
+    "selectedLabel": "Selected company / event / venue",
+    "tagsLabel": "Tags",
+    "websiteCta": "Company Website",
+    "programCta": "Program URL",
+    "posterCta": "Company_poster",
+    "opportunitiesLabel": "Available Opportunity",
+    "mockDataLabel": "Mock data",
+    "mockDataHint": "Job-opening data is a placeholder; final openings will be filled in later.",
+    "opportunityType": "Internship",
+    "bookmarkLabel": "Bookmark",
+    "shareLabel": "Share",
+    "shareTitle": "Share",
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied",
+    "closeLabel": "Close"
+  },
+  "walkInDetail": {
+    "selectedLabel": "Selected walk-in interview",
+    "roomPrefix": "Bilik",
+    "openCompanyCta": "Open company detail",
+    "noCompanyHint": "This booking has no linked company profile yet."
+  },
+  "companySessions": {
+    "title": "Sessions",
+    "stageLabel": "Main Stage",
+    "roomPrefix": "Bilik"
+  },
+  "saved": {
+    "title": "saved",
+    "listTitle": "Venue/company/event tersimpan",
+    "empty": "You haven’t bookmarked any booths or sessions yet."
+  },
+  "insights": {
+    "title": "Insights",
+    "subtitle": "What this event can offer you",
+    "kpiSectionTitle": "Openings",
+    "kpiSectionSubtitle": "Real counts from the companies and sessions in this event.",
+    "sectorsLabel": "Companies by sector",
+    "kpiEmptyLabel": "No data yet",
+    "cards": {
+      "companies": {
+        "label": "Companies",
+        "value": "25",
+        "caption": "hiring on the floor"
+      },
+      "openRoles": {
+        "label": "Open roles",
+        "value": "51",
+        "caption": "full-time + internships"
+      },
+      "sessions": {
+        "label": "Sessions today",
+        "value": "5",
+        "caption": "on the selected day"
+      },
+      "bookmarks": {
+        "label": "Saved",
+        "value": "{count}",
+        "caption": "your shortlist"
+      }
+    },
+    "kpi": {
+      "internships": "Internships",
+      "fullTime": "Full-time roles",
+      "walkIns": "Walk-in interviews",
+      "sessions": "Sessions",
+      "bySector": "by sector",
+      "byDay": "by day",
+      "byTrack": "by track"
+    }
+  },
+  "info": {
+    "title": "Info",
+    "helpTitle": "Help",
+    "registerLabel": "Daftar",
+    "mapsCta": "Open Maps",
+    "mapsQuery": "Gedung Industri Kreatif UGM",
+    "overview": {
+      "heading": "At a glance",
+      "companies": "companies",
+      "tracks": "tracks",
+      "days": "days"
+    },
+    "sections": {
+      "venue": {
+        "heading": "Venue",
+        "headline": "GIK",
+        "body": "Hall C1 for Career Expo; Hall B and C001-002 for sessions."
+      },
+      "hours": {
+        "heading": "Event Hours",
+        "headline": "08:00–17:00 WIB",
+        "body": "Doors open 07:30, last entry 16:30 WIB."
+      },
+      "whatToBring": {
+        "heading": "What to bring",
+        "body": "CV, portfolio, KTP/student ID, and vaccination certificate.",
+        "items": [
+          "Updated CV",
+          "Portfolio",
+          "KTP / student ID",
+          "Vaccination certificate"
+        ],
+        "note": "Smart casual dress code"
+      },
+      "help": {
+        "heading": "Need help?",
+        "body": "Ask the Info Center or any committee member in a pink vest."
+      }
+    }
+  },
+  "posters": {
+    "title": "ICD_poster",
+    "companyTitle": "Company_poster",
+    "hint": "Tap to explore",
+    "loading": "Loading posters…",
+    "count": "{count} posters",
+    "close": "Close poster",
+    "previous": "Previous poster",
+    "next": "Next poster"
+  },
+  "social": {
+    "title": "Follow us",
+    "instagram": {
+      "label": "Instagram",
+      "handle": "@integratedcareerdays",
+      "url": "https://www.instagram.com/integratedcareerdays/"
+    },
+    "whatsapp": {
+      "label": "WhatsApp",
+      "handle": "0811-2582-434",
+      "url": "https://wa.me/628112582434"
+    }
+  },
+  "map": {
+    "hallLabel": "Hall C1",
+    "hallSublabel": "Career Expo",
+    "compassLabel": "Reset bearing to north",
+    "recenterLabel": "Recenter map",
+    "zoomInLabel": "Zoom in",
+    "zoomOutLabel": "Zoom out"
+  }
+}

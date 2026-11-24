@@ -1,0 +1,49 @@
+---
+// Introduction / "Selamat Datang" section.
+// Desktop frame is 1440×982 and scales down; mobile is a stacked 390px layout.
+import IntroBackground from './intro/background.tsx';
+import DesktopContent from './intro/desktop-content.astro';
+import MobileContent from './intro/mobile-content.astro';
+---
+
+<section class="intro-section relative w-full overflow-clip" data-name="Intro Section" id="selamat-datang">
+  {/* Desktop layout */}
+  <div class="hidden md:block">
+    <div class="intro-scale-wrapper relative mx-auto">
+      <div class="intro-scale-inner absolute inset-0">
+        <IntroBackground variant="desktop" client:visible />
+        <DesktopContent />
+      </div>
+    </div>
+  </div>
+
+  {/* Mobile layout */}
+  <div class="block md:hidden">
+    <div class="relative w-full overflow-clip">
+      <IntroBackground variant="mobile" client:visible />
+      <MobileContent />
+    </div>
+  </div>
+</section>
+
+<style>
+  .intro-scale-wrapper {
+    width: min(1440px, 100vw);
+    aspect-ratio: 1440 / 982;
+  }
+
+  .intro-scale-inner {
+    --intro-scale: min(1, 100vw / 1440);
+    width: 1440px;
+    height: 982px;
+    transform-origin: top center;
+    transform: scale(var(--intro-scale));
+  }
+
+  @media (min-width: 1440px) {
+    .intro-scale-inner {
+      left: 50%;
+      transform: translateX(-50%) scale(1);
+    }
+  }
+</style>

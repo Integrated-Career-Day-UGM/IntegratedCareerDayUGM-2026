@@ -1,12 +1,9 @@
 name: CodeQL
 
+# Temporarily disabled while the MVP ships: manual dispatch only.
+# No PR, push, or schedule triggers — restore the pull_request/schedule blocks
+# (branches: main) once the site is live.
 on:
-  pull_request:
-    branches: [main, staging, development]
-  push:
-    branches: [main, staging, development]
-  schedule:
-    - cron: "0 2 * * 1"
   workflow_dispatch:
 
 concurrency:

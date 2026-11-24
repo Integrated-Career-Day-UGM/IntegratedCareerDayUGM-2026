@@ -1,0 +1,202 @@
+[
+  {
+    "id": "a",
+    "areaId": "hall-c1",
+    "zoneId": "zone-a",
+    "code": "A",
+    "label": "A",
+    "companyId": null
+  },
+  {
+    "id": "b",
+    "areaId": "hall-c1",
+    "zoneId": "zone-a",
+    "code": "B",
+    "label": "B",
+    "companyId": null
+  },
+  {
+    "id": "c1",
+    "areaId": "hall-c1",
+    "zoneId": "zone-c",
+    "code": "C1",
+    "label": "C1",
+    "companyId": "c1-hutama-infra"
+  },
+  {
+    "id": "c2",
+    "areaId": "hall-c1",
+    "zoneId": "zone-c",
+    "code": "C2",
+    "label": "C2",
+    "companyId": "c2-monee"
+  },
+  {
+    "id": "c3",
+    "areaId": "hall-c1",
+    "zoneId": "zone-c",
+    "code": "C3",
+    "label": "C3",
+    "companyId": "c3-astra"
+  },
+  {
+    "id": "c4",
+    "areaId": "hall-c1",
+    "zoneId": "zone-c",
+    "code": "C4",
+    "label": "C4",
+    "companyId": "c4-odoo"
+  },
+  {
+    "id": "c5",
+    "areaId": "hall-c1",
+    "zoneId": "zone-c",
+    "code": "C5",
+    "label": "C5",
+    "companyId": "c5-hutama"
+  },
+  {
+    "id": "c6",
+    "areaId": "hall-c1",
+    "zoneId": "zone-c",
+    "code": "C6",
+    "label": "C6",
+    "companyId": "c6-zurich"
+  },
+  {
+    "id": "d1",
+    "areaId": "hall-c1",
+    "zoneId": "zone-d",
+    "code": "D1",
+    "label": "D1",
+    "companyId": "d1-paragon"
+  },
+  {
+    "id": "d2",
+    "areaId": "hall-c1",
+    "zoneId": "zone-d",
+    "code": "D2",
+    "label": "D2",
+    "companyId": "d2-bni"
+  },
+  {
+    "id": "d3",
+    "areaId": "hall-c1",
+    "zoneId": "zone-d",
+    "code": "D3",
+    "label": "D3",
+    "companyId": "d3-polygon"
+  },
+  {
+    "id": "d4",
+    "areaId": "hall-c1",
+    "zoneId": "zone-d",
+    "code": "D4",
+    "label": "D4",
+    "companyId": "d4-nindya"
+  },
+  {
+    "id": "e2",
+    "areaId": "hall-c1",
+    "zoneId": "zone-e",
+    "code": "E2",
+    "label": "E2",
+    "companyId": "e2-surya"
+  },
+  {
+    "id": "e3",
+    "areaId": "hall-c1",
+    "zoneId": "zone-e",
+    "code": "E3",
+    "label": "E3",
+    "companyId": "e2-surya"
+  },
+  {
+    "id": "e4",
+    "areaId": "hall-c1",
+    "zoneId": "zone-e",
+    "code": "E4",
+    "label": "E4",
+    "companyId": "e4-obi"
+  },
+  {
+    "id": "e5",
+    "areaId": "hall-c1",
+    "zoneId": "zone-e",
+    "code": "E5",
+    "label": "E5",
+    "companyId": "e5-blibli"
+  },
+  {
+    "id": "e6",
+    "areaId": "hall-c1",
+    "zoneId": "zone-e",
+    "code": "E6",
+    "label": "E6",
+    "companyId": "e6-ugm-online"
+  },
+  {
+    "id": "e7",
+    "areaId": "hall-c1",
+    "zoneId": "zone-e",
+    "code": "E7",
+    "label": "E7",
+    "companyId": "e7-kemahasiswaan"
+  },
+  {
+    "id": "e8",
+    "areaId": "hall-c1",
+    "zoneId": "zone-e",
+    "code": "E8",
+    "label": "E8",
+    "companyId": "e8-torrecid"
+  },
+  {
+    "id": "e9",
+    "areaId": "hall-c1",
+    "zoneId": "zone-e",
+    "code": "E9",
+    "label": "E9",
+    "companyId": "e9-app"
+  },
+  {
+    "id": "e10",
+    "areaId": "hall-c1",
+    "zoneId": "zone-e",
+    "code": "E10",
+    "label": "E10",
+    "companyId": "e10-cobra"
+  },
+  {
+    "id": "e11",
+    "areaId": "hall-c1",
+    "zoneId": "zone-e",
+    "code": "E11",
+    "label": "E11",
+    "companyId": "e11-elnusa"
+  },
+  {
+    "id": "e12",
+    "areaId": "hall-c1",
+    "zoneId": "zone-e",
+    "code": "E12",
+    "label": "E12",
+    "companyId": "e12-dynapack"
+  },
+  {
+    "id": "e13",
+    "areaId": "hall-c1",
+    "zoneId": "zone-e",
+    "code": "E13",
+    "label": "E13",
+    "companyId": "e13-teachfirst"
+  },
+  {
+    "id": "e14",
+    "areaId": "hall-c1",
+    "zoneId": "zone-e",
+    "code": "E14",
+    "label": "E14",
+    "companyId": "e14-ocbc"
+  }
+]

@@ -1,0 +1,87 @@
+---
+// "What's Inside?" event experience tags.
+interface Props {
+  variant: 'desktop' | 'mobile';
+}
+
+const { variant } = Astro.props;
+const isDesktop = variant === 'desktop';
+
+const items = [
+  { icon: '/landing/companies/group1171276975.svg', label: 'Games' },
+  { icon: '/landing/companies/group1171276979.svg', iconOverlay: '/landing/companies/group1171276980.svg', label: 'Motion+' },
+  { icon: '/landing/companies/group1171276976.svg', iconOverlay: '/landing/companies/group1171276978.svg', label: 'Career Counseling', hasUnion: true },
+  { icon: '/landing/companies/group1171276982.svg', iconOverlay: '/landing/companies/group1171276981.svg', label: 'Display Experience' },
+  { icon: '/landing/companies/union4.svg', label: 'Career Expo', isUnion: true },
+  { icon: '/landing/companies/group1171276911.svg', iconOverlay: '/landing/companies/group1171276910.svg', label: 'Company Presentation', hasEyes: true },
+  { icon: '/landing/companies/rectangle41473.svg', label: 'Walk-in Interview', isResume: true },
+];
+---
+
+<div
+  class={isDesktop
+    ? 'absolute left-[136px] top-[50px] z-20 flex w-[1138.969px] flex-col items-center gap-[18px]'
+    : 'relative z-20 flex flex-col items-center gap-3 px-4 pt-10'}
+  data-name="whats-inside"
+>
+  <p
+    class={isDesktop
+      ? 'font-priego h-[38.829px] w-full text-right text-[35.83px] font-bold leading-normal not-italic text-[var(--icd-ink)]'
+      : 'w-full text-center text-[30px] font-bold leading-normal text-[#1f2f48]'}
+    style={isDesktop ? undefined : { fontFamily: "'Priego-Bold:Regular', var(--font-priego), sans-serif" }}
+  >
+    What’s Inside?
+  </p>
+
+  <div
+    class={isDesktop
+      ? 'flex flex-col items-center gap-2'
+      : 'flex flex-wrap items-center justify-center gap-x-4 gap-y-2'}
+  >
+    <div class={isDesktop ? 'flex items-center gap-[44px]' : 'contents'}>
+      {items.slice(0, 5).map((item) => (
+        <div class="inline-flex items-center gap-2">
+          {item.isUnion ? (
+            <div class="relative">
+              <img alt="" src={item.icon} class={isDesktop ? 'h-[32.172px] w-[28.761px]' : 'h-[17.4px] w-[15.555px]'} />
+            </div>
+          ) : (
+            <div class="relative">
+              <img alt="" src={item.icon} class={isDesktop ? 'h-[33.112px] w-[41.519px]' : 'h-[17.908px] w-[22.455px]'} />
+              {item.iconOverlay && (
+                <img alt="" src={item.iconOverlay} class={isDesktop ? 'absolute left-[2.88px] top-[2.88px] h-[27.355px] w-[35.763px]' : 'absolute left-[1.56px] top-[1.56px] h-[14.794px] w-[19.342px]'} />
+              )}
+            </div>
+          )}
+          <span class={isDesktop ? 'font-priego text-[27.299px] font-bold leading-normal text-white' : 'text-[14.764px] font-bold leading-normal text-white'}>
+            {item.label}
+          </span>
+        </div>
+      ))}
+    </div>
+
+    <div class={isDesktop ? 'flex items-center gap-[44px]' : 'contents'}>
+      {items.slice(5).map((item) => (
+        <div class="inline-flex items-center gap-2">
+          {item.isResume ? (
+            <div class="relative">
+              <img alt="" src="/landing/companies/rectangle41473.svg" class={isDesktop ? 'h-[10.346px] w-[21.8px]' : 'h-[5.595px] w-[11.79px]'} />
+              <img alt="" src="/landing/companies/vector746stroke-stroke.svg" class={isDesktop ? 'absolute left-0 top-[9.98px] h-[19.521px] w-[29.3px]' : 'absolute left-0 top-[5.4px] h-[10.557px] w-[15.847px]'} />
+              <img alt="" src="/landing/companies/vector746stroke-stroke1.svg" class={isDesktop ? 'absolute left-[18.99px] top-0 h-[19.521px] w-[29.3px]' : 'absolute left-[10.27px] top-0 h-[10.557px] w-[15.847px]'} />
+            </div>
+          ) : item.hasEyes ? (
+            <div class="relative">
+              <img alt="" src="/landing/companies/group1171276908.svg" class={isDesktop ? 'h-[23.523px] w-[30.098px]' : 'h-[12.722px] w-[16.278px]'} />
+              <img alt="" src="/landing/companies/group1171276909.svg" class={isDesktop ? 'absolute left-[1.69px] top-[1.64px] h-[20.233px] w-[26.726px]' : 'absolute left-[0.91px] top-[0.89px] h-[10.943px] w-[14.454px]'} />
+              <img alt="" src="/landing/companies/group1171276911.svg" class={isDesktop ? 'h-[32.494px] w-[35.799px]' : 'h-[17.574px] w-[19.361px]'} />
+              <img alt="" src="/landing/companies/group1171276910.svg" class={isDesktop ? 'absolute left-[3.37px] top-[3.29px] h-[25.915px] w-[29.055px]' : 'absolute left-[1.82px] top-[1.78px] h-[14.015px] w-[15.714px]'} />
+            </div>
+          ) : null}
+          <span class={isDesktop ? 'font-priego text-[27.299px] font-bold leading-normal text-white' : 'text-[14.764px] font-bold leading-normal text-white'}>
+            {item.label}
+          </span>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>

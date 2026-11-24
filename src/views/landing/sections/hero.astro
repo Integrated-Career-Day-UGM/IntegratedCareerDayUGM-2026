@@ -1,0 +1,51 @@
+---
+// Hero section — composed of background (pillars + floating parallax decals)
+// and content (header, title, event info, CTAs). Desktop frame is 1440×904
+// and scales down on narrower viewports; mobile frame is 390px wide and
+// renders a separate stacked layout.
+import HeroBackground from './hero/background.tsx';
+import HeroContent from './hero/content.astro';
+import MobileContent from './hero/mobile-content.astro';
+---
+
+<section class="hero-section relative w-full overflow-clip" data-name="Hero Section">
+  {/* Desktop layout */}
+  <div class="hidden md:block">
+    <div class="hero-scale-wrapper relative mx-auto">
+      <div class="hero-scale-inner absolute inset-0">
+        <HeroBackground variant="desktop" client:visible />
+        <HeroContent />
+      </div>
+    </div>
+  </div>
+
+  {/* Mobile layout */}
+  <div class="block md:hidden">
+    <div class="relative w-full overflow-clip">
+      <HeroBackground variant="mobile" client:visible />
+      <MobileContent />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-scale-wrapper {
+    width: min(1440px, 100vw);
+    aspect-ratio: 1440 / 904;
+  }
+
+  .hero-scale-inner {
+    --hero-scale: min(1, 100vw / 1440);
+    width: 1440px;
+    height: 904px;
+    transform-origin: top center;
+    transform: scale(var(--hero-scale));
+  }
+
+  @media (min-width: 1440px) {
+    .hero-scale-inner {
+      left: 50%;
+      transform: translateX(-50%) scale(1);
+    }
+  }
+</style>

@@ -1,0 +1,66 @@
+/* Priego (local display face) — one @font-face per real weight.
+   NOTE: the family ships no Medium cut; weight 500 falls back to Regular
+   via CSS font matching (500 → 400), so don't declare a fake 500. */
+@font-face {
+  font-family: 'Priego';
+  src: url('/fonts/Priego-Thin.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Priego';
+  src: url('/fonts/Priego-ExtraLight.otf') format('opentype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Priego';
+  src: url('/fonts/Priego-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Priego';
+  src: url('/fonts/Priego-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Priego';
+  src: url('/fonts/Priego-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Priego';
+  src: url('/fonts/Priego-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Priego';
+  src: url('/fonts/Priego-ExtraBold.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Priego';
+  src: url('/fonts/Priego-Black.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}

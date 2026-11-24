@@ -1,0 +1,66 @@
+.shuffle {
+  display: inline-flex;
+  align-items: baseline;
+  overflow: hidden;
+}
+
+.shuffle-char {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.shuffle-char-inner {
+  display: inline-block;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: both;
+}
+
+.shuffle-slide.shuffle-right {
+  animation-name: shuffle-slide-right;
+}
+
+.shuffle-slide.shuffle-left {
+  animation-name: shuffle-slide-left;
+}
+
+.shuffle-fade {
+  animation-name: shuffle-fade;
+}
+
+@keyframes shuffle-slide-right {
+  0% {
+    transform: translateX(75%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes shuffle-slide-left {
+  0% {
+    transform: translateX(-75%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes shuffle-fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shuffle-char-inner {
+    animation: none;
+  }
+}

@@ -1,0 +1,20 @@
+---
+// Mobile companies content layer (390px Figma frame).
+import WhatsInside from './whats-inside.astro';
+import CompanyLogoGrid from './CompanyLogoGrid.astro';
+---
+
+<div class="relative z-10 flex flex-col items-center gap-6 px-4 pb-12 pt-10" data-name="mobile-companies-content">
+  <WhatsInside variant="mobile" />
+
+  <p
+    class="text-center text-[30px] font-bold leading-tight text-white"
+    style={{ WebkitTextStroke: '1px var(--icd-ink)', textShadow: '0 2px 0 var(--icd-lime)' }}
+  >
+    Presenting<br />Companies
+  </p>
+
+  <div class="relative w-full rounded-[18px] bg-white p-6 shadow-xl">
+    <CompanyLogoGrid class="grid grid-cols-3 items-center justify-items-center gap-4 sm:grid-cols-4" />
+  </div>
+</div>

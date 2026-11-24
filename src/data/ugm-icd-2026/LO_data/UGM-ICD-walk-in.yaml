@@ -1,0 +1,70 @@
+# ugm-icd-walkin.yaml
+meta:
+  schema_version: 1
+  data_version: "2026.11.18-r1"   # keep in step with ugm-icd-booths.yaml if both come from the same sheet date
+  as_of: 2026-11-18
+  event: UGM Integrated Career Days
+  kind: walk_in_interview
+  slot_length_minutes: 60
+  day_window: { start: "10:00", end: "16:00" }
+  changelog:
+    - version: "2026.11.18-r1"
+      date: 2026-11-18
+      note: Initial parse from the walk-in interview sheet.
+
+# booth_ref links to booth ids in ugm-icd-booths.yaml (null = not in that roster)
+# Contiguous slots for the same company in the same room are merged into one booking.
+
+rooms: [F1, F2, F3, F4, F5, F6, F7, F8, F9, F10]
+
+days:
+  - day: 1
+    bookings:
+      - room: F1
+        company: Teach First Indonesia
+        booth_ref: E13
+        start: "13:00"
+        end: "14:00"
+      - room: F2
+        company: PT Bank Negara Indonesia (Persero) Tbk
+        booth_ref: D2
+        start: "11:00"
+        end: "12:00"
+      - room: F5
+        company: PT Hakaaston
+        booth_ref: null
+        start: "11:00"
+        end: "12:00"
+
+  - day: 2
+    bookings:
+      - room: F1
+        company: Teach First Indonesia
+        booth_ref: E13
+        start: "13:00"
+        end: "14:00"
+      - room: F2
+        company: PT Bank Negara Indonesia (Persero) Tbk
+        booth_ref: D2
+        start: "14:00"
+        end: "15:00"
+      - room: F3
+        company: PT Nindya Karya (Persero)
+        booth_ref: D4
+        start: "10:00"
+        end: "15:00"
+      - room: F4
+        company: PT Nindya Karya (Persero)
+        booth_ref: D4
+        start: "10:00"
+        end: "15:00"
+      - room: F5
+        company: PT Hakaaston
+        booth_ref: null
+        start: "11:00"
+        end: "12:00"
+      - room: F6
+        company: PT United Tractors Pandu Engineering (member of Astra)
+        booth_ref: null        # parent group Astra is C3, but this entity has no booth of its own
+        start: "10:00"
+        end: "16:00"

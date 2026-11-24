@@ -1,0 +1,18 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "4321:4321"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=development
+      - PUBLIC_APP_URL=${PUBLIC_APP_URL:-http://localhost:4321}
+    labels: ["dev.kiri.http.port=4321"]
+    stdin_open: true
+    tty: true #for terminal usability 

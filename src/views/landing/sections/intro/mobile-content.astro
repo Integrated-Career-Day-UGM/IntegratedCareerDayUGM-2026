@@ -1,0 +1,15 @@
+---
+// Mobile intro content layer.
+import TitleBlock from './title-block.astro';
+import VideoCard from './VideoCard.astro';
+---
+
+<div class="relative z-10 flex flex-col items-center gap-6 px-6 pb-12 pt-9" data-name="mobile-intro-content">
+  <TitleBlock variant="mobile" />
+
+  <div class="flex w-full max-w-[320px] flex-col gap-4">
+    <VideoCard variant="mobile" buttonSrc="/landing/intro/button-base.svg" />
+    <VideoCard variant="mobile" buttonSrc="/landing/intro/button-base.svg" />
+    <VideoCard variant="mobile" buttonSrc="/landing/intro/button-base1.svg" />
+  </div>
+</div>

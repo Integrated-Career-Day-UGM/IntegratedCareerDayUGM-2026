@@ -1,0 +1,49 @@
+---
+// Companies section — decoupled into background, "What's Inside?", and logo composition.
+// Desktop frame is 1440×982 and scales down; mobile is a stacked 390px layout.
+import CompaniesBackground from './companies/background.tsx';
+import DesktopContent from './companies/desktop-content.astro';
+import MobileContent from './companies/mobile-content.astro';
+---
+
+<section class="companies-section relative w-full overflow-clip" data-name="Companies Section" id="perusahaan">
+  {/* Desktop layout */}
+  <div class="hidden md:block">
+    <div class="companies-scale-wrapper relative mx-auto">
+      <div class="companies-scale-inner absolute inset-0">
+        <CompaniesBackground variant="desktop" client:visible />
+        <DesktopContent />
+      </div>
+    </div>
+  </div>
+
+  {/* Mobile layout */}
+  <div class="block md:hidden">
+    <div class="relative w-full overflow-clip">
+      <CompaniesBackground variant="mobile" client:visible />
+      <MobileContent />
+    </div>
+  </div>
+</section>
+
+<style>
+  .companies-scale-wrapper {
+    width: min(1440px, 100vw);
+    aspect-ratio: 1440 / 982;
+  }
+
+  .companies-scale-inner {
+    --companies-scale: min(1, 100vw / 1440);
+    width: 1440px;
+    height: 982px;
+    transform-origin: top center;
+    transform: scale(var(--companies-scale));
+  }
+
+  @media (min-width: 1440px) {
+    .companies-scale-inner {
+      left: 50%;
+      transform: translateX(-50%) scale(1);
+    }
+  }
+</style>
