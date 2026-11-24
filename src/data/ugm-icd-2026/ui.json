@@ -60,11 +60,28 @@
     "tagsLabel": "Tags",
     "websiteCta": "Company Website",
     "programCta": "Program URL",
+    "posterCta": "Company_poster",
     "opportunitiesLabel": "Available Opportunity",
+    "mockDataLabel": "Mock data",
+    "mockDataHint": "Job-opening data is a placeholder; final openings will be filled in later.",
     "opportunityType": "Internship",
     "bookmarkLabel": "Bookmark",
     "shareLabel": "Share",
+    "shareTitle": "Share",
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied",
     "closeLabel": "Close"
+  },
+  "walkInDetail": {
+    "selectedLabel": "Selected walk-in interview",
+    "roomPrefix": "Bilik",
+    "openCompanyCta": "Open company detail",
+    "noCompanyHint": "This booking has no linked company profile yet."
+  },
+  "companySessions": {
+    "title": "Sessions",
+    "stageLabel": "Main Stage",
+    "roomPrefix": "Bilik"
   },
   "saved": {
     "title": "saved",
@@ -73,55 +90,69 @@
   },
   "insights": {
     "title": "Insights",
-    "subtitle": "Event overview in real-time",
+    "subtitle": "What this event can offer you",
     "kpiSectionTitle": "Openings",
-    "kpiSectionSubtitle": "Recruitment trends from visitor activity and company data (coming soon).",
-    "sectorsLabel": "Sectors",
+    "kpiSectionSubtitle": "Real counts from the companies and sessions in this event.",
+    "sectorsLabel": "Companies by sector",
     "kpiEmptyLabel": "No data yet",
     "cards": {
-      "attendance": {
-        "label": "Attendance",
-        "value": "2.2K",
-        "change": "+12%",
-        "caption": "vs. yesterday"
-      },
       "companies": {
         "label": "Companies",
-        "value": "48",
-        "caption": "registered booths"
+        "value": "25",
+        "caption": "hiring on the floor"
+      },
+      "openRoles": {
+        "label": "Open roles",
+        "value": "51",
+        "caption": "full-time + internships"
       },
       "sessions": {
-        "label": "Sessions",
-        "value": "16",
-        "caption": "today"
+        "label": "Sessions today",
+        "value": "5",
+        "caption": "on the selected day"
       },
       "bookmarks": {
-        "label": "Bookmarks",
+        "label": "Saved",
         "value": "{count}",
-        "caption": "saved booths"
+        "caption": "your shortlist"
       }
+    },
+    "kpi": {
+      "internships": "Internships",
+      "fullTime": "Full-time roles",
+      "walkIns": "Walk-in interviews",
+      "sessions": "Sessions",
+      "bySector": "by sector",
+      "byDay": "by day",
+      "byTrack": "by track"
     }
   },
   "info": {
     "title": "Info",
     "helpTitle": "Help",
     "registerLabel": "Daftar",
-    "mapsCta": "Open in Google Maps",
+    "mapsCta": "Open Maps",
     "mapsQuery": "Gedung Industri Kreatif UGM",
+    "overview": {
+      "heading": "At a glance",
+      "companies": "companies",
+      "tracks": "tracks",
+      "days": "days"
+    },
     "sections": {
       "venue": {
         "heading": "Venue",
         "headline": "GIK",
-        "body": "Gedung Industri Kreatif (GIK), Universitas Gadjah Mada. Hall C1 hosts the Career Expo, Hall B hosts Walk-in Interviews, and Ruang C001-002 hosts Career Counseling."
+        "body": "Hall C1 for Career Expo; Hall B and C001-002 for sessions."
       },
       "hours": {
         "heading": "Event Hours",
-        "headline": "08:00 – 17:00 WIB",
-        "body": "Registration opens at 07:30 WIB. Last admission at 16:30 WIB."
+        "headline": "08:00–17:00 WIB",
+        "body": "Doors open 07:30, last entry 16:30 WIB."
       },
       "whatToBring": {
         "heading": "What to bring",
-        "body": "Bring your updated CV, portfolio, KTP or student ID, and vaccination certificate.",
+        "body": "CV, portfolio, KTP/student ID, and vaccination certificate.",
         "items": [
           "Updated CV",
           "Portfolio",
@@ -132,8 +163,31 @@
       },
       "help": {
         "heading": "Need help?",
-        "body": "Visit the Information Center near the entrance, the Help Desk (Pusat Bantuan) next to the Mushola, or ask any committee member in a pink vest."
+        "body": "Ask the Info Center or any committee member in a pink vest."
       }
+    }
+  },
+  "posters": {
+    "title": "ICD_poster",
+    "companyTitle": "Company_poster",
+    "hint": "Tap to explore",
+    "loading": "Loading posters…",
+    "count": "{count} posters",
+    "close": "Close poster",
+    "previous": "Previous poster",
+    "next": "Next poster"
+  },
+  "social": {
+    "title": "Follow us",
+    "instagram": {
+      "label": "Instagram",
+      "handle": "@integratedcareerdays",
+      "url": "https://www.instagram.com/integratedcareerdays/"
+    },
+    "whatsapp": {
+      "label": "WhatsApp",
+      "handle": "0811-2582-434",
+      "url": "https://wa.me/628112582434"
     }
   },
   "map": {

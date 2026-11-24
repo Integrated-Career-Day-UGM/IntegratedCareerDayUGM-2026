@@ -1,5 +1,5 @@
-import { useRef, useEffect, useState, useId } from 'react';
-import { motion, animate, useMotionValue, useTransform, useInView } from 'motion/react';
+import { useRef, useState } from 'react';
+import { motion, useInView } from 'motion/react';
 import { ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
 import { cn } from '../../../lib/utils/cn';
 
@@ -12,12 +12,14 @@ export type KpiData = {
   lowerIsBetter?: boolean;
   trend?: number[];
   trendLabels?: string[];
+  /** Shown under the value when no bar is hovered ("by sector", "by day"). */
+  seriesLabel?: string;
   loading?: boolean;
 };
 
 export interface KpiTileProps extends KpiData {
   className?: string;
-  /** Sparkline accent; defaults to the page pink. */
+  /** Bar accent; defaults to the page pink. */
   accent?: string;
 }
 
@@ -29,23 +31,27 @@ function deltaDirection(delta: number) {
 
 const [W, H, PAD] = [100, 40, 3];
 const EASE = [0.22, 1, 0.36, 1] as const;
-const ROLL = { duration: 0.6, ease: EASE };
 
-function placePoints(trend: number[], labels?: string[]) {
+function placeBars(trend: number[], labels?: string[]) {
   const kept = trend.flatMap((value, index) =>
     Number.isFinite(value) ? [{ label: labels?.[index] ?? `${index + 1}`, value }] : []
   );
   if (kept.length === 0) return [];
-  const min = Math.min(...kept.map((p) => p.value));
-  const max = Math.max(...kept.map((p) => p.value));
-  const span = max - min;
-  const step = (W - PAD * 2) / Math.max(kept.length - 1, 1);
-  return kept.map(({ label, value }, index) => ({
-    label,
-    value,
-    x: PAD + index * step,
-    y: span ? H - PAD - ((value - min) / span) * (H - PAD * 2) : H / 2,
-  }));
+  const max = Math.max(...kept.map((point) => point.value), 1);
+  const slot = (W - PAD * 2) / kept.length;
+  const width = Math.max(1.5, slot * 0.58);
+  return kept.map(({ label, value }, index) => {
+    const height =
+      value > 0 ? Math.max((value / max) * (H - PAD * 2), 1.5) : 0;
+    return {
+      label,
+      value,
+      x: PAD + index * slot + (slot - width) / 2,
+      y: H - PAD - height,
+      width,
+      height,
+    };
+  });
 }
 
 export default function KpiTile({
@@ -55,53 +61,32 @@ export default function KpiTile({
   delta,
   trend = [],
   trendLabels,
+  seriesLabel,
   loading = false,
   className,
   accent = 'var(--accent-pink)',
 }: KpiTileProps) {
-  const id = useId();
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.4 });
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  const points = placePoints(trend, trendLabels);
+  const points = placeBars(trend, trendLabels);
   const last = points.length - 1;
   const at = activeIndex === null || last < 1 ? null : Math.min(activeIndex, last);
   const point = at === null ? undefined : points[at];
-  const end = points[last];
   const isEmpty = value === null || value === undefined || !Number.isFinite(value);
   const hasDelta = delta !== undefined && Number.isFinite(delta) && !isEmpty;
   const direction = deltaDirection(hasDelta ? delta : 0);
-
-  const shownValue = useMotionValue(isEmpty ? 0 : (value ?? 0));
-  const displayValue = useTransform(shownValue, (v) => {
-    if (point) return format(point.value);
-    if (isEmpty) return '—';
-    return format(v);
-  });
-
-  useEffect(() => {
-    if (point) {
-      // Hovering a sparkline point: show that value instantly.
-      shownValue.set(point.value);
-      return;
-    }
-    if (!isInView || isEmpty) {
-      shownValue.set(0);
-      return;
-    }
-    const roll = animate(shownValue, value as number, ROLL);
-    return () => roll.stop();
-  }, [isInView, isEmpty, point, shownValue, value]);
-
-  const line = points.map((p, i) => `${i ? 'L' : 'M'}${p.x} ${p.y}`).join(' ');
-  const area = end ? `${line} L${end.x} ${H} L${PAD} ${H} Z` : '';
+  const shownValue = point ? format(point.value) : isEmpty ? '—' : format(value as number);
 
   const handlePointer = (e: React.PointerEvent<SVGSVGElement>) => {
     const box = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - box.left) / Math.max(box.width, 1)) * W;
-    const index = Math.round(((x - PAD) / (W - PAD * 2)) * last);
-    setActiveIndex(last < 1 ? null : Math.min(Math.max(index, 0), last));
+    const slot = (W - PAD * 2) / Math.max(points.length, 1);
+    const index = Math.floor((x - PAD) / slot);
+    setActiveIndex(
+      points.length < 2 ? null : Math.min(Math.max(index, 0), points.length - 1)
+    );
   };
 
   const Arrow = direction === 'down' ? ArrowDownRight : ArrowUpRight;
@@ -126,9 +111,9 @@ export default function KpiTile({
       ) : (
         <>
           <div className="flex h-6 flex-wrap items-baseline gap-2 overflow-hidden">
-            <motion.span className="inline-block min-w-[4.5ch] text-left text-[22px] font-semibold leading-none tabular-nums tracking-tight text-white">
-              {displayValue}
-            </motion.span>
+            <span className="inline-block min-w-[4.5ch] text-left text-[22px] font-semibold leading-none tabular-nums tracking-tight text-white">
+              {shownValue}
+            </span>
             {hasDelta ? (
               <span className={cn('inline-flex items-center gap-0.5 text-[11px] font-medium text-ink-body')}>
                 <Arrow size={13} />
@@ -137,10 +122,10 @@ export default function KpiTile({
             ) : null}
           </div>
 
-          {/* Only the hovered point label; no filler caption. Fixed height
-              so hovering never resizes the bento cell. */}
+          {/* Only the hovered bar label; at rest it names the series. Fixed
+              height so hovering never resizes the bento cell. */}
           <p className="h-4 truncate text-[11px] leading-4 text-[#8f8f8f]">
-            {point ? point.label : ''}
+            {point ? point.label : (seriesLabel ?? '')}
           </p>
 
           <div className="relative h-9">
@@ -149,47 +134,45 @@ export default function KpiTile({
                 <Minus size={14} />
               </div>
             ) : (
-              <>
-                <svg
-                  className="block h-full w-full touch-pan-y overflow-visible"
-                  viewBox={`0 0 ${W} ${H}`}
-                  preserveAspectRatio="none"
-                  onPointerDown={handlePointer}
-                  onPointerMove={handlePointer}
-                  onPointerLeave={() => setActiveIndex(null)}
-                  aria-hidden="true"
-                >
-                  <defs>
-                    <linearGradient id={`${id}-fill`} x1="0" x2="0" y1="0" y2="1">
-                      <stop offset="0" stopColor={accent} stopOpacity={0.25} />
-                      <stop offset="1" stopColor={accent} stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <path d={area} fill={`url(#${id}-fill)`} />
-                  <motion.path
-                    d={line}
-                    fill="none"
-                    stroke={accent}
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    vectorEffect="non-scaling-stroke"
-                    initial={{ pathLength: 0 }}
-                    animate={isInView ? { pathLength: 1 } : { pathLength: 0 }}
-                    transition={{ duration: 0.9, ease: EASE }}
-                  />
-                </svg>
-                {point && (
-                  <span
-                    className="pointer-events-none absolute size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-zinc-900"
-                    style={{
-                      left: `${(point.x / W) * 100}%`,
-                      top: `${(point.y / H) * 100}%`,
-                      backgroundColor: accent,
+              <svg
+                className="block h-full w-full touch-pan-y overflow-visible"
+                viewBox={`0 0 ${W} ${H}`}
+                preserveAspectRatio="none"
+                onPointerDown={handlePointer}
+                onPointerMove={handlePointer}
+                onPointerLeave={() => setActiveIndex(null)}
+                aria-hidden="true"
+              >
+                <line
+                  x1={PAD}
+                  x2={W - PAD}
+                  y1={H - PAD}
+                  y2={H - PAD}
+                  stroke="#2f2f34"
+                  strokeWidth={1}
+                  vectorEffect="non-scaling-stroke"
+                />
+                {points.map((bar, index) => (
+                  <motion.rect
+                    key={`${bar.label}-${index}`}
+                    x={bar.x}
+                    width={bar.width}
+                    initial={{ y: H - PAD, height: 0 }}
+                    animate={
+                      isInView
+                        ? { y: bar.y, height: bar.height }
+                        : { y: H - PAD, height: 0 }
+                    }
+                    transition={{
+                      duration: 0.45,
+                      ease: EASE,
+                      delay: index * 0.045,
                     }}
+                    fill={accent}
+                    opacity={activeIndex === null || activeIndex === index ? 1 : 0.35}
                   />
-                )}
-              </>
+                ))}
+              </svg>
             )}
           </div>
         </>

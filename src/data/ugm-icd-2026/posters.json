@@ -1,0 +1,23 @@
+[
+  {
+    "id": "career-expo",
+    "title": "Career Expo",
+    "subtitle": "Hall C1 · First floor",
+    "src": "/posters/career-expo.webp",
+    "accent": "#5b7f3a"
+  },
+  {
+    "id": "walk-in-interview",
+    "title": "Walk-in Interview",
+    "subtitle": "2nd floor · F1–F10",
+    "src": "/posters/walk-in-interview.webp",
+    "accent": "#f0c71d"
+  },
+  {
+    "id": "main-poster",
+    "title": "Main Poster",
+    "subtitle": "UGM Integrated Career Days 2026",
+    "src": "/posters/main-poster.webp",
+    "accent": "#ff2d6f"
+  }
+]

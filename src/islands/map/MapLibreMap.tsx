@@ -4,12 +4,14 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { MoveUpRight, Crosshair } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
 import FloorPlanOverlay from './FloorPlanOverlay';
+import WalkInFloorPlanOverlay from './WalkInFloorPlanOverlay';
 import ZoomButtons from '../../components/map/ZoomButtons';
 import MapTooltip from '../../components/map/MapTooltip';
 import FacilityTooltip from '../../components/map/FacilityTooltip';
 import CompassButton from '../../components/map/CompassButton';
-import MapDebugPanel from './MapDebugPanel';
-import { ui, getVenue, getTrack } from '../../lib/data';
+import PixelTransition from '../../components/map/PixelTransition';
+import { DEV_TOOLS } from '../../lib/dev-tools';
+import { ui, getVenue, getTrack, getWalkInBookings, walkInSessions } from '../../lib/data';
 import { surfaceClasses } from '../../lib/surface-classes';
 import { SNAP_PEEK, TAB_RAIL_H } from './MobileBottomSheet';
 import {
@@ -20,9 +22,11 @@ import {
   FRAME_ANCHOR_POINTS,
   HALL_BOUNDS,
   HALL_CENTER,
+  MAX_BOUNDS,
   DESKTOP_FOCUS_CENTER,
   HALL_GEOJSON,
   frameToLngLat,
+  walkInRoomFrameBox,
 } from '../../lib/map/floorplan';
 import {
   homographyToMatrix3d,
@@ -43,12 +47,16 @@ const BASE_STYLE_URL = 'https://tiles.openfreemap.org/styles/dark';
  *  candidates with the DEV GIK tuner (or `__icdMap.easeTo({ zoom: N })`). */
 const GIK_ZOOM = 18.3;
 const GIK_ZOOM_KEY = 'icd-gik-zoom';
+/** iPhone 16 Pro Max reference framing for a clicked venue/list item. */
+const MOBILE_FOCUS_CENTER: [number, number] = [110.37614532080488, -7.774196398740571];
+const MOBILE_FOCUS_ZOOM = 19.4807;
+const MOBILE_FOCUS_OFFSET_RATIO = 0.115;
 
-/** DEV: the tuning panel writes a localStorage override so the number can be
- *  previewed across reloads without editing source. Prod always uses the
- *  constant. */
+/** DEV_TOOLS: the tuning panel writes a localStorage override so the number
+ *  can be previewed across reloads without editing source. Prod always uses
+ *  the constant. */
 const resolveGikZoom = () => {
-  if (import.meta.env.DEV && typeof window !== 'undefined') {
+  if (DEV_TOOLS && typeof window !== 'undefined') {
     const stored = Number(window.localStorage.getItem(GIK_ZOOM_KEY));
     if (Number.isFinite(stored) && stored >= 10 && stored <= 24) return stored;
   }
@@ -103,7 +111,6 @@ export default function MapLibreMap() {
   const positionTooltipRef = useRef<() => void>(() => {});
   const compassNeedleRef = useRef<SVGGElement>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
-  const [mapInstance, setMapInstance] = useState<maplibregl.Map | null>(null);
   // Field selectors, not a whole-store subscription: hoveredBoothId and
   // mapView change at pointer/moveend rate, and a whole-store subscribe
   // re-rendered this island (and every other island) on each — the GC churn
@@ -115,10 +122,49 @@ export default function MapLibreMap() {
   const selectedVenueId = useMapStore((s) => s.selectedVenueId);
   const selectedAreaId = useMapStore((s) => s.selectedAreaId);
   const selectedTrackId = useMapStore((s) => s.selectedTrackId);
+  const selectedDayId = useMapStore((s) => s.selectedDayId);
+  const selectedWalkInRoomId = useMapStore((s) => s.selectedWalkInRoomId);
   const gikMode = useMapStore((s) => s.gikMode);
   const setSelectedArea = useMapStore((s) => s.setSelectedArea);
   const setGikMode = useMapStore((s) => s.setGikMode);
   const activeBoothId = hoveredBoothId ?? selectedBoothId;
+  const walkInMode = selectedTrackId === 'walk-in-interview' || selectedAreaId === 'hall-b';
+  const walkInConfig = useMapStore((s) => s.walkIn2FConfig);
+  /** Bookings for the selected 2F room on the visible day — drives the
+      pinned tooltip (earliest booking; the sidebar lists every card). */
+  const walkInBooking = selectedWalkInRoomId
+    ? getWalkInBookings(selectedDayId, selectedWalkInRoomId)[0]
+    : undefined;
+
+  useEffect(() => {
+    // A floor swap changes the overlay root while the camera is still; force
+    // one render so syncOverlay writes the existing matrix to the new root.
+    mapRef.current?.triggerRepaint();
+  }, [walkInMode]);
+
+  /* Reuse the splash's PixelTransition as a short pixel veil on floor swaps
+     (career expo ↔ walk-in 2F). Same art settings as MapSplash: mounts dark,
+     flips `active` one frame later (the component only animates on a
+     false→true change), then dissolves onto the new floor. */
+  const [floorWipe, setFloorWipe] = useState<{ key: number; active: boolean } | null>(null);
+  const prevWalkInRef = useRef(walkInMode);
+  useEffect(() => {
+    if (prevWalkInRef.current === walkInMode) return;
+    prevWalkInRef.current = walkInMode;
+    const key = Date.now();
+    setFloorWipe({ key, active: false });
+    const raf = requestAnimationFrame(() =>
+      setFloorWipe((wipe) => (wipe && wipe.key === key ? { ...wipe, active: true } : wipe)),
+    );
+    const timeout = window.setTimeout(
+      () => setFloorWipe((wipe) => (wipe && wipe.key === key ? null : wipe)),
+      1400,
+    );
+    return () => {
+      cancelAnimationFrame(raf);
+      window.clearTimeout(timeout);
+    };
+  }, [walkInMode]);
 
   /** Re-fit the hall into view. Mobile keeps the top chrome and the tray
       clear via asymmetric padding; desktop uses an even margin. */
@@ -154,6 +200,22 @@ export default function MapLibreMap() {
     });
   }, []);
 
+  /** Mobile venue/list focus reference from the iPhone 16 Pro Max CAM JSON. */
+  const focusVenue = useCallback(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    if (!window.matchMedia('(max-width: 767px)').matches) {
+      fitHall();
+      return;
+    }
+    map.stop();
+    map.easeTo({
+      center: MOBILE_FOCUS_CENTER as maplibregl.LngLatLike,
+      zoom: MOBILE_FOCUS_ZOOM,
+      duration: 650,
+    });
+  }, [fitHall]);
+
   // Current venue / tab card (top-right, SelectionFrame styling).
   const venue = getVenue(selectedVenueId);
   const area = venue?.areas.find((a) => a.trackId === selectedTrackId);
@@ -165,7 +227,7 @@ export default function MapLibreMap() {
      Shows for the hovered booth AND the selected one (click → bubble stays). */
   useLayoutEffect(() => {
     positionTooltipRef.current();
-  }, [hoveredBoothId, selectedBoothId, selectedFacilityId]);
+  }, [hoveredBoothId, selectedBoothId, selectedFacilityId, selectedWalkInRoomId]);
 
   // QuickFind / facility markers: bring the facility point into view.
   useEffect(() => {
@@ -193,6 +255,7 @@ export default function MapLibreMap() {
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
     const container = mapContainerRef.current;
+    const entryZoom = resolveGikZoom();
 
     const map = new maplibregl.Map({
       container,
@@ -200,12 +263,15 @@ export default function MapLibreMap() {
       center: HALL_CENTER,
       // Entry state (both breakpoints): the GIK overview. Picking a track
       // tab fits the hall instead.
-      zoom: resolveGikZoom(),
-      // Zoom-out floor just under the overview: any further out and the
-      // floor-plan overlay drowns in campus context (user report: zoom ran
-      // from 16 down to 4). Raise toward the entry zoom, verified on device.
-      minZoom: 15.5,
-      maxZoom: 21.5,
+      zoom: entryZoom,
+      // Camera envelope around the GIK overview: zooming out is capped at
+      // 0.8 levels below entry (the hall stays legible), zooming in at 2.2
+      // above entry (detail without pixel-mush), and panning is boxed to the
+      // hall + one short walk of context. All three are tuned from the DEV
+      // CAM readout.
+      minZoom: entryZoom - 0.8,
+      maxZoom: entryZoom + 2.2,
+      maxBounds: MAX_BOUNDS as maplibregl.LngLatBoundsLike,
       bearing: 0,
       pitch: 0,
       maxPitch: 0,
@@ -213,7 +279,6 @@ export default function MapLibreMap() {
     });
 
     mapRef.current = map;
-    setMapInstance(map);
 
     // Clicking the map itself restores the list from a facility selection.
     // Facility markers/tooltips are DOM children above the canvas, so their
@@ -237,9 +302,9 @@ export default function MapLibreMap() {
     };
     const readyFallback = window.setTimeout(revealMapBoot, 3000);
     map.once('idle', revealMapBoot);
-    if (import.meta.env.DEV) {
+    if (DEV_TOOLS) {
       (window as unknown as Record<string, unknown>).__icdMap = map;
-      // DEV: GIK tuning panel reads the intro target from here.
+      // DEV_TOOLS: GIK tuning panel reads the intro target from here.
       (window as unknown as Record<string, unknown>).__icdGik = {
         center: HALL_CENTER,
         zoom: resolveGikZoom(),
@@ -295,18 +360,33 @@ export default function MapLibreMap() {
       const store = useMapStore.getState();
       const id = store.hoveredBoothId ?? store.selectedBoothId;
       const shape = BOOTH_SHAPES.find((s) => s.id === id);
+      // Selected walk-in room: same anchor rule as a booth — the top edge
+      // centre of its frame-space box. Only while it is booked on the
+      // visible day (the store clears the room otherwise).
+      const roomBox =
+        !shape && store.selectedWalkInRoomId
+          ? walkInSessions.some(
+              (s) =>
+                s.room === store.selectedWalkInRoomId && s.dayId === store.selectedDayId,
+            )
+            ? walkInRoomFrameBox(store.walkIn2FConfig, store.selectedWalkInRoomId)
+            : null
+          : null;
       const facility =
-        !shape && store.selectedFacilityId
+        !shape && !roomBox && store.selectedFacilityId
           ? FACILITY_FRAME_POINTS[store.selectedFacilityId]
           : null;
-      if (!shape && !facility) {
+      if (!shape && !roomBox && !facility) {
         if (el.style.opacity !== '0') el.style.opacity = '0';
         return;
       }
-      // Anchor: a booth's top edge or the facility point in frame space.
+      // Anchor: a booth's top edge, a walk-in room's top edge, or the
+      // facility point — all in frame space.
       const [ax, ay] = shape
         ? [shape.left + shape.w / 2, shape.top]
-        : facility!.point;
+        : roomBox
+          ? [roomBox.left + roomBox.w / 2, roomBox.top]
+          : facility!.point;
       const anchor = frameToLngLat([ax, ay]);
       const p = map.project(anchor as maplibregl.LngLatLike);
       // Same crash class as syncOverlay: project() can return an unusable
@@ -438,8 +518,18 @@ export default function MapLibreMap() {
     };
 
     map.on('pointermove', (e) => {
-      const id = boothFromEvent(e);
       const store = useMapStore.getState();
+      // The 2F plan owns its own room hover/tooltip; never hit-test the
+      // career-expo booth boxes while it is visible.
+      if (
+        store.selectedTrackId === 'walk-in-interview' ||
+        store.selectedAreaId === 'hall-b'
+      ) {
+        if (store.hoveredBoothId) store.hoverBooth(null);
+        map.getCanvas().style.cursor = '';
+        return;
+      }
+      const id = boothFromEvent(e);
       if (id !== store.hoveredBoothId) store.hoverBooth(id);
       map.getCanvas().style.cursor = id ? 'pointer' : '';
     });
@@ -448,6 +538,20 @@ export default function MapLibreMap() {
       map.getCanvas().style.cursor = '';
     });
     map.on('click', (e) => {
+      // The second-floor walk-in plan is a separate overlay; never hit-test
+      // the career-expo booth shapes while it is active.
+      const state = useMapStore.getState();
+      if (
+        state.selectedTrackId === 'walk-in-interview' ||
+        state.selectedAreaId === 'hall-b'
+      ) {
+        // Tapping the canvas away from a room clears every selection —
+        // the tooltip drops and the tray/list returns.
+        if (state.selectedBoothId) state.selectBooth(null);
+        if (state.selectedFacilityId) state.selectFacility(null);
+        if (state.selectedWalkInRoomId) state.selectWalkInRoom(null);
+        return;
+      }
       // MapLibre suppresses click after a drag, so pan-then-release is safe.
       const id = boothFromEvent(e);
       if (id) {
@@ -484,24 +588,63 @@ export default function MapLibreMap() {
     // Cancel any in-flight camera move first — two overlapping moves are
     // how the camera race (§ black-map) starts.
     map.stop();
+    // iPhone 16 Pro Max reference framing (user-provided CAM JSON): the
+    // selected booth sits above the detail tray, clear of the top chrome.
+    // The offset is negative because MapLibre places a positive offset BELOW
+    // the container centre (verified via map.project).
+    const focusOffset = Math.round(map.getContainer().clientHeight * MOBILE_FOCUS_OFFSET_RATIO);
     // NOTE: never pass `offset: undefined` — MapLibre's option validation
     // runs Point.convert(undefined) which throws "reading 'x'", killing
     // this effect and unmounting the island (the desktop black-map bug).
     // Only include the key when there is an offset.
     map.easeTo({
       center: target,
-      zoom: Math.max(map.getZoom(), 19.4),
+      zoom: Math.max(map.getZoom(), isMobile ? MOBILE_FOCUS_ZOOM : 19.4),
       duration: 650,
       ...(isMobile && detailOpen
         ? {
-            offset: [
-              0,
-              Math.min(188, Math.floor(map.getContainer().clientHeight * 0.3)),
-            ],
+            offset: [0, -focusOffset],
           }
         : {}),
     });
   }, [selectedBoothId, mapLoaded]);
+
+  /* Fly to the selected 2F walk-in room — same framing rules as the booth
+     fly-to above (mobile detail offset included). Single camera owner: the
+     hall-fit and GIK effects both yield to a selected room. */
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapLoaded || !selectedWalkInRoomId) return;
+    try {
+      const box = walkInRoomFrameBox(
+        useMapStore.getState().walkIn2FConfig,
+        selectedWalkInRoomId,
+      );
+      if (!box) return;
+      const target = frameToLngLat([box.left + box.w / 2, box.top + box.h / 2]);
+      const isMobile = window.matchMedia('(max-width: 767px)').matches;
+      const detailOpen = useMapStore.getState().sidebarMode === 'detail';
+      // Cancel any in-flight camera move first (see the booth fly-to).
+      map.stop();
+      const focusOffset = Math.round(
+        map.getContainer().clientHeight * MOBILE_FOCUS_OFFSET_RATIO,
+      );
+      map.easeTo({
+        center: target as maplibregl.LngLatLike,
+        zoom: Math.max(map.getZoom(), isMobile ? MOBILE_FOCUS_ZOOM : 19.4),
+        duration: 650,
+        // Transient offset only — never persistent padding (§ disappearing
+        // map). Omitted entirely when there is nothing to shift.
+        ...(isMobile && detailOpen
+          ? {
+              offset: [0, -focusOffset],
+            }
+          : {}),
+      });
+    } catch (error) {
+      console.error('[maplibre] walk-in room focus', error);
+    }
+  }, [selectedWalkInRoomId, mapLoaded]);
 
   /* Zoom to the hall whenever the venue state changes — track switcher,
      area dropdown, hall card tap — no matter where it came from. The first
@@ -518,10 +661,14 @@ export default function MapLibreMap() {
       return;
     }
     lastAreaKeyRef.current = key;
-    // A selected booth owns the camera (booth fly-to); fitting the hall
-    // here would cancel that flight via fitHall's map.stop(). Booth
-    // selection can switch area/track since the store change — skip.
-    if (useMapStore.getState().selectedBoothId) return;
+    // A selected booth or walk-in room owns the camera (its fly-to); fitting
+    // the hall here would cancel that flight via fitHall's map.stop().
+    // Selections can switch area/track since the store change — skip.
+    if (
+      useMapStore.getState().selectedBoothId ||
+      useMapStore.getState().selectedWalkInRoomId
+    )
+      return;
     fitHall();
   }, [selectedVenueId, selectedAreaId, selectedTrackId, mapLoaded, fitHall]);
 
@@ -545,10 +692,14 @@ export default function MapLibreMap() {
       map.stop();
       map.easeTo({ center: HALL_CENTER, zoom: resolveGikZoom(), duration: 700 });
     } else {
-      // A selected booth owns the camera — its fly-to must not be cancelled
-      // by this hall fit (selectBooth leaves GIK mode and switches area in
-      // the same commit).
-      if (useMapStore.getState().selectedBoothId) return;
+      // A selected booth or walk-in room owns the camera — its fly-to must
+      // not be cancelled by this hall fit (selections leave GIK mode and
+      // switch area in the same commit).
+      if (
+        useMapStore.getState().selectedBoothId ||
+        useMapStore.getState().selectedWalkInRoomId
+      )
+        return;
       fitHall();
     }
   }, [gikMode, mapLoaded, fitHall]);
@@ -567,23 +718,44 @@ export default function MapLibreMap() {
 
       {/* Georeferenced floor-plan overlay (warped via CSS matrix3d) */}
       <div className="pointer-events-none absolute inset-0 z-[1] overflow-hidden">
-        <FloorPlanOverlay ref={overlayRootRef} />
+        {walkInMode ? (
+          <WalkInFloorPlanOverlay ref={overlayRootRef} config={walkInConfig} />
+        ) : (
+          <FloorPlanOverlay ref={overlayRootRef} />
+        )}
       </div>
 
-      {/* Mobile map-centre crosshair — lets you read what the camera is
-          focused on above the tray. */}
-      <div
-        className="pointer-events-none absolute inset-0 z-[3] flex items-center justify-center md:hidden"
-        aria-hidden="true"
-      >
-        <div className="relative size-6">
-          <span className="absolute left-1/2 top-1/2 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--accent-pink)]" />
-          <span className="absolute left-1/2 top-0 h-2 w-px -translate-x-1/2 bg-white/60" />
-          <span className="absolute bottom-0 left-1/2 h-2 w-px -translate-x-1/2 bg-white/60" />
-          <span className="absolute left-0 top-1/2 h-px w-2 -translate-y-1/2 bg-white/60" />
-          <span className="absolute right-0 top-1/2 h-px w-2 -translate-y-1/2 bg-white/60" />
+      {/* Splash pixel-transition art reused as the floor-swap veil. */}
+      {floorWipe && (
+        <div key={floorWipe.key} className="pointer-events-none absolute inset-0 z-[12]">
+          <PixelTransition
+            firstContent={<div className="absolute inset-0 bg-[#09090b]" />}
+            secondContent={<div className="absolute inset-0" />}
+            gridSize={24}
+            pixelColor="#2a2a2a"
+            pixelFill="#2a2a2a"
+            pixelBorder="#ff2d6f"
+            mosaic={0.1}
+            animationStepDuration={0.3}
+            pattern="random"
+            randomness={0.72}
+            pixelAnimation="pop"
+            pixelShape="square"
+            gap={0.2}
+            trigger="click"
+            active={floorWipe.active}
+            once
+            onActiveChange={() => {}}
+            aspectRatio="auto"
+            className="h-full w-full"
+            style={{ width: '100%', height: '100%' }}
+            decorative
+          />
         </div>
-      </div>
+      )}
+
+      {/* Mobile map-centre crosshair removed — the hall card + tray already
+          communicate the camera target. */}
 
       {/* Zoom + Compass controls — right rail, vertically centered (the
           default spot, both breakpoints; keeps top clear for the chrome
@@ -611,14 +783,12 @@ export default function MapLibreMap() {
         </button>
       </div>
 
-      {import.meta.env.DEV && <MapDebugPanel map={mapInstance} />}
-
       {/* Current venue / tab card. Mobile: hovers just above the tray's
           peek position — derived from the sheet's SNAP_PEEK + tab rail
           constants instead of a hard-coded 172 (§1). Desktop: sits above
           the quick-find bar. Tappable: re-fits the hall into view. */}
       <div
-        className="absolute inset-x-3 z-10 flex justify-end bottom-(--hall-card-bottom) md:inset-x-auto md:bottom-[56px] md:left-3 md:justify-start"
+        className="absolute inset-x-3 z-10 flex justify-end bottom-(--hall-card-bottom) md:inset-x-auto md:bottom-0 md:left-3 md:justify-start"
         style={{ '--hall-card-bottom': `calc(${SNAP_PEEK}px + ${TAB_RAIL_H}px + 6px)` } as React.CSSProperties}
       >
         <button
@@ -630,7 +800,7 @@ export default function MapLibreMap() {
             if (!gikMode) {
               // Desktop focus lands on the measured framing; mobile keeps
               // the fit-bounds framing that respects the sheet.
-              if (window.matchMedia('(max-width: 767px)').matches) fitHall();
+              if (window.matchMedia('(max-width: 767px)').matches) focusVenue();
               else mapRef.current?.easeTo({ center: DESKTOP_FOCUS_CENTER, duration: 400 });
               return;
             }
@@ -657,8 +827,9 @@ export default function MapLibreMap() {
 
       {/* Screen-space booth tooltip (upright — outside the plan warp).
           Shows on hover AND on selection, so the clicked venue keeps its
-          bubble while the sidebar shows the detail. */}
-      {(activeBoothId || selectedFacilityId) && (
+          bubble while the sidebar shows the detail. The same bubble pins
+          above a selected 2F walk-in room. */}
+      {(activeBoothId || selectedFacilityId || selectedWalkInRoomId) && (
         <div
           ref={tooltipRef}
           className="absolute top-0 left-0 z-20"
@@ -666,6 +837,16 @@ export default function MapLibreMap() {
         >
           {activeBoothId ? (
             <MapTooltip boothId={activeBoothId} x={0} y={0} />
+          ) : walkInBooking ? (
+            <MapTooltip
+              walkIn={{
+                room: walkInBooking.room,
+                companyId: walkInBooking.companyId,
+                companyName: walkInBooking.companyName,
+              }}
+              x={0}
+              y={0}
+            />
           ) : selectedFacilityId ? (
             <FacilityTooltip facilityId={selectedFacilityId} />
           ) : null}

@@ -77,7 +77,8 @@ export default function MapDebugPanel({ map }: { map: maplibregl.Map | null }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="fixed bottom-4 left-44 z-[96] border border-[#34343a] bg-[#0c0c0f] px-3 py-2 font-mono text-[10px] text-white shadow-lg"
+        className="flex h-10 w-10 items-center justify-center rounded-full border border-[#34343a] bg-[#141416] text-[9px] font-bold tracking-[0.08em] text-white transition-[transform,colors] hover:border-[#4a4a52] active:scale-95"
+        aria-label="Open camera debug"
       >
         CAM
       </button>
@@ -92,50 +93,60 @@ export default function MapDebugPanel({ map }: { map: maplibregl.Map | null }) {
   };
 
   return (
-    <div className="fixed bottom-16 left-4 z-[96] w-72 border border-[#34343a] bg-[#0c0c0f] p-3 font-mono text-[10px] text-white shadow-2xl">
-      <div className="mb-2 flex items-center justify-between">
-        <span className="text-[11px] font-bold">Camera debug</span>
-        <button
-          type="button"
-          onClick={() => setOpen(false)}
-          className="border border-[#34343a] px-1.5 py-0.5 hover:bg-[#1f1f23]"
-          aria-label="Close camera debug"
-        >
-          ×
-        </button>
-      </div>
-
-      {camera ? (
-        <dl className="space-y-1">
-          {[
-            ['center', `${camera.lat.toFixed(6)}, ${camera.lng.toFixed(6)}`],
-            ['zoom', camera.zoom.toFixed(3)],
-            ['bearing', camera.bearing.toFixed(2)],
-            ['pitch', camera.pitch.toFixed(2)],
-            ['zoom range', `${camera.minZoom.toFixed(2)} → ${camera.maxZoom.toFixed(2)}`],
-            ['bounds W', camera.west.toFixed(6)],
-            ['bounds S', camera.south.toFixed(6)],
-            ['bounds E', camera.east.toFixed(6)],
-            ['bounds N', camera.north.toFixed(6)],
-            ['max bounds', camera.maxBounds],
-          ].map(([label, value]) => (
-            <div key={label} className="flex gap-2">
-              <dt className="w-20 shrink-0 text-[#8f8f8f]">{label}</dt>
-              <dd className="min-w-0 break-all text-[#d4d4d8]">{value}</dd>
-            </div>
-          ))}
-        </dl>
-      ) : (
-        <div className="text-[#8f8f8f]">Waiting for map…</div>
-      )}
-
+    <div className="relative">
       <button
         type="button"
-        onClick={copy}
-        className="mt-2 w-full border border-[#34343a] px-2 py-1 text-[9px] hover:bg-[#1f1f23]"
+        onClick={() => setOpen(false)}
+        className="flex h-10 w-10 items-center justify-center rounded-full border border-[#34343a] bg-[#141416] text-[9px] font-bold tracking-[0.08em] text-white transition-[transform,colors] hover:border-[#4a4a52] active:scale-95"
+        aria-label="Close camera debug"
       >
-        Copy camera JSON
+        CAM
       </button>
+      <div className="absolute right-full top-0 z-[96] mr-2 w-72 rounded-md border border-line bg-[#0c0c0f] p-3 font-mono text-[10px] text-white shadow-2xl">
+        <div className="mb-2 flex items-center justify-between">
+          <span className="text-[11px] font-bold">Camera debug</span>
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            className="border border-[#34343a] px-1.5 py-0.5 hover:bg-[#1f1f23]"
+            aria-label="Close camera debug"
+          >
+            ×
+          </button>
+        </div>
+
+        {camera ? (
+          <dl className="space-y-1">
+            {[
+              ['center', `${camera.lat.toFixed(6)}, ${camera.lng.toFixed(6)}`],
+              ['zoom', camera.zoom.toFixed(3)],
+              ['bearing', camera.bearing.toFixed(2)],
+              ['pitch', camera.pitch.toFixed(2)],
+              ['zoom range', `${camera.minZoom.toFixed(2)} → ${camera.maxZoom.toFixed(2)}`],
+              ['bounds W', camera.west.toFixed(6)],
+              ['bounds S', camera.south.toFixed(6)],
+              ['bounds E', camera.east.toFixed(6)],
+              ['bounds N', camera.north.toFixed(6)],
+              ['max bounds', camera.maxBounds],
+            ].map(([label, value]) => (
+              <div key={label} className="flex gap-2">
+                <dt className="w-20 shrink-0 text-[#8f8f8f]">{label}</dt>
+                <dd className="min-w-0 break-all text-[#d4d4d8]">{value}</dd>
+              </div>
+            ))}
+          </dl>
+        ) : (
+          <div className="text-[#8f8f8f]">Waiting for map…</div>
+        )}
+
+        <button
+          type="button"
+          onClick={copy}
+          className="mt-2 w-full border border-[#34343a] px-2 py-1 text-[9px] hover:bg-[#1f1f23]"
+        >
+          Copy camera JSON
+        </button>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
-import { Bookmark, Share2 } from 'lucide-react';
+import { Bookmark } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
-import { useShareBooth } from '../../hooks/map/useShareBooth';
+import ShareBoothButton from '../../components/map/ShareBoothButton';
 import { track } from '../../lib/analytics';
 import type { Booth, Company } from '../../types/map';
 import { getBooth, getCompanyForBooth, getZonesByArea, getSessionsByArea, getTrack, event, ui } from '../../lib/data';
@@ -10,7 +10,6 @@ export default function BookmarkList() {
   const selectBooth = useMapStore((s) => s.selectBooth);
   const toggleBookmark = useMapStore((s) => s.toggleBookmark);
   const isBookmarked = useMapStore((s) => s.isBookmarked);
-  const { share, feedback: shareFeedback } = useShareBooth();
 
   const handleSelectBooth = (boothId: string) => {
     track('item.click', { boothId, context: 'saved-list' });
@@ -79,14 +78,11 @@ export default function BookmarkList() {
                   </div>
                 </button>
                 <div className="flex shrink-0 items-center gap-0.5 self-start">
-                  <button
-                    type="button"
-                    onClick={() => share(id)}
-                    className="flex size-7 items-center justify-center text-ink-muted transition-[transform,colors] hover:text-white active:scale-95"
-                    aria-label={ui.boothDetail.shareLabel}
-                  >
-                    <Share2 size={16} />
-                  </button>
+                  <ShareBoothButton
+                    boothId={id}
+                    iconSize={16}
+                    className="size-7 text-ink-muted hover:text-white"
+                  />
                   <button
                     type="button"
                     onClick={() => toggleBookmark(id)}
@@ -97,9 +93,6 @@ export default function BookmarkList() {
                   </button>
                 </div>
               </div>
-              {shareFeedback && (
-                <div className="mt-1.5 text-xs text-[#d4d4d8]">{shareFeedback}</div>
-              )}
             </div>
           );
         })}

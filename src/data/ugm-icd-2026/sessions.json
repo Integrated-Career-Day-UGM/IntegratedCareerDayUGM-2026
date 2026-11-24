@@ -32,7 +32,7 @@
   {
     "id": "wi-hall-b-shopee-d1",
     "areaId": "hall-b",
-    "companyId": "e5-bibit",
+    "companyId": "e5-blibli",
     "trackId": "walk-in-interview",
     "dayId": "d1",
     "start": "2026-11-28T14:00:00+07:00",
@@ -82,7 +82,7 @@
   {
     "id": "cc-c001-gojek-d2",
     "areaId": "room-c001-002",
-    "companyId": "e5-bibit",
+    "companyId": "e5-blibli",
     "trackId": "career-counseling",
     "dayId": "d2",
     "start": "2026-11-29T09:00:00+07:00",

@@ -81,13 +81,13 @@ export default function QuickFind() {
                 track('facility.click', { facilityId: item.id, label: item.label });
                 openFacility(item.id);
               }}
-              className="group relative flex h-6 shrink-0 items-center gap-1.5 rounded-full border border-[#4a4a4a] bg-[#2a2a2a] px-2 text-[8.5px] font-semibold text-ink-body transition-colors active:scale-[0.98] md:h-8 md:gap-2 md:px-3 md:text-[9px]"
+              className="group relative flex h-6 shrink-0 items-center gap-1.5 rounded-full border border-[#4a4a4a] bg-[#2a2a2a] px-2 text-[8.5px] font-semibold text-ink-body transition-colors active:scale-[0.98] md:h-7 md:gap-1.5 md:px-2.5 md:text-[8px]"
             >
               <Icon
                 size={12}
                 strokeWidth={1.5}
                 fill="currentColor"
-                className="h-2.5 w-2.5 shrink-0 md:h-3 md:w-3"
+                className="h-2.5 w-2.5 shrink-0 md:h-2.5 md:w-2.5"
               />
               <span className="text-[#d4d4d8]/65 transition-colors group-hover:text-[#d4d4d8]">
                 {label}

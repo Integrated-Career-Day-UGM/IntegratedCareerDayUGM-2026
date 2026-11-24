@@ -256,6 +256,172 @@ export const HALL_BOUNDS: [[number, number], [number, number]] = [
   ],
 ];
 
+/** Hard camera pan limit: the hall plus a short walk of surrounding context.
+ *  Keeps the building on screen without exposing the whole campus. */
+export const MAX_BOUNDS: [[number, number], [number, number]] = [
+  [HALL_BOUNDS[0][0] - 0.0012, HALL_BOUNDS[0][1] - 0.0009],
+  [HALL_BOUNDS[1][0] + 0.0012, HALL_BOUNDS[1][1] + 0.0009],
+];
+
+/** Second-floor walk-in layout (Figma 2136:22531 / 2136:22594 / 2136:22608).
+ *  Everything is in the same 818×820 frame as the career-expo plan so the
+ *  existing map warp can carry it; tweak it from the DEV 2F panel. */
+export type WalkIn2FRoom = {
+  id: string;
+  left: number;
+  top: number;
+  w: number;
+  h: number;
+  rotate: number;
+};
+
+export type WalkIn2FDecor = {
+  id: string;
+  label: string;
+  src: string;
+  left: number;
+  top: number;
+  w: number;
+  h: number;
+  rotate: number;
+};
+
+export type WalkIn2FConfig = {
+  hull: { left: number; top: number; w: number; h: number; rotate: number };
+  content: { left: number; top: number; scale: number };
+  rooms: WalkIn2FRoom[];
+  signs: {
+    id: 'entrance' | 'exit';
+    left: number;
+    top: number;
+    w: number;
+    h: number;
+    rotate: number;
+  }[];
+  decor?: WalkIn2FDecor[];
+};
+
+const walkInRoomSize = 71.6489;
+
+export const WALKIN_2F: WalkIn2FConfig = {
+  hull: { left: 20.1, top: 83.6, w: 798, h: 814, rotate: -5 },
+  content: { left: 225, top: 140, scale: 1 },
+  rooms: [
+    { id: 'F1', left: 81.5, top: -18.5, w: walkInRoomSize, h: walkInRoomSize, rotate: 35 },
+    { id: 'F2', left: 32.4, top: 48.1, w: walkInRoomSize, h: walkInRoomSize, rotate: 35 },
+    { id: 'F3', left: -69.4, top: 207.3, w: walkInRoomSize, h: walkInRoomSize, rotate: 35 },
+    { id: 'F4', left: -115.6, top: 275.2, w: walkInRoomSize, h: walkInRoomSize, rotate: 35 },
+    { id: 'F5', left: 27.9, top: 350.1, w: walkInRoomSize, h: walkInRoomSize, rotate: 35 },
+    { id: 'F6', left: 77, top: 283.6, w: walkInRoomSize, h: walkInRoomSize, rotate: 35 },
+    { id: 'F7', left: 124.6, top: 216.9, w: walkInRoomSize, h: walkInRoomSize, rotate: 35 },
+    { id: 'F8', left: 170.9, top: 151.6, w: walkInRoomSize, h: walkInRoomSize, rotate: 35 },
+    { id: 'F9', left: 219.9, top: 85.1, w: walkInRoomSize, h: walkInRoomSize, rotate: 35 },
+    { id: 'F10', left: 265.9, top: 17.1, w: walkInRoomSize, h: walkInRoomSize, rotate: 35 },
+  ],
+  signs: [
+    { id: 'exit', left: 354, top: -10.1, w: 96, h: 44, rotate: -20 },
+    { id: 'entrance', left: 81.2, top: 161.1, w: 46, h: 150, rotate: 35 },
+  ],
+  decor: [
+    {
+      id: 'decor-ugm-art',
+      label: 'UGM ICD artwork',
+      src: '/maps/assets/ugm-icd-art.svg',
+      left: -43.6,
+      top: 81.8,
+      w: 210,
+      h: 52.5,
+      rotate: 0,
+    },
+    {
+      id: 'decor-door-exit',
+      label: 'Exit door',
+      src: '/maps/assets/door-glyph-2086-22758.svg',
+      left: 395.3,
+      top: 38.5,
+      w: 28,
+      h: 31,
+      rotate: 20,
+    },
+    {
+      id: 'decor-door-entrance',
+      label: 'Entrance door',
+      src: '/maps/assets/door-glyph-2086-22757.svg',
+      left: 132.2,
+      top: 252.3,
+      w: 18,
+      h: 35,
+      rotate: 35,
+    },
+    {
+      id: 'decor-arrow-entrance',
+      label: 'Entrance arrow',
+      src: '/maps/assets/arrow-yellow-2087-22763.svg',
+      left: 14.2,
+      top: 177.6,
+      w: 58,
+      h: 28,
+      rotate: 20,
+    },
+  ],
+};
+
+/**
+ * Axis-aligned frame-space bounding box of a 2F walk-in room: the composed
+ * room.rotate (about the room centre) + hull.rotate (about the hull centre)
+ * transform, in the same 818×820 frame px as the career-expo booth boxes.
+ * Used for the click-tooltip anchor and the camera fly-to — the exact roles
+ * BOOTH_SHAPES boxes play downstairs.
+ */
+export function walkInRoomFrameBox(
+  config: WalkIn2FConfig,
+  roomId: string,
+): { left: number; top: number; w: number; h: number } | null {
+  const room = config.rooms.find((r) => r.id === roomId);
+  if (!room) return null;
+  const { content, hull } = config;
+  const rw = room.w * content.scale;
+  const rh = room.h * content.scale;
+  const lx = content.left + room.left * content.scale;
+  const ly = content.top + room.top * content.scale;
+  // CSS rotate in a y-down space: x' = dx·cos − dy·sin, y' = dx·sin + dy·cos.
+  const rcx = lx + rw / 2;
+  const rcy = ly + rh / 2;
+  const ra = (room.rotate * Math.PI) / 180;
+  const rc = Math.cos(ra);
+  const rs = Math.sin(ra);
+  const hcx = hull.w / 2;
+  const hcy = hull.h / 2;
+  const ha = (hull.rotate * Math.PI) / 180;
+  const hc = Math.cos(ha);
+  const hs = Math.sin(ha);
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+  for (const [cx, cy] of [
+    [0, 0],
+    [rw, 0],
+    [rw, rh],
+    [0, rh],
+  ]) {
+    const dx = lx + cx - rcx;
+    const dy = ly + cy - rcy;
+    const x1 = rcx + dx * rc - dy * rs;
+    const y1 = rcy + dx * rs + dy * rc;
+    const ex = x1 - hcx;
+    const ey = y1 - hcy;
+    const x2 = hcx + ex * hc - ey * hs + hull.left;
+    const y2 = hcy + ex * hs + ey * hc + hull.top;
+    if (x2 < minX) minX = x2;
+    if (x2 > maxX) maxX = x2;
+    if (y2 < minY) minY = y2;
+    if (y2 > maxY) maxY = y2;
+  }
+  return { left: minX, top: minY, w: maxX - minX, h: maxY - minY };
+}
+
+
 export const HALL_CENTER: [number, number] = [110.376329, -7.774125];
 /** Desktop hall-card focus: the framing measured when clicking the venue
  *  card on desktop. */
@@ -366,11 +532,6 @@ export const BOOTH_SHAPES: BoothShape[] = [
     labelSize: 16, labelTracking: -1.3,
   },
   // E zone, west row — small boxes, labels flipped
-  {
-    id: 'e1', code: 'E1', left: 143.5, top: 663.3, w: 48.08, h: 42.347, rotate: -151.93,
-    innerW: 40.38, innerH: 26.456, bg: '#f0862a', borderWidth: 1.274, padding: 6.37,
-    labelSize: 16.261, labelTracking: -1.3009, labelRotate: 180,
-  },
   {
     id: 'e2', code: 'E2', left: 183.4, top: 684.2, w: 48.08, h: 42.347, rotate: -151.93,
     innerW: 40.38, innerH: 26.456, bg: '#f0862a', borderWidth: 1.274, padding: 6.37,
@@ -559,6 +720,16 @@ export const PLAN_SPRITES: PlanSprite[] = [
     w: 62,
     h: 31.3,
     rotate: 20,
+  },
+  {
+    id: 'ugm-icd-map-art',
+    label: 'UGM ICD map art (Figma 2115:22565)',
+    src: '/maps/assets/ugm-icd-art.svg',
+    left: -256.3,
+    top: 185.2,
+    w: 337.2,
+    h: 109.3,
+    rotate: 0,
   },
 ];
 

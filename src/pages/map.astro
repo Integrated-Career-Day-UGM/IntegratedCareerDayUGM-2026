@@ -8,8 +8,7 @@ import SearchBar from '../islands/map/SearchBar';
 import MobileBottomSheet from '../islands/map/MobileBottomSheet';
 import RegisterLinks from '../islands/map/RegisterLinks';
 import MapSplash from '../islands/map/MapSplash';
-import SvgPicker from '../islands/map/SvgPicker';
-import GeometryEditor from '../islands/map/GeometryEditor';
+import BrandLockup from '../components/map/BrandLockup';
 import '../styles/base/global.css';
 ---
 
@@ -56,14 +55,22 @@ import '../styles/base/global.css';
           <SearchBar client:only="react" />
         </div>
 
+        {/* Brand art reused as a compact mobile decoration — the same header
+            lockup + ribbon, scaled down, right-aligned under the filter
+            button. Static markup (no hydration). */}
+        <div class="pointer-events-none w-full md:hidden">
+          <div class="flex justify-end pr-0.5">
+            <BrandLockup compact />
+          </div>
+        </div>
+
         {/* Track switcher (island owns its bar chrome) — desktop top bar. */}
         <div class="pointer-events-auto hidden max-w-full md:block">
           <TrackSwitcher client:only="react" />
         </div>
 
-        {/* Mobile track switcher — above QuickFind; active tab keeps its
-            label, inactive tabs collapse to icons. */}
-        <div class="pointer-events-auto max-w-full md:hidden">
+        {/* Mobile track switcher — above QuickFind; content-width, no bar. */}
+        <div class="pointer-events-auto w-auto max-w-full md:w-auto md:hidden">
           <TrackSwitcher client:only="react" />
         </div>
 
@@ -101,13 +108,6 @@ import '../styles/base/global.css';
           if (chrome) chrome.classList.add('reveal-items');
         });
       </script>
-
-      {/* DEV-only GIK tuner removed — use the console `__icdMap` probe if
-          a camera value needs checking. */}
-      {/* DEV SVG picker: only mounts with ?svg=1 (or ?debug=1), so the
-          normal map never shows a debug control. */}
-      {import.meta.env.DEV && <SvgPicker client:only="react" />}
-      {import.meta.env.DEV && <GeometryEditor client:only="react" />}
     </section>
   </main>
 </BaseLayout>

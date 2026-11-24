@@ -77,6 +77,8 @@ export type Company = {
   websiteUrl: string | null;
   programUrl: string | null;
   logoUrl: string | null;
+  posterUrl?: string | null;
+  description?: string | null;
   openings: JobOpening[];
 };
 
@@ -89,6 +91,27 @@ export type Session = {
   start: string;
   end: string;
   title: string;
+};
+
+export type StageSession = {
+  id: string;
+  dayId: string;
+  companyId: string;
+  start: string;
+  end: string;
+  title: string;
+  speakers: { name: string; title: string }[];
+};
+
+export type WalkInSession = {
+  id: string;
+  dayId: string;
+  companyId: string | null;
+  companyName: string;
+  room: string;
+  boothRef?: string | null;
+  start: string;
+  end: string;
 };
 
 export type QuickFindItem = {
@@ -119,6 +142,17 @@ export type UiStrings = {
   venueList: Record<string, string>;
   happeningNow: Record<string, string>;
   boothDetail: Record<string, string> & { shareLabel: string };
+  walkInDetail: {
+    selectedLabel: string;
+    roomPrefix: string;
+    openCompanyCta: string;
+    noCompanyHint: string;
+  };
+  companySessions: {
+    title: string;
+    stageLabel: string;
+    roomPrefix: string;
+  };
   saved: Record<string, string>;
   insights: {
     title: string;
@@ -128,6 +162,7 @@ export type UiStrings = {
     sectorsLabel: string;
     kpiEmptyLabel: string;
     cards: Record<string, { label: string; value: string; change?: string; caption: string }>;
+    kpi: Record<string, string>;
   };
   info: {
     title: string;
@@ -135,12 +170,32 @@ export type UiStrings = {
     registerLabel: string;
     mapsCta: string;
     mapsQuery: string;
+    overview: {
+      heading: string;
+      companies: string;
+      tracks: string;
+      days: string;
+    };
     sections: Record<
       string,
       { heading: string; headline?: string; body: string; items?: string[]; note?: string }
     >;
   };
   map: Record<string, string>;
+  posters: Record<string, string>;
+  social: {
+    title: string;
+    instagram: { label: string; handle: string; url: string };
+    whatsapp: { label: string; handle: string; url: string };
+  };
+};
+
+export type PosterInfo = {
+  id: string;
+  title: string;
+  subtitle: string;
+  src: string;
+  accent: string;
 };
 
 export type FacilityInfo = {

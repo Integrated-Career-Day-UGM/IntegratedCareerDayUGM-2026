@@ -1,7 +1,15 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { MapViewState } from '../types/map';
-import { event, venues, getVenue, getArea, getBooth } from '../lib/data';
+import {
+  event,
+  venues,
+  getVenue,
+  getArea,
+  getBooth,
+  walkInSessions,
+} from '../lib/data';
+import { WALKIN_2F, type WalkIn2FConfig } from '../lib/map/floorplan';
 import { track } from '../lib/analytics';
 
 type SidebarMode = 'list' | 'detail' | 'facility' | 'search';
@@ -17,6 +25,8 @@ interface MapState {
   selectedBoothId: string | null;
   selectedFacilityId: string | null;
   hoveredBoothId: string | null;
+  /** Selected 2F walk-in room (F1–F10 id); exclusive with booth/facility. */
+  selectedWalkInRoomId: string | null;
 
   // UI
   sidebarMode: SidebarMode;
@@ -31,6 +41,9 @@ interface MapState {
   // Map view
   mapView: MapViewState;
 
+  // DEV-tuned second-floor frame transform
+  walkIn2FConfig: WalkIn2FConfig;
+
   // Bookmarks
   bookmarkedIds: string[];
 
@@ -42,6 +55,12 @@ interface MapState {
   selectBooth: (boothId: string | null) => void;
   selectFacility: (facilityId: string | null) => void;
   hoverBooth: (boothId: string | null) => void;
+  /**
+   * Select a walk-in room on the 2F plan. An optional `dayId` lets
+   * cross-links (session rows on a company card) land on the day the
+   * booking actually exists.
+   */
+  selectWalkInRoom: (roomId: string | null, dayId?: string) => void;
   setSearchQuery: (query: string) => void;
   toggleSearchFilter: (kind: keyof SearchFilters, value: string) => void;
   clearSearchFilters: () => void;
@@ -51,6 +70,7 @@ interface MapState {
   openMobileSheet: () => void;
   closeMobileSheet: () => void;
   setMapView: (view: Partial<MapViewState>) => void;
+  setWalkIn2FConfig: (config: WalkIn2FConfig) => void;
   toggleBookmark: (id: string) => void;
   isBookmarked: (id: string) => boolean;
 }
@@ -71,6 +91,7 @@ export const useMapStore = create<MapState>()(
       selectedBoothId: null,
       selectedFacilityId: null,
       hoveredBoothId: null,
+      selectedWalkInRoomId: null,
       sidebarMode: 'list',
       sidebarTab: 'home',
       searchQuery: '',
@@ -83,6 +104,7 @@ export const useMapStore = create<MapState>()(
         bearing: 0,
         pitch: 0,
       },
+      walkIn2FConfig: WALKIN_2F,
       bookmarkedIds: [],
 
       setSelectedVenue: (venueId) => {
@@ -94,6 +116,7 @@ export const useMapStore = create<MapState>()(
           selectedTrackId: firstArea?.trackId ?? '',
           selectedBoothId: null,
           selectedFacilityId: null,
+          selectedWalkInRoomId: null,
           sidebarMode: 'list',
         });
       },
@@ -107,6 +130,7 @@ export const useMapStore = create<MapState>()(
           selectedTrackId: area.trackId,
           selectedBoothId: null,
           selectedFacilityId: null,
+          selectedWalkInRoomId: null,
           sidebarMode: 'list',
         });
       },
@@ -121,12 +145,28 @@ export const useMapStore = create<MapState>()(
           selectedAreaId: area.id,
           selectedBoothId: null,
           selectedFacilityId: null,
+          selectedWalkInRoomId: null,
           sidebarMode: 'list',
         });
       },
 
       setSelectedDay: (dayId) => {
         track('day.switch', { dayId });
+        // A selected walk-in room only makes sense while it is booked on the
+        // visible day; switching days drops it when the new day has no
+        // booking (the sidebar detail and tooltip would describe nothing).
+        const room = get().selectedWalkInRoomId;
+        if (
+          room &&
+          !walkInSessions.some((s) => s.dayId === dayId && s.room === room)
+        ) {
+          set({
+            selectedDayId: dayId,
+            selectedWalkInRoomId: null,
+            ...(get().sidebarMode === 'detail' ? { sidebarMode: 'list' } : {}),
+          });
+          return;
+        }
         set({ selectedDayId: dayId });
       },
 
@@ -152,6 +192,7 @@ export const useMapStore = create<MapState>()(
         set({
           selectedBoothId: boothId,
           selectedFacilityId: null,
+          selectedWalkInRoomId: null,
           selectedVenueId: venue?.id ?? get().selectedVenueId,
           selectedAreaId: area?.id ?? get().selectedAreaId,
           selectedTrackId: area?.trackId ?? get().selectedTrackId,
@@ -165,13 +206,16 @@ export const useMapStore = create<MapState>()(
         if (!facilityId) {
           set({
             selectedFacilityId: null,
-            sidebarMode: get().selectedBoothId ? 'detail' : 'list',
+            sidebarMode: get().selectedBoothId || get().selectedWalkInRoomId
+              ? 'detail'
+              : 'list',
           });
           return;
         }
         set({
           selectedFacilityId: facilityId,
           selectedBoothId: null,
+          selectedWalkInRoomId: null,
           gikMode: false,
           sidebarTab: 'home',
           sidebarMode: 'facility',
@@ -179,6 +223,52 @@ export const useMapStore = create<MapState>()(
       },
 
       hoverBooth: (boothId) => set({ hoveredBoothId: boothId }),
+
+      selectWalkInRoom: (roomId, dayId) => {
+        if (!roomId) {
+          // Deselect (map tap, close button, tab switch) — mirror selectBooth:
+          // keep a booth detail open if one is somehow active.
+          set({
+            selectedWalkInRoomId: null,
+            sidebarMode: get().selectedBoothId ? 'detail' : 'list',
+          });
+          return;
+        }
+        const targetDay = dayId ?? get().selectedDayId;
+        // A bilik can host several companies across the day's slots — any
+        // booking on the target day makes the room selectable; the detail
+        // card renders one card per booking.
+        const bookings = walkInSessions.filter(
+          (s) => s.room === roomId && s.dayId === targetDay,
+        );
+        // Only booked rooms are selectable — an open room behaves like the
+        // empty map (a tap clears the selection instead).
+        if (bookings.length === 0) return;
+        track('walkin.room.select', {
+          roomId,
+          dayId: targetDay,
+          companyIds: bookings.map((b) => b.companyId),
+        });
+        // Same rule as selectBooth: the track/area follow the selection so
+        // the sidebar detail and the visible plan can never disagree —
+        // session rows on a company card can link here from the career-expo
+        // tab, and they carry the booking's day so the room is booked there.
+        const venue = venues.find((v) =>
+          v.areas.some((a) => a.trackId === 'walk-in-interview'),
+        );
+        const area = venue?.areas.find((a) => a.trackId === 'walk-in-interview');
+        set({
+          selectedWalkInRoomId: roomId,
+          selectedBoothId: null,
+          selectedFacilityId: null,
+          selectedDayId: targetDay,
+          selectedAreaId: area?.id ?? get().selectedAreaId,
+          selectedTrackId: area?.trackId ?? get().selectedTrackId,
+          gikMode: false,
+          sidebarTab: 'home',
+          sidebarMode: 'detail',
+        });
+      },
 
       setSearchQuery: (query) => {
         if (query) {
@@ -188,7 +278,7 @@ export const useMapStore = create<MapState>()(
           searchQuery: query,
           sidebarMode: query
             ? 'search'
-            : get().selectedBoothId
+            : get().selectedBoothId || get().selectedWalkInRoomId
               ? 'detail'
               : get().selectedFacilityId
                 ? 'facility'
@@ -218,6 +308,7 @@ export const useMapStore = create<MapState>()(
             sidebarMode: 'list',
             selectedBoothId: null,
             selectedFacilityId: null,
+            selectedWalkInRoomId: null,
           });
           return;
         }
@@ -227,6 +318,7 @@ export const useMapStore = create<MapState>()(
             sidebarMode: 'list',
             selectedBoothId: null,
             selectedFacilityId: null,
+            selectedWalkInRoomId: null,
           });
           return;
         }
@@ -236,6 +328,7 @@ export const useMapStore = create<MapState>()(
           sidebarMode: 'list',
           selectedBoothId: null,
           selectedFacilityId: null,
+          selectedWalkInRoomId: null,
         });
       },
 
@@ -248,6 +341,8 @@ export const useMapStore = create<MapState>()(
       closeMobileSheet: () => set({ isMobileSheetOpen: false }),
 
       setMapView: (view) => set({ mapView: { ...get().mapView, ...view } }),
+
+      setWalkIn2FConfig: (config) => set({ walkIn2FConfig: config }),
 
       toggleBookmark: (id) => {
         const current = get().bookmarkedIds;
@@ -267,7 +362,10 @@ export const useMapStore = create<MapState>()(
     }),
     {
       name: 'icd-2026-map',
-      partialize: (state) => ({ bookmarkedIds: state.bookmarkedIds }),
+      partialize: (state) => ({
+      bookmarkedIds: state.bookmarkedIds,
+      walkIn2FConfig: state.walkIn2FConfig,
+    }),
     }
   )
 );

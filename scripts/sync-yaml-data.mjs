@@ -28,7 +28,6 @@ const boothsYaml = readYaml('UGM-ICD-booths.yaml');
 const walkInYaml = readYaml('UGM-ICD-walk-in.yaml');
 const sessionsYaml = readYaml('UGM-ICD-sessions.yaml');
 const oldCompanies = readJson('companies.json');
-const oldBooths = readJson('booths.json');
 const zones = readJson('zones.json');
 
 const companyByName = new Map();
@@ -122,6 +121,7 @@ for (const day of walkInYaml.days) {
       companyId: companyIdForBooth(booking.booth_ref),
       companyName: booking.company,
       room: booking.room,
+      boothRef: booking.booth_ref ?? null,
       start: `${date}T${booking.start}:00+07:00`,
       end: `${date}T${booking.end}:00+07:00`,
     });

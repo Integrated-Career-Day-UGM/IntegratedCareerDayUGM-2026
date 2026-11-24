@@ -4,6 +4,7 @@ import {
   PLAN_ANNOTATIONS,
   PLAN_SPRITES,
 } from '../../lib/map/floorplan';
+import WalkIn2FEditor from './WalkIn2FEditor';
 
 /**
  * DEV-only geometry editor. A flat 818×820 frame (the same coordinate space
@@ -108,6 +109,7 @@ type DragTarget = {
 
 export default function GeometryEditor() {
   const [open, setOpen] = useState(false);
+  const [tab, setTab] = useState<'expo' | 'walkin'>('expo');
   const [items, setItems] = useState<GeomItem[]>(INITIAL_ITEMS);
   const [hull, setHull] = useState({
     tx: 242.5,
@@ -432,8 +434,36 @@ export default function GeometryEditor() {
     <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/80 p-4">
       <div className="flex max-h-full w-full max-w-5xl flex-col border border-[#34343a] bg-[#0c0c0f] text-white">
         <div className="flex items-center justify-between border-b border-[#34343a] px-3 py-2">
-          <div className="font-mono text-[11px]">
-            Geometry editor — drag · rotate · shift-click group · scale handle
+          <div className="flex items-center gap-3">
+            <div className="flex gap-1">
+              <button
+                type="button"
+                onClick={() => setTab('expo')}
+                className={`border px-2 py-1 text-[10px] ${
+                  tab === 'expo'
+                    ? 'border-[#ff2d6f] bg-[#ff2d6f] text-white'
+                    : 'border-[#34343a] text-[#8f8f8f]'
+                }`}
+              >
+                Career Expo
+              </button>
+              <button
+                type="button"
+                onClick={() => setTab('walkin')}
+                className={`border px-2 py-1 text-[10px] ${
+                  tab === 'walkin'
+                    ? 'border-[#ff2d6f] bg-[#ff2d6f] text-white'
+                    : 'border-[#34343a] text-[#8f8f8f]'
+                }`}
+              >
+                Walk-in 2F
+              </button>
+            </div>
+            <div className="font-mono text-[10px] text-[#8f8f8f]">
+              {tab === 'expo'
+                ? 'drag · rotate · shift-click group · scale handle'
+                : 'position the second-floor hull and room grid'}
+            </div>
           </div>
           <button
             type="button"
@@ -444,7 +474,11 @@ export default function GeometryEditor() {
           </button>
         </div>
 
-        <div className="flex min-h-0 flex-1 overflow-auto">
+        <div
+          className={`min-h-0 flex-1 overflow-auto ${
+            tab === 'expo' ? 'flex' : 'hidden'
+          }`}
+        >
           <div className="flex-1 overflow-auto p-4">
             <div
               className="relative"
@@ -826,6 +860,8 @@ export default function GeometryEditor() {
             )}
           </div>
         </div>
+
+        {tab === 'walkin' && <WalkIn2FEditor />}
       </div>
     </div>
   );

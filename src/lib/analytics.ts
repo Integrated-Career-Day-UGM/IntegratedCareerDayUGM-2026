@@ -1,10 +1,11 @@
-import { uuidv7 } from './uuidv7';
+import { uuidv6 } from './uuidv6';
 
 export type AnalyticsEventType =
   | 'bookmark.add'
   | 'bookmark.remove'
   | 'bookmark.view'
   | 'booth.select'
+  | 'walkin.room.select'
   | 'search.query'
   | 'sidebar.tab.switch'
   | 'area.switch'
@@ -45,16 +46,16 @@ function isBrowser(): boolean {
 }
 
 function getUserId(): string {
-  if (!isBrowser()) return uuidv7();
+  if (!isBrowser()) return uuidv6();
   try {
     let id = window.localStorage.getItem(USER_ID_KEY);
     if (!id) {
-      id = uuidv7();
+      id = uuidv6();
       window.localStorage.setItem(USER_ID_KEY, id);
     }
     return id;
   } catch {
-    return uuidv7();
+    return uuidv6();
   }
 }
 
@@ -176,7 +177,7 @@ export function track(eventType: AnalyticsEventType, payload: AnalyticsPayload =
   if (!isBrowser()) return;
 
   const event: AnalyticsEvent = {
-    eventId: uuidv7(),
+    eventId: uuidv6(),
     userId: getUserId(),
     userAgent: window.navigator.userAgent || '',
     timestamp: new Date().toISOString(),

@@ -7,7 +7,9 @@ import { MapFluidRoot } from '../../components/map/map-fluid-root';
 import { ScrollArea } from '../../components/ui/scroll-area';
 import HappeningNow from './HappeningNow';
 import VenueList from './VenueList';
+import WalkInList from './WalkInList';
 import BoothDetail from './BoothDetail';
+import WalkInDetail from './WalkInDetail';
 import FacilityDetail from './FacilityDetail';
 import BookmarkList from './BookmarkList';
 import Insights from './Insights';
@@ -40,6 +42,11 @@ export default function MobileBottomSheet() {
   const sidebarMode = useMapStore((s) => s.sidebarMode);
   const sidebarTab = useMapStore((s) => s.sidebarTab);
   const setSidebarTab = useMapStore((s) => s.setSidebarTab);
+  const selectedWalkInRoomId = useMapStore((s) => s.selectedWalkInRoomId);
+  const selectedAreaId = useMapStore((s) => s.selectedAreaId);
+  const selectedTrackId = useMapStore((s) => s.selectedTrackId);
+  const walkInMode =
+    selectedTrackId === 'walk-in-interview' || selectedAreaId === 'hall-b';
   // Gliding hover highlight across the tab rail (§0).
   const railRef = useRef<HTMLElement>(null);
   const hover = useFluidHover(railRef, { axis: 'x' });
@@ -143,7 +150,12 @@ export default function MobileBottomSheet() {
     if (sidebarTab === 'info') return <EventInfo />;
 
     if (sidebarMode === 'facility') return <FacilityDetail />;
-    if (sidebarMode === 'detail') return <BoothDetail />;
+    // Same detail mode as desktop: a selected walk-in room wins over the
+    // booth card; the store keeps the two mutually exclusive.
+    if (sidebarMode === 'detail')
+      return selectedWalkInRoomId ? <WalkInDetail /> : <BoothDetail />;
+    // Hall B has no expo booths — show every bilik booking instead.
+    if (walkInMode) return <WalkInList />;
     return <VenueList />;
   };
 
@@ -165,7 +177,7 @@ export default function MobileBottomSheet() {
         {/* Drag handle — taller safe area, kept above the scroll viewport
             so it cannot steal vertical list gestures. */}
         <div
-          className="flex shrink-0 cursor-grab items-center justify-center pt-2 pb-4 active:cursor-grabbing"
+          className="relative flex shrink-0 cursor-grab items-center justify-center pt-2 pb-4 active:cursor-grabbing"
           style={{ touchAction: 'none' }}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
@@ -179,7 +191,7 @@ export default function MobileBottomSheet() {
         <ScrollArea
           className="min-h-0 flex-1"
           onPointerDown={raiseFromPeek}
-          viewportClassName="touch-pan-y overscroll-contain"
+          viewportClassName="scroll-fade touch-pan-y overscroll-contain"
         >
           <div className="@container flex flex-col gap-3 px-4 pb-6 pt-3">
             {sidebarTab === 'home' &&

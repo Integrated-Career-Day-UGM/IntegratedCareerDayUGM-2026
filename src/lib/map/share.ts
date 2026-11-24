@@ -1,46 +1,19 @@
-import { getBooth, getCompanyForBooth } from '../data';
-
+/**
+ * Share URLs point at the booth card on our own map page, not the company's
+ * external site: `/map?booth=<id>` restores the exact card, its map context
+ * and the generated card artwork for whoever opens the link.
+ */
 export function getBoothShareUrl(boothId: string): string {
   if (typeof window === 'undefined') return '';
-  const url = new URL(window.location.href);
+  const url = new URL('/map', window.location.origin);
   url.searchParams.set('booth', boothId);
   return url.toString();
 }
 
-export async function shareBooth(boothId: string): Promise<boolean> {
-  const booth = getBooth(boothId);
-  const company = getCompanyForBooth(boothId);
-  if (!booth) return false;
-
-  const url = getBoothShareUrl(boothId);
-  const title = `${company?.name ?? booth.label} — Booth ${booth.code}`;
-
-  const openingsText =
-    company?.openings && company.openings.length > 0
-      ? `\nOpenings: ${company.openings.map((o) => `${o.title} (${o.type})`).join(', ')}`
-      : '';
-
-  const text = `Check out ${company?.name ?? booth.label} at Booth ${booth.code} at UGM Integrated Career Days 2026.${openingsText}`;
-
-  if (typeof navigator !== 'undefined' && navigator.share) {
-    try {
-      await navigator.share({ title, text, url });
-      return true;
-    } catch (err) {
-      if (err instanceof Error && err.name !== 'AbortError') {
-        // Fall through to clipboard
-      }
-    }
-  }
-
-  if (typeof navigator !== 'undefined' && navigator.clipboard) {
-    try {
-      await navigator.clipboard.writeText(`${text}\n${url}`);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  return false;
+/** Link-only share targets: no pre-filled copy, no referral text. */
+export function getShareIntent(network: 'x' | 'whatsapp', url: string): string {
+  const encoded = encodeURIComponent(url);
+  return network === 'x'
+    ? `https://x.com/intent/post?url=${encoded}`
+    : `https://wa.me/?text=${encoded}`;
 }

@@ -12,6 +12,7 @@
   --color-border: #27272a;
   --color-muted-foreground: #8f8f8f;
   --color-hover: #262626;
+  --color-active: #1c1c1c;
 
   /* Role tokens — 1:1 with the Figma fills they replace (§2; zero visual
       change). Elevation is surface-1..8; these are surface FILLS. */
