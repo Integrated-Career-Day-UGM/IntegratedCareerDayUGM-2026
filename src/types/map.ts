@@ -65,8 +65,29 @@ export type Booth = {
 };
 
 export type JobOpening = {
+  id: string;
   title: string;
   type: string;
+  description?: string | null;
+  location?: string | null;
+  deadline?: string | null;
+  applyUrl?: string | null;
+  posterUrl?: string | null;
+  posterDownloadUrl?: string | null;
+  updatedAt?: string | null;
+  isMock?: boolean;
+  dataSource?: string | null;
+  availableDays?: string[];
+};
+
+export type OpeningsStatus = 'ok' | 'unavailable';
+
+export type OpeningsFile = {
+  meta: {
+    updatedAt: string | null;
+    status: OpeningsStatus;
+  };
+  items: (JobOpening & { companyId: string })[];
 };
 
 export type Company = {
@@ -78,6 +99,7 @@ export type Company = {
   programUrl: string | null;
   logoUrl: string | null;
   posterUrl?: string | null;
+  posterDownloadUrl?: string | null;
   description?: string | null;
   openings: JobOpening[];
 };
@@ -129,6 +151,9 @@ export type UiStrings = {
     shortcutKey: string;
     resultsLabel: string;
     emptyResults: string;
+    emptyTitle: string;
+    emptyBody: string;
+    emptyAction: string;
     filters: {
       trigger: string;
       title: string;
@@ -140,6 +165,11 @@ export type UiStrings = {
   tabs: Record<string, string>;
   quickFind: { title: string; items: Record<string, string> };
   venueList: Record<string, string>;
+  walkInList: {
+    title: string;
+    emptyTitle: string;
+    emptyBody: string;
+  };
   happeningNow: Record<string, string>;
   boothDetail: Record<string, string> & { shareLabel: string };
   walkInDetail: {
@@ -152,6 +182,8 @@ export type UiStrings = {
     title: string;
     stageLabel: string;
     roomPrefix: string;
+    emptyTitle: string;
+    emptyBody: string;
   };
   saved: Record<string, string>;
   insights: {
@@ -196,6 +228,7 @@ export type PosterInfo = {
   subtitle: string;
   src: string;
   accent: string;
+  downloadUrl?: string;
 };
 
 export type FacilityInfo = {

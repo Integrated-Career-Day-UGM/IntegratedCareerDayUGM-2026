@@ -4,9 +4,9 @@ import SelectionFrame from '../../components/ui/SelectionFrame';
 import Shuffle from '../../components/map/Shuffle';
 import { ui } from '../../lib/data';
 
-const MIN_VISIBLE_MS = 1800;
+const MIN_VISIBLE_MS = 400;
 const MAX_VISIBLE_MS = 6000;
-const EXIT_MS = 1100;
+const EXIT_MS = 400;
 
 type ReadyWindow = Window & { __icdMapReady?: boolean };
 
@@ -115,7 +115,7 @@ export default function MapSplash() {
         pixelFill="#2a2a2a"
         pixelBorder="#ff2d6f"
         mosaic={0.1}
-        animationStepDuration={0.34}
+        animationStepDuration={0.18}
         pattern="random"
         randomness={0.72}
         pixelAnimation="pop"

@@ -215,6 +215,8 @@ export default function MapSidebar() {
             content="Pick a day to switch the schedule"
             side="left"
             sideOffset={10}
+            contentClassName="z-[120]"
+            className="border border-line bg-[#141416] text-white shadow-surface-3"
           >
             <div className="absolute right-3.5 top-[66px]">
               <div className="grid grid-cols-2">

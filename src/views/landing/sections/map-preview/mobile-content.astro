@@ -1,0 +1,87 @@
+---
+// Native mobile map preview content matching Figma node 1487:18219.
+---
+
+<div class="relative z-10 flex h-full flex-col items-center gap-8 px-4 pb-7 pt-[42px]" data-name="mobile-map-preview-content">
+  {/* Title + subtitle */}
+  <div class="flex w-[326px] flex-col items-start gap-1">
+    <div class="font-priego text-[28px] font-bold leading-[32px] text-[#1f2f48]">
+      <p>Denah</p>
+      <p>Interaktif</p>
+    </div>
+    <p class="font-poppins w-[326px] text-[14px] font-medium leading-[20px] text-white">
+      Gunakan peta interaktif untuk menemukan dream companymu!
+    </p>
+  </div>
+
+  {/* Options + snapshot */}
+  <div class="flex flex-col items-center gap-3">
+    <div class="relative w-[329px]">
+      {/* Denah label */}
+      <div class="absolute left-[1.5px] top-0 bg-[#ff316b] px-[4.319px] py-[1.08px]">
+        <p class="font-priego whitespace-nowrap text-[12.957px] font-bold leading-[15.116px] text-[#fffdfd]">Denah</p>
+      </div>
+
+      <div class="grid w-[329px] grid-cols-2 gap-x-[0.5px] gap-y-[0.888px] pt-[28.45px]">
+        {/* GIK — selected */}
+        <div class="flex h-[41.336px] flex-col items-start bg-[#ff4361] p-[5.041px]">
+          <div class="font-priego text-[10px] font-bold leading-[8.066px] text-white">
+            <p>Gelanggang Inovasi</p>
+            <p>dan Kreativitas UGM</p>
+          </div>
+        </div>
+
+        {/* Career Expo */}
+        <div class="flex h-[41.336px] flex-col items-start bg-white p-[5.041px]">
+          <div class="font-priego text-[10px] font-bold leading-[8.066px] text-[#1f2f48]">
+            <p>Career Expo</p>
+            <p>(Student Center)</p>
+          </div>
+        </div>
+
+        {/* Interview + Counseling */}
+        <div class="flex h-[41.336px] flex-col items-start gap-[1.512px] bg-white p-[5.041px]">
+          <div class="font-priego text-[8px] font-bold leading-[8.066px] text-[#1f2f48]">
+            <p>Walk-in interview</p>
+            <p>& Career Counseling</p>
+          </div>
+          <p class="font-priego text-[6px] font-bold leading-[7.057px] text-[#1f2f48]">Ruang C001-002</p>
+        </div>
+
+        {/* Huawei */}
+        <div class="flex h-[41.336px] flex-col items-start gap-[1.512px] bg-white p-[5.041px]">
+          <div class="font-priego text-[8px] font-bold leading-[8.066px] text-[#1f2f48]">
+            <p>Walk-in interview</p>
+            <p>PT Huawei Tech</p>
+          </div>
+          <p class="font-priego text-[6px] font-bold leading-[7.057px] text-[#1f2f48]">Student Center Lt. 2</p>
+        </div>
+      </div>
+    </div>
+
+    {/* Map snapshot */}
+    <div class="relative h-[344px] w-[326px] overflow-hidden border-[8px] border-solid border-[#f9a395] bg-[#ececec] shadow-[13.481px_2.157px_16.986px_0px_rgba(254,115,90,0.4)]">
+      <img
+        alt="Peta Gelanggang Inovasi dan Kreativitas UGM"
+        src="/landing/map-preview/gik-isometric.webp"
+        class="absolute left-1/2 top-1/2 h-[377px] w-[570px] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+
+    {/* CTA */}
+    <a
+      href="/map/"
+      aria-label="Lihat peta interaktif"
+      class="figma-link flex w-[185px] items-center gap-[7.325px] bg-[#161616] px-[10.143px] py-[7.236px]"
+    >
+      <span class="flex rotate-180 items-center justify-center">
+        <img alt="" src="/landing/map-preview/union.svg" class="block size-[11.537px] max-w-none" />
+      </span>
+      <span class="font-priego whitespace-nowrap text-[15.309px] font-bold leading-normal text-[#e1e1e1]">
+        Lihat peta interaktif
+      </span>
+    </a>
+  </div>
+</div>

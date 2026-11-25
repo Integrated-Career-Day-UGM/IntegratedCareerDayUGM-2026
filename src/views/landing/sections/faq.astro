@@ -1,0 +1,125 @@
+---
+// FAQ section (Figma node 1487:20057).
+// The "FAQ" headline is exported from Figma as SVG (node 1493:24560) instead
+// of being rebuilt with CSS. Copy lives in ./faq/data.ts.
+import FaqAccordion from './faq/FaqAccordion.tsx';
+import { faqItems } from './faq/data';
+---
+
+<section class="faq-section relative w-full overflow-clip bg-[#f4faff] px-8 pb-[40px] pt-[60px] md:py-20" data-name="FAQ" id="faq">
+  <div class="mx-auto flex w-full max-w-[310px] flex-col items-center md:max-w-[720px]">
+    <img
+      src="/landing/faq-header.svg"
+      alt="FAQ — Frequently Asked Question"
+      class="h-auto w-[246px] md:w-[320px]"
+      width="246"
+      height="80"
+      loading="lazy"
+      decoding="async"
+    />
+
+    <div class="mt-3 w-full md:mt-8">
+      <FaqAccordion items={faqItems} client:visible />
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  /* ── Figma FAQ surface ─────────────────────────────────────────────────────
+     The installed FF accordion owns the spring height/chevron motion and the
+     gliding hover. These rules only repaint its rows as the flat, square
+     Figma cards: full-bleed blue fills, navy question text, white answer. */
+  .faq-figma {
+    --color-hover: rgba(255, 255, 255, 0.12);
+  }
+
+  .faq-figma button {
+    padding: 19.035px !important;
+    border-radius: 0 !important;
+  }
+
+  .faq-figma button > span:first-child {
+    text-align: center;
+    font-size: 14.752px;
+    line-height: 20.939px;
+    letter-spacing: -0.295px;
+  }
+
+  .faq-figma button > span:first-child > span {
+    text-align: center;
+  }
+
+  .faq-figma button span {
+    color: #1f2f48;
+  }
+
+  .faq-figma button svg {
+    color: #1f2f48;
+  }
+
+  .faq-figma [data-open] button svg {
+    color: #fff;
+  }
+
+  .faq-figma button > span:last-child {
+    display: inline-flex;
+    width: 19.035px;
+    height: 19.035px;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+  }
+
+  .faq-figma [data-open] button > span:last-child {
+    background: transparent;
+  }
+
+  .faq-figma [role="region"] > div > div {
+    padding: 0 19.035px 19.035px;
+    color: #fff;
+    font-size: 13.325px;
+    line-height: 20.939px;
+    letter-spacing: -0.2665px;
+  }
+
+  .faq-figma [role="region"] p {
+    color: #fff;
+  }
+
+  .faq-figma .bg-hover {
+    border-radius: 0 !important;
+  }
+
+  /* The pink dashed band that separates the Figma FAQ rows. */
+  .faq-divider {
+    width: 100%;
+    height: 6px;
+    background-image: repeating-linear-gradient(
+      90deg,
+      #ff9ec4 0 6px,
+      transparent 6px 12px
+    );
+  }
+
+  @media (min-width: 768px) {
+    .faq-figma button {
+      padding: 24px !important;
+    }
+
+    .faq-figma button > span:first-child {
+      font-size: 18px;
+      line-height: 24px;
+    }
+
+    .faq-figma button > span:last-child {
+      width: 24px;
+      height: 24px;
+    }
+
+    .faq-figma [role="region"] > div > div {
+      padding: 0 24px 24px;
+      font-size: 15px;
+      line-height: 22px;
+    }
+  }
+</style>

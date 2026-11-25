@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMapStore } from '../../stores/mapStore';
 import { posters, ui } from '../../lib/data';
 import type { PosterInfo } from '../../types/map';
 import { cn } from '../../lib/utils/cn';
 import { surfaceClasses } from '../../lib/surface-classes';
 import HoverZoomImage from './HoverZoomImage';
+import PosterModal from './PosterModal';
 
 function PosterSkeleton() {
   return (
@@ -47,7 +47,7 @@ function PosterArtwork({
             className={cn('h-full w-full', contain ? 'object-contain' : 'object-cover')}
           />
           {compact && (
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-1.5 pb-1 pt-4 text-[8px] font-medium text-white">
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-1.5 pb-1 pt-4 text-[0.625rem] font-medium text-white md:text-[8px]">
               {poster.title}
             </div>
           )}
@@ -73,6 +73,7 @@ export default function PosterFolder({
   hideTitle = false,
   hint = ui.posters.hint,
   onOpenInfo,
+  consumePosterFocus = false,
 }: {
   className?: string;
   /** Folder is the desktop gimmick; carousel is the calmer mobile version. */
@@ -84,53 +85,68 @@ export default function PosterFolder({
   hint?: string;
   /** Map folders use this to jump to the matching Info carousel. */
   onOpenInfo?: () => void;
+  /** Only the Info company carousel should consume cross-surface poster focus. */
+  consumePosterFocus?: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
   const [selected, setSelected] = useState<number | null>(null);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [broken, setBroken] = useState<Record<string, boolean>>({});
+  const rootRef = useRef<HTMLDivElement>(null);
   const isSkeleton = items.length === 0;
-  const displayItems = isSkeleton ? SKELETON_ITEMS : items;
+  const displayItems = useMemo(
+    () =>
+      isSkeleton
+        ? SKELETON_ITEMS
+        : items.filter((poster) => Boolean(poster.src) && !broken[poster.id]),
+    [broken, isSkeleton, items],
+  );
   const current = selected === null ? null : displayItems[selected];
+  const activeCarouselIndex = Math.min(
+    carouselIndex,
+    Math.max(0, displayItems.length - 1),
+  );
+  const posterFocusId = useMapStore((s) => s.posterFocusId);
+  const setPosterFocus = useMapStore((s) => s.setPosterFocus);
 
   useEffect(() => {
-    if (selected === null) return;
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setSelected(null);
-      if (event.key === 'ArrowLeft') {
-        setSelected((index) => (index === null ? null : Math.max(0, index - 1)));
-      }
-      if (event.key === 'ArrowRight') {
-        setSelected((index) =>
-          index === null ? null : Math.min(displayItems.length - 1, index + 1),
-        );
-      }
-    };
-    window.addEventListener('keydown', onKey);
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      window.removeEventListener('keydown', onKey);
-      document.body.style.overflow = previous;
-    };
-  }, [selected]);
+    if (!consumePosterFocus || !posterFocusId || isSkeleton) return;
+    // Desktop and mobile both mount EventInfo in separate islands; only the
+    // visible carousel may consume the focus request.
+    if (!rootRef.current || rootRef.current.offsetParent === null) return;
+    const index = displayItems.findIndex((poster) => poster.id === posterFocusId);
+    if (index < 0) return;
+    setCarouselIndex(index);
+    setSelected(index);
+    setPosterFocus(null);
+    rootRef.current
+      ?.closest('#company-poster-carousel')
+      ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, [
+    consumePosterFocus,
+    posterFocusId,
+    displayItems,
+    isSkeleton,
+    setPosterFocus,
+  ]);
 
-  if (items.length === 0 && !isSkeleton) return null;
+  // All posters missing/broken: render no carousel node at all.
+  if (!isSkeleton && displayItems.length === 0) return null;
 
   return (
-    <div className={cn('select-none', className)}>
+    <div ref={rootRef} className={cn('select-none', className)}>
       {variant === 'carousel' ? (
         <>
           <div className="mb-2 flex items-end justify-between">
             {!hideTitle && (
-              <div className="font-heading text-[15px] font-bold leading-none text-white">
+              <div className="font-heading text-[1.0625rem] font-bold leading-none text-white md:text-[15px]">
                 {title}
               </div>
             )}
-            <div className="ml-auto text-[9px] text-[#8f8f8f]">
+            <div className="ml-auto text-[0.6875rem] text-[#8f8f8f] md:text-[9px]">
               {isSkeleton
                 ? ui.posters.loading
-                : ui.posters.count.replace('{count}', String(items.length))}
+                : ui.posters.count.replace('{count}', String(displayItems.length))}
             </div>
           </div>
           <div
@@ -162,7 +178,7 @@ export default function PosterFolder({
                   if (!isSkeleton) setSelected(index);
                 }}
                 className={cn(
-                  'w-[96px] shrink-0 snap-start overflow-hidden rounded-md border border-line text-left',
+                  'w-[calc(50%_-_0.25rem)] shrink-0 snap-start overflow-hidden rounded-md border border-line text-left md:w-[120px]',
                   surfaceClasses(3, 3),
                 )}
               >
@@ -174,14 +190,14 @@ export default function PosterFolder({
                     compact
                   />
                 </div>
-                <div className="truncate px-2 py-1.5 text-[9px] font-medium text-white">
+                <div className="truncate px-2 py-1.5 text-[0.75rem] font-medium text-white md:text-[9px]">
                   {poster.title}
                 </div>
               </button>
             ))}
           </div>
-          <div className="mt-1 text-[9px] tabular-nums text-[#8f8f8f]">
-            {isSkeleton ? '' : `${carouselIndex + 1} / ${items.length}`}
+          <div className="mt-1 text-[0.6875rem] tabular-nums text-[#8f8f8f] md:text-[9px]">
+            {isSkeleton ? '' : `${activeCarouselIndex + 1} / ${displayItems.length}`}
           </div>
         </>
       ) : (
@@ -304,83 +320,28 @@ export default function PosterFolder({
         </>
       )}
 
-      {current &&
-        createPortal(
-          <div
-            className="fixed inset-0 z-[200] flex items-center justify-center bg-black/70 p-4 backdrop-blur-md"
-            onClick={() => setSelected(null)}
-          >
-            <div
-              className={cn(
-                'flex max-h-[88vh] w-full max-w-[420px] flex-col overflow-hidden rounded-md border border-line md:max-w-[540px]',
-                surfaceClasses(4, 4),
-              )}
-              onClick={(event) => event.stopPropagation()}
-            >
-              <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
-                <div className="min-w-0">
-                  <div className="truncate font-heading text-[16px] font-bold text-white">
-                    {current.title}
-                  </div>
-                  <div className="mt-0.5 truncate text-[10px] text-[#8f8f8f]">
-                    {current.subtitle}
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setSelected(null)}
-                  aria-label={ui.posters.close}
-                  className="flex size-8 shrink-0 items-center justify-center text-[#8f8f8f] transition-colors hover:text-white"
-                >
-                  <X size={17} />
-                </button>
-              </div>
-
-              <div className="relative min-h-0 flex-1 bg-[#0c0c0f]">
-                <div className="flex h-full min-h-[280px] items-center justify-center">
-                  <PosterArtwork
-                    poster={current}
-                    broken={!!broken[current.id]}
-                    onError={() =>
-                      setBroken((state) => ({ ...state, [current.id]: true }))
-                    }
-                    contain
-                    zoom
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between border-t border-line px-3 py-2">
-                <button
-                  type="button"
-                  onClick={() => setSelected((index) => Math.max(0, (index ?? 0) - 1))}
-                  disabled={selected === 0}
-                  aria-label={ui.posters.previous}
-                  className="flex size-8 items-center justify-center text-[#d4d4d8] transition-colors hover:text-white disabled:opacity-25"
-                >
-                  <ChevronLeft size={18} />
-                </button>
-                <span className="text-[10px] tabular-nums text-[#8f8f8f]">
-                  {(selected ?? 0) + 1} / {displayItems.length}
-                </span>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setSelected((index) =>
-                      Math.min(displayItems.length - 1, (index ?? 0) + 1),
-                    )
-                  }
-                  disabled={selected === displayItems.length - 1}
-                  aria-label={ui.posters.next}
-                  className="flex size-8 items-center justify-center text-[#d4d4d8] transition-colors hover:text-white disabled:opacity-25"
-                >
-                  <ChevronRight size={18} />
-                </button>
-              </div>
-            </div>
-          </div>,
-          document.body,
-        )}
+      <PosterModal
+        poster={current}
+        onClose={() => setSelected(null)}
+        onPrevious={
+          selected !== null && selected > 0
+            ? () => setSelected((index) => Math.max(0, (index ?? 0) - 1))
+            : undefined
+        }
+        onNext={
+          selected !== null && selected < displayItems.length - 1
+            ? () =>
+                setSelected((index) =>
+                  Math.min(displayItems.length - 1, (index ?? 0) + 1),
+                )
+            : undefined
+        }
+        index={selected ?? 0}
+        total={displayItems.length}
+        closeLabel={ui.posters.close}
+        previousLabel={ui.posters.previous}
+        nextLabel={ui.posters.next}
+      />
     </div>
   );
 }

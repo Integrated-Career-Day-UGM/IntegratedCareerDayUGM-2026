@@ -2,7 +2,8 @@ import { motion } from 'motion/react';
 import { useMapStore } from '../../stores/mapStore';
 import KpiTile from '../../components/map/kpi/KpiTile';
 import type { KpiData } from '../../components/map/kpi/KpiTile';
-import { ui, booths, sessions, event, companies } from '../../lib/data';
+import InsightsSkeleton from '../../components/map/kpi/InsightsSkeleton';
+import { ui, booths, sessions, event, companies, openingsMeta } from '../../lib/data';
 
 /** Swift-Charts-like categorical palette for the sector bars only. */
 const SECTOR_COLORS = ['#5b8def', '#4fc3a1', '#f2a65a', '#9b8cff', '#e5657a', '#4fc3d9'];
@@ -70,34 +71,44 @@ const HIRING_COMPANIES = new Set(
  * big values, small muted labels. Every number is derived from the event
  * data (companies, openings, sessions, bookmarks) — no invented analytics.
  */
-export default function Insights() {
+export default function Insights({ loading = false }: { loading?: boolean }) {
   const bookmarkedIds = useMapStore((s) => s.bookmarkedIds);
   const selectedDayId = useMapStore((s) => s.selectedDayId);
   const cards = ui.insights.cards;
   const copy = ui.insights.kpi;
 
+  if (loading) return <InsightsSkeleton />;
+
   const sessionsToday = sessions.filter((s) => s.dayId === selectedDayId).length;
 
-  const stats = [
+  const stats: (KpiData & { key: string })[] = [
     {
       key: 'companies',
       label: cards.companies.label,
-      value: String(HIRING_COMPANIES),
+      value: HIRING_COMPANIES,
+      format: whole,
+      caption: cards.companies.caption,
     },
     {
       key: 'openRoles',
       label: cards.openRoles.label,
-      value: String(TOTAL_OPENINGS),
+      value: TOTAL_OPENINGS,
+      format: whole,
+      caption: cards.openRoles.caption,
     },
     {
       key: 'sessions',
       label: cards.sessions.label,
-      value: String(sessionsToday),
+      value: sessionsToday,
+      format: whole,
+      caption: cards.sessions.caption,
     },
     {
       key: 'bookmarks',
       label: cards.bookmarks.label,
-      value: cards.bookmarks.value.replace('{count}', String(bookmarkedIds.length)),
+      value: bookmarkedIds.length,
+      format: whole,
+      caption: cards.bookmarks.caption,
     },
   ];
 
@@ -171,15 +182,13 @@ export default function Insights() {
       {/* Bento: visitor facts and real distributions share one hairline
           panel — no nested cards, no section label between them. */}
       <div className="grid grid-cols-2 gap-px border border-line bg-[#2a2a2a]">
-        {stats.map((stat) => (
-          <div key={stat.key} className="bg-[#141416] px-3 py-3">
-            <div className="truncate text-[11px] text-[#8f8f8f]">{stat.label}</div>
-            <div className="mt-1 flex items-baseline gap-1.5 overflow-hidden">
-              <span className="font-heading text-[24px] font-bold leading-none text-white">
-                {stat.value}
-              </span>
-            </div>
-          </div>
+        {stats.map(({ key, ...stat }) => (
+          <KpiTile
+            key={key}
+            {...stat}
+            variant="stat"
+            className="bg-[#141416]"
+          />
         ))}
         {kpis.map((kpi, index) => (
           <KpiTile
@@ -190,6 +199,13 @@ export default function Insights() {
           />
         ))}
       </div>
+      {TOTAL_OPENINGS === 0 && (
+        <p className="mt-2 text-[10.5px] text-[#8f8f8f]">
+          {openingsMeta.status === 'unavailable'
+            ? ui.boothDetail.openingsUnavailableTitle
+            : ui.boothDetail.openingsEmptyTitle}
+        </p>
+      )}
 
       {/* Companies per sector — one flat chart; no dividers between rows. */}
       <div className="section-label mt-5 mb-2.5">{ui.insights.sectorsLabel}</div>

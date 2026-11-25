@@ -129,3 +129,5 @@ skills-lock.json
 # Promote the ones that matter into docs/screenshots/reference/ before
 # committing. The inbox itself never goes to the remote repo.
 /docs/screenshots/inbox/
+/scripts/seed
+/public/landing

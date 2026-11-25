@@ -33,19 +33,9 @@ const zones = readJson('zones.json');
 const companyByName = new Map();
 for (const company of oldCompanies) {
   const key = normalize(company.name);
-  const previous = companyByName.get(key);
-  if (!previous) {
+  if (!companyByName.has(key)) {
     companyByName.set(key, company);
-    continue;
   }
-  // Keep one canonical row but merge mock openings from duplicate names.
-  const openings = [...(previous.openings ?? [])];
-  for (const opening of company.openings ?? []) {
-    if (!openings.some((row) => row.title === opening.title && row.type === opening.type)) {
-      openings.push(opening);
-    }
-  }
-  companyByName.set(key, { ...previous, openings });
 }
 
 const companyIdByName = new Map();
@@ -64,7 +54,11 @@ for (const row of boothsYaml.booths) {
   companyIdByName.set(key, id);
   companies.push(
     existing
-      ? { ...existing, description: descriptionByName.get(key) ?? existing.description ?? null }
+      ? {
+          ...existing,
+          description: descriptionByName.get(key) ?? existing.description ?? null,
+          openings: [],
+        }
       : {
           id,
           name: row.company,

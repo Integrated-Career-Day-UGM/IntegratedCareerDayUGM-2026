@@ -34,10 +34,19 @@ Rules for all agents working in this repo.
 - Default to pure HTML + CSS for all UI. Only if a component or design is too unusual to model that way, export the asset from Figma (SVG/PNG) and commit it under `public/` instead of hand-hacking a recreation.
 - Don't reach for image assets for things that are trivially CSS (gradients, shadows, simple shapes, rounded rects).
 
-## 3. Design source: user prompt + Figma file — list nodes before fetching
+## 3. Figma design-to-code workflow
 
-- Every design/implementation decision must be inspired by or based on the **user's prompt** and the **Figma file**. Do not invent designs from general taste.
-- To reduce token usage: when a user refers to "the current frame" or a screen in Figma, **first list the candidate nodes** (names + node IDs) and ask which one they mean. Only fetch the full design context/screenshot for the node the user confirms.
+- Base implementation decisions on the user's prompt and the Figma design; do not invent visual details from general taste.
+- **Exact node links are confirmation.** If the user supplies one or more node-specific Figma URLs, use those nodes directly. Treat multiple supplied links as multiple requested targets unless they conflict. List candidate nodes and ask which one only when the user refers vaguely to an unspecified frame or the target links are genuinely ambiguous.
+- Before editing, inspect the relevant routes/components, fonts, and `public/` assets. Reuse matching local assets and project fonts; do not export duplicates.
+- For each confirmed target, use Figma `get_design_context` with its screenshot and the required `figma-design-to-code` skill. Treat generated code as the primary source for exact copy, font family/size/weight, colors, dimensions, wrapping, and asset placement. Adapt its markup/layout to project conventions, but do not silently replace explicit Figma values with approximate site tokens or guessed typography.
+- If the user provides a Figma code snippet or exact utility classes, preserve those values in the implementation (including the named font family); do not substitute a similar family, alter tracking, or force different line breaks. For visible strokes/outlines, inspect the Figma text effects/layers and match the actual stroke instead of guessing its width or color.
+- Generated Figma code is a reference, not a paste-in implementation: avoid carrying over irrelevant absolute positioning or temporary Figma asset URLs. Use the screenshot to verify composition, never as a shipped image.
+- If artwork is complex, first look for an exact local export. If the user asks for an export or specifies a format, honor that format and use `download_assets` on the exact node (`defaultFormat: "png"` for PNG, `"svg"` for SVG); prefer the selected node's composite `export` over unrelated child assets. Save it under `public/`, replace the old callsite, and remove temporary Figma URLs from runtime code. Do not hand-redraw complex illustrations or decals.
+- Copy descendant node IDs exactly from Figma metadata/context; do not guess them from a parent ID or instance prefix. If an export is empty/null, re-check the canonical child ID and confirm the export response's `nodeId` before proceeding.
+- Preserve exported asset geometry/aspect ratio. Check the downloaded file is non-empty, confirm its dimensions, and verify the page references the new local asset at the intended slot; do not assume that exporting alone updated the implementation.
+- Use a supplied mobile screenshot/frame as the mobile target. If the user supplied desktop and mobile nodes, inspect and implement both; do not ask them to identify nodes they already linked or infer mobile from desktop when a mobile reference exists.
+- Ask a follow-up only when a material choice remains unresolved after inspecting the supplied prompt, nodes, screenshots, and existing assets. Keep implementation proportional to the request; make only the requested changes and do not add speculative interactions or unrelated polish.
 ## Debugging and Map Island Rules (MapLibre + React + Zustand)
 
 ### 1. Never pass `undefined` into library option objects

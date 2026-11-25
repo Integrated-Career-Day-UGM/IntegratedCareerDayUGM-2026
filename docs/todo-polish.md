@@ -355,6 +355,22 @@ what floats.
       the carousel cadence, mobile list scrolling, and the compass after a
       two-finger map rotation.
 
+### E. Mobile screenshot pass — next sprint
+
+- [ ] Rework the narrow top-control band shown in the supplied mobile
+      screenshot: keep Search visually primary, give the filter control a
+      clear separate hit area, and prevent the quick-find chips from feeling
+      crammed against the search row or map chrome.
+- [ ] Check the layout at 320 / 360 / 375 / 390 / 430px widths. No clipped
+      search text, wrapped/overlapping controls, or registration/map labels
+      obscured by the top controls.
+- [ ] Preserve the current Persona 5-inspired dark/pink art direction and
+      map-first composition. Solve the hierarchy with spacing, sizing, and
+      grouping before adding another component library.
+- [ ] Keep quick-find chips visually compact but give each a reliable
+      44px-effective touch target; verify tap accuracy and separation from
+      map pan/zoom gestures on real mobile hardware.
+
 ### Acceptance
 - [ ] Screenshots 375 / 768 / 1440; sidebar reads as ONE surface with
       dividers; the dominant element matches the table above per view.
@@ -995,17 +1011,7 @@ authority: FF spring tokens for values, Emil's decision framework for
 whether/why/how, custom-motion.md for recipes. Two ideas agree on the core:
 **springs/tokens, not hand-written durations; transform + opacity only.**
 
-### Should it animate at all? (Emil's frequency test)
 
-- [ ] **Never animate:** Ctrl K focus (keyboard-initiated), zoom buttons,
-      compass reset, day-picker switches, sidebar tab switches, search
-      typing — high-frequency actions get instant state changes (Raycast
-      rule).
-- [ ] **Standard animation (occasional):** track dropdown, map tooltip,
-      sheet snap, detail view entry, share feedback.
-- [ ] **Delight allowed (rare):** first-visit entry reveal, empty states.
-- [ ] Map camera moves (flyTo/easeTo) are MapLibre's domain — leave their
-      easing alone; only UI chrome follows this section.
 
 ### Values (FF tokens replace every hand-written duration)
 
@@ -1024,43 +1030,7 @@ whether/why/how, custom-motion.md for recipes. Two ideas agree on the core:
       springs already encode this). Constant motion (progress bar,
       live-session blink) = linear/steps as now.
 
-### Recipes per surface
 
-- [ ] **Press feedback:** keep the global `:active scale(0.97)` — Emil's
-      rule, already in `global.css`; ensure transition targets transform
-      only (150–160ms var(--ease-out) or spring.fast).
-- [ ] **Nothing enters from `scale(0)`:** audit all entrances — dropdowns
-      and tooltip already start at 0.95 + opacity (correct); keep it that
-      way for the sheet, detail view, and any new surface.
-- [ ] **Origin-aware popovers:** track dropdown keeps `transform-origin:
-      top left` (trigger-anchored); map tooltip keeps `center bottom`
-      (anchored above the booth). New popovers derive origin from their
-      trigger, never center (modals exempt).
-- [ ] **Interruptible UI:** CSS transitions (current pattern) or
-      springs — never keyframes for anything users trigger repeatedly
-      (dropdown, tooltip, sheet). `@starting-style` entries are correct;
-      keep them.
-- [ ] **Tooltips:** instant reopen on adjacent targets (skip delay/animation
-      after the first); ≤200ms; the map tooltip's follow is positional, so
-      no entry delay beyond the first.
-- [ ] **Sheet:** drag stays 1:1 (current pointer code is right); on
-      release, snap via spring (FF) instead of the 350ms CSS height tween;
-      if height animation stays, FLIP-measure per custom-motion.md and
-      keep `transform`/`opacity` for any content crossfade inside the
-      sheet (Emil: blur ≤ 2px can mask the crossfade if it reads muddy).
-- [ ] **Lists (venue list, search results, sheet content):** FF
-      `reveal-items` or Emil's stagger — 30–80ms delays, non-uniform, ONE
-      entrance per container (see choreograph), never blocking
-      interaction; skip stagger entirely on keyboard-initiated tab switches.
-- [ ] **Icon swaps:** rail Info ⇄ CircleHelp and bookmark fill/empty
-      crossfade in one grid cell (FF recipe, slight blur + scale) — the
-      slot never resizes.
-- [ ] **State changes that move layout** (detail ⇄ list swap in sidebar,
-      sheet height): FLIP from snapshot — measure, commit, play from old
-      position with the tier's spring, `.exit` for dismissal.
-- [ ] **Hover:** gated behind `(hover: hover) and (pointer: fine)` (§2);
-      hover fills transition `--hover` at spring.fast — no transform
-      hover lift on rows (gliding fluid hover from §0 replaces it).
 
 ### Reduced motion & performance
 
@@ -1150,20 +1120,6 @@ future pages without importing map islands.
       `src/components/map/kpi/`. Shared UI/data stay in `components/` and
       `lib/`. No logic changed.
 
-### B. Copywriting: hunt AI-slop copy with the detector
-
-- [ ] Run the detector's copy rules over the app — `marketing-buzzword`,
-      `aphoristic-cadence`, `theater-slop-phrase`, `em-dash-overuse` —
-      against rendered pages (they're element rules: scan the running dev
-      server, not regex) and manually sweep `ui.json` +
-      `EventInfo`/`Insights` copy for the same tells.
-- [ ] Kill useless copy: filler eyebrows, "Discover the experience" class
-      lines, redundant labels that restate the UI (a search field doesn't
-      need the word "Search" twice), stats copy that hedges
-      ("up to ~N+"). Keep voice consistent with the Persona-5 energy —
-      short, punchy, Indonesian-first per `lang="id"` where applicable.
-- [ ] Record any intentional keepers as DECISIONS (e.g. the event tagline
-      survives a rule hit because it's brand).
 
 ### C. Loading UX: skeleton vs View Transition (esp. the WebGL map) — decide, then build
 
@@ -1259,8 +1215,6 @@ interactions that make it feel alive — Emil's "delight allowed" tier
 - [ ] Cap it: every mini-interaction ≤ 250ms, transform/opacity only,
       reduced-motion drops movement (fades stay). If a surface reads
       stiffer after adding — remove, don't tune.
-
----
 
 ## Verify (before calling it done)
 

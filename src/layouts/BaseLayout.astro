@@ -2,13 +2,35 @@
 // Shared shell. Composes layout components (header, footer) and renders a slot.
 // Layout components live in src/components/layout and are added during UI work.
 import '../styles/base/global.css';
+import Seo from '../components/seo/Seo.astro';
 
 type Props = {
   title: string;
   description?: string;
+  canonicalPath?: string;
+  image?: string;
+  imageAlt?: string;
+  robots?: string;
+  openGraph?: boolean;
+  siteName?: string;
+  locale?: string;
+  type?: 'website' | 'article';
+  jsonLd?: Record<string, unknown>;
 };
 
-const { title, description = 'Integrated Career Day 2026' } = Astro.props;
+const {
+  title,
+  description = 'Integrated Career Day 2026',
+  canonicalPath,
+  image,
+  imageAlt,
+  robots,
+  openGraph,
+  siteName,
+  locale,
+  type,
+  jsonLd,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -16,12 +38,28 @@ const { title, description = 'Integrated Career Day 2026' } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="text-scale" content="scale" />
     <meta name="theme-color" content="#09090b" />
-    <meta name="description" content={description} />
+    <Seo
+      title={title}
+      description={description}
+      canonicalPath={canonicalPath}
+      image={image}
+      imageAlt={imageAlt}
+      robots={robots}
+      openGraph={openGraph}
+      siteName={siteName}
+      locale={locale}
+      type={type}
+      jsonLd={jsonLd}
+    />
     <link rel="icon" href="/favicon.ico" sizes="any" />
-    <title>{title}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    {/* OpenFreeMap serves the map style, tiles, sprites, and glyphs from this
+        one origin. Warm it up before MapLibre requests the style. */}
+    <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin />
+    <link rel="dns-prefetch" href="https://tiles.openfreemap.org" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@700&family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"

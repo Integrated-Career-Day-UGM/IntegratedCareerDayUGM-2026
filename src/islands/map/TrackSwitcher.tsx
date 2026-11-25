@@ -66,6 +66,23 @@ export default function TrackSwitcher() {
       ? activeTrackIndex
       : 0;
 
+  // Keep the selected tab visible when the strip scrolls (the mobile row is
+  // narrower than the four tabs with the active label expanded).
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    const selectedTab = container.querySelector<HTMLElement>(
+      '[role="tab"][aria-selected="true"]',
+    );
+    selectedTab?.scrollIntoView({
+      block: 'nearest',
+      inline: 'nearest',
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'auto'
+        : 'smooth',
+    });
+  }, [selectedIndex]);
+
   const onSelect = (index: number) => {
     setOpenTrackId(null);
     if (index === visibleTracks.length) {
@@ -93,8 +110,8 @@ export default function TrackSwitcher() {
           selectedIndex={selectedIndex}
           onSelect={onSelect}
           className={cn(
-            'mx-0 w-fit max-w-full overflow-visible rounded-md border border-line bg-[#0a0a0a] md:w-auto',
-            '[&_[role=tab]_span]:text-[11px] [&_[role=tab]_span]:leading-none md:[&_[role=tab]_span]:text-[13px]',
+            'mx-0 w-fit max-w-full overscroll-x-contain rounded-md border border-line bg-[#0a0a0a] md:w-auto',
+            '[&_[role=tab]_span]:text-[0.9375rem] [&_[role=tab]_span]:leading-none md:[&_[role=tab]_span]:text-[0.8125rem]',
           )}
           style={{ scrollbarWidth: 'none' }}
         >
@@ -110,10 +127,10 @@ export default function TrackSwitcher() {
                   icon={Icon}
                   label={track.label}
                   className={cn(
-                    'relative shrink-0 text-[11px] font-semibold',
+                    'relative shrink-0 text-[11px] font-semibold max-md:h-auto max-md:min-h-10 max-md:py-1 max-md:[&_svg]:h-5 max-md:[&_svg]:w-5',
                     selected
-                      ? 'flex-none justify-start px-3'
-                      : 'w-10 justify-center px-0 md:w-auto md:px-3',
+                      ? 'flex-none justify-start px-3 max-md:px-4'
+                      : 'w-10 justify-center px-0 max-md:w-[57px] md:w-auto md:px-3',
                   )}
                 />
 
@@ -168,10 +185,10 @@ export default function TrackSwitcher() {
             icon={Route}
             label="GIK"
             className={cn(
-              'relative shrink-0 text-[11px] font-semibold',
+              'relative shrink-0 text-[11px] font-semibold max-md:h-auto max-md:min-h-10 max-md:py-1 max-md:[&_svg]:h-5 max-md:[&_svg]:w-5',
               gikMode
-                ? 'flex-none justify-start px-3'
-                : 'w-10 justify-center px-0 md:w-auto md:px-3',
+                ? 'flex-none justify-start px-3 max-md:px-4'
+                : 'w-10 justify-center px-0 max-md:w-[57px] md:w-auto md:px-3',
             )}
           />
         </Tabs>

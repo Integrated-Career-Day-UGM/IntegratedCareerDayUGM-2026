@@ -14,6 +14,8 @@ export type KpiData = {
   trendLabels?: string[];
   /** Shown under the value when no bar is hovered ("by sector", "by day"). */
   seriesLabel?: string;
+  /** Static caption for the simple stat variant. */
+  caption?: string;
   loading?: boolean;
 };
 
@@ -21,6 +23,8 @@ export interface KpiTileProps extends KpiData {
   className?: string;
   /** Bar accent; defaults to the page pink. */
   accent?: string;
+  /** `stat` is the shared label/value/caption cell; `kpi` adds the bar chart. */
+  variant?: 'stat' | 'kpi';
 }
 
 const decimal = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 });
@@ -62,15 +66,18 @@ export default function KpiTile({
   trend = [],
   trendLabels,
   seriesLabel,
+  caption: captionProp,
   loading = false,
   className,
   accent = 'var(--accent-pink)',
+  variant = 'kpi',
 }: KpiTileProps) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.4 });
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  const points = placeBars(trend, trendLabels);
+  const showChart = variant === 'kpi';
+  const points = showChart ? placeBars(trend, trendLabels) : [];
   const last = points.length - 1;
   const at = activeIndex === null || last < 1 ? null : Math.min(activeIndex, last);
   const point = at === null ? undefined : points[at];
@@ -78,6 +85,7 @@ export default function KpiTile({
   const hasDelta = delta !== undefined && Number.isFinite(delta) && !isEmpty;
   const direction = deltaDirection(hasDelta ? delta : 0);
   const shownValue = point ? format(point.value) : isEmpty ? '—' : format(value as number);
+  const caption = point ? point.label : (seriesLabel ?? captionProp ?? '');
 
   const handlePointer = (e: React.PointerEvent<SVGSVGElement>) => {
     const box = e.currentTarget.getBoundingClientRect();
@@ -103,15 +111,15 @@ export default function KpiTile({
       <p className="truncate text-[11px] font-medium text-[#8f8f8f]">{label}</p>
 
       {loading ? (
-        <div className="space-y-2">
-          <div className="h-7 w-20 animate-pulse bg-[#26262b]" />
-          <div className="h-3 w-16 animate-pulse bg-[#26262b]" />
-          <div className="h-9 w-full animate-pulse bg-[#26262b]" />
-        </div>
+        <>
+          <div className="h-6 w-20 skeleton-shimmer" />
+          <div className="h-4 w-24 skeleton-shimmer" />
+          {showChart && <div className="h-9 w-full skeleton-shimmer" />}
+        </>
       ) : (
         <>
           <div className="flex h-6 flex-wrap items-baseline gap-2 overflow-hidden">
-            <span className="inline-block min-w-[4.5ch] text-left text-[22px] font-semibold leading-none tabular-nums tracking-tight text-white">
+            <span className="inline-block min-w-[4.5ch] text-left font-heading text-[24px] font-bold leading-none tabular-nums text-white">
               {shownValue}
             </span>
             {hasDelta ? (
@@ -122,59 +130,62 @@ export default function KpiTile({
             ) : null}
           </div>
 
-          {/* Only the hovered bar label; at rest it names the series. Fixed
-              height so hovering never resizes the bento cell. */}
+          {/* One shared caption slot: the KPI series/hover label, or the
+              static stat caption. Fixed height so hover never resizes the
+              bento cell. */}
           <p className="h-4 truncate text-[11px] leading-4 text-[#8f8f8f]">
-            {point ? point.label : (seriesLabel ?? '')}
+            {caption}
           </p>
 
-          <div className="relative h-9">
-            {points.length < 2 ? (
-              <div className="flex h-full w-full items-center justify-center text-xs text-[#9b9b9b]">
-                <Minus size={14} />
-              </div>
-            ) : (
-              <svg
-                className="block h-full w-full touch-pan-y overflow-visible"
-                viewBox={`0 0 ${W} ${H}`}
-                preserveAspectRatio="none"
-                onPointerDown={handlePointer}
-                onPointerMove={handlePointer}
-                onPointerLeave={() => setActiveIndex(null)}
-                aria-hidden="true"
-              >
-                <line
-                  x1={PAD}
-                  x2={W - PAD}
-                  y1={H - PAD}
-                  y2={H - PAD}
-                  stroke="#2f2f34"
-                  strokeWidth={1}
-                  vectorEffect="non-scaling-stroke"
-                />
-                {points.map((bar, index) => (
-                  <motion.rect
-                    key={`${bar.label}-${index}`}
-                    x={bar.x}
-                    width={bar.width}
-                    initial={{ y: H - PAD, height: 0 }}
-                    animate={
-                      isInView
-                        ? { y: bar.y, height: bar.height }
-                        : { y: H - PAD, height: 0 }
-                    }
-                    transition={{
-                      duration: 0.45,
-                      ease: EASE,
-                      delay: index * 0.045,
-                    }}
-                    fill={accent}
-                    opacity={activeIndex === null || activeIndex === index ? 1 : 0.35}
+          {showChart && (
+            <div className="relative h-9">
+              {points.length < 2 ? (
+                <div className="flex h-full w-full items-center justify-center text-xs text-[#9b9b9b]">
+                  <Minus size={14} />
+                </div>
+              ) : (
+                <svg
+                  className="block h-full w-full touch-pan-y overflow-visible"
+                  viewBox={`0 0 ${W} ${H}`}
+                  preserveAspectRatio="none"
+                  onPointerDown={handlePointer}
+                  onPointerMove={handlePointer}
+                  onPointerLeave={() => setActiveIndex(null)}
+                  aria-hidden="true"
+                >
+                  <line
+                    x1={PAD}
+                    x2={W - PAD}
+                    y1={H - PAD}
+                    y2={H - PAD}
+                    stroke="#2f2f34"
+                    strokeWidth={1}
+                    vectorEffect="non-scaling-stroke"
                   />
-                ))}
-              </svg>
-            )}
-          </div>
+                  {points.map((bar, index) => (
+                    <motion.rect
+                      key={`${bar.label}-${index}`}
+                      x={bar.x}
+                      width={bar.width}
+                      initial={{ y: H - PAD, height: 0 }}
+                      animate={
+                        isInView
+                          ? { y: bar.y, height: bar.height }
+                          : { y: H - PAD, height: 0 }
+                      }
+                      transition={{
+                        duration: 0.45,
+                        ease: EASE,
+                        delay: index * 0.045,
+                      }}
+                      fill={accent}
+                      opacity={activeIndex === null || activeIndex === index ? 1 : 0.35}
+                    />
+                  ))}
+                </svg>
+              )}
+            </div>
+          )}
         </>
       )}
     </article>

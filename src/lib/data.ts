@@ -3,6 +3,7 @@ import venuesJson from '../data/ugm-icd-2026/venues.json';
 import zonesJson from '../data/ugm-icd-2026/zones.json';
 import boothsJson from '../data/ugm-icd-2026/booths.json';
 import companiesJson from '../data/ugm-icd-2026/companies.json';
+import openingsJson from '../data/ugm-icd-2026/openings.json';
 import sessionsJson from '../data/ugm-icd-2026/sessions.json';
 import stageSessionsJson from '../data/ugm-icd-2026/stage-sessions.json';
 import walkInSessionsJson from '../data/ugm-icd-2026/walk-in-sessions.json';
@@ -17,6 +18,7 @@ import type {
   Zone,
   Booth,
   Company,
+  JobOpening,
   Session,
   StageSession,
   WalkInSession,
@@ -26,13 +28,25 @@ import type {
   UiStrings,
   FacilityInfo,
   PosterInfo,
+  OpeningsFile,
 } from '../types/map';
 
 export const event: EventConfig = eventJson as EventConfig;
 export const venues: Venue[] = venuesJson as Venue[];
 export const zones: Zone[] = zonesJson as Zone[];
 export const booths: Booth[] = boothsJson as Booth[];
-export const companies: Company[] = companiesJson as Company[];
+const openingsFile = openingsJson as OpeningsFile;
+export const openingsMeta = openingsFile.meta;
+const openingsByCompany = new Map<string, JobOpening[]>();
+for (const opening of openingsFile.items) {
+  const list = openingsByCompany.get(opening.companyId) ?? [];
+  list.push(opening);
+  openingsByCompany.set(opening.companyId, list);
+}
+export const companies: Company[] = (companiesJson as Company[]).map((company) => ({
+  ...company,
+  openings: openingsByCompany.get(company.id) ?? [],
+}));
 export const sessions: Session[] = sessionsJson as Session[];
 export const stageSessions: StageSession[] = stageSessionsJson as StageSession[];
 export const walkInSessions: WalkInSession[] = walkInSessionsJson as WalkInSession[];

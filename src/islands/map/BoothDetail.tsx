@@ -1,14 +1,12 @@
 import { Bookmark, Image as ImageIcon, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { useMapStore } from '../../stores/mapStore';
 import ShareBoothButton from '../../components/map/ShareBoothButton';
 import CtaBar from '../../components/map/CtaBar';
 import OpeningsList from '../../components/map/OpeningsList';
 import CompanySessions from '../../components/map/CompanySessions';
-import HoverZoomImage from '../../components/map/HoverZoomImage';
-import { cn } from '../../lib/utils/cn';
-import { surfaceClasses } from '../../lib/surface-classes';
+import PosterModal from '../../components/map/PosterModal';
+import usePosterAvailable from '../../hooks/map/usePosterAvailable';
 import { track } from '../../lib/analytics';
 import {
   getBooth,
@@ -35,6 +33,8 @@ export default function BoothDetail() {
     () => (selectedBoothId ? getCompanyForBooth(selectedBoothId) : undefined),
     [selectedBoothId],
   );
+  const posterAvailable = usePosterAvailable(company?.posterUrl);
+  const hasPoster = Boolean(company?.posterUrl && posterAvailable);
   const zone = useMemo(
     () =>
       booth
@@ -74,7 +74,7 @@ export default function BoothDetail() {
         </div>
 
         <span
-          className="absolute bottom-1.5 left-2 px-1.5 py-0.5 text-[10px] font-bold text-white"
+          className="absolute bottom-1.5 left-2 px-1.5 py-0.5 text-[0.6875rem] font-bold text-white md:text-[10px]"
           style={{ backgroundColor: zone?.color ?? '#27272a' }}
         >
           {booth?.code}
@@ -84,7 +84,7 @@ export default function BoothDetail() {
           <button
             type="button"
             onClick={() => toggleBookmark(selectedBoothId)}
-            className={`flex size-8 items-center justify-center transition-[color,transform] active:scale-95 ${
+            className={`flex size-11 items-center justify-center transition-[color,transform] active:scale-95 md:size-8 ${
               saved
                 ? 'text-[var(--accent-pink)]'
                 : 'text-white/60 hover:text-white'
@@ -93,34 +93,38 @@ export default function BoothDetail() {
             aria-pressed={saved}
             title={ui.boothDetail.bookmarkLabel}
           >
-            <Bookmark size={18} fill={saved ? 'currentColor' : 'none'} />
+            <Bookmark
+              size={22}
+              fill={saved ? 'currentColor' : 'none'}
+              className="md:h-[18px] md:w-[18px]"
+            />
           </button>
-          <ShareBoothButton boothId={selectedBoothId} />
+          <ShareBoothButton boothId={selectedBoothId} iconSize={22} />
           <button
             type="button"
             onClick={() => selectBooth(null)}
-            className="flex size-8 items-center justify-center text-white transition-colors hover:text-white/70 active:scale-95"
+            className="flex size-11 items-center justify-center text-white transition-colors hover:text-white/70 active:scale-95 md:size-8"
             aria-label={ui.boothDetail.closeLabel}
             title={ui.boothDetail.closeLabel}
           >
-            <X size={20} />
+            <X size={24} className="md:h-5 md:w-5" />
           </button>
         </div>
       </div>
 
       <div className="px-3 pt-3">
         {/* Ribbon-style label (Jelajahi Denah treatment, not rotated) */}
-        <div className="inline-block bg-[var(--accent-pink)] px-2 py-0.5 font-heading text-[10px] font-bold leading-tight text-white">
+        <div className="inline-block bg-[var(--accent-pink)] px-2 py-0.5 font-heading text-[0.6875rem] font-bold leading-tight text-white md:text-[10px]">
           {ui.boothDetail.selectedLabel}
         </div>
-        <h2 className="mt-1.5 font-heading text-[20px] font-extrabold leading-[1.1] tracking-[-0.4px] text-white">
+        <h2 className="mt-1.5 font-heading text-[1.375rem] font-extrabold leading-[1.1] tracking-[-0.4px] text-white md:text-[20px]">
           {company?.name ?? booth?.label}
         </h2>
       </div>
 
       <div className="mt-2 flex min-w-0 flex-wrap items-center gap-1.5 border-t border-line px-3 py-2">
         {session && (
-          <span className="bg-[var(--accent-pink)] px-1.5 py-0.5 text-[11px] font-bold text-white">
+          <span className="bg-[var(--accent-pink)] px-1.5 py-0.5 text-[0.75rem] font-bold text-white md:text-[11px]">
             {new Date(session.start).toLocaleTimeString(event.locale, {
               hour: '2-digit',
               minute: '2-digit',
@@ -129,7 +133,7 @@ export default function BoothDetail() {
           </span>
         )}
         {trackInfo && (
-          <span className="bg-[#1f1f23] px-1.5 py-0.5 text-[11px] font-medium text-[#d4d4d8]">
+          <span className="bg-[#1f1f23] px-1.5 py-0.5 text-[0.75rem] font-medium text-[#d4d4d8] md:text-[11px]">
             {trackInfo.label}
           </span>
         )}
@@ -138,7 +142,7 @@ export default function BoothDetail() {
       {company?.tags.length ? (
         <div className="flex flex-wrap gap-1.5 border-t border-line px-3 py-2">
           {company.tags.map((tag) => (
-            <span key={tag} className="bg-[#1f1f23] px-1.5 py-0.5 text-[11px] text-[#d4d4d8]">
+            <span key={tag} className="bg-[#1f1f23] px-1.5 py-0.5 text-[0.75rem] text-[#d4d4d8] md:text-[11px]">
               {tag}
             </span>
           ))}
@@ -146,15 +150,15 @@ export default function BoothDetail() {
       ) : null}
 
       {company?.description && (
-        <p className="border-t border-line px-3 py-2 text-[11px] leading-snug text-[#d4d4d8]">
+        <p className="border-t border-line px-3 py-2 text-[0.8125rem] leading-snug text-[#d4d4d8] md:text-[11.5px]">
           {company.description}
         </p>
       )}
 
       {/* Everything below stays inside the one card, with its own padding. */}
-      {(company?.posterUrl || company?.websiteUrl || company?.programUrl) && (
+      {(hasPoster || company?.websiteUrl || company?.programUrl) && (
         <div className="space-y-2 border-t border-line p-3">
-          {company?.posterUrl && (
+          {hasPoster && (
             <CtaBar
               icon={ImageIcon}
               label={ui.boothDetail.posterCta}
@@ -202,47 +206,22 @@ export default function BoothDetail() {
           the walk-in detail card uses. */}
       <CompanySessions companyId={booth?.companyId ?? null} />
       {company && <OpeningsList openings={company.openings} />}
-      {posterOpen && company?.posterUrl &&
-        createPortal(
-          <div
-            className="fixed inset-0 z-[200] flex items-center justify-center bg-black/70 p-4 backdrop-blur-md"
-            onClick={() => setPosterOpen(false)}
-          >
-            <div
-              className={cn(
-                'flex max-h-[88vh] w-full max-w-[440px] flex-col overflow-hidden rounded-md border border-line md:max-w-[560px]',
-                surfaceClasses(4, 4),
-              )}
-              onClick={(event) => event.stopPropagation()}
-            >
-              <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
-                <div className="min-w-0">
-                  <div className="truncate font-heading text-[16px] font-bold text-white">
-                    {company.name}
-                  </div>
-                  <div className="mt-0.5 text-[10px] text-[#8f8f8f]">
-                    {ui.boothDetail.posterCta}
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setPosterOpen(false)}
-                  aria-label={ui.boothDetail.closeLabel}
-                  className="flex size-8 shrink-0 items-center justify-center text-[#8f8f8f] transition-colors hover:text-white"
-                >
-                  <X size={17} />
-                </button>
-              </div>
-              <div className="h-[70vh] max-h-[78vh] min-h-[280px] bg-[#0c0c0f]">
-                <HoverZoomImage
-                  src={company.posterUrl}
-                  alt={`${company.name} poster`}
-                />
-              </div>
-            </div>
-          </div>,
-          document.body,
-        )}
+      <PosterModal
+        poster={
+          posterOpen && hasPoster && company?.posterUrl
+            ? {
+                id: company.id,
+                title: company.name,
+                subtitle: ui.boothDetail.posterCta,
+                src: company.posterUrl,
+                downloadUrl: company.posterDownloadUrl ?? company.posterUrl,
+                accent: zone?.color ?? '#ff2d6f',
+              }
+            : null
+        }
+        onClose={() => setPosterOpen(false)}
+        closeLabel={ui.boothDetail.closeLabel}
+      />
     </section>
   );
 }

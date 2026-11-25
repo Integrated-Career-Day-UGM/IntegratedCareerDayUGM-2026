@@ -25,7 +25,7 @@ export default function FacilityDetail() {
         }}
       >
         <span
-          className="absolute bottom-1.5 left-2 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-black"
+          className="absolute bottom-1.5 left-2 px-1.5 py-0.5 text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-black md:text-[10px]"
           style={{ backgroundColor: facility.accent }}
         >
           {facility.kind}
@@ -37,32 +37,36 @@ export default function FacilityDetail() {
             aria-label={starred ? 'Saved' : 'Save'}
             aria-pressed={starred}
             title={starred ? 'Saved' : 'Save'}
-            className={`flex size-8 items-center justify-center transition-[color,transform] active:scale-95 ${
+            className={`flex size-11 items-center justify-center transition-[color,transform] active:scale-95 md:size-8 ${
               starred ? 'text-[var(--accent-pink)]' : 'text-white/60 hover:text-white'
             }`}
           >
-            <Star size={18} fill={starred ? 'currentColor' : 'none'} />
+            <Star
+              size={20}
+              fill={starred ? 'currentColor' : 'none'}
+              className="md:h-[18px] md:w-[18px]"
+            />
           </button>
           <button
             type="button"
             onClick={() => selectFacility(null)}
             aria-label="Close"
             title="Close"
-            className="flex size-8 items-center justify-center text-white transition-colors hover:text-white/70 active:scale-95"
+            className="flex size-11 items-center justify-center text-white transition-colors hover:text-white/70 active:scale-95 md:size-8"
           >
-            <X size={20} />
+            <X size={24} className="md:h-5 md:w-5" />
           </button>
         </div>
       </div>
 
       <div className="px-3 pt-3">
-        <div className="inline-block bg-[var(--accent-pink)] px-2 py-0.5 font-heading text-[10px] font-bold leading-tight text-white">
+        <div className="inline-block bg-[var(--accent-pink)] px-2 py-0.5 font-heading text-[0.6875rem] font-bold leading-tight text-white md:text-[10px]">
           Facility
         </div>
-        <h2 className="mt-1.5 font-heading text-[20px] font-extrabold leading-[1.1] tracking-[-0.4px] text-white">
+        <h2 className="mt-1.5 font-heading text-[1.375rem] font-extrabold leading-[1.1] tracking-[-0.4px] text-white md:text-[20px]">
           {facility.title}
         </h2>
-        <p className="mt-1.5 text-[12px] leading-snug text-[#d4d4d8]">{facility.summary}</p>
+        <p className="mt-1.5 text-[0.875rem] leading-snug text-[#d4d4d8] md:text-[12px]">{facility.summary}</p>
       </div>
 
       <div className="mt-3 grid grid-cols-1 gap-0 border-t border-line @[17rem]:grid-cols-2 @[17rem]:divide-x @[17rem]:divide-[#2a2a2a]">
@@ -71,10 +75,10 @@ export default function FacilityDetail() {
             key={item.heading}
             className={`p-3 ${i > 0 ? 'border-t border-[#2a2a2a] @[17rem]:border-t-0' : ''}`}
           >
-            <div className="font-heading text-[12px] font-semibold leading-tight text-white">
+            <div className="font-heading text-[0.875rem] font-semibold leading-tight text-white md:text-[12px]">
               {item.heading}
             </div>
-            <p className="mt-1 text-[11.5px] leading-snug text-[#d4d4d8]">{item.body}</p>
+            <p className="mt-1 text-[0.8125rem] leading-snug text-[#d4d4d8] md:text-[11.5px]">{item.body}</p>
           </div>
         ))}
       </div>
@@ -103,7 +107,7 @@ export default function FacilityDetail() {
       )}
 
       {facility.tip && (
-        <div className="border-t border-line px-3 py-2 text-[11px] leading-snug text-[#8f8f8f]">
+        <div className="border-t border-line px-3 py-2 text-[0.8125rem] leading-snug text-[#8f8f8f] md:text-[11px]">
           {facility.tip}
         </div>
       )}

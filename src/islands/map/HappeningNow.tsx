@@ -81,7 +81,7 @@ export default function HappeningNow() {
     <section className="relative border border-line bg-[#0e0e0e] px-3 pb-2.5 pt-2 shadow-[4px_4px_0_var(--accent-pink)]">
       {/* Status chip floats on the top border, like the design */}
       <span
-        className={`absolute right-3 top-[-10px] px-3 py-px font-heading text-[12px] font-bold ${
+        className={`absolute right-3 top-[-10px] px-3 py-px font-heading text-[0.8125rem] font-bold md:text-[0.75rem] ${
           live ? 'bg-white text-black' : 'bg-[#1c1c1c] text-ink-body'
         }`}
       >
@@ -89,9 +89,11 @@ export default function HappeningNow() {
       </span>
 
       <div key={session.id} className="happening-enter">
-        {/* Header row: marker + label | time range */}
-        <div className="flex items-center justify-between font-heading text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-dim">
-          <span className="flex items-center">
+        {/* Header row: marker + label | time range. The time is the one piece
+            of live data a visitor scans for, so it gets a larger, brighter
+            step than the uppercase label. */}
+        <div className="flex items-center justify-between gap-2 font-heading text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-dim md:text-[0.6875rem]">
+          <span className="flex min-w-0 items-center">
             <i
               className={`mr-[7px] h-2.5 w-2.5 shrink-0 bg-[var(--accent-pink)] ${
                 live ? 'blink-dot' : ''
@@ -99,8 +101,9 @@ export default function HappeningNow() {
             />
             {live ? ui.happeningNow.liveLabel : ui.happeningNow.nextLabel}
           </span>
-          <span>
-            {formatTime(session.start)} - {formatTime(session.end)} WIB
+          <span className="shrink-0 text-[0.8125rem] font-bold normal-case tracking-normal text-white tabular-nums md:text-[0.75rem]">
+            {formatTime(session.start)} - {formatTime(session.end)}{' '}
+            <span className="text-[0.625rem] font-medium text-zinc-400">WIB</span>
           </span>
         </div>
 
@@ -113,11 +116,13 @@ export default function HappeningNow() {
             className="min-w-0 flex-1 text-left"
             aria-label={`Open ${session.title}`}
           >
-            <h3 className="font-heading text-[17px] font-bold leading-tight tracking-[-0.3px] text-white">
+            <h3 className="text-balance font-heading text-[1.1875rem] font-bold leading-tight tracking-[-0.3px] text-white md:text-[1.0625rem]">
               {session.title}
             </h3>
-            <p className="text-[11px] leading-snug text-ink-dim">{company?.name}</p>
-            <div className="mt-1 flex items-baseline justify-between gap-2 text-[11px] font-semibold">
+            <p className="text-pretty text-[0.8125rem] leading-snug text-ink-dim md:text-[0.75rem]">
+              {company?.name}
+            </p>
+            <div className="mt-1 flex items-baseline justify-between gap-2 text-[0.8125rem] font-semibold md:text-[0.75rem]">
               <span className="truncate text-ink-body">{area?.name}</span>
               {current.countdown && (
                 <span className="shrink-0 text-[#f5b400]">{current.countdown}</span>
@@ -132,12 +137,12 @@ export default function HappeningNow() {
                 onClick={() => toggleBookmark(booth.id)}
                 aria-label={saved ? ui.happeningNow.saved : ui.happeningNow.save}
                 title={saved ? ui.happeningNow.saved : ui.happeningNow.save}
-                className="flex size-[33px] items-center justify-center bg-chipfill transition-colors hover:bg-field-hover active:scale-[0.98]"
+                className="flex size-11 items-center justify-center bg-chipfill transition-colors hover:bg-field-hover active:scale-[0.98] md:size-[33px]"
               >
                 <Bookmark
-                  size={16}
+                  size={18}
                   strokeWidth={2}
-                  className={saved ? 'fill-current text-white' : 'fill-none text-white'}
+                  className={`${saved ? 'fill-current' : 'fill-none'} h-[1.125rem] w-[1.125rem] text-white md:h-4 md:w-4`}
                 />
               </button>
             </div>
@@ -155,7 +160,7 @@ export default function HappeningNow() {
 
       {/* Footer: the single up-next line — the carousel above is the only
           session browser. */}
-      <div className="mt-2 truncate border-t border-line pt-1.5 text-[11px] text-ink-dim">
+      <div className="mt-2 truncate border-t border-line pt-1.5 text-[0.75rem] text-ink-dim">
         {next
           ? `${ui.happeningNow.upNext} ${formatTime(next.start)} ${next.title}${
               nextCompany ? `, ${nextCompany.name}` : ''

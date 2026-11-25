@@ -1,0 +1,99 @@
+---
+// Native mobile registration content matching Figma node 1487:18218.
+// Two-tab flow: Sivitas UGM (default) and Non-Sivitas UGM.
+import MobilePanel from './MobilePanel.astro';
+import { columns } from './data';
+
+const sivitas = columns[0];
+const nonSivitas = columns[1];
+---
+
+<div
+  class="relative z-10 flex flex-col items-center gap-6 px-8 pb-11 pt-9"
+  data-name="mobile-registration-content"
+  data-registration-root
+>
+  <p
+    class="font-priego w-full text-center text-[26px] font-bold leading-[34px] text-white"
+    style={{ WebkitTextStroke: '2.5px var(--icd-teal-dark)', paintOrder: 'stroke fill' }}
+  >
+    Alur Pendaftaran
+  </p>
+
+  {/* Tabs */}
+  <div
+    class="flex w-full items-start justify-center gap-[10px] rounded-[8px] bg-[#f4faff] p-1"
+    role="tablist"
+    aria-label="Alur pendaftaran"
+  >
+    <button
+      type="button"
+      role="tab"
+      data-tab="sivitas"
+      aria-selected="true"
+      aria-controls="registration-panel-sivitas"
+      class="figma-link w-[128.341px] shrink rounded-[4px] px-2 py-[4.5px] font-priego text-[19.968px] font-bold capitalize leading-[12.829px] tracking-[-0.3994px]"
+    >
+      Sivitas UGM
+    </button>
+    <button
+      type="button"
+      role="tab"
+      data-tab="non-sivitas"
+      aria-selected="false"
+      aria-controls="registration-panel-non-sivitas"
+      class="figma-link w-[164px] shrink rounded-[4px] border border-solid border-white px-2 py-[4.5px] font-priego text-[19.968px] font-bold capitalize leading-[12.829px] tracking-[-0.3994px]"
+    >
+      Non-Sivitas UGM
+    </button>
+  </div>
+
+  {/* Panels */}
+  <div class="w-full">
+    <div id="registration-panel-sivitas" data-panel="sivitas" role="tabpanel">
+      <MobilePanel column={sivitas} />
+    </div>
+    <div id="registration-panel-non-sivitas" data-panel="non-sivitas" role="tabpanel" hidden>
+      <MobilePanel column={nonSivitas} />
+    </div>
+  </div>
+</div>
+
+<style>
+  [data-tab] {
+    background-color: #ffffff;
+    color: #070707;
+  }
+
+  [data-tab].is-active {
+    background-color: #d2ff58;
+    border-color: #d2ff58;
+    color: #164d5c;
+  }
+</style>
+
+<script>
+  const roots = document.querySelectorAll<HTMLElement>('[data-registration-root]');
+
+  roots.forEach((root) => {
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-tab]'));
+    const panels = Array.from(root.querySelectorAll<HTMLElement>('[data-panel]'));
+
+    const activate = (key: string) => {
+      tabs.forEach((tab) => {
+        const isActive = tab.dataset.tab === key;
+        tab.classList.toggle('is-active', isActive);
+        tab.setAttribute('aria-selected', String(isActive));
+      });
+      panels.forEach((panel) => {
+        panel.hidden = panel.dataset.panel !== key;
+      });
+    };
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => activate(tab.dataset.tab ?? 'sivitas'));
+    });
+
+    activate('sivitas');
+  });
+</script>

@@ -6,6 +6,7 @@ import {
   useRegisterFluidHoverItem,
 } from '../../hooks/use-fluid-hover';
 import { FluidHoverHighlight } from '../../components/ui/fluid-hover-highlight';
+import EmptyState from '../../components/map/EmptyState';
 import { event, getCompany, getTrack, ui, walkInSessions } from '../../lib/data';
 import { formatTime } from '../../lib/map/happening-carousel';
 import type { WalkInSession } from '../../types/map';
@@ -137,9 +138,11 @@ export default function WalkInList() {
       </div>
 
       {groups.length === 0 ? (
-        <div className="panel-list px-3 py-4 text-[13px] text-ink-dim">
-          {ui.search.emptyResults}
-        </div>
+        <EmptyState
+          className="panel-list"
+          title={ui.walkInList.emptyTitle}
+          description={ui.walkInList.emptyBody}
+        />
       ) : (
         groups.map((group) => (
           <div key={group.dayId} className="panel-list mb-2.5">

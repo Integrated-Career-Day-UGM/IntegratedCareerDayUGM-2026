@@ -602,6 +602,87 @@ export const BOOTH_SHAPES: BoothShape[] = [
 
 export { WHITE as BOOTH_BORDER_WHITE };
 
+/* ------------------------------------------------------------------ */
+/* Booth hit-testing                                                   */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Per-booth constants for the pointermove/click hit-test. The visible chip is
+ * the inner box, centred in its rotated wrapper; the hit area keeps the old
+ * 2px forgiveness. cos/sin are the inverse rotation used to project a frame
+ * point into the booth's local axes, precomputed once so hovering never calls
+ * trig.
+ */
+export type BoothHitTarget = {
+  id: string;
+  cx: number;
+  cy: number;
+  cos: number;
+  sin: number;
+  halfW: number;
+  halfH: number;
+  minX: number;
+  maxX: number;
+  minY: number;
+  maxY: number;
+};
+
+const BOOTH_HIT_PAD = 2;
+/** Broad-phase slack: never reject a boundary point the exact test accepts. */
+const BOOTH_HIT_AABB_EPSILON = 0.001;
+
+export const BOOTH_HIT_TARGETS: BoothHitTarget[] = BOOTH_SHAPES.map((s) => {
+  const a = (-s.rotate * Math.PI) / 180;
+  const cos = Math.cos(a);
+  const sin = Math.sin(a);
+  const halfW = s.innerW / 2 + BOOTH_HIT_PAD;
+  const halfH = s.innerH / 2 + BOOTH_HIT_PAD;
+  const cx = s.left + s.w / 2;
+  const cy = s.top + s.h / 2;
+  const halfX = Math.abs(halfW * cos) + Math.abs(halfH * sin);
+  const halfY = Math.abs(halfW * sin) + Math.abs(halfH * cos);
+  return {
+    id: s.id,
+    cx,
+    cy,
+    cos,
+    sin,
+    halfW,
+    halfH,
+    minX: cx - halfX - BOOTH_HIT_AABB_EPSILON,
+    maxX: cx + halfX + BOOTH_HIT_AABB_EPSILON,
+    minY: cy - halfY - BOOTH_HIT_AABB_EPSILON,
+    maxY: cy + halfY + BOOTH_HIT_AABB_EPSILON,
+  };
+});
+
+/**
+ * Hit-test a frame-space point against the rotated booth boxes (first match
+ * wins, same order as BOOTH_SHAPES). The AABB broad phase rejects the common
+ * miss without trig; the exact rotated-box test stays identical to the old
+ * per-move implementation.
+ */
+export function boothAtFramePoint(p: { x: number; y: number }): string | null {
+  for (const target of BOOTH_HIT_TARGETS) {
+    if (
+      p.x < target.minX ||
+      p.x > target.maxX ||
+      p.y < target.minY ||
+      p.y > target.maxY
+    ) {
+      continue;
+    }
+    const dx = p.x - target.cx;
+    const dy = p.y - target.cy;
+    const rx = dx * target.cos - dy * target.sin;
+    const ry = dx * target.sin + dy * target.cos;
+    if (Math.abs(rx) <= target.halfW && Math.abs(ry) <= target.halfH) {
+      return target.id;
+    }
+  }
+  return null;
+}
+
 /**
  * Static SVG fixtures on the plan (toilet, mushola, panggung platform,
  * horseshoe island, seat grid, entrance arrows). Positions are frame px and

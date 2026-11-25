@@ -11,6 +11,7 @@ import WalkInList from './WalkInList';
 import BoothDetail from './BoothDetail';
 import WalkInDetail from './WalkInDetail';
 import FacilityDetail from './FacilityDetail';
+import TraySkeleton from '../../components/map/TraySkeleton';
 import BookmarkList from './BookmarkList';
 import Insights from './Insights';
 import EventInfo from './EventInfo';
@@ -28,7 +29,7 @@ const SNAP_FULL_RATIO = 0.94;
 const TOP_CLEAR = 24;
 /** Tab rail height (h-14). Exported with SNAP_PEEK so map chrome can sit
     above the tray's peek state without hard-coding its height (§1). */
-export const TAB_RAIL_H = 56;
+export const TAB_RAIL_H = 66;
 
 const mobileTabs: { id: 'home' | 'search' | 'saved' | 'stats' | 'info'; icon: typeof Home }[] = [
   { id: 'home', icon: Home },
@@ -43,6 +44,8 @@ export default function MobileBottomSheet() {
   const sidebarTab = useMapStore((s) => s.sidebarTab);
   const setSidebarTab = useMapStore((s) => s.setSidebarTab);
   const selectedWalkInRoomId = useMapStore((s) => s.selectedWalkInRoomId);
+  const selectedBoothId = useMapStore((s) => s.selectedBoothId);
+  const selectedFacilityId = useMapStore((s) => s.selectedFacilityId);
   const selectedAreaId = useMapStore((s) => s.selectedAreaId);
   const selectedTrackId = useMapStore((s) => s.selectedTrackId);
   const walkInMode =
@@ -55,6 +58,22 @@ export default function MobileBottomSheet() {
   const dragStartY = useRef(0);
   const startHeight = useRef(0);
   const sheetRef = useRef<HTMLDivElement>(null);
+
+  const detailKey = selectedBoothId ?? selectedWalkInRoomId ?? selectedFacilityId ?? '';
+  const [detailLoading, setDetailLoading] = useState(false);
+  const previousDetailKeyRef = useRef('');
+  useEffect(() => {
+    if (!['detail', 'facility'].includes(sidebarMode) || !detailKey) {
+      previousDetailKeyRef.current = '';
+      setDetailLoading(false);
+      return;
+    }
+    if (previousDetailKeyRef.current === detailKey) return;
+    previousDetailKeyRef.current = detailKey;
+    setDetailLoading(true);
+    const timer = window.setTimeout(() => setDetailLoading(false), 200);
+    return () => window.clearTimeout(timer);
+  }, [sidebarMode, detailKey]);
 
   const getMaxHeight = () => {
     // Detail/facility mode never takes more than 30% of the screen.
@@ -114,8 +133,17 @@ export default function MobileBottomSheet() {
 
   const setTab = (tab: typeof sidebarTab) => {
     setSidebarTab(tab);
+    // Search is a working state like venue detail: give the list the 30%
+    // tray height instead of leaving it at peek.
+    if (tab === 'search') snapTo(getDetailHeight());
     if (tab === 'search') window.dispatchEvent(new CustomEvent('icd:focus-search'));
   };
+
+  useEffect(() => {
+    const raiseForSearch = () => snapTo(getDetailHeight());
+    window.addEventListener('icd:focus-search', raiseForSearch);
+    return () => window.removeEventListener('icd:focus-search', raiseForSearch);
+  }, [snapTo]);
 
   // Raise the sheet when the content context changes — a tab switch (the
   // top search bar focuses 'search' too) or a booth detail opening — but
@@ -149,11 +177,14 @@ export default function MobileBottomSheet() {
     if (sidebarTab === 'stats') return <Insights />;
     if (sidebarTab === 'info') return <EventInfo />;
 
-    if (sidebarMode === 'facility') return <FacilityDetail />;
+    if (sidebarMode === 'facility')
+      return detailLoading ? <TraySkeleton /> : <FacilityDetail />;
     // Same detail mode as desktop: a selected walk-in room wins over the
     // booth card; the store keeps the two mutually exclusive.
-    if (sidebarMode === 'detail')
+    if (sidebarMode === 'detail') {
+      if (detailLoading) return <TraySkeleton />;
       return selectedWalkInRoomId ? <WalkInDetail /> : <BoothDetail />;
+    }
     // Hall B has no expo booths — show every bilik booking instead.
     if (walkInMode) return <WalkInList />;
     return <VenueList />;
@@ -168,7 +199,7 @@ export default function MobileBottomSheet() {
           sheet is fully opaque. */}
       <div
         ref={sheetRef}
-        className="pointer-events-auto flex flex-col overflow-hidden rounded-t-xl border-t border-zinc-800 bg-[#0c0c0f] shadow-[0_-8px_40px_rgba(0,0,0,0.5)]"
+        className="pointer-events-auto relative flex flex-col overflow-hidden rounded-t-xl border-t border-zinc-800 bg-[#0c0c0f] shadow-[0_-8px_40px_rgba(0,0,0,0.5)]"
         style={{
           height,
           transition: isDragging ? 'none' : 'height 350ms cubic-bezier(0.32, 0.72, 0, 1)',
@@ -205,7 +236,8 @@ export default function MobileBottomSheet() {
       {/* Persistent bottom tab bar — fixed chrome, excluded from the drag */}
       <nav
         ref={railRef}
-        className="pointer-events-auto relative flex h-14 shrink-0 items-center justify-around border-t border-zinc-800 bg-[#0c0c0f] px-2"
+        data-layout-tune="sheet-tabs"
+        className="pointer-events-auto relative flex h-[66px] shrink-0 items-center justify-around border-t border-zinc-800 bg-[#0c0c0f] px-2"
         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
         aria-label="Sheet sections"
         {...hover.handlers}
@@ -221,12 +253,12 @@ export default function MobileBottomSheet() {
               ref={(el) => hover.registerItem(i, el)}
               onFocus={() => hover.setActiveIndex(i)}
               onClick={() => setTab(item.id)}
-              className={`relative flex h-10 w-12 items-center justify-center rounded-sm transition-colors ${
+              className={`relative flex h-12 w-14 items-center justify-center rounded-sm transition-colors ${
                 active ? 'text-white' : 'text-zinc-500'
               }`}
               aria-label={ui.tabs[item.id]}
             >
-              <Icon size={20} strokeWidth={active ? 2 : 1.5} />
+              <Icon size={23} strokeWidth={active ? 2 : 1.5} />
             </button>
           );
         })}

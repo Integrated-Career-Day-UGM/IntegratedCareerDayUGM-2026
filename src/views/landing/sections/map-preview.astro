@@ -1,0 +1,52 @@
+---
+// "Denah Interaktif" map preview section.
+// Desktop frame is 1440×1317 and scales down; mobile is a native 390px card
+// matching Figma node 1487:18219.
+import MapPreviewBackground from './map-preview/background.tsx';
+import DesktopContent from './map-preview/desktop-content.astro';
+import MobileContent from './map-preview/mobile-content.astro';
+---
+
+<section class="map-preview-section relative w-full overflow-clip bg-[#f4faff]" data-name="Map Preview Section" id="denah">
+  {/* Desktop layout */}
+  <div class="hidden md:block">
+    <div class="map-preview-scale-wrapper relative mx-auto">
+      <div class="map-preview-scale-inner absolute inset-0 bg-[#f4faff]">
+        <div class="absolute left-[26px] top-[26px] h-[1265px] w-[1388px]">
+          <MapPreviewBackground variant="desktop" client:visible />
+          <DesktopContent />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* Mobile layout */}
+  <div class="block md:hidden p-4">
+    <div class="relative h-[721px] w-full overflow-clip rounded-[16px]">
+      <MapPreviewBackground variant="mobile" client:visible />
+      <MobileContent />
+    </div>
+  </div>
+</section>
+
+<style>
+  .map-preview-scale-wrapper {
+    width: min(1440px, 100vw);
+    aspect-ratio: 1440 / 1317;
+  }
+
+  .map-preview-scale-inner {
+    --map-preview-scale: min(1, 100vw / 1440);
+    width: 1440px;
+    height: 1317px;
+    transform-origin: top center;
+    transform: scale(var(--map-preview-scale));
+  }
+
+  @media (min-width: 1440px) {
+    .map-preview-scale-inner {
+      left: 50%;
+      transform: translateX(-50%) scale(1);
+    }
+  }
+</style>

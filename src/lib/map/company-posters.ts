@@ -1,4 +1,4 @@
-import { event, getCompany, stageSessions, walkInSessions } from '../data';
+import { companies, event, getCompany, stageSessions, walkInSessions } from '../data';
 import type { PosterInfo } from '../../types/map';
 
 const formatTime = (iso: string) =>
@@ -22,12 +22,16 @@ export function getCompanyPosterItems(dayId: string): PosterInfo[] {
     accent: string,
   ) => {
     const company = companyId ? getCompany(companyId) : undefined;
+    // A company without a poster simply has no gallery node. Do not fall
+    // back to the logo or an empty skeleton card.
+    if (!company?.posterUrl) return;
     items.set(key, {
       id: key,
-      title: company?.shortName ?? companyName,
+      title: company.shortName ?? companyName,
       subtitle,
-      src: company?.posterUrl ?? company?.logoUrl ?? '',
+      src: company.posterUrl,
       accent,
+      downloadUrl: company.posterDownloadUrl ?? undefined,
     });
   };
 
@@ -55,6 +59,38 @@ export function getCompanyPosterItems(dayId: string): PosterInfo[] {
         : `Stage · ${formatTime(session.start)}`,
       '#f0c71d',
     );
+  }
+
+  // Every company with a poster gets a gallery slot even when it has no
+  // walk-in/stage session. Session companies keep their richer subtitle;
+  // the rest use the company name.
+  const represented = new Set(items.keys());
+  for (const company of companies) {
+    if (!company.posterUrl || represented.has(company.id)) continue;
+    items.set(`company-${company.id}`, {
+      id: `company-${company.id}`,
+      title: company.shortName,
+      subtitle: company.name,
+      src: company.posterUrl,
+      accent: '#5b7f3a',
+      downloadUrl: company.posterDownloadUrl ?? undefined,
+    });
+  }
+
+  // Lowongan posters live in the same company carousel so a detail-page
+  // "Open in Info" can reveal them by a stable opening id.
+  for (const company of companies) {
+    for (const opening of company.openings) {
+      if (!opening.posterUrl) continue;
+      items.set(opening.id, {
+        id: opening.id,
+        title: company.shortName,
+        subtitle: opening.title,
+        src: opening.posterUrl,
+        accent: '#f0c71d',
+        downloadUrl: opening.posterDownloadUrl ?? undefined,
+      });
+    }
   }
 
   return [...items.values()];

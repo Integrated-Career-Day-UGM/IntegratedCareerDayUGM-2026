@@ -17,7 +17,7 @@ export default function BrandLockup({ compact = false }: { compact?: boolean }) 
   if (compact) {
     return (
       <div className="flex flex-col items-start gap-1.5">
-        <div className="-rotate-[1.2deg] bg-[#ff2d6f] px-2 pb-[1px] pt-0 font-heading text-[13px] font-bold leading-[1.15] tracking-[-0.3px] text-white shadow-[0_1px_0_rgba(0,0,0,0.25)]">
+        <div className="-rotate-[1.2deg] bg-[#ff2d6f] px-2 pb-[1px] pt-0 font-heading text-[0.719rem] font-bold leading-[1.15] tracking-[-0.3px] text-white shadow-[0_1px_0_rgba(0,0,0,0.25)]">
           {ui.event.exploreBadge}
         </div>
         <SelectionFrame frameClassName="-left-[2px] -top-[3px] -right-[12px] -bottom-[4px]">
@@ -25,10 +25,10 @@ export default function BrandLockup({ compact = false }: { compact?: boolean }) 
             className="flex items-center gap-[1px]"
             aria-label={ui.event.titleLine1 + ' ' + ui.event.titleLine2}
           >
-            <span className="font-heading shrink-0 text-[26px] font-bold leading-[0.8] tracking-[-1.2px] text-white">
+            <span className="font-heading shrink-0 text-[1.4375rem] font-bold leading-[0.8] tracking-[-1.1px] text-white">
               {ui.event.titleLine1}
             </span>
-            <span className="font-heading shrink-0 whitespace-nowrap text-[10px] font-bold leading-[0.95] tracking-[-0.3px] text-white">
+            <span className="font-heading shrink-0 whitespace-nowrap text-[0.5625rem] font-bold leading-[0.95] tracking-[-0.3px] text-white">
               {lockupLine1}
               <br />
               {lockupLine2}
