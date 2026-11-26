@@ -1,5 +1,6 @@
 import { ArrowUpRight } from 'lucide-react';
 import { facilities, registration } from '../../lib/data';
+import TooltipNeedle from './TooltipNeedle';
 
 /** Large facility bubble for the selected map marker. Registration adds
  *  direct register CTAs; other facilities stay informational. */
@@ -8,9 +9,9 @@ export default function FacilityTooltip({ facilityId }: { facilityId: string }) 
   if (!facility) return null;
 
   return (
-    <div className="map-tooltip facility-tooltip pointer-events-auto fixed z-50 w-[250px] border border-line bg-[#141416] md:w-[290px]">
+    <div className="map-tooltip facility-tooltip pointer-events-auto fixed z-50 w-[250px] rounded-[4px] border border-line bg-[#141416] md:w-[290px]">
       <div
-        className="relative h-12 w-full overflow-hidden border-b border-line md:h-14"
+        className="relative h-12 w-full overflow-hidden rounded-t-[4px] border-b border-line md:h-14"
         style={{
           background: `linear-gradient(135deg, ${facility.accent}33 0%, #141416 70%)`,
         }}
@@ -55,9 +56,8 @@ export default function FacilityTooltip({ facilityId }: { facilityId: string }) 
         </div>
       )}
 
-      <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2">
-        <div className="map-tooltip-pointer h-3 w-3 rotate-45 border-b border-r border-line bg-[#141416]" />
-      </div>
+      {/* Uber-style needle: black and longer for the venue/facility card. */}
+      <TooltipNeedle color="#000000" height={22} />
     </div>
   );
 }

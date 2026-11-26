@@ -242,15 +242,15 @@ export default function PosterFolder({
             onPointerLeave={(event) => {
               if (event.pointerType === 'mouse') setExpanded(false);
             }}
-            className="relative mx-auto flex h-[128px] w-full max-w-[200px] origin-top cursor-pointer items-center justify-center"
+            className="relative mx-auto flex h-[92px] w-full max-w-[146px] origin-top cursor-pointer items-center justify-center"
             style={{ perspective: '1000px' }}
           >
             {/* Folder back */}
             <div
-              className="absolute rounded-md bg-[#1c1c20] shadow-md"
+              className="absolute rounded-md bg-[#1f7fd1] shadow-md"
               style={{
-                width: 96,
-                height: 70,
+                width: 68,
+                height: 50,
                 transformOrigin: 'bottom center',
                 transform: expanded ? 'rotateX(-15deg)' : 'rotateX(0deg)',
                 transition: 'transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1)',
@@ -258,13 +258,13 @@ export default function PosterFolder({
               }}
             />
             <div
-              className="absolute h-2.5 w-8 rounded-t-md bg-[#242429]"
-              style={{ transform: 'translate(-28px, -40px)', zIndex: 10 }}
+              className="absolute h-2 w-6 rounded-t-md bg-[#2589dd]"
+              style={{ transform: 'translate(-20px, -29px)', zIndex: 10 }}
             />
 
             {/* Poster cards — tucked behind the folder front */}
             {displayItems.map((poster, index) => {
-              const offsets = [-35, 0, 35];
+              const offsets = [-25, 0, 25];
               const rotations = [-8, 0, 8];
               return (
                 <button
@@ -278,11 +278,11 @@ export default function PosterFolder({
                     else setSelected(index);
                   }}
                   onFocus={() => setExpanded(true)}
-                  className="absolute left-1/2 top-1/2 h-[78px] w-[58px] overflow-hidden rounded-md border border-[#3a3a40] bg-[#141416] text-left shadow-xl transition-[transform,opacity] duration-500"
+                  className="absolute left-1/2 top-1/2 h-[55px] w-[41px] overflow-hidden rounded-md border border-[#3a3a40] bg-[#141416] text-left shadow-xl transition-[transform,opacity] duration-500"
                   style={{
                     zIndex: 20,
                     transform: expanded
-                      ? `translate(-50%, -50%) translate(${offsets[index] ?? 0}px, -48px) rotate(${rotations[index] ?? 0}deg)`
+                      ? `translate(-50%, -50%) translate(${offsets[index] ?? 0}px, -34px) rotate(${rotations[index] ?? 0}deg)`
                       : 'translate(-50%, -50%) translateY(0) rotate(0deg) scale(0.72)',
                     opacity: expanded ? 1 : 0,
                     transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
@@ -301,12 +301,12 @@ export default function PosterFolder({
 
             {/* Folder front */}
             <div
-              className="absolute rounded-md bg-[#29292e] shadow-lg"
+              className="absolute rounded-md bg-[#3fa9f5] shadow-lg"
               style={{
-                width: 96,
-                height: 70,
+                width: 68,
+                height: 50,
                 transformOrigin: 'bottom center',
-                transform: expanded ? 'rotateX(25deg) translateY(8px)' : 'rotateX(0deg)',
+                transform: expanded ? 'rotateX(25deg) translateY(6px)' : 'rotateX(0deg)',
                 transition: 'transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1)',
                 zIndex: 30,
               }}
@@ -314,12 +314,12 @@ export default function PosterFolder({
             <div
               className="pointer-events-none absolute rounded-md"
               style={{
-                width: 96,
-                height: 70,
+                width: 68,
+                height: 50,
                 background:
                   'linear-gradient(135deg, rgba(255,255,255,0.18) 0%, transparent 52%)',
                 transformOrigin: 'bottom center',
-                transform: expanded ? 'rotateX(25deg) translateY(8px)' : 'rotateX(0deg)',
+                transform: expanded ? 'rotateX(25deg) translateY(6px)' : 'rotateX(0deg)',
                 transition: 'transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1)',
                 zIndex: 31,
               }}
@@ -332,17 +332,17 @@ export default function PosterFolder({
             onClick={onOpenInfo}
           >
             {!hideTitle && (
-              <div className="font-heading text-[15px] font-bold leading-none text-white">
+              <div className="font-heading text-[13px] font-bold leading-none text-white">
                 {title}
               </div>
             )}
-            <div className="mt-0.5 text-[9px] text-[#8f8f8f]">
+            <div className="mt-0.5 text-[8px] text-[#8f8f8f]">
               {isSkeleton
                 ? ui.posters.loading
                 : ui.posters.count.replace('{count}', String(items.length))}
             </div>
             <div
-              className="mt-0.5 text-[9px] text-[#8f8f8f] transition-opacity duration-300"
+              className="mt-0.5 text-[8px] text-[#8f8f8f] transition-opacity duration-300"
               style={{ opacity: expanded ? 0 : 1 }}
             >
               {hint}

@@ -1,5 +1,5 @@
-@import 'tailwindcss';
 @import './fonts.css';
+@import 'tailwindcss';
 
 /* shadcn/FF theme tokens mapped onto the granite palette (§0/§2). The FF
    components consume these via Tailwind utilities — bg-hover (the gliding
@@ -384,27 +384,50 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     #141417 75%
   );
   background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  animation: map-skeleton-shimmer 1.5s ease-in-out infinite;
 }
 
-/* Shared shimmer for every skeleton strip (map boot, detail cover, tooltip). */
-.skeleton-shimmer {
-  background: linear-gradient(
-    90deg,
-    #1a1a1d 25%,
-    #26262b 50%,
-    #1a1a1d 75%
-  );
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s ease-in-out infinite;
-}
-
-@keyframes skeleton-shimmer {
+@keyframes map-skeleton-shimmer {
   from {
     background-position: 200% 0;
   }
   to {
     background-position: -200% 0;
+  }
+}
+
+/* Shared shimmer for every skeleton strip (map boot, detail cover, tooltip).
+   The sweep is a pseudo-element moved by `transform`, so it runs on the
+   compositor and never repaints the page. `@layer components` keeps Tailwind
+   utilities (e.g. `absolute`) winning over the host positioning below. */
+@layer components {
+  .skeleton-shimmer {
+    position: relative;
+    overflow: hidden;
+    background: #1a1a1d;
+  }
+
+  .skeleton-shimmer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.055),
+      transparent
+    );
+    transform: translateX(-100%);
+    animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes skeleton-shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
   }
 }
 
@@ -444,7 +467,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
 @media (prefers-reduced-motion: reduce) {
   .map-skeleton,
-  .skeleton-shimmer {
+  .skeleton-shimmer::after {
     animation: none;
   }
 }
@@ -540,6 +563,88 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 @media (prefers-reduced-motion: reduce) {
   .happening-enter {
     animation: none;
+  }
+}
+
+/* INFO bento: hard-edged cards, mount stagger. */
+.info-enter {
+  animation: info-enter 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes info-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .info-enter {
+    animation: none;
+  }
+}
+
+/* Career matching quiz: directional step slides. */
+.matching-forward {
+  animation: matching-forward 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes matching-forward {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.matching-back {
+  animation: matching-back 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes matching-back {
+  from {
+    opacity: 0;
+    transform: translateX(-14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .matching-forward,
+  .matching-back {
+    animation: none;
+  }
+}
+
+/* Job Matcher trigger: slow AI-style shimmer sweep. */
+@keyframes matching-shimmer {
+  0% {
+    transform: translateX(-150%) skewX(-12deg);
+  }
+  55%,
+  100% {
+    transform: translateX(420%) skewX(-12deg);
+  }
+}
+
+.matching-shimmer {
+  animation: matching-shimmer 3.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .matching-shimmer {
+    animation: none;
+    opacity: 0;
   }
 }
 

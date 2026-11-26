@@ -359,10 +359,12 @@ export function useFluidHover<T extends HTMLElement>(
       // overlays to the top of the list, so treat the whole pass as
       // incomplete. A boxless element is the only case: `position: fixed`
       // items also have no offsetParent but do have a size.
+      // One layout read per property, reused for the box check and the rect:
+      // each offset* read can force a layout pass.
+      const width = element.offsetWidth;
+      const height = element.offsetHeight;
       const hasLayoutBox =
-        element.offsetParent !== null ||
-        element.offsetWidth > 0 ||
-        element.offsetHeight > 0;
+        element.offsetParent !== null || width > 0 || height > 0;
       if (!hasLayoutBox) {
         everyItemHasLayout = false;
         return;
@@ -386,9 +388,9 @@ export function useFluidHover<T extends HTMLElement>(
       }
       rects[index] = {
         top,
-        height: element.offsetHeight,
+        height,
         left,
-        width: element.offsetWidth,
+        width,
       };
     });
     if (!everyItemHasLayout) return false;

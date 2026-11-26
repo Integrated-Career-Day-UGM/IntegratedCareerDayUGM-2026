@@ -124,7 +124,7 @@ export default function TrackSwitcher() {
           className={cn(
             'mx-0 w-fit max-w-full overscroll-x-contain rounded-[18px] border border-line bg-[#0a0a0a] md:w-auto md:rounded-md',
             'max-md:[&>div.bg-active]:rounded-[14px]',
-            '[&_[role=tab]_span]:text-[0.9375rem] [&_[role=tab]_span]:leading-none md:[&_[role=tab]_span]:text-[0.8125rem]',
+            '[&_[role=tab]_span]:text-[0.9375rem] [&_[role=tab]_span]:leading-none md:[&_[role=tab]_span]:text-base md:[&_svg]:h-5 md:[&_svg]:w-5',
           )}
           style={{ scrollbarWidth: 'none' }}
         >
@@ -141,10 +141,10 @@ export default function TrackSwitcher() {
                   icon={Icon}
                   label={track.label}
                   className={cn(
-                    'relative shrink-0 text-[11px] font-semibold max-md:h-auto max-md:min-h-10 max-md:py-1 max-md:[&_svg]:h-5 max-md:[&_svg]:w-5',
+                    'relative shrink-0 text-[11px] font-semibold max-md:h-auto max-md:min-h-10 max-md:py-1 max-md:[&_svg]:h-5 max-md:[&_svg]:w-5 md:min-h-12 md:py-2',
                     selected
-                      ? 'flex-none justify-start px-3 max-md:px-4'
-                      : 'w-10 justify-center px-0 max-md:w-[57px] md:w-auto md:px-3',
+                      ? 'flex-none justify-start px-3 max-md:px-4 md:px-5'
+                      : 'w-10 justify-center px-0 max-md:w-[57px] md:w-auto md:px-5',
                   )}
                 />
 

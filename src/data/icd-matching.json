@@ -1,0 +1,3344 @@
+{
+  "version": "2026.11.1",
+  "params": {
+    "gapWeights": [
+      5,
+      4,
+      3,
+      2,
+      1
+    ],
+    "aspectWeights": {
+      "eligibility": 0.35,
+      "major": 0.25,
+      "interest": 0.25,
+      "fit": 0.15
+    },
+    "coreShare": 0.6,
+    "interestCoreThreshold": 4,
+    "gaps": {
+      "majorAny": -1,
+      "majorRelated": -1,
+      "majorMismatch": -3,
+      "typeMismatch": -2,
+      "locMismatch": -2
+    },
+    "blocking": [
+      "campus",
+      "level",
+      "stage"
+    ],
+    "dataQuality": {
+      "poster": 1,
+      "web": 0.9,
+      "inferred": 0.6
+    },
+    "confidence": {
+      "weights": {
+        "data": 0.3,
+        "coverage": 0.2,
+        "margin": 0.3,
+        "clarity": 0.2
+      },
+      "marginSaturation": 15,
+      "ineligiblePenalty": 0.5,
+      "levels": {
+        "high": 70,
+        "medium": 45
+      }
+    },
+    "topN": 3
+  },
+  "labels": {
+    "level": [
+      "",
+      "D3",
+      "D4",
+      "S1",
+      "S2"
+    ],
+    "stage": [
+      "",
+      "mahasiswa aktif",
+      "fresh graduate",
+      "pengalaman hingga 2 tahun",
+      "pengalaman 3 tahun atau lebih"
+    ],
+    "gpa": [
+      "",
+      "tanpa batas",
+      "2,75",
+      "3,00",
+      "3,25",
+      "3,50"
+    ],
+    "gpaCandidate": [
+      "",
+      "< 2,75",
+      "2,75 - 2,99",
+      "3,00 - 3,24",
+      "3,25 - 3,49",
+      "3,50 ke atas"
+    ],
+    "campus": [
+      "",
+      "Kampus lain",
+      "UGM"
+    ],
+    "type": {
+      "intern": "magang",
+      "trainee": "trainee / program pengembangan",
+      "staff": "staf",
+      "fellow": "fellowship"
+    },
+    "axis": {
+      "tech": "teknologi",
+      "data": "analisis data",
+      "biz": "bisnis dan penjualan",
+      "ops": "operasional",
+      "people": "SDM dan komunikasi",
+      "create": "desain dan konten"
+    },
+    "region": {
+      "diy": "Yogyakarta",
+      "jabodetabek": "Jabodetabek",
+      "jatim": "Jawa Timur",
+      "lainnya": "di luar kota besar"
+    },
+    "aspect": {
+      "eligibility": "Kelayakan",
+      "major": "Jurusan",
+      "interest": "Minat",
+      "fit": "Kecocokan program"
+    },
+    "criterion": {
+      "campus": "Kampus",
+      "level": "Jenjang",
+      "stage": "Status",
+      "gpa": "IPK",
+      "major": "Jurusan",
+      "type": "Jenis program",
+      "loc": "Penempatan"
+    }
+  },
+  "questions": [
+    {
+      "id": "campus",
+      "kind": "profile",
+      "field": "campus",
+      "q": "Kamu kuliah di mana?",
+      "opts": [
+        {
+          "id": "ugm",
+          "t": "UGM",
+          "v": 2
+        },
+        {
+          "id": "other",
+          "t": "Kampus lain",
+          "v": 1
+        }
+      ]
+    },
+    {
+      "id": "level",
+      "kind": "profile",
+      "field": "level",
+      "q": "Jenjang pendidikanmu?",
+      "opts": [
+        {
+          "id": "d3",
+          "t": "D3",
+          "v": 1
+        },
+        {
+          "id": "d4",
+          "t": "D4",
+          "v": 2
+        },
+        {
+          "id": "s1",
+          "t": "S1",
+          "v": 3
+        },
+        {
+          "id": "s2",
+          "t": "S2",
+          "v": 4
+        }
+      ]
+    },
+    {
+      "id": "stage",
+      "kind": "profile",
+      "field": "stage",
+      "q": "Posisimu sekarang?",
+      "opts": [
+        {
+          "id": "student",
+          "t": "Mahasiswa aktif",
+          "v": 1
+        },
+        {
+          "id": "fresh",
+          "t": "Fresh graduate",
+          "v": 2
+        },
+        {
+          "id": "exp2",
+          "t": "Pengalaman kerja sampai 2 tahun",
+          "v": 3
+        },
+        {
+          "id": "exp3",
+          "t": "Pengalaman kerja 3 tahun atau lebih",
+          "v": 4
+        }
+      ]
+    },
+    {
+      "id": "gpa",
+      "kind": "profile",
+      "field": "gpa",
+      "q": "Kisaran IPK-mu?",
+      "opts": [
+        {
+          "id": "g1",
+          "t": "Di bawah 2,75",
+          "v": 1
+        },
+        {
+          "id": "g2",
+          "t": "2,75 - 2,99",
+          "v": 2
+        },
+        {
+          "id": "g3",
+          "t": "3,00 - 3,24",
+          "v": 3
+        },
+        {
+          "id": "g4",
+          "t": "3,25 - 3,49",
+          "v": 4
+        },
+        {
+          "id": "g5",
+          "t": "3,50 ke atas",
+          "v": 5
+        },
+        {
+          "id": "skip",
+          "t": "Lewati",
+          "v": null
+        }
+      ]
+    },
+    {
+      "id": "major",
+      "kind": "profile",
+      "field": "major",
+      "q": "Rumpun jurusanmu?",
+      "opts": [
+        {
+          "id": "cs",
+          "t": "Ilmu Komputer / Informatika / Sistem Informasi",
+          "v": "cs"
+        },
+        {
+          "id": "data",
+          "t": "Statistika / Matematika / Aktuaria / Fisika",
+          "v": "data"
+        },
+        {
+          "id": "mech",
+          "t": "Teknik Mesin / Mekatronika",
+          "v": "mech"
+        },
+        {
+          "id": "elec",
+          "t": "Teknik Elektro",
+          "v": "elec"
+        },
+        {
+          "id": "indus",
+          "t": "Teknik Industri",
+          "v": "indus"
+        },
+        {
+          "id": "chem",
+          "t": "Teknik Kimia / Kimia / Material",
+          "v": "chem"
+        },
+        {
+          "id": "civil",
+          "t": "Teknik Sipil",
+          "v": "civil"
+        },
+        {
+          "id": "design",
+          "t": "DKV / Desain / Arsitektur",
+          "v": "design"
+        },
+        {
+          "id": "agri",
+          "t": "Pertanian / Kehutanan / Agribisnis",
+          "v": "agri"
+        },
+        {
+          "id": "biz",
+          "t": "Manajemen / Bisnis / Ekonomi",
+          "v": "biz"
+        },
+        {
+          "id": "acct",
+          "t": "Akuntansi / Keuangan",
+          "v": "acct"
+        },
+        {
+          "id": "psy",
+          "t": "Psikologi",
+          "v": "psy"
+        },
+        {
+          "id": "comm",
+          "t": "Ilmu Komunikasi / Marketing",
+          "v": "comm"
+        },
+        {
+          "id": "social",
+          "t": "Hukum / HI / Sosial Humaniora",
+          "v": "social"
+        },
+        {
+          "id": "other",
+          "t": "Lainnya",
+          "v": null
+        }
+      ]
+    },
+    {
+      "id": "want",
+      "kind": "profile",
+      "field": "want",
+      "q": "Kamu cari program apa?",
+      "opts": [
+        {
+          "id": "intern",
+          "t": "Magang",
+          "v": "intern"
+        },
+        {
+          "id": "trainee",
+          "t": "Trainee / program pengembangan",
+          "v": "trainee"
+        },
+        {
+          "id": "staff",
+          "t": "Staf / karyawan",
+          "v": "staff"
+        },
+        {
+          "id": "fellow",
+          "t": "Fellowship",
+          "v": "fellow"
+        },
+        {
+          "id": "any",
+          "t": "Belum menentukan",
+          "v": "any"
+        }
+      ]
+    },
+    {
+      "id": "region",
+      "kind": "profile",
+      "field": "region",
+      "q": "Mau ditempatkan di mana?",
+      "opts": [
+        {
+          "id": "diy",
+          "t": "Yogyakarta",
+          "v": "diy"
+        },
+        {
+          "id": "jabodetabek",
+          "t": "Jabodetabek",
+          "v": "jabodetabek"
+        },
+        {
+          "id": "jatim",
+          "t": "Jawa Timur",
+          "v": "jatim"
+        },
+        {
+          "id": "lainnya",
+          "t": "Daerah lain",
+          "v": "lainnya"
+        },
+        {
+          "id": "all",
+          "t": "Di mana saja",
+          "v": "all"
+        }
+      ]
+    },
+    {
+      "id": "i1",
+      "kind": "interest",
+      "q": "Tugas yang paling kamu nikmati?",
+      "opts": [
+        {
+          "id": "a",
+          "t": "Membangun atau mengoprek sistem",
+          "a": {
+            "tech": 2
+          }
+        },
+        {
+          "id": "b",
+          "t": "Menggali angka dan pola",
+          "a": {
+            "data": 2
+          }
+        },
+        {
+          "id": "c",
+          "t": "Meyakinkan orang dan menutup kesepakatan",
+          "a": {
+            "biz": 2
+          }
+        },
+        {
+          "id": "d",
+          "t": "Merapikan proses dan jadwal",
+          "a": {
+            "ops": 2
+          }
+        },
+        {
+          "id": "e",
+          "t": "Membantu dan mengembangkan orang",
+          "a": {
+            "people": 2
+          }
+        },
+        {
+          "id": "f",
+          "t": "Merancang tampilan dan cerita",
+          "a": {
+            "create": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "i2",
+      "kind": "interest",
+      "q": "Di proyek kelompok, kamu biasanya jadi...",
+      "opts": [
+        {
+          "id": "a",
+          "t": "Penulis kode atau pengerjaan teknis",
+          "a": {
+            "tech": 2,
+            "data": 1
+          }
+        },
+        {
+          "id": "b",
+          "t": "Pengolah dan penganalisis data",
+          "a": {
+            "data": 2,
+            "tech": 1
+          }
+        },
+        {
+          "id": "c",
+          "t": "Penghubung dengan klien atau pihak luar",
+          "a": {
+            "biz": 2,
+            "people": 1
+          }
+        },
+        {
+          "id": "d",
+          "t": "Koordinator yang menjaga tenggat",
+          "a": {
+            "ops": 2,
+            "people": 1
+          }
+        },
+        {
+          "id": "e",
+          "t": "Fasilitator yang menjaga tim kompak",
+          "a": {
+            "people": 2,
+            "ops": 1
+          }
+        },
+        {
+          "id": "f",
+          "t": "Pembuat desain dan materi presentasi",
+          "a": {
+            "create": 2,
+            "biz": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "i3",
+      "kind": "interest",
+      "q": "Hari kerja yang ideal buatmu?",
+      "opts": [
+        {
+          "id": "a",
+          "t": "Debug dan merilis fitur",
+          "a": {
+            "tech": 2
+          }
+        },
+        {
+          "id": "b",
+          "t": "Membuat dashboard dan insight",
+          "a": {
+            "data": 2,
+            "biz": 1
+          }
+        },
+        {
+          "id": "c",
+          "t": "Rapat klien dan mengejar target",
+          "a": {
+            "biz": 2
+          }
+        },
+        {
+          "id": "d",
+          "t": "Memantau lapangan, pabrik, atau rantai pasok",
+          "a": {
+            "ops": 2
+          }
+        },
+        {
+          "id": "e",
+          "t": "Mewawancarai dan melatih orang",
+          "a": {
+            "people": 2
+          }
+        },
+        {
+          "id": "f",
+          "t": "Membuat materi visual atau konten",
+          "a": {
+            "create": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "i4",
+      "kind": "interest",
+      "q": "Skill mana yang paling ingin kamu asah?",
+      "opts": [
+        {
+          "id": "a",
+          "t": "Pemrograman dan arsitektur sistem",
+          "a": {
+            "tech": 2
+          }
+        },
+        {
+          "id": "b",
+          "t": "Statistik dan machine learning",
+          "a": {
+            "data": 2,
+            "tech": 1
+          }
+        },
+        {
+          "id": "c",
+          "t": "Strategi dan penjualan",
+          "a": {
+            "biz": 2
+          }
+        },
+        {
+          "id": "d",
+          "t": "Manajemen proyek dan operasi",
+          "a": {
+            "ops": 2
+          }
+        },
+        {
+          "id": "e",
+          "t": "Komunikasi dan kepemimpinan",
+          "a": {
+            "people": 2
+          }
+        },
+        {
+          "id": "f",
+          "t": "Desain dan storytelling",
+          "a": {
+            "create": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "i5",
+      "kind": "interest",
+      "q": "Pencapaian yang paling kamu banggakan?",
+      "opts": [
+        {
+          "id": "a",
+          "t": "Aplikasi atau sistem yang benar-benar dipakai",
+          "a": {
+            "tech": 2
+          }
+        },
+        {
+          "id": "b",
+          "t": "Analisis yang mengubah sebuah keputusan",
+          "a": {
+            "data": 2
+          }
+        },
+        {
+          "id": "c",
+          "t": "Target penjualan atau kemitraan tercapai",
+          "a": {
+            "biz": 2
+          }
+        },
+        {
+          "id": "d",
+          "t": "Acara atau proyek yang berjalan mulus",
+          "a": {
+            "ops": 2,
+            "people": 1
+          }
+        },
+        {
+          "id": "e",
+          "t": "Organisasi atau tim yang solid",
+          "a": {
+            "people": 2
+          }
+        },
+        {
+          "id": "f",
+          "t": "Karya desain atau konten yang dikenal",
+          "a": {
+            "create": 2
+          }
+        }
+      ]
+    }
+  ],
+  "majors": [
+    {
+      "id": "cs",
+      "label": "Ilmu Komputer / Informatika / Sistem Informasi"
+    },
+    {
+      "id": "data",
+      "label": "Statistika / Matematika / Data Science"
+    },
+    {
+      "id": "mech",
+      "label": "Teknik Mesin / Mekatronika"
+    },
+    {
+      "id": "elec",
+      "label": "Teknik Elektro"
+    },
+    {
+      "id": "indus",
+      "label": "Teknik Industri"
+    },
+    {
+      "id": "chem",
+      "label": "Teknik Kimia / Kimia / Material"
+    },
+    {
+      "id": "civil",
+      "label": "Teknik Sipil"
+    },
+    {
+      "id": "design",
+      "label": "DKV / Desain / Arsitektur"
+    },
+    {
+      "id": "agri",
+      "label": "Pertanian / Kehutanan / Agribisnis"
+    },
+    {
+      "id": "biz",
+      "label": "Manajemen / Bisnis / Ekonomi"
+    },
+    {
+      "id": "acct",
+      "label": "Akuntansi / Keuangan"
+    },
+    {
+      "id": "psy",
+      "label": "Psikologi"
+    },
+    {
+      "id": "comm",
+      "label": "Komunikasi / Marketing"
+    },
+    {
+      "id": "social",
+      "label": "Hukum / HI / Sosial Humaniora"
+    }
+  ],
+  "related": {
+    "cs": [
+      "data",
+      "elec"
+    ],
+    "data": [
+      "cs",
+      "acct",
+      "indus",
+      "biz"
+    ],
+    "mech": [
+      "elec",
+      "indus",
+      "civil",
+      "chem"
+    ],
+    "elec": [
+      "cs",
+      "mech",
+      "indus"
+    ],
+    "indus": [
+      "mech",
+      "biz",
+      "data",
+      "chem"
+    ],
+    "chem": [
+      "indus",
+      "mech",
+      "agri"
+    ],
+    "civil": [
+      "mech",
+      "design",
+      "indus"
+    ],
+    "design": [
+      "comm",
+      "civil"
+    ],
+    "agri": [
+      "chem",
+      "biz"
+    ],
+    "biz": [
+      "acct",
+      "comm",
+      "social",
+      "indus",
+      "data"
+    ],
+    "acct": [
+      "biz",
+      "data"
+    ],
+    "psy": [
+      "social",
+      "biz",
+      "comm"
+    ],
+    "comm": [
+      "biz",
+      "design",
+      "social"
+    ],
+    "social": [
+      "biz",
+      "psy",
+      "comm"
+    ]
+  },
+  "booths": {
+    "app-group": {
+      "company": "APP Group",
+      "ref": "E9",
+      "deadline": null,
+      "apply": {
+        "label": "Website resmi / QR poster",
+        "url": "https://www.app.co.id"
+      }
+    },
+    "utpe-group": {
+      "company": "United Tractors Pandu Engineering Group",
+      "ref": "C3",
+      "deadline": "2026-11-28",
+      "apply": {
+        "label": "Campus Hiring Linktree",
+        "url": "https://linktr.ee/CampushiringUTPEGroup"
+      }
+    },
+    "dynapack-asia": {
+      "company": "Dynapack Asia",
+      "ref": "E12",
+      "deadline": null,
+      "apply": {
+        "label": "Website resmi / QR poster",
+        "url": "https://dynapackasia.com"
+      }
+    },
+    "elnusa-petrofin": {
+      "company": "Elnusa Petrofin",
+      "ref": "E11",
+      "deadline": null,
+      "apply": {
+        "label": "Talent Pool EPN",
+        "url": "https://bit.ly/talentpoolUGM"
+      }
+    },
+    "monee": {
+      "company": "Monee",
+      "ref": "C2",
+      "deadline": null,
+      "apply": {
+        "label": "Monee Careers",
+        "url": "https://careers.monee.com/careers"
+      }
+    },
+    "ocbc": {
+      "company": "OCBC",
+      "ref": "E14",
+      "deadline": null,
+      "apply": {
+        "label": "Karir OCBC",
+        "url": "https://www.ocbc.id/id/karir"
+      }
+    },
+    "odoo-indonesia": {
+      "company": "Odoo Indonesia",
+      "ref": "C4",
+      "deadline": null,
+      "apply": {
+        "label": "Halaman pendaftaran Odoo",
+        "url": "https://odoo.com/r/9uq"
+      }
+    },
+    "paragon-corp": {
+      "company": "ParagonCorp",
+      "ref": "D1",
+      "deadline": "2026-11-30",
+      "apply": {
+        "label": "Talent Pool ParagonCorp",
+        "url": "https://bit.ly/TalentPoolParagonCorp"
+      }
+    },
+    "polygon-bikes": {
+      "company": "Polygon Bikes",
+      "ref": "D3",
+      "deadline": null,
+      "apply": {
+        "label": "Portal karir Polygon",
+        "url": "https://www.polygonbikes.com/id/karir/"
+      }
+    },
+    "bni": {
+      "company": "BNI",
+      "ref": "D2",
+      "deadline": null,
+      "apply": {
+        "label": "BNI Career Connect 2026",
+        "url": "https://bni.id/JFUGM_NOV2026"
+      }
+    },
+    "cobra-dental": {
+      "company": "Cobra Dental",
+      "ref": "E10",
+      "deadline": null,
+      "apply": {
+        "label": "Pendaftaran MT Cobra Dental",
+        "url": "https://bit.ly/RegistMTCDI"
+      }
+    },
+    "quick-traktor": {
+      "company": "Quick Traktor",
+      "ref": "E1",
+      "deadline": null,
+      "apply": {
+        "label": "Rekrutmen Quick",
+        "url": "https://quick.co.id/recruit/ERS"
+      }
+    },
+    "surya-internusa": {
+      "company": "PT Surya Semesta Internusa Tbk (SSIA)",
+      "ref": "E2",
+      "deadline": null,
+      "apply": {
+        "label": "Linktree HRD SSIA",
+        "url": "https://linktr.ee/hrdssia?utm_source=qr_code"
+      }
+    },
+    "teach-first-indonesia": {
+      "company": "Teach First Indonesia",
+      "ref": "E13",
+      "deadline": null,
+      "apply": {
+        "label": "Scan QR di poster",
+        "url": null
+      }
+    },
+    "pt-torrecid-indonesia": {
+      "company": "PT Torrecid Indonesia",
+      "ref": "E8",
+      "deadline": null,
+      "apply": {
+        "label": "Website resmi / QR poster",
+        "url": "https://www.torrecid.com"
+      }
+    },
+    "zurich-indonesia": {
+      "company": "Zurich Indonesia",
+      "ref": "C6",
+      "deadline": null,
+      "apply": {
+        "label": "Zurich Indonesia",
+        "url": "https://www.zurich.co.id"
+      }
+    }
+  },
+  "roles": [
+    {
+      "id": "app-mt",
+      "b": "app-group",
+      "r": "Management Trainee",
+      "t": "trainee",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        3
+      ],
+      "gpa": 5,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "biz": 4,
+        "ops": 3,
+        "people": 3
+      },
+      "src": "poster",
+      "note": "Wajib Inggris dan/atau Mandarin, siap ditempatkan di seluruh Indonesia."
+    },
+    {
+      "id": "app-gt-forestry",
+      "b": "app-group",
+      "r": "Graduate Trainee - Forestry",
+      "t": "trainee",
+      "lv": [
+        3,
+        3
+      ],
+      "st": [
+        2,
+        3
+      ],
+      "gpa": 3,
+      "mj": [
+        "agri",
+        "acct",
+        "data"
+      ],
+      "loc": "any",
+      "ax": {
+        "ops": 4,
+        "data": 3
+      },
+      "src": "poster"
+    },
+    {
+      "id": "app-gt-tissue",
+      "b": "app-group",
+      "r": "Graduate Trainee - Tissue",
+      "t": "trainee",
+      "lv": [
+        3,
+        3
+      ],
+      "st": [
+        2,
+        3
+      ],
+      "gpa": 1,
+      "mj": [
+        "mech",
+        "elec",
+        "indus",
+        "chem"
+      ],
+      "loc": "any",
+      "ax": {
+        "ops": 4,
+        "data": 3,
+        "tech": 3
+      },
+      "src": "poster",
+      "note": "Lean Manufacturing jadi nilai tambah."
+    },
+    {
+      "id": "app-gt-serang",
+      "b": "app-group",
+      "r": "Graduate Trainee - Serang Mill (Power Plant)",
+      "t": "trainee",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        3
+      ],
+      "gpa": 3,
+      "mj": [
+        "mech",
+        "elec",
+        "indus",
+        "chem",
+        "civil"
+      ],
+      "loc": [
+        "lainnya"
+      ],
+      "ax": {
+        "ops": 4,
+        "people": 3,
+        "tech": 3
+      },
+      "src": "poster",
+      "note": "Penempatan Serang Mill, Banten."
+    },
+    {
+      "id": "app-int-hr",
+      "b": "app-group",
+      "r": "Internship - Human Resource",
+      "t": "intern",
+      "lv": [
+        1,
+        4
+      ],
+      "st": [
+        1,
+        2
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "people": 4,
+        "ops": 3
+      },
+      "src": "poster"
+    },
+    {
+      "id": "app-int-proc",
+      "b": "app-group",
+      "r": "Internship - Procurement",
+      "t": "intern",
+      "lv": [
+        1,
+        4
+      ],
+      "st": [
+        1,
+        2
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "ops": 4,
+        "biz": 3
+      },
+      "src": "poster"
+    },
+    {
+      "id": "app-int-comm",
+      "b": "app-group",
+      "r": "Internship - Commercial",
+      "t": "intern",
+      "lv": [
+        1,
+        4
+      ],
+      "st": [
+        1,
+        2
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "biz": 4,
+        "people": 3
+      },
+      "src": "poster"
+    },
+    {
+      "id": "app-int-log",
+      "b": "app-group",
+      "r": "Internship - Logistic / Supply Chain",
+      "t": "intern",
+      "lv": [
+        1,
+        4
+      ],
+      "st": [
+        1,
+        2
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "ops": 4,
+        "data": 3
+      },
+      "src": "poster"
+    },
+    {
+      "id": "app-int-is",
+      "b": "app-group",
+      "r": "Internship - Information System",
+      "t": "intern",
+      "lv": [
+        1,
+        4
+      ],
+      "st": [
+        1,
+        2
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "tech": 4,
+        "data": 3
+      },
+      "src": "poster"
+    },
+    {
+      "id": "utpe-fluid",
+      "b": "utpe-group",
+      "r": "Fluid Power Tech. Engineer",
+      "t": "staff",
+      "lv": [
+        2,
+        4
+      ],
+      "st": [
+        1,
+        3
+      ],
+      "gpa": 1,
+      "mj": [
+        "mech"
+      ],
+      "loc": "any",
+      "campus": 2,
+      "ax": {
+        "tech": 4,
+        "ops": 3
+      },
+      "src": "inferred",
+      "note": "Khusus mahasiswa UGM."
+    },
+    {
+      "id": "utpe-design",
+      "b": "utpe-group",
+      "r": "Design Engineer",
+      "t": "staff",
+      "lv": [
+        2,
+        4
+      ],
+      "st": [
+        1,
+        3
+      ],
+      "gpa": 1,
+      "mj": [
+        "mech"
+      ],
+      "loc": "any",
+      "campus": 2,
+      "ax": {
+        "tech": 4,
+        "create": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "utpe-structure",
+      "b": "utpe-group",
+      "r": "Structure Engineer",
+      "t": "staff",
+      "lv": [
+        2,
+        4
+      ],
+      "st": [
+        1,
+        3
+      ],
+      "gpa": 1,
+      "mj": [
+        "civil",
+        "mech"
+      ],
+      "loc": "any",
+      "campus": 2,
+      "ax": {
+        "tech": 4,
+        "ops": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "utpe-scm",
+      "b": "utpe-group",
+      "r": "Supply Chain Management (PML, Mandarin)",
+      "t": "staff",
+      "lv": [
+        2,
+        4
+      ],
+      "st": [
+        1,
+        3
+      ],
+      "gpa": 1,
+      "mj": [
+        "indus",
+        "biz"
+      ],
+      "loc": "any",
+      "campus": 2,
+      "ax": {
+        "ops": 4,
+        "biz": 3
+      },
+      "src": "inferred",
+      "note": "Wajib berbahasa Mandarin."
+    },
+    {
+      "id": "utpe-field",
+      "b": "utpe-group",
+      "r": "Nautical Staff / Field Officer (PML)",
+      "t": "staff",
+      "lv": [
+        2,
+        4
+      ],
+      "st": [
+        1,
+        3
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "campus": 2,
+      "ax": {
+        "ops": 4,
+        "people": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "utpe-strategic",
+      "b": "utpe-group",
+      "r": "Business Strategic (PML)",
+      "t": "staff",
+      "lv": [
+        2,
+        4
+      ],
+      "st": [
+        1,
+        3
+      ],
+      "gpa": 1,
+      "mj": [
+        "biz",
+        "indus",
+        "acct"
+      ],
+      "loc": "any",
+      "campus": 2,
+      "ax": {
+        "biz": 4,
+        "data": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "utpe-part",
+      "b": "utpe-group",
+      "r": "Part Analyst (PML)",
+      "t": "staff",
+      "lv": [
+        2,
+        4
+      ],
+      "st": [
+        1,
+        3
+      ],
+      "gpa": 1,
+      "mj": [
+        "mech",
+        "indus",
+        "data"
+      ],
+      "loc": "any",
+      "campus": 2,
+      "ax": {
+        "data": 4,
+        "ops": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "utpe-prod",
+      "b": "utpe-group",
+      "r": "Production Engineering - Blasting & Painting (PMP)",
+      "t": "staff",
+      "lv": [
+        2,
+        4
+      ],
+      "st": [
+        1,
+        3
+      ],
+      "gpa": 1,
+      "mj": [
+        "mech",
+        "chem",
+        "indus"
+      ],
+      "loc": "any",
+      "campus": 2,
+      "ax": {
+        "ops": 4,
+        "tech": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "utpe-bizcon",
+      "b": "utpe-group",
+      "r": "Business Consultant (Ship Repair / Ship Building / Triatra)",
+      "t": "staff",
+      "lv": [
+        2,
+        4
+      ],
+      "st": [
+        1,
+        3
+      ],
+      "gpa": 1,
+      "mj": [
+        "biz",
+        "indus",
+        "mech"
+      ],
+      "loc": "any",
+      "campus": 2,
+      "ax": {
+        "biz": 4,
+        "data": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "utpe-sales",
+      "b": "utpe-group",
+      "r": "Sales Associate / After Sales Consultant / MT Marketing & Sales (Triatra)",
+      "t": "staff",
+      "lv": [
+        2,
+        4
+      ],
+      "st": [
+        1,
+        3
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "campus": 2,
+      "ax": {
+        "biz": 5,
+        "people": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "dyna-apprentice",
+      "b": "dynapack-asia",
+      "r": "Apprentice 2027",
+      "t": "trainee",
+      "lv": [
+        1,
+        4
+      ],
+      "st": [
+        1,
+        2
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "ops": 4,
+        "data": 3
+      },
+      "src": "inferred",
+      "note": "Program apprentice sejak 1993; kualifikasi belum tercantum di poster."
+    },
+    {
+      "id": "dyna-hrga",
+      "b": "dynapack-asia",
+      "r": "HRGA Generalist",
+      "t": "staff",
+      "lv": [
+        2,
+        4
+      ],
+      "st": [
+        2,
+        4
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "people": 4,
+        "ops": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "dyna-tech",
+      "b": "dynapack-asia",
+      "r": "Technician",
+      "t": "staff",
+      "lv": [
+        1,
+        3
+      ],
+      "st": [
+        2,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "mech",
+        "elec"
+      ],
+      "loc": "any",
+      "ax": {
+        "tech": 4,
+        "ops": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "dyna-finance",
+      "b": "dynapack-asia",
+      "r": "Tax Staff / AP Staff",
+      "t": "staff",
+      "lv": [
+        2,
+        4
+      ],
+      "st": [
+        2,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "acct"
+      ],
+      "loc": "any",
+      "ax": {
+        "data": 4,
+        "ops": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "dyna-talent",
+      "b": "dynapack-asia",
+      "r": "Talentpool 2027",
+      "t": "staff",
+      "lv": [
+        1,
+        4
+      ],
+      "st": [
+        1,
+        4
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "ops": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "elnusa-talent",
+      "b": "elnusa-petrofin",
+      "r": "Talent Pool EPN",
+      "t": "staff",
+      "lv": [
+        1,
+        4
+      ],
+      "st": [
+        1,
+        4
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "ops": 3,
+        "tech": 3
+      },
+      "src": "poster",
+      "note": "Terbuka untuk umum. Bursa Karir UGM 28-29 November 2026, 09.00-16.00 WIB di GIK."
+    },
+    {
+      "id": "monee-qa",
+      "b": "monee",
+      "r": "Product Quality Assurance",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        3,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "cs",
+        "biz"
+      ],
+      "loc": "any",
+      "ax": {
+        "tech": 4,
+        "ops": 3
+      },
+      "src": "poster",
+      "note": "Min. 2 tahun di QA atau product management."
+    },
+    {
+      "id": "monee-bd-digital",
+      "b": "monee",
+      "r": "Business Development - Project, Digital Products",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        3
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "biz": 4,
+        "data": 3,
+        "ops": 3
+      },
+      "src": "poster",
+      "note": "Fresh graduate diterima. Wajib mahir Excel dan Inggris."
+    },
+    {
+      "id": "monee-trainer-da",
+      "b": "monee",
+      "r": "Trainer Data Analyst - Monee Credit",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        3,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "data",
+        "cs"
+      ],
+      "loc": [
+        "diy"
+      ],
+      "ax": {
+        "data": 4,
+        "people": 3
+      },
+      "src": "poster",
+      "note": "Min. 1 tahun di e-commerce atau start-up."
+    },
+    {
+      "id": "monee-bi",
+      "b": "monee",
+      "r": "Business Intelligence",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        3,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "data",
+        "cs",
+        "indus",
+        "elec",
+        "mech"
+      ],
+      "loc": "any",
+      "ax": {
+        "data": 5,
+        "tech": 3,
+        "biz": 3
+      },
+      "src": "poster",
+      "note": "Min. 2 tahun di peran data atau BI; SQL wajib."
+    },
+    {
+      "id": "monee-pm-credit",
+      "b": "monee",
+      "r": "Project Management - Credit",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        3
+      ],
+      "gpa": 1,
+      "mj": [
+        "data",
+        "cs",
+        "indus",
+        "mech",
+        "elec",
+        "biz",
+        "acct"
+      ],
+      "loc": "any",
+      "ax": {
+        "ops": 4,
+        "data": 3,
+        "people": 3
+      },
+      "src": "poster"
+    },
+    {
+      "id": "monee-pm-internal",
+      "b": "monee",
+      "r": "Project Management - Internal Project, Credit Operations",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        1,
+        3
+      ],
+      "gpa": 1,
+      "mj": [
+        "biz",
+        "indus"
+      ],
+      "loc": [
+        "diy"
+      ],
+      "ax": {
+        "ops": 4,
+        "people": 3
+      },
+      "src": "poster",
+      "note": "Butuh pengalaman magang 6 bulan sampai 1 tahun."
+    },
+    {
+      "id": "monee-bd",
+      "b": "monee",
+      "r": "Business Development",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        4
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "biz": 4,
+        "data": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "monee-qa-lead",
+      "b": "monee",
+      "r": "QA Feedbacker Team Leader - Monee Credit",
+      "t": "staff",
+      "lv": [
+        2,
+        4
+      ],
+      "st": [
+        3,
+        4
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": [
+        "diy"
+      ],
+      "ax": {
+        "people": 4,
+        "ops": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "monee-cs-sup",
+      "b": "monee",
+      "r": "Customer Service Supervisor - Monee Credit",
+      "t": "staff",
+      "lv": [
+        2,
+        4
+      ],
+      "st": [
+        3,
+        4
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": [
+        "diy"
+      ],
+      "ax": {
+        "people": 4,
+        "ops": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "ocbc-jds",
+      "b": "ocbc",
+      "r": "Junior Data Scientist (AI/LLM Systems)",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        2
+      ],
+      "gpa": 1,
+      "mj": [
+        "data",
+        "cs",
+        "elec",
+        "mech",
+        "indus"
+      ],
+      "loc": "any",
+      "ax": {
+        "data": 5,
+        "tech": 4
+      },
+      "src": "poster",
+      "note": "Wajib pernah membangun sesuatu dengan LLM (skripsi, magang, proyek, atau hackathon)."
+    },
+    {
+      "id": "ocbc-crayon",
+      "b": "ocbc",
+      "r": "Crayon Tech Internship",
+      "t": "intern",
+      "lv": [
+        1,
+        4
+      ],
+      "st": [
+        1,
+        1
+      ],
+      "gpa": 1,
+      "mj": [
+        "cs",
+        "data"
+      ],
+      "loc": "any",
+      "ax": {
+        "tech": 4,
+        "data": 3
+      },
+      "src": "poster",
+      "note": "Mahasiswa semester 6 atau tingkat akhir."
+    },
+    {
+      "id": "ocbc-dscp",
+      "b": "ocbc",
+      "r": "Direct Sales Career Program (DSCP)",
+      "t": "trainee",
+      "lv": [
+        1,
+        4
+      ],
+      "st": [
+        2,
+        3
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": [
+        "jabodetabek"
+      ],
+      "ax": {
+        "biz": 5,
+        "people": 3
+      },
+      "src": "poster"
+    },
+    {
+      "id": "ocbc-gtp",
+      "b": "ocbc",
+      "r": "Graduate Talent Programme (GTP)",
+      "t": "trainee",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        3
+      ],
+      "gpa": 3,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "ops": 3,
+        "biz": 3,
+        "people": 3
+      },
+      "src": "poster",
+      "note": "Rotasi lintas unit."
+    },
+    {
+      "id": "ocbc-basa",
+      "b": "ocbc",
+      "r": "Service Advisor (BASA)",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        3,
+        4
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": [
+        "jabodetabek"
+      ],
+      "ax": {
+        "people": 4,
+        "biz": 3
+      },
+      "src": "poster",
+      "note": "Butuh pengalaman teller/CS di bank non-BPR."
+    },
+    {
+      "id": "ocbc-bait",
+      "b": "ocbc",
+      "r": "Banking Academy for IT",
+      "t": "trainee",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        3
+      ],
+      "gpa": 3,
+      "mj": [
+        "cs",
+        "data",
+        "elec"
+      ],
+      "loc": "any",
+      "ax": {
+        "tech": 5,
+        "data": 3
+      },
+      "src": "poster"
+    },
+    {
+      "id": "ocbc-basales",
+      "b": "ocbc",
+      "r": "Banking Academy for Sales",
+      "t": "trainee",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        3
+      ],
+      "gpa": 2,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "biz": 5,
+        "people": 3
+      },
+      "src": "poster"
+    },
+    {
+      "id": "odoo-acct-intern",
+      "b": "odoo-indonesia",
+      "r": "Accounting Intern",
+      "t": "intern",
+      "lv": [
+        1,
+        4
+      ],
+      "st": [
+        1,
+        2
+      ],
+      "gpa": 1,
+      "mj": [
+        "acct"
+      ],
+      "loc": "any",
+      "ax": {
+        "data": 3,
+        "ops": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "odoo-bd",
+      "b": "odoo-indonesia",
+      "r": "Business Development",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        4
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "biz": 4,
+        "people": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "odoo-partner-consultant",
+      "b": "odoo-indonesia",
+      "r": "Partnership Consultant",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        4
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "biz": 4,
+        "people": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "odoo-growth",
+      "b": "odoo-indonesia",
+      "r": "Partner Growth & Enablement",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        4
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "people": 4,
+        "biz": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "odoo-cam-png",
+      "b": "odoo-indonesia",
+      "r": "Channel Account Manager (Papua New Guinea)",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        3,
+        4
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": [
+        "lainnya"
+      ],
+      "ax": {
+        "biz": 4,
+        "people": 3
+      },
+      "src": "inferred",
+      "note": "Penempatan di Papua Nugini."
+    },
+    {
+      "id": "paragon-mt-abd",
+      "b": "paragon-corp",
+      "r": "MT Area Business Development",
+      "t": "trainee",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        3
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "biz": 4,
+        "people": 3
+      },
+      "src": "poster",
+      "note": "Program 18 bulan; lulusan 2024-2026."
+    },
+    {
+      "id": "paragon-mt-comm",
+      "b": "paragon-corp",
+      "r": "MT Commercial",
+      "t": "trainee",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        3
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "biz": 4,
+        "data": 3
+      },
+      "src": "poster"
+    },
+    {
+      "id": "paragon-mt-log",
+      "b": "paragon-corp",
+      "r": "MT Logistics & Distribution",
+      "t": "trainee",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        3
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "ops": 4,
+        "data": 3
+      },
+      "src": "poster"
+    },
+    {
+      "id": "paragon-mt-scm",
+      "b": "paragon-corp",
+      "r": "MT Supply Chain Management",
+      "t": "trainee",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        3
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "ops": 4,
+        "data": 4
+      },
+      "src": "poster"
+    },
+    {
+      "id": "poly-gcc",
+      "b": "polygon-bikes",
+      "r": "Global Customer Care",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        3
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": [
+        "diy"
+      ],
+      "ax": {
+        "people": 4,
+        "ops": 3
+      },
+      "src": "poster",
+      "note": "Wajib fasih berbahasa Inggris."
+    },
+    {
+      "id": "poly-sa",
+      "b": "polygon-bikes",
+      "r": "System Analyst",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "cs"
+      ],
+      "loc": [
+        "jatim"
+      ],
+      "ax": {
+        "tech": 4,
+        "data": 3,
+        "ops": 3
+      },
+      "src": "poster",
+      "note": "Penempatan Sidoarjo."
+    },
+    {
+      "id": "poly-dge",
+      "b": "polygon-bikes",
+      "r": "Digital Growth Executive",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        3,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "biz",
+        "data",
+        "comm"
+      ],
+      "loc": [
+        "jatim"
+      ],
+      "ax": {
+        "biz": 4,
+        "data": 4
+      },
+      "src": "poster",
+      "note": "Pengalaman 1-3 tahun; penempatan Surabaya."
+    },
+    {
+      "id": "poly-mkt-admin",
+      "b": "polygon-bikes",
+      "r": "Marketing Administrator",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        3
+      ],
+      "gpa": 1,
+      "mj": [
+        "comm",
+        "biz"
+      ],
+      "loc": [
+        "jabodetabek"
+      ],
+      "ax": {
+        "ops": 4,
+        "create": 3
+      },
+      "src": "poster"
+    },
+    {
+      "id": "poly-ppic",
+      "b": "polygon-bikes",
+      "r": "PPIC",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        3,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "indus"
+      ],
+      "loc": [
+        "jatim"
+      ],
+      "ax": {
+        "ops": 5
+      },
+      "src": "poster",
+      "note": "Min. 2 tahun sebagai leader/supervisor PPIC."
+    },
+    {
+      "id": "poly-process",
+      "b": "polygon-bikes",
+      "r": "Process Engineering",
+      "t": "staff",
+      "lv": [
+        1,
+        4
+      ],
+      "st": [
+        2,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "mech"
+      ],
+      "loc": [
+        "jatim"
+      ],
+      "ax": {
+        "tech": 4,
+        "create": 3
+      },
+      "src": "poster",
+      "note": "Wajib mahir 3D CAD."
+    },
+    {
+      "id": "poly-qa-warranty",
+      "b": "polygon-bikes",
+      "r": "QA & Warranty Supervisor",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "indus",
+        "chem",
+        "data"
+      ],
+      "loc": [
+        "jatim"
+      ],
+      "ax": {
+        "ops": 4,
+        "data": 3
+      },
+      "src": "poster"
+    },
+    {
+      "id": "poly-pd-da",
+      "b": "polygon-bikes",
+      "r": "Product Development Data Analyst",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        3,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "data",
+        "cs",
+        "indus",
+        "mech"
+      ],
+      "loc": [
+        "jatim"
+      ],
+      "ax": {
+        "data": 5,
+        "tech": 3
+      },
+      "src": "poster"
+    },
+    {
+      "id": "poly-qa-eng",
+      "b": "polygon-bikes",
+      "r": "QA Engineer",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "cs",
+        "elec",
+        "mech"
+      ],
+      "loc": [
+        "diy"
+      ],
+      "ax": {
+        "tech": 4,
+        "ops": 3
+      },
+      "src": "poster"
+    },
+    {
+      "id": "poly-fpa",
+      "b": "polygon-bikes",
+      "r": "Financial Planner & Analyst",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "acct",
+        "biz"
+      ],
+      "loc": [
+        "jatim"
+      ],
+      "ax": {
+        "data": 4,
+        "biz": 3
+      },
+      "src": "poster"
+    },
+    {
+      "id": "poly-store",
+      "b": "polygon-bikes",
+      "r": "Asst. Store Supervisor",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        3
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": [
+        "lainnya"
+      ],
+      "ax": {
+        "biz": 4,
+        "people": 3
+      },
+      "src": "poster",
+      "note": "Penempatan Denpasar, Bali."
+    },
+    {
+      "id": "poly-intern-hr",
+      "b": "polygon-bikes",
+      "r": "Intern - HR Communication & Content",
+      "t": "intern",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        2
+      ],
+      "gpa": 1,
+      "mj": [
+        "comm",
+        "design",
+        "biz"
+      ],
+      "loc": [
+        "jatim"
+      ],
+      "ax": {
+        "create": 5,
+        "people": 3
+      },
+      "src": "poster",
+      "note": "Portofolio desain/konten jadi nilai tambah."
+    },
+    {
+      "id": "poly-swe",
+      "b": "polygon-bikes",
+      "r": "Software Engineer",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "cs"
+      ],
+      "loc": [
+        "jatim"
+      ],
+      "ax": {
+        "tech": 5
+      },
+      "src": "poster",
+      "note": "Butuh Laravel/PHP."
+    },
+    {
+      "id": "bni-career-connect",
+      "b": "bni",
+      "r": "BNI Career Connect 2026 (detail posisi belum dipublikasikan)",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        1,
+        4
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "biz": 3,
+        "ops": 3
+      },
+      "src": "inferred",
+      "note": "Cek detail di bni.id/JFUGM_NOV2026."
+    },
+    {
+      "id": "cobra-mt",
+      "b": "cobra-dental",
+      "r": "Management Trainee",
+      "t": "trainee",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        2
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "biz": 4,
+        "people": 3,
+        "ops": 3
+      },
+      "src": "poster",
+      "note": "Maksimal 1 tahun sejak lulus."
+    },
+    {
+      "id": "quick-mkt",
+      "b": "quick-traktor",
+      "r": "Staf Marketing",
+      "t": "staff",
+      "lv": [
+        3,
+        3
+      ],
+      "st": [
+        2,
+        4
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": [
+        "diy"
+      ],
+      "ax": {
+        "biz": 4,
+        "people": 3
+      },
+      "src": "poster",
+      "note": "Posisi ini mensyaratkan laki-laki. Diutamakan Manajemen, Ekonomi, Teknik Pertanian, Agribisnis, Statistika, Matematika, HI, Bahasa Inggris."
+    },
+    {
+      "id": "quick-design",
+      "b": "quick-traktor",
+      "r": "Staf Produksi - Staf Desain",
+      "t": "staff",
+      "lv": [
+        3,
+        3
+      ],
+      "st": [
+        2,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "mech"
+      ],
+      "loc": [
+        "diy"
+      ],
+      "ax": {
+        "tech": 4,
+        "create": 3
+      },
+      "src": "poster",
+      "note": "Penempatan Yogyakarta dan Kulon Progo."
+    },
+    {
+      "id": "quick-prodeng",
+      "b": "quick-traktor",
+      "r": "Staf Produksi - Production Engineering",
+      "t": "staff",
+      "lv": [
+        1,
+        3
+      ],
+      "st": [
+        2,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "mech"
+      ],
+      "loc": [
+        "diy"
+      ],
+      "ax": {
+        "ops": 4,
+        "tech": 3
+      },
+      "src": "poster",
+      "note": "Posisi ini mensyaratkan laki-laki."
+    },
+    {
+      "id": "quick-qc",
+      "b": "quick-traktor",
+      "r": "Staf Produksi - Quality Control",
+      "t": "staff",
+      "lv": [
+        1,
+        3
+      ],
+      "st": [
+        2,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "mech"
+      ],
+      "loc": [
+        "diy"
+      ],
+      "ax": {
+        "ops": 4,
+        "data": 3
+      },
+      "src": "poster",
+      "note": "Posisi ini mensyaratkan laki-laki."
+    },
+    {
+      "id": "quick-maint",
+      "b": "quick-traktor",
+      "r": "Staf Produksi - Maintenance",
+      "t": "staff",
+      "lv": [
+        1,
+        3
+      ],
+      "st": [
+        2,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "elec",
+        "mech"
+      ],
+      "loc": [
+        "diy"
+      ],
+      "ax": {
+        "tech": 4,
+        "ops": 3
+      },
+      "src": "poster",
+      "note": "Posisi ini mensyaratkan laki-laki."
+    },
+    {
+      "id": "quick-civil",
+      "b": "quick-traktor",
+      "r": "Staf Produksi - Civil Maintenance",
+      "t": "staff",
+      "lv": [
+        1,
+        3
+      ],
+      "st": [
+        2,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "civil"
+      ],
+      "loc": [
+        "diy"
+      ],
+      "ax": {
+        "ops": 4,
+        "tech": 3
+      },
+      "src": "poster",
+      "note": "Posisi ini mensyaratkan laki-laki."
+    },
+    {
+      "id": "quick-acct",
+      "b": "quick-traktor",
+      "r": "Staf Akuntansi",
+      "t": "staff",
+      "lv": [
+        3,
+        3
+      ],
+      "st": [
+        2,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "acct",
+        "data"
+      ],
+      "loc": [
+        "diy"
+      ],
+      "ax": {
+        "data": 4,
+        "ops": 3
+      },
+      "src": "poster"
+    },
+    {
+      "id": "quick-purch",
+      "b": "quick-traktor",
+      "r": "Staf Purchasing",
+      "t": "staff",
+      "lv": [
+        3,
+        3
+      ],
+      "st": [
+        2,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "mech",
+        "elec"
+      ],
+      "loc": [
+        "diy"
+      ],
+      "ax": {
+        "ops": 4,
+        "biz": 3
+      },
+      "src": "poster"
+    },
+    {
+      "id": "quick-ict",
+      "b": "quick-traktor",
+      "r": "Staf ICT",
+      "t": "staff",
+      "lv": [
+        2,
+        3
+      ],
+      "st": [
+        2,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "cs",
+        "indus",
+        "data"
+      ],
+      "loc": [
+        "diy"
+      ],
+      "ax": {
+        "tech": 4,
+        "data": 3
+      },
+      "src": "poster"
+    },
+    {
+      "id": "quick-people",
+      "b": "quick-traktor",
+      "r": "Staf People Development",
+      "t": "staff",
+      "lv": [
+        3,
+        3
+      ],
+      "st": [
+        2,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "psy"
+      ],
+      "loc": [
+        "diy"
+      ],
+      "ax": {
+        "people": 5,
+        "ops": 3
+      },
+      "src": "poster",
+      "note": "Perlu paham psikodiagnostik."
+    },
+    {
+      "id": "ssia-int-acct",
+      "b": "surya-internusa",
+      "r": "Accounting Intern",
+      "t": "intern",
+      "lv": [
+        1,
+        4
+      ],
+      "st": [
+        1,
+        2
+      ],
+      "gpa": 1,
+      "mj": [
+        "acct"
+      ],
+      "loc": "any",
+      "ax": {
+        "data": 3,
+        "ops": 3
+      },
+      "src": "inferred",
+      "note": "Magang berbayar. Ada booth kedua perusahaan ini di E3."
+    },
+    {
+      "id": "ssia-int-it",
+      "b": "surya-internusa",
+      "r": "IT Business Analyst Intern",
+      "t": "intern",
+      "lv": [
+        1,
+        4
+      ],
+      "st": [
+        1,
+        2
+      ],
+      "gpa": 1,
+      "mj": [
+        "cs",
+        "data"
+      ],
+      "loc": "any",
+      "ax": {
+        "tech": 4,
+        "data": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "ssia-int-hrga",
+      "b": "surya-internusa",
+      "r": "HRGA / Recruitment / Purchasing Intern",
+      "t": "intern",
+      "lv": [
+        1,
+        4
+      ],
+      "st": [
+        1,
+        2
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "people": 4,
+        "ops": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "ssia-fg-acct",
+      "b": "surya-internusa",
+      "r": "Accounting & Tax / Finance Officer",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        2
+      ],
+      "gpa": 1,
+      "mj": [
+        "acct"
+      ],
+      "loc": "any",
+      "ax": {
+        "data": 4,
+        "ops": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "ssia-fg-audit",
+      "b": "surya-internusa",
+      "r": "Internal Audit",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        2
+      ],
+      "gpa": 1,
+      "mj": [
+        "acct",
+        "biz"
+      ],
+      "loc": "any",
+      "ax": {
+        "data": 4,
+        "ops": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "ssia-fg-legal",
+      "b": "surya-internusa",
+      "r": "Legal & Corporate Secretary / Land Compliance",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        2
+      ],
+      "gpa": 1,
+      "mj": [
+        "social"
+      ],
+      "loc": "any",
+      "ax": {
+        "ops": 4,
+        "people": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "ssia-fg-mkt",
+      "b": "surya-internusa",
+      "r": "Marketing Communication",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        2
+      ],
+      "gpa": 1,
+      "mj": [
+        "comm",
+        "biz",
+        "design"
+      ],
+      "loc": "any",
+      "ax": {
+        "create": 4,
+        "biz": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "ssia-fg-sales",
+      "b": "surya-internusa",
+      "r": "Sales Executive / Leasing Officer",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        2
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "biz": 5,
+        "people": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "ssia-fg-strat",
+      "b": "surya-internusa",
+      "r": "Strategic Management Analyst",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        2
+      ],
+      "gpa": 1,
+      "mj": [
+        "biz",
+        "data",
+        "indus"
+      ],
+      "loc": "any",
+      "ax": {
+        "data": 4,
+        "biz": 4
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "ssia-ex-dev",
+      "b": "surya-internusa",
+      "r": "IT Full Stack Developer / DevOps Engineer",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        3,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "cs"
+      ],
+      "loc": "any",
+      "ax": {
+        "tech": 5,
+        "data": 3
+      },
+      "src": "inferred",
+      "note": "Posisi untuk yang sudah berpengalaman."
+    },
+    {
+      "id": "ssia-ex-bd",
+      "b": "surya-internusa",
+      "r": "Business Development (B2B & B2C)",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        3,
+        4
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "biz": 5,
+        "people": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "ssia-ex-eng",
+      "b": "surya-internusa",
+      "r": "Contract / MEP / Pipeline / QA-QC Engineer & Supervisor",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        3,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "civil",
+        "elec",
+        "mech"
+      ],
+      "loc": "any",
+      "ax": {
+        "ops": 5,
+        "tech": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "ssia-ex-pm",
+      "b": "surya-internusa",
+      "r": "Project Management / Resource Coordinator",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        3,
+        4
+      ],
+      "gpa": 1,
+      "mj": [
+        "civil",
+        "indus",
+        "biz"
+      ],
+      "loc": "any",
+      "ax": {
+        "ops": 5,
+        "people": 3
+      },
+      "src": "inferred"
+    },
+    {
+      "id": "tfi-fellow",
+      "b": "teach-first-indonesia",
+      "r": "Fellow (2-year paid Fellowship)",
+      "t": "fellow",
+      "lv": [
+        1,
+        3
+      ],
+      "st": [
+        1,
+        3
+      ],
+      "gpa": 1,
+      "mj": "any",
+      "loc": [
+        "lainnya"
+      ],
+      "ax": {
+        "people": 5,
+        "ops": 3,
+        "create": 3
+      },
+      "src": "poster",
+      "note": "Maks. usia 32 tahun; IPK 3,00 ke atas jadi preferensi."
+    },
+    {
+      "id": "torr-techmkt",
+      "b": "pt-torrecid-indonesia",
+      "r": "Technical Marketing",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        3
+      ],
+      "gpa": 3,
+      "mj": [
+        "chem"
+      ],
+      "loc": "any",
+      "ax": {
+        "biz": 4,
+        "tech": 3
+      },
+      "src": "poster",
+      "note": "Lulusan 2023-2026."
+    },
+    {
+      "id": "torr-designer",
+      "b": "pt-torrecid-indonesia",
+      "r": "Designer",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        3
+      ],
+      "gpa": 3,
+      "mj": [
+        "design",
+        "comm"
+      ],
+      "loc": "any",
+      "ax": {
+        "create": 5
+      },
+      "src": "poster"
+    },
+    {
+      "id": "torr-process",
+      "b": "pt-torrecid-indonesia",
+      "r": "Process",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        3
+      ],
+      "gpa": 3,
+      "mj": [
+        "indus",
+        "chem"
+      ],
+      "loc": "any",
+      "ax": {
+        "ops": 4,
+        "tech": 3
+      },
+      "src": "poster"
+    },
+    {
+      "id": "torr-scm",
+      "b": "pt-torrecid-indonesia",
+      "r": "Supply Chain Management",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        3
+      ],
+      "gpa": 3,
+      "mj": [
+        "biz"
+      ],
+      "loc": "any",
+      "ax": {
+        "ops": 4,
+        "data": 3
+      },
+      "src": "poster"
+    },
+    {
+      "id": "torr-hr",
+      "b": "pt-torrecid-indonesia",
+      "r": "Human Resource",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        2,
+        3
+      ],
+      "gpa": 3,
+      "mj": [
+        "biz",
+        "psy",
+        "indus"
+      ],
+      "loc": "any",
+      "ax": {
+        "people": 5
+      },
+      "src": "poster"
+    },
+    {
+      "id": "zurich-antz",
+      "b": "zurich-indonesia",
+      "r": "ANT'Z (Awe-inspiring Next Talent of Zurich)",
+      "t": "trainee",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        1,
+        2
+      ],
+      "gpa": 4,
+      "mj": "any",
+      "loc": "any",
+      "ax": {
+        "people": 4,
+        "biz": 3,
+        "data": 3
+      },
+      "src": "poster",
+      "note": "Mahasiswa semester akhir boleh dengan transkrip sementara."
+    },
+    {
+      "id": "zurich-hrtech",
+      "b": "zurich-indonesia",
+      "r": "HR Technology - Zurich Topas Life (HRIS Specialist)",
+      "t": "staff",
+      "lv": [
+        3,
+        4
+      ],
+      "st": [
+        1,
+        2
+      ],
+      "gpa": 1,
+      "mj": [
+        "cs"
+      ],
+      "loc": [
+        "jabodetabek"
+      ],
+      "ax": {
+        "tech": 4,
+        "data": 4,
+        "people": 3
+      },
+      "src": "poster",
+      "note": "Hybrid, Head Office Graha Zurich."
+    }
+  ]
+}

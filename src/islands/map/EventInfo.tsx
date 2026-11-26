@@ -1,10 +1,7 @@
 import {
   MapPin,
   Clock,
-  Briefcase,
-  CircleHelp,
   ArrowUpRight,
-  Check,
 } from 'lucide-react';
 import {
   careerFairMeta,
@@ -12,18 +9,13 @@ import {
   event,
   ui,
 } from '../../lib/data';
-import { surfaceClasses } from '../../lib/surface-classes';
 import { cn } from '../../lib/utils/cn';
 import RegisterCtas from '../../components/map/RegisterCtas';
 import SocialLinks from '../../components/map/SocialLinks';
 import CompanyBentoGrid from '../../components/map/CompanyBentoGrid';
-import PosterShortcutStrip from '../../components/map/PosterShortcutStrip';
 
-const card = cn(
-  'flex h-full min-w-0 flex-col overflow-hidden rounded-md border border-line p-3',
-  surfaceClasses(3, 3),
-);
-const icon = 'text-[#8f8f8f]';
+const card =
+  'group relative flex h-full min-w-0 flex-col overflow-hidden bg-[#0e0e11] p-3 transition-colors duration-200 hover:bg-[#141418]';
 
 /**
  * Info tab — a clean 2×2 information block. Poster carousels and Daftar are
@@ -31,7 +23,6 @@ const icon = 'text-[#8f8f8f]';
  */
 export default function EventInfo() {
   const { venue, hours, whatToBring, help } = ui.info.sections;
-  const { overview } = ui.info;
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
     ui.info.mapsQuery,
   )}`;
@@ -50,9 +41,8 @@ export default function EventInfo() {
 
   return (
     <div className="reveal-product">
-      <div className="mb-2.5 flex items-baseline justify-between gap-3 border-b border-[#232326] pb-2">
-        <div className="section-label text-white!">{ui.info.title}</div>
-        {updatedLabel && (
+      {updatedLabel && (
+        <div className="mb-2.5 flex justify-end border-b border-[#232326] pb-2">
           <time
             dateTime={updatedAt ?? undefined}
             className="shrink-0 text-[0.6875rem] text-[#71717a] md:text-[0.625rem]"
@@ -60,107 +50,135 @@ export default function EventInfo() {
           >
             Last updated: {updatedLabel} WIB
           </time>
-        )}
+        </div>
+      )}
+
+      <div className="mb-2 md:hidden">
+        <RegisterCtas />
       </div>
 
-      <div className="grid grid-cols-2 gap-2">
-        <div className="col-span-2 md:hidden">
-          <RegisterCtas />
-        </div>
-
-        {/* 2×2 information block */}
-        <section className={card}>
-          <MapPin size={14} className={icon} />
-          <div className="mt-2 font-heading text-[1.5rem] font-bold leading-[0.85] tracking-[-1.2px] text-white md:text-[1.75rem] md:tracking-[-1.4px]">
-            {venue.headline}
-          </div>
-          {venue.subline && (
-            <div className="mt-0.5 text-[0.75rem] font-medium text-[#a1a1aa] md:text-[11px]">
-              {venue.subline}
+      {/* Unified INSIGHTS-style grid: hairline gaps, no floating cards. */}
+      <div className="mb-4 overflow-hidden border border-line bg-[#232326]">
+        <div className="grid grid-cols-2 gap-px">
+          <section className={cn(card, 'info-enter')} style={{ animationDelay: '0ms' }}>
+            <svg
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 h-full w-full text-white opacity-[0.06]"
+            >
+              <defs>
+                <pattern
+                  id="info-map-grid"
+                  width="16"
+                  height="16"
+                  patternUnits="userSpaceOnUse"
+                >
+                  <path d="M16 0H0V16" fill="none" stroke="currentColor" strokeWidth="1" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#info-map-grid)" />
+            </svg>
+            <MapPin
+              aria-hidden="true"
+              size={120}
+              strokeWidth={2}
+              className="pointer-events-none absolute -bottom-8 -right-5 text-zinc-500/20"
+            />
+            <div className="relative z-10 font-heading text-[1.5rem] font-bold leading-[0.85] tracking-[-1.2px] text-white md:text-[1.75rem] md:tracking-[-1.4px]">
+              {venue.headline}
             </div>
-          )}
-          <a
-            href={mapsUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="cta-bar group relative mt-auto flex min-h-9 w-full items-center gap-2 overflow-hidden bg-white pl-1.5 pr-2 text-black transition-transform duration-150 focus-visible:bg-[var(--accent-pink)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black active:scale-[0.99]"
-          >
+            {venue.subline && (
+              <div className="relative z-10 mt-0.5 text-[0.75rem] font-medium text-[#a1a1aa] md:text-[11px]">
+                {venue.subline}
+              </div>
+            )}
+            <div className="relative z-10 mt-auto border-t border-line pt-2">
+              <a
+                href={mapsUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="group/cta inline-flex items-center gap-1.5 border border-line bg-[#1b1b1f] px-2.5 py-1 text-xs font-medium text-white transition-[border-color,background-color] duration-200 hover:border-[#5a5a63] hover:bg-[#232327] active:scale-[0.98]"
+              >
+                {ui.info.mapsCta}
+                <ArrowUpRight
+                  size={12}
+                  strokeWidth={2.2}
+                  className="transition-transform duration-200 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5 motion-reduce:transform-none"
+                />
+              </a>
+            </div>
+          </section>
+
+          <section className={cn(card, 'info-enter')} style={{ animationDelay: '60ms' }}>
+            <Clock
+              aria-hidden="true"
+              size={120}
+              strokeWidth={2}
+              className="pointer-events-none absolute -bottom-8 -right-5 text-zinc-500/20"
+            />
+            <div className="relative z-10 font-heading text-[1.125rem] font-bold leading-[1.05] tracking-[-0.2px] text-white md:text-[16px]">
+              {hours.headline}
+            </div>
+            {hours.body && (
+              <p className="relative z-10 mt-1.5 text-[0.75rem] leading-snug text-[#8f8f8f] md:text-[10px]">
+                {hours.body}
+              </p>
+            )}
+          </section>
+
+          <section className={cn(card, 'info-enter')} style={{ animationDelay: '120ms' }}>
+            {/* Rotated document stack, low-contrast, bottom-left. */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -bottom-8 -left-6 h-28 w-28 opacity-40"
+            >
+              <span className="absolute bottom-0 left-0 h-16 w-11 rotate-45 border border-[#2a2a2e] bg-[#161619]" />
+              <span className="absolute bottom-2 left-3 h-16 w-11 rotate-45 border border-[#2a2a2e] bg-[#131316]" />
+              <span className="absolute bottom-4 left-6 h-16 w-11 rotate-45 border border-[#2a2a2e] bg-[#0f0f12]" />
+            </div>
+            <ul className="relative z-10 divide-y divide-[#2a2a2a]">
+              {(whatToBring.items ?? []).map((item, index) => (
+                <li
+                  key={`${item}-${index}`}
+                  className="py-1.5 font-heading text-[0.8125rem] font-bold leading-snug text-[#d4d4d8] transition-colors duration-200 hover:text-white md:text-[11px]"
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className={cn(card, 'info-enter')} style={{ animationDelay: '180ms' }}>
             <span
               aria-hidden="true"
-              className="cta-fill pointer-events-none absolute inset-0 bg-[var(--accent-pink)]"
-            />
-            <span className="cta-tile cta-content relative z-10 flex size-5 shrink-0 items-center justify-center border border-black/70">
-              <ArrowUpRight size={11} strokeWidth={2.4} />
+              className="pointer-events-none absolute -bottom-10 right-2 select-none font-heading text-[120px] font-bold leading-none text-transparent"
+              style={{ WebkitTextStroke: '3px rgba(255,255,255,0.14)' }}
+            >
+              ?
             </span>
-            <span className="cta-content relative z-10 truncate text-[0.75rem] font-bold md:text-[10px]">
-              {ui.info.mapsCta}
-            </span>
-          </a>
-        </section>
-
-        <section className={card}>
-          <Clock size={14} className={icon} />
-          <div className="mt-2 font-heading text-[1.125rem] font-bold leading-[1.05] tracking-[-0.2px] text-white md:text-[16px]">
-            {hours.headline}
-          </div>
-          {hours.body && (
-            <p className="mt-1.5 text-[0.75rem] leading-snug text-[#8f8f8f] md:text-[10px]">
-              {hours.body}
+            <p className="relative z-10 text-[0.75rem] leading-snug text-[#d4d4d8] md:text-[10.5px]">
+              {help.body}
             </p>
-          )}
-          <div className="mt-auto flex items-baseline gap-1 pt-2">
-            <span className="font-heading text-[1.375rem] font-bold leading-none text-white md:text-[18px]">
-              {companies.length}
-            </span>
-            <span className="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-[#8f8f8f] md:text-[8.5px]">
-              {overview.companies}
-            </span>
-          </div>
-          <div className="mt-0.5 text-[0.6875rem] text-[#8f8f8f] md:text-[9px]">
-            {event.tracks.length} {overview.tracks} · {event.days.length} {overview.days}
-          </div>
-        </section>
+          </section>
 
-        <section className={card}>
-          <Briefcase size={14} className={icon} />
-          <ul className="mt-2 space-y-1.5">
-            {(whatToBring.items ?? []).map((item, index) => (
-              <li
-                key={`${item}-${index}`}
-                className="flex items-start gap-1.5 text-[0.75rem] leading-snug text-[#d4d4d8] md:text-[10px]"
-              >
-                <Check size={12} className="mt-0.5 shrink-0 text-[var(--accent-pink)]" />
-                {item}
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section className={card}>
-          <CircleHelp size={14} className={icon} />
-          <p className="mt-2 text-[0.75rem] leading-snug text-[#d4d4d8] md:text-[10.5px]">{help.body}</p>
-        </section>
-
-        <section className={cn(card, 'col-span-2 flex-row items-center justify-between gap-4')}>
-          <div className="min-w-0">
-            <div className="font-heading text-[1rem] font-bold leading-tight text-white">
+          <section
+            className={cn(card, 'info-enter col-span-2 flex-row items-center justify-between gap-4')}
+            style={{ animationDelay: '240ms' }}
+          >
+            <div className="min-w-0 font-heading text-[1rem] font-bold leading-tight text-white">
               {ui.social.title}
             </div>
-          </div>
-          <SocialLinks variant="sheet" />
-        </section>
-
-        {/* Company posters live under the info bento, not above it. */}
-        <div id="icd-poster-carousel" className="col-span-2 mt-4 scroll-mt-4">
-          <PosterShortcutStrip />
+            <div className="border-l border-line pl-3">
+              <SocialLinks variant="sheet" />
+            </div>
+          </section>
         </div>
+      </div>
 
-        <div id="company-directory" className="col-span-2 mt-2 scroll-mt-4">
-          <div className="section-label mb-2 border-b border-[#232326] pb-2">
-            All companies
-          </div>
-          <CompanyBentoGrid companies={companies} />
+      <div id="company-directory" className="mt-4 scroll-mt-4">
+        <div className="section-label mb-3 border-b border-[#232326] pb-2">
+          Posters
         </div>
+        <CompanyBentoGrid companies={companies} />
       </div>
     </div>
   );

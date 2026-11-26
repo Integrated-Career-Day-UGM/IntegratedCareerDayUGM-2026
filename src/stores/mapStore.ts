@@ -369,7 +369,31 @@ export const useMapStore = create<MapState>()(
 
       setGikMode: (on) => {
         track('gik.mode', { on });
-        set({ gikMode: on });
+        if (!on) {
+          set({ gikMode: false });
+          return;
+        }
+        // GIK is the career-expo overview: entering it from the walk-in (2F)
+        // plan must also route the layout back to the first floor, otherwise
+        // the camera only zooms out over the wrong plan.
+        const current = get();
+        const venue = getVenue(current.selectedVenueId);
+        const expoArea =
+          venue?.areas.find((a) => a.trackId === 'career-expo') ?? venue?.areas[0];
+        set({
+          gikMode: true,
+          ...(expoArea
+            ? {
+                selectedTrackId: expoArea.trackId,
+                selectedAreaId: expoArea.id,
+                selectedBoothId: null,
+                selectedFacilityId: null,
+                selectedWalkInRoomId: null,
+                detailOriginTab: null,
+                sidebarMode: 'list' as const,
+              }
+            : {}),
+        });
       },
 
       setMapView: (view) => set({ mapView: { ...get().mapView, ...view } }),

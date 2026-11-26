@@ -20,7 +20,7 @@ function MapControls({ mapRef, compassNeedleRef, fitHall }: MapControlsProps) {
   return (
     <div
       data-layout-tune="map-controls"
-      className="absolute right-3 top-1/2 z-10 flex -translate-y-1/2 flex-col gap-2"
+      className="absolute right-3 z-10 flex flex-col items-center gap-2 bottom-[246px] md:bottom-auto md:top-1/2 md:-translate-y-1/2"
     >
       <ZoomButtons
         onZoomIn={() => mapRef.current?.zoomIn({ duration: 200 })}
@@ -38,9 +38,9 @@ function MapControls({ mapRef, compassNeedleRef, fitHall }: MapControlsProps) {
         onClick={fitHall}
         aria-label={ui.map.recenterLabel}
         title={ui.map.recenterLabel}
-        className="flex h-9 w-9 items-center justify-center rounded-full border border-[#34343a] bg-[#141416] text-white transition-[transform,colors] hover:border-[#4a4a52] active:scale-95 md:h-9 md:w-9"
+        className="flex h-11 w-11 items-center justify-center rounded-full border border-[#34343a] bg-[#141416] text-white transition-[transform,colors] hover:border-[#4a4a52] active:scale-95 md:h-10 md:w-10"
       >
-        <Crosshair size={15} strokeWidth={1.7} />
+        <Crosshair size={16} strokeWidth={1.7} />
       </button>
     </div>
   );

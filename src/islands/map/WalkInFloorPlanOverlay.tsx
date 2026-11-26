@@ -10,6 +10,7 @@ import type { WalkInSession } from '../../types/map';
 import {
   FRAME_HEIGHT,
   FRAME_WIDTH,
+  PLAN_SPRITES,
   WALKIN_2F,
   type WalkIn2FConfig,
 } from '../../lib/map/floorplan';
@@ -222,6 +223,27 @@ const WalkInFloorPlanOverlay = forwardRef<
             </div>
           ))}
         </div>
+
+        {/* Map art stays visible on the 2F plan too (same frame coords). */}
+        {PLAN_SPRITES.filter((sprite) => sprite.id === 'ugm-icd-map-art').map(
+          (sprite) => (
+            <img
+              key={sprite.id}
+              src={sprite.src}
+              alt=""
+              draggable={false}
+              className="pointer-events-none absolute max-w-none"
+              style={{
+                left: sprite.left,
+                top: sprite.top,
+                width: sprite.w,
+                height: sprite.h,
+                transform: `rotate(${sprite.rotate}deg)`,
+                transformOrigin: 'center',
+              }}
+            />
+          ),
+        )}
       </div>
     </>
   );

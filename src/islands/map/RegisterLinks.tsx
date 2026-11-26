@@ -65,7 +65,7 @@ export default function RegisterLinks() {
       <PosterFolder
         className="mb-3"
         hint="Open in Info"
-        onOpenInfo={() => openInfoAt('icd-poster-carousel')}
+        onOpenInfo={() => openInfoAt('company-directory')}
       />
       <PosterFolder
         className="mb-3"
@@ -77,7 +77,19 @@ export default function RegisterLinks() {
           if (poster.companyId) setGalleryCompanyId(poster.companyId);
         }}
       />
-      <RegisterCtas className="p-3 md:p-4" />
+      <div className="relative mx-auto mt-1 aspect-[713/410] w-[252px] max-w-full -rotate-1">
+        {/* Desktop-only registration container art (paper + grid + clip). */}
+        <img
+          src="/registration-container-art.png"
+          alt=""
+          aria-hidden="true"
+          draggable={false}
+          className="pointer-events-none absolute inset-0 h-full w-full select-none object-contain"
+        />
+        <div className="relative z-10 flex h-full flex-col justify-center px-5">
+          <RegisterCtas bare />
+        </div>
+      </div>
 
       {galleryCompanyId && (
         <PosterGalleryModal

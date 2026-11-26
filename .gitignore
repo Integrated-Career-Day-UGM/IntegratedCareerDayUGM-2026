@@ -134,3 +134,8 @@ skills-lock.json
 /docs/screenshots/inbox/
 /scripts/seed
 /public/landing
+
+# ---------- R2 upload staging (hash + renamed, local only) ----------
+# Run `node scripts/prepare-r2-posters.mjs` to populate, then upload via rclone.
+# See docs/r2-sync.md. Only the manifest JSON is committed.
+.tmp/
