@@ -3,8 +3,7 @@ import venuesJson from '../data/ugm-icd-2026/venues.json';
 import zonesJson from '../data/ugm-icd-2026/zones.json';
 import boothsJson from '../data/ugm-icd-2026/booths.json';
 import companiesJson from '../data/ugm-icd-2026/companies.json';
-import openingsJson from '../data/ugm-icd-2026/openings.json';
-import sessionsJson from '../data/ugm-icd-2026/sessions.json';
+import careerFairJson from '../data/ugm-icd-2026/career-fair.json';
 import stageSessionsJson from '../data/ugm-icd-2026/stage-sessions.json';
 import walkInSessionsJson from '../data/ugm-icd-2026/walk-in-sessions.json';
 import quickfindJson from '../data/ugm-icd-2026/quickfind.json';
@@ -12,6 +11,7 @@ import uiJson from '../data/ugm-icd-2026/ui.json';
 import registrationJson from '../data/ugm-icd-2026/registration.json';
 import facilitiesJson from '../data/ugm-icd-2026/facilities.json';
 import postersJson from '../data/ugm-icd-2026/posters.json';
+import companyPostersJson from '../data/ugm-icd-2026/company-posters.json';
 import type {
   EventConfig,
   Venue,
@@ -28,28 +28,71 @@ import type {
   UiStrings,
   FacilityInfo,
   PosterInfo,
-  OpeningsFile,
+  CompanyPoster,
+  CareerFairFile,
 } from '../types/map';
 
 export const event: EventConfig = eventJson as EventConfig;
 export const venues: Venue[] = venuesJson as Venue[];
 export const zones: Zone[] = zonesJson as Zone[];
 export const booths: Booth[] = boothsJson as Booth[];
-const openingsFile = openingsJson as OpeningsFile;
-export const openingsMeta = openingsFile.meta;
+const careerFairFile = careerFairJson as CareerFairFile;
+export const careerFairMeta = careerFairFile.meta;
 const openingsByCompany = new Map<string, JobOpening[]>();
-for (const opening of openingsFile.items) {
+for (const opening of careerFairFile.items) {
   const list = openingsByCompany.get(opening.companyId) ?? [];
   list.push(opening);
   openingsByCompany.set(opening.companyId, list);
 }
-export const companies: Company[] = (companiesJson as Company[]).map((company) => ({
-  ...company,
-  openings: openingsByCompany.get(company.id) ?? [],
-}));
-export const sessions: Session[] = sessionsJson as Session[];
+/** Compressed company gallery posters generated from the external source. */
+export const companyPosters: CompanyPoster[] = companyPostersJson as CompanyPoster[];
+const postersByCompany = new Map<string, CompanyPoster[]>();
+for (const poster of companyPosters) {
+  const list = postersByCompany.get(poster.companyId) ?? [];
+  list.push(poster);
+  postersByCompany.set(poster.companyId, list);
+}
+
+export const companies: Company[] = (companiesJson as Company[]).map((company) => {
+  const profile = careerFairFile.profiles?.[company.id];
+  return {
+    ...company,
+    description: profile?.description ?? company.description,
+    profile,
+    posters: postersByCompany.get(company.id) ?? [],
+    openings: openingsByCompany.get(company.id) ?? [],
+  };
+});
 export const stageSessions: StageSession[] = stageSessionsJson as StageSession[];
 export const walkInSessions: WalkInSession[] = walkInSessionsJson as WalkInSession[];
+
+/**
+ * Track-shaped sessions assembled from the generated YAML sources. There is no
+ * hand-maintained sessions.json anymore; walk-ins and stage talks are the only
+ * real scheduled sessions.
+ */
+export const sessions: Session[] = [
+  ...walkInSessions.map((booking) => ({
+    id: booking.id,
+    areaId: 'hall-b',
+    companyId: booking.companyId ?? '',
+    trackId: 'walk-in-interview',
+    dayId: booking.dayId,
+    start: booking.start,
+    end: booking.end,
+    title: 'Walk-in Interview',
+  })),
+  ...stageSessions.map((session) => ({
+    id: session.id,
+    areaId: 'panggung',
+    companyId: session.companyId,
+    trackId: 'stage',
+    dayId: session.dayId,
+    start: session.start,
+    end: session.end,
+    title: session.title,
+  })),
+];
 export const quickfind: QuickFindItem[] = quickfindJson as QuickFindItem[];
 export const ui: UiStrings = uiJson as UiStrings;
 
@@ -149,11 +192,6 @@ export function getSessionsByArea(areaId: string): Session[] {
   return sessions.filter((s) => s.areaId === areaId);
 }
 
-/** All track sessions (sessions.yaml) held by one company. */
-export function getSessionsByCompany(companyId: string): Session[] {
-  return sessions.filter((s) => s.companyId === companyId);
-}
-
 /** Speaking slots on the panggung stage held by one company. */
 export function getStageSessionsByCompany(companyId: string): StageSession[] {
   return stageSessions.filter((s) => s.companyId === companyId);
@@ -192,10 +230,6 @@ export function getWalkInBooking(dayId: string, room: string): WalkInSession | u
   return getWalkInBookings(dayId, room)[0];
 }
 
-
-export function getSession(id: string): Session | undefined {
-  return sessions.find((s) => s.id === id);
-}
 
 export function getBoothsByZone(zoneId: string): Booth[] {
   return booths.filter((b) => b.zoneId === zoneId);

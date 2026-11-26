@@ -22,6 +22,7 @@ import SearchBar from './SearchBar';
 import HappeningNow from './HappeningNow';
 import VenueList from './VenueList';
 import WalkInList from './WalkInList';
+import CounselingList from './CounselingList';
 import BoothDetail from './BoothDetail';
 import WalkInDetail from './WalkInDetail';
 import FacilityDetail from './FacilityDetail';
@@ -53,6 +54,8 @@ export default function MapSidebar() {
   useBoothFromUrl();
   const walkInMode =
     selectedTrackId === 'walk-in-interview' || selectedAreaId === 'hall-b';
+  const counselingMode =
+    selectedTrackId === 'career-counseling' || selectedAreaId === 'pp-kagama';
 
   // One gliding hover highlight for the whole rail (§0), replacing the
   // per-button hover classes. Keyboard focus lights it too.
@@ -108,6 +111,7 @@ export default function MapSidebar() {
     // Hall B holds no expo booths — the venue list would read "0 booths".
     // List every bilik booking (all days) instead.
     if (walkInMode) return <WalkInList />;
+    if (counselingMode) return <CounselingList />;
     return <VenueList />;
   };
 
@@ -228,7 +232,7 @@ export default function MapSidebar() {
                     <button
                       type="button"
                       onClick={() => setSelectedDay(day.id)}
-                      className={`flex size-[26px] items-center justify-center text-center font-heading text-[17px] font-bold leading-none transition-all ${
+                      className={`flex size-[26px] items-center justify-center text-center font-heading text-[17px] font-bold leading-none transition-colors ${
                         selectedDayId === day.id
                           ? 'bg-[var(--accent-pink)] text-white'
                           : 'text-ink-muted hover:text-white'

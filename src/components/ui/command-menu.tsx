@@ -268,9 +268,9 @@ export function formatShortcut(shortcut: string, mac: boolean): string[] {
 /** Whether the page runs on a Mac — the platform that draws ⌘ and ⌥. */
 export function isMacPlatform(): boolean {
   if (typeof navigator === "undefined") return false;
-  const nav = navigator as Navigator & { userAgentData?: { platform?: string } };
-  const platform = nav.userAgentData?.platform ?? nav.platform ?? "";
-  return /mac|iphone|ipad|ipod/i.test(platform);
+  // userAgent, not the deprecated navigator.platform: it is present on every
+  // browser (userAgentData is Chromium-only) and names the same platforms.
+  return /mac|iphone|ipad|ipod/i.test(navigator.userAgent);
 }
 
 // The platform never changes, so it is read once and served as a store

@@ -31,6 +31,7 @@ export default function HappeningNow() {
   const selectedDayId = useMapStore((s) => s.selectedDayId);
   const setSelectedArea = useMapStore((s) => s.setSelectedArea);
   const selectBooth = useMapStore((s) => s.selectBooth);
+  const selectFacility = useMapStore((s) => s.selectFacility);
   const toggleBookmark = useMapStore((s) => s.toggleBookmark);
   // The array itself, not the isBookmarked() helper: without it the icon
   // renders once and never flips when toggled.
@@ -65,6 +66,7 @@ export default function HappeningNow() {
   const live = current.live;
   const company = getCompany(session.companyId);
   const area = getArea(event.defaultVenueId, session.areaId);
+  const areaName = session.trackId === 'stage' ? 'Panggung' : area?.name;
   // Save targets the company's booth in the session's area (bookmarks are booth-based).
   const booth = getBoothsByArea(session.areaId).find((b) => b.companyId === session.companyId);
   const saved = booth ? bookmarkedIds.includes(booth.id) : false;
@@ -73,6 +75,10 @@ export default function HappeningNow() {
   const nextCompany = next ? getCompany(next.companyId) : null;
 
   const openSession = () => {
+    if (session.trackId === 'stage') {
+      selectFacility('panggung');
+      return;
+    }
     if (booth) selectBooth(booth.id);
     else setSelectedArea(session.areaId);
   };
@@ -123,7 +129,7 @@ export default function HappeningNow() {
               {company?.name}
             </p>
             <div className="mt-1 flex items-baseline justify-between gap-2 text-[0.8125rem] font-semibold md:text-[0.75rem]">
-              <span className="truncate text-ink-body">{area?.name}</span>
+              <span className="truncate text-ink-body">{areaName}</span>
               {current.countdown && (
                 <span className="shrink-0 text-[#f5b400]">{current.countdown}</span>
               )}

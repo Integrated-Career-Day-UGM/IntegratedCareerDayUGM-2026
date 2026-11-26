@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ArrowUpRight, Star, X } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
 import { facilities, registration } from '../../lib/data';
+import StageSchedule from '../../components/map/StageSchedule';
 
 /**
  * Facility detail — one card: cover, title, then the bento explanation and
@@ -69,19 +70,23 @@ export default function FacilityDetail() {
         <p className="mt-1.5 text-[0.875rem] leading-snug text-[#d4d4d8] md:text-[12px]">{facility.summary}</p>
       </div>
 
-      <div className="mt-3 grid grid-cols-1 gap-0 border-t border-line @[17rem]:grid-cols-2 @[17rem]:divide-x @[17rem]:divide-[#2a2a2a]">
-        {facility.items.map((item, i) => (
-          <div
-            key={item.heading}
-            className={`p-3 ${i > 0 ? 'border-t border-[#2a2a2a] @[17rem]:border-t-0' : ''}`}
-          >
-            <div className="font-heading text-[0.875rem] font-semibold leading-tight text-white md:text-[12px]">
-              {item.heading}
+      {facilityId === 'panggung' && <StageSchedule />}
+
+      {facility.items.length > 0 && (
+        <div className="mt-3 grid grid-cols-1 gap-0 border-t border-line @[17rem]:grid-cols-2 @[17rem]:divide-x @[17rem]:divide-[#2a2a2a]">
+          {facility.items.map((item, i) => (
+            <div
+              key={item.heading}
+              className={`p-3 ${i > 0 ? 'border-t border-[#2a2a2a] @[17rem]:border-t-0' : ''}`}
+            >
+              <div className="font-heading text-[0.875rem] font-semibold leading-tight text-white md:text-[12px]">
+                {item.heading}
+              </div>
+              <p className="mt-1 text-[0.8125rem] leading-snug text-[#d4d4d8] md:text-[11.5px]">{item.body}</p>
             </div>
-            <p className="mt-1 text-[0.8125rem] leading-snug text-[#d4d4d8] md:text-[11.5px]">{item.body}</p>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {facilityId === 'registration' && (
         <div className="grid gap-1.5 border-t border-line p-3 @[17rem]:grid-cols-2">

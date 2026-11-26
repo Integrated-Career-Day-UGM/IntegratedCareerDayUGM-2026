@@ -1,11 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { useMapStore } from '../../stores/mapStore';
+import { useMemo, useRef, useState } from 'react';
 import { posters, ui } from '../../lib/data';
 import type { PosterInfo } from '../../types/map';
 import { cn } from '../../lib/utils/cn';
 import { surfaceClasses } from '../../lib/surface-classes';
 import HoverZoomImage from './HoverZoomImage';
-import PosterModal from './PosterModal';
+import PosterGalleryModal from './PosterGalleryModal';
 
 function PosterSkeleton() {
   return (
@@ -40,7 +39,7 @@ function PosterArtwork({
       ) : (
         <>
           <img
-            src={poster.src}
+            src={poster.thumbUrl ?? poster.src}
             alt={poster.title}
             loading="lazy"
             onError={onError}
@@ -73,20 +72,20 @@ export default function PosterFolder({
   hideTitle = false,
   hint = ui.posters.hint,
   onOpenInfo,
-  consumePosterFocus = false,
+  onOpen,
 }: {
   className?: string;
-  /** Folder is the desktop gimmick; carousel is the calmer mobile version. */
+  /** Folder is the desktop gimmick; carousel is the calmer Info version. */
   variant?: 'folder' | 'carousel';
   /** Defaults to the ICD poster set; pass company posters to reuse the shell. */
   items?: PosterInfo[];
   title?: string;
   hideTitle?: boolean;
   hint?: string;
-  /** Map folders use this to jump to the matching Info carousel. */
+  /** Map folders use this to jump to the matching Info section. */
   onOpenInfo?: () => void;
-  /** Only the Info company carousel should consume cross-surface poster focus. */
-  consumePosterFocus?: boolean;
+  /** Company folders open a per-company gallery instead of the mixed set. */
+  onOpen?: (poster: PosterInfo, index: number) => void;
 }) {
   const [expanded, setExpanded] = useState(false);
   const [selected, setSelected] = useState<number | null>(null);
@@ -101,36 +100,23 @@ export default function PosterFolder({
         : items.filter((poster) => Boolean(poster.src) && !broken[poster.id]),
     [broken, isSkeleton, items],
   );
-  const current = selected === null ? null : displayItems[selected];
+  const galleryItems = displayItems.map((poster) => ({
+    id: poster.id,
+    companyId: poster.companyId ?? 'icd',
+    companyName: poster.subtitle || poster.title,
+    companyShortName: poster.title,
+    kind: 'gallery' as const,
+    title: poster.title,
+    src: poster.src,
+    thumbUrl: poster.thumbUrl ?? poster.src,
+    downloadUrl: poster.downloadUrl ?? poster.src,
+  }));
   const activeCarouselIndex = Math.min(
     carouselIndex,
     Math.max(0, displayItems.length - 1),
   );
-  const posterFocusId = useMapStore((s) => s.posterFocusId);
-  const setPosterFocus = useMapStore((s) => s.setPosterFocus);
 
-  useEffect(() => {
-    if (!consumePosterFocus || !posterFocusId || isSkeleton) return;
-    // Desktop and mobile both mount EventInfo in separate islands; only the
-    // visible carousel may consume the focus request.
-    if (!rootRef.current || rootRef.current.offsetParent === null) return;
-    const index = displayItems.findIndex((poster) => poster.id === posterFocusId);
-    if (index < 0) return;
-    setCarouselIndex(index);
-    setSelected(index);
-    setPosterFocus(null);
-    rootRef.current
-      ?.closest('#company-poster-carousel')
-      ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }, [
-    consumePosterFocus,
-    posterFocusId,
-    displayItems,
-    isSkeleton,
-    setPosterFocus,
-  ]);
-
-  // All posters missing/broken: render no carousel node at all.
+  // All posters missing/broken: render no folder at all.
   if (!isSkeleton && displayItems.length === 0) return null;
 
   return (
@@ -178,7 +164,7 @@ export default function PosterFolder({
                   if (!isSkeleton) setSelected(index);
                 }}
                 className={cn(
-                  'w-[calc(50%_-_0.25rem)] shrink-0 snap-start overflow-hidden rounded-md border border-line text-left md:w-[120px]',
+                  'w-[calc(50%_-_0.25rem)] shrink-0 snap-start overflow-hidden rounded-md border border-line text-left',
                   surfaceClasses(3, 3),
                 )}
               >
@@ -244,7 +230,9 @@ export default function PosterFolder({
                   disabled={isSkeleton}
                   onClick={(event) => {
                     event.stopPropagation();
-                    if (!isSkeleton) setSelected(index);
+                    if (isSkeleton) return;
+                    if (onOpen) onOpen(poster, index);
+                    else setSelected(index);
                   }}
                   onFocus={() => setExpanded(true)}
                   className="absolute left-1/2 top-1/2 h-[78px] w-[58px] overflow-hidden rounded-md border border-[#3a3a40] bg-[#141416] text-left shadow-xl transition-[transform,opacity] duration-500"
@@ -320,28 +308,15 @@ export default function PosterFolder({
         </>
       )}
 
-      <PosterModal
-        poster={current}
-        onClose={() => setSelected(null)}
-        onPrevious={
-          selected !== null && selected > 0
-            ? () => setSelected((index) => Math.max(0, (index ?? 0) - 1))
-            : undefined
-        }
-        onNext={
-          selected !== null && selected < displayItems.length - 1
-            ? () =>
-                setSelected((index) =>
-                  Math.min(displayItems.length - 1, (index ?? 0) + 1),
-                )
-            : undefined
-        }
-        index={selected ?? 0}
-        total={displayItems.length}
-        closeLabel={ui.posters.close}
-        previousLabel={ui.posters.previous}
-        nextLabel={ui.posters.next}
-      />
+      {selected !== null && (
+        <PosterGalleryModal
+          items={galleryItems}
+          heading={title}
+          index={selected}
+          onIndexChange={setSelected}
+          onClose={() => setSelected(null)}
+        />
+      )}
     </div>
   );
 }

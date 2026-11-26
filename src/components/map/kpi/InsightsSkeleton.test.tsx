@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import InsightsSkeleton from './InsightsSkeleton';
 
 describe('InsightsSkeleton', () => {
-  it('mirrors the four stat cells, four KPI cells, and six sector rows', () => {
+  it('mirrors the eleven stat cells, two KPI cells, and six sector rows', () => {
     const { container } = render(<InsightsSkeleton />);
 
     expect(screen.getByLabelText(/loading insights/i)).toHaveAttribute(
@@ -12,10 +12,10 @@ describe('InsightsSkeleton', () => {
     );
     expect(
       container.querySelectorAll('[data-skeleton-variant="stat"]'),
-    ).toHaveLength(4);
+    ).toHaveLength(11);
     expect(
       container.querySelectorAll('[data-skeleton-variant="kpi"]'),
-    ).toHaveLength(4);
+    ).toHaveLength(2);
     expect(container.querySelectorAll('[data-skeleton-sector]')).toHaveLength(6);
   });
 });

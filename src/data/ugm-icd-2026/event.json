@@ -10,7 +10,7 @@
   "tracks": [
     { "id": "career-expo", "label": "Career Expo", "type": "booth" },
     { "id": "walk-in-interview", "label": "Walk-in Interview", "type": "session" },
-    { "id": "career-counseling", "label": "Career Counseling", "type": "session" }
+    { "id": "career-counseling", "label": "Counseling", "type": "session" }
   ],
   "defaultVenueId": "gik",
   "locale": "id-ID"

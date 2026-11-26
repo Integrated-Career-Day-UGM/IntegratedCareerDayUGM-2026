@@ -1,11 +1,13 @@
-import { Image as ImageIcon, X } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { X } from 'lucide-react';
+import { useMemo } from 'react';
 import { useMapStore } from '../../stores/mapStore';
 import CtaBar from '../../components/map/CtaBar';
 import OpeningsList from '../../components/map/OpeningsList';
 import CompanySessions from '../../components/map/CompanySessions';
-import PosterModal from '../../components/map/PosterModal';
-import usePosterAvailable from '../../hooks/map/usePosterAvailable';
+import CompanyProfileBlocks, {
+  CompanyCategoryChips,
+} from '../../components/map/CompanyProfileBlocks';
+import CompanyPosterTeaser from '../../components/map/CompanyPosterTeaser';
 import { track } from '../../lib/analytics';
 import {
   event,
@@ -40,15 +42,12 @@ const dayLabel = (dayId: string) => {
 function WalkInBookingCard({ booking }: { booking: WalkInSession }) {
   const selectWalkInRoom = useMapStore((s) => s.selectWalkInRoom);
   const selectBooth = useMapStore((s) => s.selectBooth);
-  const [posterOpen, setPosterOpen] = useState(false);
 
   const company = booking.companyId ? getCompany(booking.companyId) : undefined;
   const booth = booking.boothRef ? getBoothByCode(booking.boothRef) : undefined;
   const title = company?.name ?? booking.companyName;
-  const posterAvailable = usePosterAvailable(company?.posterUrl);
-  const hasPoster = Boolean(company?.posterUrl && posterAvailable);
   const hasLinks = Boolean(
-    booth || hasPoster || company?.websiteUrl || company?.programUrl,
+    booth || company?.websiteUrl || company?.programUrl,
   );
 
   return (
@@ -109,10 +108,12 @@ function WalkInBookingCard({ booking }: { booking: WalkInSession }) {
         </span>
       </div>
 
-      {company?.tags.length ? (
+      <CompanyCategoryChips profile={company?.profile} />
+
+      {!company?.profile?.categories?.length && company?.tags.length ? (
         <div className="flex flex-wrap gap-1.5 border-t border-line px-3 py-2">
-          {company.tags.map((tag) => (
-            <span key={tag} className="bg-[#1f1f23] px-1.5 py-0.5 text-[0.75rem] text-[#d4d4d8] md:text-[11px]">
+          {company.tags.map((tag, index) => (
+            <span key={`${tag}-${index}`} className="bg-[#1f1f23] px-1.5 py-0.5 text-[0.75rem] text-[#d4d4d8] md:text-[11px]">
               {tag}
             </span>
           ))}
@@ -129,6 +130,9 @@ function WalkInBookingCard({ booking }: { booking: WalkInSession }) {
         </p>
       ) : null}
 
+      <CompanyProfileBlocks profile={company?.profile} />
+      {company && <CompanyPosterTeaser company={company} />}
+
       {/* Cross-link into the career-expo company detail, then the company's
           own outbound CTAs — same slabs as the booth card. */}
       {hasLinks && (
@@ -139,20 +143,6 @@ function WalkInBookingCard({ booking }: { booking: WalkInSession }) {
               onClick={() => {
                 track('cta.click', { boothId: booth.id, type: 'company-detail' });
                 selectBooth(booth.id);
-              }}
-            />
-          )}
-          {hasPoster && (
-            <CtaBar
-              icon={ImageIcon}
-              label={ui.boothDetail.posterCta}
-              onClick={() => {
-                setPosterOpen(true);
-                track('cta.click', {
-                  boothId: booth?.id ?? null,
-                  type: 'poster',
-                  url: company?.posterUrl,
-                });
               }}
             />
           )}
@@ -169,7 +159,7 @@ function WalkInBookingCard({ booking }: { booking: WalkInSession }) {
               }
             />
           )}
-          {company?.programUrl && (
+          {company?.programUrl && !company.profile?.programLinks?.length && (
             <CtaBar
               href={company.programUrl}
               label={ui.boothDetail.programCta}
@@ -188,28 +178,11 @@ function WalkInBookingCard({ booking }: { booking: WalkInSession }) {
       {/* All of the company's other sessions — stage talks, track sessions
           and its other walk-in bookings — then the openings list, exactly
           like the booth detail card. */}
+      {company && <OpeningsList openings={company.openings} />}
       <CompanySessions
         companyId={booking.companyId}
         companyName={booking.companyName}
         highlightId={booking.id}
-      />
-      {company && <OpeningsList openings={company.openings} />}
-
-      <PosterModal
-        poster={
-          posterOpen && hasPoster && company?.posterUrl
-            ? {
-                id: company.id,
-                title: company.name,
-                subtitle: ui.boothDetail.posterCta,
-                src: company.posterUrl,
-                downloadUrl: company.posterDownloadUrl ?? company.posterUrl,
-                accent: WALK_IN_ACCENT,
-              }
-            : null
-        }
-        onClose={() => setPosterOpen(false)}
-        closeLabel={ui.boothDetail.closeLabel}
       />
     </section>
   );

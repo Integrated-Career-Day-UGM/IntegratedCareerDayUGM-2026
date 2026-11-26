@@ -8,6 +8,7 @@ import { ScrollArea } from '../../components/ui/scroll-area';
 import HappeningNow from './HappeningNow';
 import VenueList from './VenueList';
 import WalkInList from './WalkInList';
+import CounselingList from './CounselingList';
 import BoothDetail from './BoothDetail';
 import WalkInDetail from './WalkInDetail';
 import FacilityDetail from './FacilityDetail';
@@ -19,10 +20,13 @@ import { ui } from '../../lib/data';
 
 
 export const SNAP_PEEK = 110;
-/** Detail tray height — 30% of the viewport, so the map stays readable. */
-const DETAIL_RATIO = 0.3;
+/** Opening height for the tray — search and venue detail both start here. */
+const DETAIL_RATIO = 0.4;
+const DETAIL_MAX_RATIO = 0.5;
 const getDetailHeight = () =>
   Math.max(240, Math.round(window.innerHeight * DETAIL_RATIO));
+const getDetailMaxHeight = () =>
+  Math.max(240, Math.round(window.innerHeight * DETAIL_MAX_RATIO));
 const SNAP_FULL_RATIO = 0.94;
 /** Room kept above the fully-raised sheet. The live chrome bottom is read
  *  from `#map-chrome`, so the tray maxes out just under QuickFind. */
@@ -50,10 +54,14 @@ export default function MobileBottomSheet() {
   const selectedTrackId = useMapStore((s) => s.selectedTrackId);
   const walkInMode =
     selectedTrackId === 'walk-in-interview' || selectedAreaId === 'hall-b';
+  const counselingMode =
+    selectedTrackId === 'career-counseling' || selectedAreaId === 'pp-kagama';
   // Gliding hover highlight across the tab rail (§0).
   const railRef = useRef<HTMLElement>(null);
   const hover = useFluidHover(railRef, { axis: 'x' });
-  const [height, setHeight] = useState<number>(SNAP_PEEK);
+  const [height, setHeight] = useState<number>(() =>
+    typeof window === 'undefined' ? SNAP_PEEK : getDetailHeight(),
+  );
   const [isDragging, setIsDragging] = useState(false);
   const dragStartY = useRef(0);
   const startHeight = useRef(0);
@@ -62,6 +70,31 @@ export default function MobileBottomSheet() {
   const detailKey = selectedBoothId ?? selectedWalkInRoomId ?? selectedFacilityId ?? '';
   const [detailLoading, setDetailLoading] = useState(false);
   const previousDetailKeyRef = useRef('');
+  const [showDragHint, setShowDragHint] = useState(false);
+
+  useEffect(() => {
+    try {
+      if (window.localStorage.getItem('icd:tray-drag-hint') === '1') return;
+      let timer = 0;
+      const reveal = () => {
+        setShowDragHint(true);
+        timer = window.setTimeout(() => {
+          setShowDragHint(false);
+          window.localStorage.setItem('icd:tray-drag-hint', '1');
+        }, 5000);
+      };
+      const readyWindow = window as unknown as { __icdMapReady?: boolean };
+      if (readyWindow.__icdMapReady) reveal();
+      else window.addEventListener('icd:map-ready', reveal, { once: true });
+      return () => {
+        window.removeEventListener('icd:map-ready', reveal);
+        if (timer) window.clearTimeout(timer);
+      };
+    } catch {
+      // Private mode: skip the one-time hint.
+      return;
+    }
+  }, []);
   useEffect(() => {
     if (!['detail', 'facility'].includes(sidebarMode) || !detailKey) {
       previousDetailKeyRef.current = '';
@@ -76,10 +109,11 @@ export default function MobileBottomSheet() {
   }, [sidebarMode, detailKey]);
 
   const getMaxHeight = () => {
-    // Detail/facility mode never takes more than 30% of the screen.
-    if (['detail', 'facility'].includes(useMapStore.getState().sidebarMode)) {
-      return getDetailHeight();
-    }
+    const state = useMapStore.getState();
+    // Detail/facility can be pulled to half the viewport; search is capped
+    // at its opening height. Other tabs keep the full sheet.
+    if (['detail', 'facility'].includes(state.sidebarMode)) return getDetailMaxHeight();
+    if (state.sidebarTab === 'search') return getDetailHeight();
     const chrome = document.getElementById('map-chrome');
     const chromeBottom = chrome
       ? chrome.getBoundingClientRect().bottom
@@ -100,6 +134,12 @@ export default function MobileBottomSheet() {
 
   const onPointerDown = (e: React.PointerEvent) => {
     setIsDragging(true);
+    setShowDragHint(false);
+    try {
+      window.localStorage.setItem('icd:tray-drag-hint', '1');
+    } catch {
+      // Private mode.
+    }
     dragStartY.current = e.clientY;
     startHeight.current = height;
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
@@ -108,19 +148,31 @@ export default function MobileBottomSheet() {
   const onPointerMove = (e: React.PointerEvent) => {
     if (!isDragging) return;
     const delta = dragStartY.current - e.clientY;
-    const next = startHeight.current + delta;
-    snapTo(next);
+    const raw = startHeight.current + delta;
+    const max = getMaxHeight();
+    // Android-style rubber band: past the cap the tray still follows the
+    // finger, but with heavy resistance, then springs back on release.
+    const resisted =
+      raw > max ? max + Math.min(28, (raw - max) * 0.18) : raw;
+    setHeight(Math.max(SNAP_PEEK, resisted));
   };
 
   const onPointerUp = () => {
     setIsDragging(false);
     const half = getDetailHeight();
     const max = getMaxHeight();
+    // Read the rendered height: React state can be one frame behind the last
+    // pointermove, and the rubber-band snap must use the real position.
+    const currentHeight = sheetRef.current?.getBoundingClientRect().height ?? height;
+    if (currentHeight > max) {
+      snapTo(max);
+      return;
+    }
     const midPeekHalf = (SNAP_PEEK + half) / 2;
     const midHalfFull = (half + max) / 2;
 
-    if (height < midPeekHalf) snapTo(SNAP_PEEK);
-    else if (height < midHalfFull) snapTo(half);
+    if (currentHeight < midPeekHalf) snapTo(SNAP_PEEK);
+    else if (currentHeight < midHalfFull) snapTo(half);
     else snapTo(max);
   };
 
@@ -187,6 +239,7 @@ export default function MobileBottomSheet() {
     }
     // Hall B has no expo booths — show every bilik booking instead.
     if (walkInMode) return <WalkInList />;
+    if (counselingMode) return <CounselingList />;
     return <VenueList />;
   };
 
@@ -202,20 +255,31 @@ export default function MobileBottomSheet() {
         className="pointer-events-auto relative flex flex-col overflow-hidden rounded-t-xl border-t border-zinc-800 bg-[#0c0c0f] shadow-[0_-8px_40px_rgba(0,0,0,0.5)]"
         style={{
           height,
-          transition: isDragging ? 'none' : 'height 350ms cubic-bezier(0.32, 0.72, 0, 1)',
+          transition: isDragging ? 'none' : 'height 380ms cubic-bezier(0.34, 1.2, 0.64, 1)',
         }}
       >
         {/* Drag handle — taller safe area, kept above the scroll viewport
             so it cannot steal vertical list gestures. */}
         <div
-          className="relative flex shrink-0 cursor-grab items-center justify-center pt-2 pb-4 active:cursor-grabbing"
+          className="relative flex shrink-0 cursor-grab items-center justify-center pt-3 pb-6 active:cursor-grabbing"
           style={{ touchAction: 'none' }}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
+          role="separator"
+          aria-label="Drag bottom sheet"
+          aria-orientation="horizontal"
         >
-          <div className="h-1 w-10 rounded-full bg-zinc-700" />
+          <div className="h-1.5 w-12 rounded-full bg-zinc-700" />
         </div>
+
+        {showDragHint && (
+          <div className="pointer-events-none px-4 pb-1">
+            <div className="mx-auto w-fit rounded-full border border-[var(--accent-pink)]/40 bg-[#1c1c20] px-3 py-1 text-[0.75rem] font-medium text-white shadow-lg">
+              Tarik untuk lihat venue
+            </div>
+          </div>
+        )}
 
         {/* Sheet content — FF ScrollArea (same engine as the desktop list)
             so native touch scrolling is preserved at every snap. */}

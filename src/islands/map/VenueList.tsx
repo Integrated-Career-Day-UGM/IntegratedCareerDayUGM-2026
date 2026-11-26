@@ -49,7 +49,10 @@ function BoothRow({
   const ref = useRef<HTMLDivElement>(null);
   useRegisterFluidHoverItem(registerItem, index, ref);
   return (
-    <div ref={ref} className={`relative flex items-center ${rowState(selected)}`}>
+    <div
+      ref={ref}
+      className={`relative flex items-center border border-transparent transition-colors md:hover:border-[var(--accent-pink)] ${rowState(selected)}`}
+    >
       <button
         type="button"
         onClick={onClick}

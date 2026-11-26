@@ -74,7 +74,7 @@ const WalkInFloorPlanOverlay = forwardRef<
         }}
       >
         <div className="absolute left-8 top-5 flex items-center gap-2.5 rounded-sm border border-white/20 bg-[#0c0c0f]/85 px-3 py-1.5 font-heading text-[16px] font-bold leading-none text-white">
-          <span>2nd floor</span>
+          <span>Student Center Lt 2</span>
           <span className="text-[#8f8f8f]">·</span>
           <span>{dayLabel}</span>
         </div>

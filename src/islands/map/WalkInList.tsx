@@ -50,16 +50,19 @@ function WalkInRow({
   useRegisterFluidHoverItem(registerItem, index, ref);
   const company = booking.companyId ? getCompany(booking.companyId) : undefined;
   return (
-    <div ref={ref} className={`relative flex items-center ${rowState(selected)}`}>
+    <div
+      ref={ref}
+      className={`relative flex items-center border border-transparent transition-colors md:hover:border-[var(--accent-pink)] ${rowState(selected)}`}
+    >
       <button
         type="button"
         onClick={() => onClick(booking)}
         onFocus={() => onFocusIndex(index)}
-        className="flex min-w-0 flex-1 items-center gap-2.5 px-3 py-2 text-left text-[13px] font-semibold leading-[1.2]"
+        className="flex min-w-0 flex-1 items-center gap-2.5 px-3 py-2.5 text-left text-[0.9375rem] font-semibold leading-[1.25] md:py-2 md:text-[13px]"
         aria-pressed={selected}
       >
         <span
-          className="font-heading min-w-[30px] shrink-0 rounded-[2px] px-1 text-center text-[12px] font-bold leading-[1.5] text-white"
+          className="font-heading min-w-[30px] shrink-0 rounded-[2px] px-1 text-center text-[0.8125rem] font-bold leading-[1.5] text-white md:text-[12px]"
           style={{ backgroundColor: ROOM_ACCENT }}
         >
           {booking.room}
@@ -67,7 +70,7 @@ function WalkInRow({
         <span className="min-w-0 flex-1 truncate text-ink-body">
           {company?.name ?? booking.companyName}
         </span>
-        <span className="shrink-0 text-[11px] font-medium tabular-nums text-ink-dim">
+        <span className="shrink-0 text-[0.75rem] font-medium tabular-nums text-ink-dim md:text-[11px]">
           {formatTime(booking.start)} - {formatTime(booking.end)}
         </span>
       </button>

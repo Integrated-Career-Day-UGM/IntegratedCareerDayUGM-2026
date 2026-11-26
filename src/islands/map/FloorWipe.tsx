@@ -41,6 +41,9 @@ function FloorWipe() {
     if (prevKeyRef.current === key) return;
     prevKeyRef.current = key;
 
+    // Mobile tab switches skip the pixel veil; the sheet repaint is enough.
+    if (window.matchMedia('(max-width: 767px)').matches) return;
+
     const id = ++wipeIdRef.current;
     setWipe({ id, active: false });
 

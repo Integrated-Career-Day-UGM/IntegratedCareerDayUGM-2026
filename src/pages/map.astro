@@ -12,11 +12,11 @@ import MobileLayoutTuner from '../islands/map/MobileLayoutTuner';
 import RegisterLinks from '../islands/map/RegisterLinks';
 import MapSplash from '../islands/map/MapSplash';
 import BrandLockup from '../components/map/BrandLockup';
-import { event } from '../lib/data';
+import { event, ui } from '../lib/data';
 import '../styles/base/global.css';
 
-const firstDay = event.days[0];
-const lastDay = event.days[event.days.length - 1];
+const eventStartDate = event.days[0]?.date ?? '2026-11-28';
+const eventEndDate = event.days.at(-1)?.date ?? '2026-11-29';
 const canonicalUrl = new URL(
   '/map',
   Astro.site ?? 'https://www.icdugm26.app',
@@ -26,8 +26,8 @@ const eventJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Event',
   name: `${event.name} 2026`,
-  startDate: `${firstDay.date}T10:00:00+07:00`,
-  endDate: `${lastDay.date}T15:00:00+07:00`,
+  startDate: `${eventStartDate}T10:00:00+07:00`,
+  endDate: `${eventEndDate}T15:00:00+07:00`,
   eventStatus: 'https://schema.org/EventScheduled',
   eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
   url: canonicalUrl,
@@ -58,8 +58,8 @@ const eventJsonLd = {
       <h1 id="map-seo-heading">Peta Interaktif UGM Integrated Career Days 2026</h1>
       <p>
         28–29 November 2026 di Gedung Industri Kreatif (GIK) UGM, Yogyakarta.
-        Career Expo di Hall C1, Walk-in Interview di Hall B, dan Career
-        Counseling di Ruang C001-002. Event berlangsung 10:00–15:00 WIB.
+        Career Expo di Student Center Lt 1, Walk-in Interview di Student Center Lt 2,
+        dan Counseling di PP KAGAMA Booth B. Event berlangsung 10:00–15:00 WIB.
       </p>
     </section>
     {/* Desktop sidebar — narrower step at md (360px) widening to 390px at
@@ -134,6 +134,17 @@ const eventJsonLd = {
         <div data-layout-tune="quick-find" class="pointer-events-auto">
           <QuickFind client:only="react" />
         </div>
+      </div>
+
+      {/* Desktop open-hours badge — top-right of the map viewport. */}
+      <div
+        data-layout-tune="open-hours-desktop"
+        class="pointer-events-none absolute right-3 top-3 z-30 hidden flex-col items-end md:flex md:right-4 md:top-4"
+      >
+        <span class="bg-white px-2.5 py-1.5 font-heading text-[0.875rem] font-bold uppercase leading-none tracking-[0.04em] text-black">
+          {ui.info.sections.hours.headline}
+        </span>
+        <span class="h-[2px] w-full bg-white"></span>
       </div>
 
       {/* Registration — outside the sidebar, desktop only. Bottom-right

@@ -1,12 +1,14 @@
-import { Bookmark, Image as ImageIcon, X } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { Bookmark, X } from 'lucide-react';
+import { useMemo } from 'react';
 import { useMapStore } from '../../stores/mapStore';
 import ShareBoothButton from '../../components/map/ShareBoothButton';
 import CtaBar from '../../components/map/CtaBar';
 import OpeningsList from '../../components/map/OpeningsList';
 import CompanySessions from '../../components/map/CompanySessions';
-import PosterModal from '../../components/map/PosterModal';
-import usePosterAvailable from '../../hooks/map/usePosterAvailable';
+import CompanyProfileBlocks, {
+  CompanyCategoryChips,
+} from '../../components/map/CompanyProfileBlocks';
+import CompanyPosterTeaser from '../../components/map/CompanyPosterTeaser';
 import { track } from '../../lib/analytics';
 import {
   getBooth,
@@ -23,7 +25,6 @@ export default function BoothDetail() {
   const selectBooth = useMapStore((s) => s.selectBooth);
   const toggleBookmark = useMapStore((s) => s.toggleBookmark);
   const bookmarkedIds = useMapStore((s) => s.bookmarkedIds);
-  const [posterOpen, setPosterOpen] = useState(false);
 
   const booth = useMemo(
     () => (selectedBoothId ? getBooth(selectedBoothId) : undefined),
@@ -33,8 +34,6 @@ export default function BoothDetail() {
     () => (selectedBoothId ? getCompanyForBooth(selectedBoothId) : undefined),
     [selectedBoothId],
   );
-  const posterAvailable = usePosterAvailable(company?.posterUrl);
-  const hasPoster = Boolean(company?.posterUrl && posterAvailable);
   const zone = useMemo(
     () =>
       booth
@@ -139,10 +138,12 @@ export default function BoothDetail() {
         )}
       </div>
 
-      {company?.tags.length ? (
+      <CompanyCategoryChips profile={company?.profile} />
+
+      {!company?.profile?.categories?.length && company?.tags.length ? (
         <div className="flex flex-wrap gap-1.5 border-t border-line px-3 py-2">
-          {company.tags.map((tag) => (
-            <span key={tag} className="bg-[#1f1f23] px-1.5 py-0.5 text-[0.75rem] text-[#d4d4d8] md:text-[11px]">
+          {company.tags.map((tag, index) => (
+            <span key={`${tag}-${index}`} className="bg-[#1f1f23] px-1.5 py-0.5 text-[0.75rem] text-[#d4d4d8] md:text-[11px]">
               {tag}
             </span>
           ))}
@@ -155,23 +156,12 @@ export default function BoothDetail() {
         </p>
       )}
 
+      <CompanyProfileBlocks profile={company?.profile} />
+      {company && <CompanyPosterTeaser company={company} />}
+
       {/* Everything below stays inside the one card, with its own padding. */}
-      {(hasPoster || company?.websiteUrl || company?.programUrl) && (
+      {(company?.websiteUrl || company?.programUrl) && (
         <div className="space-y-2 border-t border-line p-3">
-          {hasPoster && (
-            <CtaBar
-              icon={ImageIcon}
-              label={ui.boothDetail.posterCta}
-              onClick={() => {
-                setPosterOpen(true);
-                track('cta.click', {
-                  boothId: selectedBoothId,
-                  type: 'poster',
-                  url: company.posterUrl,
-                });
-              }}
-            />
-          )}
           {company?.websiteUrl && (
             <CtaBar
               href={company.websiteUrl}
@@ -185,7 +175,7 @@ export default function BoothDetail() {
               }
             />
           )}
-          {company?.programUrl && (
+          {company?.programUrl && !company.profile?.programLinks?.length && (
             <CtaBar
               href={company.programUrl}
               label={ui.boothDetail.programCta}
@@ -204,24 +194,8 @@ export default function BoothDetail() {
       {/* What the company is doing beyond this booth — stage talks, track
           sessions and walk-in bookings — then the openings, the same order
           the walk-in detail card uses. */}
-      <CompanySessions companyId={booth?.companyId ?? null} />
       {company && <OpeningsList openings={company.openings} />}
-      <PosterModal
-        poster={
-          posterOpen && hasPoster && company?.posterUrl
-            ? {
-                id: company.id,
-                title: company.name,
-                subtitle: ui.boothDetail.posterCta,
-                src: company.posterUrl,
-                downloadUrl: company.posterDownloadUrl ?? company.posterUrl,
-                accent: zone?.color ?? '#ff2d6f',
-              }
-            : null
-        }
-        onClose={() => setPosterOpen(false)}
-        closeLabel={ui.boothDetail.closeLabel}
-      />
+      <CompanySessions companyId={booth?.companyId ?? null} />
     </section>
   );
 }

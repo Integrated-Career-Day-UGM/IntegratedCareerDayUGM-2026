@@ -8,6 +8,9 @@
 #      litter never gets committed by accident. Kit code belongs in
 #      src/lib, src/hooks, and src/components/ui.
 
+# ---------- Poster originals (source stays outside the repo) ----------
+posters/source/company-posters/
+
 # ---------- Dependencies ----------
 node_modules/
 .pnp

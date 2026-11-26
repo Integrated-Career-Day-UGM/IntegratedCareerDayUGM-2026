@@ -5,7 +5,7 @@
     "areas": [
       {
         "id": "hall-c1",
-        "name": "Hall C1",
+        "name": "Student Center Lt 1",
         "kind": "hall",
         "trackId": "career-expo",
         "map": {
@@ -16,8 +16,8 @@
           "maxZoom": 4
         }
       },
-      { "id": "hall-b", "name": "Hall B", "kind": "hall", "trackId": "walk-in-interview", "map": null },
-      { "id": "room-c001-002", "name": "Ruang C001-002", "kind": "room", "trackId": "career-counseling", "map": null }
+      { "id": "hall-b", "name": "Student Center Lt 2", "kind": "hall", "trackId": "walk-in-interview", "map": null },
+      { "id": "pp-kagama", "name": "PP KAGAMA · Booth B", "kind": "room", "trackId": "career-counseling", "map": null }
     ]
   }
 ]

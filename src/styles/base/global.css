@@ -126,10 +126,22 @@ button {
   font: inherit;
 }
 
+/* The mobile filter popover lives inside #map-chrome (z-30). Raise that
+   stacking context only while the filter is open so the popover can sit
+   above the bottom sheet (z-40) without lifting the whole chrome permanently. */
+#map-chrome:has([data-search-filter][aria-expanded='true']) {
+  z-index: 50;
+}
+
 /* Press feedback for all buttons (low specificity so Tailwind utilities can override) */
+:where(button),
+:where([role='button']) {
+  transition: scale 200ms ease-out;
+}
+
 :where(button):active,
 :where([role='button']):active {
-  transform: scale(0.97);
+  scale: 0.97;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -142,7 +154,7 @@ button {
   }
   :where(button):active,
   :where([role='button']):active {
-    transform: none;
+    scale: none;
   }
   :is(.reveal-landing, .reveal-landing-subtle) {
     --reveal-distance: 0px;

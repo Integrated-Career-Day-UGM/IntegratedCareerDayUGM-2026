@@ -502,7 +502,7 @@ export const BOOTH_SHAPES: BoothShape[] = [
   },
   // Main stage booths — navy
   {
-    id: 'a', code: 'A', left: 364, top: 458.5, w: 75.151, h: 91.966, rotate: -71.71,
+    id: 'b', code: 'B', left: 364, top: 458.5, w: 75.151, h: 91.966, rotate: -71.71,
     innerW: 79.369, innerH: 52.912, bg: '#1f7f79', borderWidth: 1.274, padding: 6.37,
     labelSize: 31.104, labelTracking: -2.4883, labelRotate: 91.5,
   },

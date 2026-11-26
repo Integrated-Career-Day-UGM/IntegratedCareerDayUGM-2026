@@ -5,8 +5,8 @@ const skeleton = 'skeleton-shimmer rounded-[1px]';
 
 /**
  * Loading mirror of the final Insights geometry: same section rails, same
- * 2-column hairline bento, four stat cells, four KPI cells, and six sector
- * rows. Heights match the real tiles so the swap does not shift layout.
+ * 2-column hairline bento, eight stat cells, two KPI cells, one full-width
+ * top-company cell, two top-fact cells, and six sector rows.
  */
 export default function InsightsSkeleton() {
   return (
@@ -21,7 +21,7 @@ export default function InsightsSkeleton() {
       </div>
 
       <div className="grid grid-cols-2 gap-px border border-line bg-[#2a2a2a]">
-        {Array.from({ length: 4 }, (_, index) => (
+        {Array.from({ length: 8 }, (_, index) => (
           <div
             key={`stat-${index}`}
             data-skeleton-variant="stat"
@@ -32,7 +32,7 @@ export default function InsightsSkeleton() {
             <div className={cnSkeleton('h-4 w-24')} />
           </div>
         ))}
-        {Array.from({ length: 4 }, (_, index) => (
+        {Array.from({ length: 2 }, (_, index) => (
           <div
             key={`kpi-${index}`}
             data-skeleton-variant="kpi"
@@ -41,7 +41,27 @@ export default function InsightsSkeleton() {
             <div className={cnSkeleton('h-[16.5px] w-24')} />
             <div className={cnSkeleton('h-6 w-16')} />
             <div className={cnSkeleton('h-4 w-24')} />
-            <div className={cnSkeleton('h-9 w-full')} />
+            <div className={cnSkeleton('h-11 w-full')} />
+          </div>
+        ))}
+        <div
+          data-skeleton-variant="stat"
+          data-skeleton-top-company=""
+          className={`${cellClass} col-span-2`}
+        >
+          <div className={cnSkeleton('h-[16.5px] w-24')} />
+          <div className={cnSkeleton('h-6 w-40 max-w-full')} />
+          <div className={cnSkeleton('h-4 w-24')} />
+        </div>
+        {Array.from({ length: 2 }, (_, index) => (
+          <div
+            key={`stat-tail-${index}`}
+            data-skeleton-variant="stat"
+            className={cellClass}
+          >
+            <div className={cnSkeleton('h-[16.5px] w-20')} />
+            <div className={cnSkeleton('h-6 w-16')} />
+            <div className={cnSkeleton('h-4 w-24')} />
           </div>
         ))}
       </div>

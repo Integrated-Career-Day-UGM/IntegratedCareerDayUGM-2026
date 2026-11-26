@@ -1,46 +1,43 @@
-import { useMemo, useRef, useState } from 'react';
-import { useFluidHover } from '../../hooks/use-fluid-hover';
-import { FluidHoverHighlight } from '../../components/ui/fluid-hover-highlight';
+import { useMemo, useState } from 'react';
+import { ArrowUpRight, Calendar, Clock, MapPin } from 'lucide-react';
 import EmptyState from '../../components/map/EmptyState';
-import PosterModal from '../../components/map/PosterModal';
-import { useMapStore } from '../../stores/mapStore';
-import { openingsMeta, ui } from '../../lib/data';
+import PosterGalleryModal from '../../components/map/PosterGalleryModal';
+import {
+  AccordionContent,
+  AccordionGroup,
+  AccordionItem,
+  AccordionTrigger,
+} from '../../components/ui/accordion';
+import { careerFairMeta, ui } from '../../lib/data';
 import type { JobOpening } from '../../types/map';
 
 /**
- * Grouped job openings with the gliding hover highlight — the exact block
- * the booth detail card renders, shared with the walk-in detail card so
- * both read identically.
+ * Grouped job openings. Each role is an FF accordion row: title + program
+ * group in the header, qualification/preference/apply details in the panel.
+ * Company-level dates and program links live in the detail card above.
  */
 export default function OpeningsList({ openings }: { openings: JobOpening[] }) {
-  const openingsRef = useRef<HTMLDivElement>(null);
-  const openingsHover = useFluidHover(openingsRef);
-  const setSidebarTab = useMapStore((s) => s.setSidebarTab);
-  const setPosterFocus = useMapStore((s) => s.setPosterFocus);
   const [poster, setPoster] = useState<JobOpening | null>(null);
 
-  // Openings are grouped by contract type; one fluid hover glides across the
-  // whole list like the search results.
-  const openingsGroups = useMemo(() => {
-    const groups: { type: string; roles: JobOpening[] }[] = [];
+  const groups = useMemo(() => {
+    const next: { program: string; roles: JobOpening[] }[] = [];
     for (const role of openings) {
-      let group = groups.find((g) => g.type === role.type);
+      const program = role.program ?? role.type;
+      let group = next.find((item) => item.program === program);
       if (!group) {
-        group = { type: role.type, roles: [] };
-        groups.push(group);
+        group = { program, roles: [] };
+        next.push(group);
       }
       group.roles.push(role);
     }
-    return groups;
+    return next;
   }, [openings]);
 
   if (!openings.length) {
-    const unavailable = openingsMeta.status === 'unavailable';
+    const unavailable = careerFairMeta.status === 'unavailable';
     return (
       <div className="border-t border-line p-3">
-        <div className="section-label mb-2">
-          {ui.boothDetail.opportunitiesLabel}
-        </div>
+        <div className="section-label mb-2">{ui.boothDetail.opportunitiesLabel}</div>
         <EmptyState
           variant="inline"
           art={unavailable ? 'sad' : 'empty'}
@@ -65,94 +62,149 @@ export default function OpeningsList({ openings }: { openings: JobOpening[] }) {
   return (
     <div className="border-t border-line p-3">
       <div className="mb-2 flex items-center justify-between gap-2">
-        <div className="flex min-w-0 items-center gap-2">
-          <div className="section-label">{ui.boothDetail.opportunitiesLabel}</div>
-        </div>
-        <span className="font-heading text-[11px] font-semibold text-ink-dim">
+        <div className="section-label">{ui.boothDetail.opportunitiesLabel}</div>
+        <span className="font-heading text-[0.75rem] font-semibold text-ink-dim">
           {openings.length}
         </span>
       </div>
 
-      <div ref={openingsRef} className="relative" {...openingsHover.handlers}>
-        <FluidHoverHighlight hover={openingsHover} className="bg-[#1f1f23]" />
-        {openingsGroups.map((group) => (
-          <div key={group.type} className="mb-2 last:mb-0">
-            <div className="flex items-center justify-between px-1 pb-1">
-              <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#8f8f8f]">
-                {group.type}
+      <AccordionGroup type="single" collapsible highlight="trigger" className="w-full">
+        {groups.map((group) => (
+          <div key={group.program} className="mb-4 w-full last:mb-0">
+            <div className="flex w-full items-start justify-between gap-3 border-b border-[#232326] px-2 pb-2">
+              <span className="min-w-0 flex-1 line-clamp-2 text-[0.6875rem] font-semibold uppercase leading-snug tracking-[0.08em] text-[#8f8f8f]">
+                {group.program}
               </span>
-              <span className="text-[10px] tabular-nums text-[#8f8f8f]">
+              <span className="shrink-0 pt-0.5 text-[0.6875rem] tabular-nums text-[#8f8f8f]">
                 {group.roles.length}
               </span>
             </div>
+
             {group.roles.map((role) => {
               const index = flatIndex++;
               return (
-                <div
+                <AccordionItem
                   key={role.id}
-                  ref={(el) => openingsHover.registerItem(index, el)}
-                  className="relative px-2 py-2"
+                  value={role.id}
+                  index={index}
+                  className="w-full border-b border-[#232326] last:border-b-0"
                 >
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="min-w-0 truncate text-[13px] font-medium leading-snug text-white">
-                      {role.title}
+                  <AccordionTrigger className="w-full py-3">
+                    <span className="flex w-full min-w-0 items-start gap-2">
+                      <span className="min-w-0 flex-1 line-clamp-2 break-words text-[1rem] font-semibold leading-snug text-white md:text-[0.875rem]">
+                        {role.title}
+                      </span>
                     </span>
-                    <span className="shrink-0 text-[10.5px] text-[#8f8f8f]">
-                      {role.type}
-                    </span>
-                  </div>
-                  {(role.location || role.posterUrl) && (
-                    <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                  </AccordionTrigger>
+
+                  <AccordionContent className="px-3 pb-4">
+                    {role.description && (
+                      <p className="text-[0.8125rem] leading-snug text-[#d4d4d8] md:text-[11.5px]">
+                        {role.description}
+                      </p>
+                    )}
+
+                    <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[0.75rem] text-[#a1a1aa] md:text-[11px]">
                       {role.location && (
-                        <span className="text-[10px] text-[#8f8f8f]">
+                        <span className="inline-flex items-center gap-1">
+                          <MapPin size={13} strokeWidth={1.7} />
                           {role.location}
                         </span>
                       )}
-                      {role.posterUrl && (
-                        <>
+                      {role.intakeCount != null && (
+                        <span className="inline-flex items-center gap-1">
+                          <Clock size={13} strokeWidth={1.7} />
+                          {ui.boothDetail.intakeLabel} {role.intakeCount}
+                        </span>
+                      )}
+                      {role.deadlineLabel && (
+                        <span className="inline-flex items-center gap-1">
+                          <Calendar size={13} strokeWidth={1.7} />
+                          {role.deadlineLabel}
+                        </span>
+                      )}
+                    </div>
+
+                    {role.qualifications && role.qualifications.length > 0 && (
+                      <div className="mt-2">
+                        <div className="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-[#8f8f8f]">
+                          {ui.boothDetail.qualificationsLabel}
+                        </div>
+                        <ul className="mt-1 list-disc space-y-0.5 pl-4 text-[0.75rem] leading-snug text-[#d4d4d8] md:text-[11px]">
+                          {role.qualifications.map((item, index) => (
+                            <li key={`${item}-${index}`}>{item}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {role.preferences && role.preferences.length > 0 && (
+                      <div className="mt-2">
+                        <div className="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-[#8f8f8f]">
+                          {ui.boothDetail.preferencesLabel}
+                        </div>
+                        <ul className="mt-1 list-disc space-y-0.5 pl-4 text-[0.75rem] leading-snug text-[#d4d4d8] md:text-[11px]">
+                          {role.preferences.map((item, index) => (
+                            <li key={`${item}-${index}`}>{item}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {(role.applyUrl || role.posterUrl) && (
+                      <div className="mt-2.5 flex flex-wrap items-center gap-2">
+                        {role.applyUrl && (
+                          <a
+                            href={role.applyUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 bg-white px-3 py-1.5 text-[0.75rem] font-bold text-black transition-colors hover:bg-[var(--accent-pink)] md:text-[11px]"
+                          >
+                            {role.applyLabel && role.applyLabel.length <= 30
+                              ? role.applyLabel
+                              : ui.boothDetail.applyLabel}
+                            <ArrowUpRight size={13} strokeWidth={2.2} />
+                          </a>
+                        )}
+                        {role.posterUrl && (
                           <button
                             type="button"
                             onClick={() => setPoster(role)}
-                            className="text-[10px] font-semibold text-[#d4d4d8] underline underline-offset-2 hover:text-white"
+                            className="text-[0.75rem] font-semibold text-[#d4d4d8] underline underline-offset-2 hover:text-white md:text-[11px]"
                           >
                             Open poster
                           </button>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setSidebarTab('info');
-                              setPosterFocus(role.id);
-                            }}
-                            className="text-[10px] font-semibold text-[#8f8f8f] underline underline-offset-2 hover:text-white"
-                          >
-                            Open in Info
-                          </button>
-                        </>
-                      )}
-                    </div>
-                  )}
-                </div>
+                        )}
+                      </div>
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
               );
             })}
           </div>
         ))}
-      </div>
+      </AccordionGroup>
 
-      <PosterModal
-        poster={
-          poster?.posterUrl
-            ? {
-                id: poster.id,
-                title: poster.title,
-                subtitle: poster.type,
-                src: poster.posterUrl,
-                accent: '#f0c71d',
-                downloadUrl: poster.posterDownloadUrl ?? undefined,
-              }
-            : null
-        }
-        onClose={() => setPoster(null)}
-      />
+      {poster?.posterUrl && (
+        <PosterGalleryModal
+          items={[
+            {
+              id: poster.id,
+              companyId: 'opening',
+              companyName: poster.title,
+              companyShortName: poster.type,
+              kind: 'gallery',
+              title: poster.title,
+              src: poster.posterUrl,
+              thumbUrl: poster.posterUrl,
+              downloadUrl: poster.posterDownloadUrl ?? poster.posterUrl,
+            },
+          ]}
+          heading={poster.title}
+          index={0}
+          onClose={() => setPoster(null)}
+        />
+      )}
     </div>
   );
 }

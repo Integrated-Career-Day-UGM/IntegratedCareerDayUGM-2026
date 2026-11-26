@@ -1,0 +1,1313 @@
+id: app-group
+booth_ref: E9
+company: APP Group
+category:
+  - manufacturing
+  - forestry-and-pulp
+  - corporate-and-operations
+  - fmcg
+  - energy-and-utilities
+desc: "APP Group Management Trainee, Graduate Trainee (Foresty, Tissue, Serang Mill Power Plant Division), and Internship programs with intensive in-class and on-the-job training across Commercial, Mills Operations, Forestry, Supporting Division, Human Resource, Procurement, Logistic/Supply Chain, and Information System."
+important_dates: []
+program_links:
+  - url: https://www.app.co.id
+    label: Official website (QR code also provided on poster)
+cta: "Apply Here by scanning the QR code on the poster or visiting the website."
+intakes:
+  - program: Management Trainee
+    intake_count: null
+    roles:
+      - title: Management Trainee
+        location: Across Indonesia
+        job_desc_summary: "Intensive in-class and on-the-job training mentored by leaders across Commercial, Mills Operations, Forestry, or Supporting Division."
+        qualification:
+          - Fresh Graduate, with a Bachelor's/Master's Degree in any Major
+          - Min. GPA 3.50 out of 4.00 scale
+          - Max. 2 years of working experience
+          - Proficient in English and/or Mandarin (written & oral)
+          - Proficient in Microsoft Office, esp. Ms. Excel
+          - Strong interpersonal and management skills, with potential leadership, high integrity and keen passion
+          - Willingness to be placed in any of the APP's location all around Indonesia
+        preferences:
+          - Adaptable person that has profound organizational skills, proven with excellent organizational experiences
+  - program: Graduate Trainee - Foresty
+    intake_count: null
+    roles:
+      - title: Graduate Trainee - Foresty
+        location: null
+        job_desc_summary: "Development program for fresh graduates featuring intensive in-class and on-the-job training with exposure to forestry operations."
+        qualification:
+          - Fresh graduates with maximum 1 year of working experience in related field
+          - Bachelor's degree from reputable university (major in Forestry, Accounting, Statistics, Agriculture, any related majors)
+          - Minimal GPA 3.00 out of scale 4.00
+          - The position is for full-time position
+          - Willing to be placed in all operational area
+        preferences: []
+  - program: Graduate Trainee - Tissue
+    intake_count: null
+    roles:
+      - title: Graduate Trainee - Tissue
+        location: null
+        job_desc_summary: "Development program for fresh graduates featuring intensive in-class and on-the-job training mentored by leaders with exposure to tissue operations."
+        qualification:
+          - Bachelor's Degree (S1) in Industrial Engineering, Mechanical Engineering, Electrical Engineering, Chemical Engineering, Manufacturing Engineering, Mechatronics Engineering, Other relevant engineering disciplines
+          - Working experience maximum 2 Years
+          - Proficiency in Microsoft Excel and data analysis
+          - Strong analytical and problem-solving skills
+          - Willing to participate in cross-functional rotations
+          - Willing to be placed at any company operational site
+        preferences:
+          - Knowledge of Lean Manufacturing and Continuous Improvement principles is an advantage
+  - program: Graduate Trainee - Serang Mill
+    intake_count: null
+    roles:
+      - title: Graduate Trainee - Serang Mill (Power Plant Division)
+        location: Serang Mill, Banten
+        job_desc_summary: "On-the-job learning and guidance from experienced colleagues with exposure to mill operations at Indah Kiat Serang (Power Plant Division)."
+        qualification:
+          - Fresh graduate with a bachelor's or master's degree in engineering (all disciplines are welcome)
+          - Maximum 2 years of working experience
+          - Minimum GPA of 3.00 on a 4.00 scale
+          - Strong analytical, interpersonal, and communication skills
+          - Demonstrated leadership experience through academic, organizational, or extracurricular activities
+          - Proficient in English, both written and spoken
+          - Highly motivated, adaptable, and eager to learn in a fast-paced manufacturing environment
+          - Willing to be placed at Serang Mill, Banten
+        preferences: []
+  - program: Internship
+    intake_count: null
+    roles:
+      - title: Internship - Human Resource Division
+        location: null
+        job_desc_summary: null
+        qualification:
+          - Final year/fresh graduate students in any major
+          - Proficient in Microsoft Office, esp. Ms. Excel
+          - Proficient in English and/or Mandarin (written & oral)
+          - Strong analytical, organizational, and problem-solving skills
+          - Detail-oriented, proactive, and eager to learn
+          - Ability to work independently and collaboratively in a team environment
+        preferences:
+          - Active involvement in student organizations, committees, or extracurricular activities is an advantage
+      - title: Internship - Procurement
+        location: null
+        job_desc_summary: null
+        qualification:
+          - Final year/fresh graduate students in any major
+          - Proficient in Microsoft Office, esp. Ms. Excel
+          - Proficient in English and/or Mandarin (written & oral)
+          - Strong analytical, organizational, and problem-solving skills
+          - Detail-oriented, proactive, and eager to learn
+          - Ability to work independently and collaboratively in a team environment
+        preferences:
+          - Active involvement in student organizations, committees, or extracurricular activities is an advantage
+      - title: Internship - Commercial
+        location: null
+        job_desc_summary: null
+        qualification:
+          - Final year/fresh graduate students in any major
+          - Proficient in Microsoft Office, esp. Ms. Excel
+          - Proficient in English and/or Mandarin (written & oral)
+          - Strong analytical, organizational, and problem-solving skills
+          - Detail-oriented, proactive, and eager to learn
+          - Ability to work independently and collaboratively in a team environment
+        preferences:
+          - Active involvement in student organizations, committees, or extracurricular activities is an advantage
+      - title: Internship - Logistic/Supply Chain
+        location: null
+        job_desc_summary: null
+        qualification:
+          - Final year/fresh graduate students in any major
+          - Proficient in Microsoft Office, esp. Ms. Excel
+          - Proficient in English and/or Mandarin (written & oral)
+          - Strong analytical, organizational, and problem-solving skills
+          - Detail-oriented, proactive, and eager to learn
+          - Ability to work independently and collaboratively in a team environment
+        preferences:
+          - Active involvement in student organizations, committees, or extracurricular activities is an advantage
+      - title: Internship - Information System
+        location: null
+        job_desc_summary: null
+        qualification:
+          - Final year/fresh graduate students in any major
+          - Proficient in Microsoft Office, esp. Ms. Excel
+          - Proficient in English and/or Mandarin (written & oral)
+          - Strong analytical, organizational, and problem-solving skills
+          - Detail-oriented, proactive, and eager to learn
+          - Ability to work independently and collaboratively in a team environment
+        preferences:
+          - Active involvement in student organizations, committees, or extracurricular activities is an advantage
+---
+id: utpe-group
+booth_ref: C3 
+company: United Tractors Pandu Engineering Group (Member of ASTRA)
+category:
+  - heavy-equipment-and-engineering
+  - maritime-and-shipbuilding
+  - logistics-and-supply-chain
+  - manufacturing
+desc: "United Tractors Pandu Engineering Group Goes To Integrated Career Days at Universitas Gadjah Mada — Exclusive Hiring for UGM Students with 15+ Open Positions and 20+ Talent Needed."
+important_dates:
+  - event: Registration Period
+    date: 16 - 28 November 2026
+    time: null
+    location: null
+    note: null
+  - event: Application Deadline
+    date: 28 November 2026
+    time: null
+    location: null
+    note: null
+program_links:
+  - url: https://linktr.ee/CampushiringUTPEGroup
+    label: Campus Hiring Linktree (QR code also provided on poster)
+cta: "Register through the Campus Hiring link (https://linktr.ee/CampushiringUTPEGroup) or scan the QR code, choose the company & position that match your interest and qualifications, make sure you already have an Astra Career Account, complete the application form and upload your latest CV, and double check that all your data is correct before submitting. Apply Before 28 November 2026."
+intakes:
+  - program: Integrated Career Days - Universitas Gadjah Mada (UTPE)
+    intake_count: null
+    roles:
+      - title: Fluid Power Tech. Engineer
+        location: null
+        job_desc_summary: null
+        qualification:
+          - Exclusive Hiring for UGM Students
+        preferences: []
+      - title: Design Engineer
+        location: null
+        job_desc_summary: null
+        qualification:
+          - Exclusive Hiring for UGM Students
+        preferences: []
+      - title: Structure Engineer
+        location: null
+        job_desc_summary: null
+        qualification:
+          - Exclusive Hiring for UGM Students
+        preferences: []
+  - program: Integrated Career Days - Universitas Gadjah Mada (PML - Patria Maritime Lines)
+    intake_count: null
+    roles:
+      - title: Supply Chain Management (Mandarin Speaker)
+        location: null
+        job_desc_summary: null
+        qualification:
+          - Exclusive Hiring for UGM Students
+          - Mandarin Speaker
+        preferences: []
+      - title: Nautical Staff
+        location: null
+        job_desc_summary: null
+        qualification:
+          - Exclusive Hiring for UGM Students
+        preferences: []
+      - title: Field Officer
+        location: null
+        job_desc_summary: null
+        qualification:
+          - Exclusive Hiring for UGM Students
+        preferences: []
+      - title: Business Strategic
+        location: null
+        job_desc_summary: null
+        qualification:
+          - Exclusive Hiring for UGM Students
+        preferences: []
+      - title: Part Analyst
+        location: null
+        job_desc_summary: null
+        qualification:
+          - Exclusive Hiring for UGM Students
+        preferences: []
+  - program: Integrated Career Days - Universitas Gadjah Mada (PMP - Patria Maritim Perkasa)
+    intake_count: null
+    roles:
+      - title: Production Engineering (Blasting & Painting)
+        location: null
+        job_desc_summary: null
+        qualification:
+          - Exclusive Hiring for UGM Students
+        preferences: []
+      - title: Business Consultant (Ship Repair)
+        location: null
+        job_desc_summary: null
+        qualification:
+          - Exclusive Hiring for UGM Students
+        preferences: []
+      - title: Business Consultant (Ship Building)
+        location: null
+        job_desc_summary: null
+        qualification:
+          - Exclusive Hiring for UGM Students
+        preferences: []
+  - program: Integrated Career Days - Universitas Gadjah Mada (TRIATRA - Triatra Sinergia Pratama)
+    intake_count: null
+    roles:
+      - title: MT Marketing & Sales Site Department Head
+        location: null
+        job_desc_summary: null
+        qualification:
+          - Exclusive Hiring for UGM Students
+        preferences: []
+      - title: Sales Associate
+        location: null
+        job_desc_summary: null
+        qualification:
+          - Exclusive Hiring for UGM Students
+        preferences: []
+      - title: After Sales Consultant
+        location: null
+        job_desc_summary: null
+        qualification:
+          - Exclusive Hiring for UGM Students
+        preferences: []
+      - title: Business Consultant
+        location: null
+        job_desc_summary: null
+        qualification:
+          - Exclusive Hiring for UGM Students
+        preferences: []
+---
+id: dynapack-asia
+booth_ref: E12
+company: Dynapack Asia
+category:
+  - manufacturing
+  - packaging-and-plastics
+desc: "Dynapack Asia (The Most Sustainable Plastic Manufacturer in Asia) hiring across Apprentice Intake 2027—offering hands-on plant experience in production, quality management, and continuous improvement with coaching and mentoring, part of an Apprentice Program since 1993 with 180+ graduates—alongside additional openings."
+important_dates: []
+program_links:
+  - url: https://dynapackasia.com
+    label: Official website (QR code also provided on poster)
+cta: "SCAN TO JOIN OUR JOURNEY. More positions available. Scan to see all openings and apply. 1 Scan, 2 Choose a position, 3 Submit your CV."
+intakes:
+  - program: Apprentice Intake 2027
+    intake_count: null
+    roles:
+      - title: Apprentice 2027
+        location: null
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+  - program: General Hiring
+    intake_count: null
+    roles:
+      - title: HRGA Generalist
+        location: null
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Talentpool 2027
+        location: null
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Technician
+        location: null
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Tax Staff
+        location: null
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: AP Staff
+        location: null
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+---
+id: elnusa-petrofin
+booth_ref: E11
+company: Elnusa Petrofin (Danantara Indonesia)
+category:
+  - energy-and-utilities
+  - oil-and-gas
+desc: "Elnusa Petrofin x Universitas Gadjah Mada (Bursa Karir UGM) — Explore Your Career in the Energy Industry, open to the public, with benefits including Insight Karier di Elnusa Petrofin and Exclusive Souvenir."
+important_dates:
+  - event: Bursa Karir UGM
+    date: 28 - 29 November 2026
+    time: 09.00 - 16.00 WIB
+    location: GIK - Gelanggang Inovasi dan Kreativitas UGM
+    note: null
+program_links:
+  - url: https://bit.ly/talentpoolUGM
+    label: Link Pendaftaran Talent Pool EPN (QR code also provided on poster)
+  - url: https://www.elnusapetrofin.co.id
+    label: Official website
+cta: "Jangan Lewatkan Kesempatan Ini! Bergabunglah dan temukan peluang karier terbaik bersama Elnusa Petrofin. SCAN QR CODE untuk bergabung ke Talent Pool EPN atau daftar melalui bit.ly/talentpoolUGM. Your Future Starts Here!"
+intakes:
+  - program: Talent Pool EPN (Bursa Karir UGM)
+    intake_count: null
+    roles:
+      - title: Talent Pool EPN
+        location: null
+        job_desc_summary: null
+        qualification:
+          - Terbuka untuk umum (Open to the general public)
+        preferences: []
+---
+id: monee
+booth_ref: C2
+company: Monee
+category:
+  - fintech
+  - technology
+  - business-and-operations
+desc: "Monee (Make It Simple, Make It Last) hiring opportunities across product, data, business intelligence, credit & project management, and operations—including roles in Monee Credit (Yogyakarta) and digital financial products."
+important_dates: []
+program_links:
+  - url: https://careers.monee.com/careers
+    label: Official Careers Page
+  - url: null
+    label: QR code provided on role slides (bit.ly link on QR)
+cta: "Explore Opportunities at Monee via careers.monee.com/careers or click APPLY HERE / scan the QR code on the poster."
+intakes:
+  - program: General Hiring & Operations
+    intake_count: null
+    roles:
+      - title: Product Quality Assurance
+        location: null
+        job_desc_summary: "Manual & automated testing, QA/test case documentation, and feature socialization."
+        qualification:
+          - Bachelor's degree in Computer Science, Information Technology, Business, or a related field
+          - Minimum 2 years of experience in QA or product management
+          - Strong understanding of SDLC and QA methodologies, with strong analytical and problem-solving skills
+        preferences:
+          - Preferably in the fintech or BNPL industry
+      - title: Business Development - Project, Digital Products
+        location: null
+        job_desc_summary: "Drive digital product projects, project timelines, and growth/campaigns for Investment & Insurance products via market analysis and stakeholder collaboration."
+        qualification:
+          - 1-2 years of relevant work experience in business development, category management, project management, e-commerce, fintech, consulting, or related fields (fresh graduates welcome)
+          - Strong analytical and problem-solving skills, proficient in Excel/Google Sheets, plus project execution and stakeholder management skills
+          - Proactive, detail-oriented, eager to learn, with strong interest in digital products and financial services
+          - Good written and verbal English proficiency in a professional environment
+        preferences:
+          - SQL experience is a plus, not required
+          - Prior experience or knowledge in Investment, Insurance, or other fintech products is a plus, not required
+      - title: Trainer Data Analyst - Monee Credit
+        location: Yogyakarta
+        job_desc_summary: "Maintain training/onboarding data, analyze pre/during/post-training agent data, build reports/dashboards, and automate/AI-streamline trainer & QA processes."
+        qualification:
+          - Bachelor's Degree in Mathematics, Statistics, or related fields
+          - Minimum 1 year experience in e-commerce or Start-Up Company
+          - Good analytical skills, critical thinking, independent or team work, and ability to present training data contextually
+          - Mastering Windows, Microsoft & Google apps, Excel/Gsheet formulas/functions, SQL, and AI Tools/Automation
+        preferences:
+          - Bachelor's Degree preferably in Mathematics, Statistics, or related fields
+      - title: Business Intelligence
+        location: null
+        job_desc_summary: "Analyze Paylater, Cash Loan, and collections/repayment data, build KPI dashboards/reports, run A/B tests/experiments, and deliver ad-hoc & strategic insights."
+        qualification:
+          - Bachelor's degree in Statistics, Mathematics, Engineering, Computer Science, or related field
+          - Minimal 2 years of professional experience in a data-related role and business intelligence role
+          - Proficiency in SQL and spreadsheets (Excel/Google Sheets); familiarity with BI tools such as Power BI, Tableau, or similar
+          - Good communication skills to explain insights clearly to non-technical stakeholders, plus strong analytical, problem-solving, and attention-to-detail skills
+        preferences:
+          - Proficiency in Python (for data analysis/modeling) is a strong plus
+      - title: Project Management - Credit
+        location: null
+        job_desc_summary: "Support end-to-end strategic & operational project execution, coordinate cross-functional timelines, analyze operational data, build SOPs/reports, and flag risks."
+        qualification:
+          - Bachelor's degree from any major in STEM, Business, Economics, Mathematics, or related fields
+          - Fresh graduates or up to two (2) years of working experience
+          - Strong analytical thinking, problem-solving, fast learning, ownership/execution mindset, communication, and stakeholder management skills
+          - Comfortable with data and Microsoft Excel / Google Sheets; detail-oriented, organized, multi-tasking, and adaptable in a fast-paced environment
+        preferences:
+          - Bachelor's degree preferably in STEM, Business, Economics, Mathematics, or related fields
+      - title: Project Management - Internal Project - Credit Operations
+        location: Yogyakarta
+        job_desc_summary: "Lead multiple credit operations projects on time/scope/budget, drive process improvements, analyze data, manage stakeholders/risks, and maintain project docs."
+        qualification:
+          - Bachelor's degree in Business Administration, Operations Management, or related fields from top tier university
+          - 6 months to 1 year of relevant internship experience
+          - Good written and verbal English proficiency in a professional environment
+        preferences: []
+      - title: Business Development
+        location: null
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Quality Assurance Feedbacker Team Leader - Monee Credit
+        location: Yogyakarta
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Customer Service Supervisor - Monee Credit
+        location: Yogyakarta
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+---
+id: ocbc
+booth_ref: E14
+company: OCBC (PT Bank OCBC NISP, Tbk)
+category:
+  - banking-and-finance
+  - information-technology
+  - artificial-intelligence-and-data
+  - sales-and-business-development
+desc: "OCBC (#OpportunityStartsHere / #FinanciallyFit / Terus bersama, melaju jauh) career, academy, and internship tracks spanning AI/LLM systems, tech internship, direct sales, and graduate talent rotation across banking operations."
+important_dates: []
+program_links:
+  - url: https://bit.ly/JuniorDataScientistAILLMSystems
+    label: Registration Link Junior Data Scientist (AI/LLM Systems) (QR code juga tersedia pada poster)
+  - url: https://kerja.kitalulus.com/lowongan/detail/banking-academy-for-service-advisor-o3pm?utm_source=Copylink&utm_medium=social&utm_campaign=employer-share&status=share
+    label: Lowongan Banking Academy for Service Advisor (QR code juga tersedia pada poster BASA)
+  - url: https://kerja.kitalulus.com/lowongan/detail/direct-sales-career-program-fc8l?utm_source=Copylink&utm_medium=social&utm_campaign=employer-share&status=share
+    label: Lowongan Direct Sales Career Program (DSCP) (QR code juga tersedia pada poster DSCP)
+  - url: https://www.ocbc.id/id/karir
+    label: Halaman Karir OCBC
+  - url: mailto:academy@ocbc.id
+    label: Email rekrutmen academy@ocbc.id
+  - url: null
+    label: QR code provided on Crayon Tech Internship poster
+cta: "Daftar melalui tautan/QR masing-masing program atau kirim CV dan transkrip nilai ke academy@ocbc.id / kunjungi www.ocbc.id/id/karir."
+intakes:
+  - program: Junior Data Scientist (AI/LLM Systems)
+    intake_count: null
+    roles:
+      - title: Junior Data Scientist (AI/LLM Systems)
+        location: null
+        job_desc_summary: "Build/ship LLM systems & workflows to production, run evals/A/B tests/live monitoring with Python, vLLM, prompt optimization, & fine-tuning, and collaborate with Product, Risk, & Compliance on banking/credit risk/regulatory use cases."
+        qualification:
+          - "Fresh graduate (Bachelor's or Master's) in a quantitative field: Statistics, Computer Science, Math, Engineering, Physics"
+          - Strong Python fundamentals
+          - Experience building something with LLMs (through thesis, internship, side project, or hackathon) and able to explain the concept and objective simply
+        preferences: []
+  - program: Crayon Tech Internship
+    intake_count: null
+    roles:
+      - title: Crayon Tech Internship
+        location: null
+        job_desc_summary: "Hands-on experience in impactful projects supporting #FinanciallyFit initiatives."
+        qualification:
+          - Active student, 6th semester or final-year (not yet graduated)
+          - Majoring in IT, Mathematics, Data or Computer Science
+          - Proactive, adaptable and innovative
+          - Strong collaboration and communication skills
+        preferences:
+          - Organizational experience, international exposure, or competition achievement
+  - program: Direct Sales Career Program (DSCP)
+    intake_count: null
+    roles:
+      - title: Direct Sales Career Program (DSCP)
+        location: Jakarta dan/atau Tangerang Selatan
+        job_desc_summary: "Program pembekalan penjualan perbankan untuk mendorong produk seperti EDC, QRIS, dan funding serta membangun relasi langsung dengan merchant dan/atau calon nasabah; benefit meliputi uang saku, tunjangan komunikasi, kesehatan, transportasi, dan insentif/bonus."
+        qualification:
+          - Minimal lulusan Diploma (D3), dari berbagai jurusan
+          - Memiliki pengalaman atau antusias dalam bidang penjualan langsung
+          - Memiliki integritas, komitmen, serta kemampuan komunikasi yang baik
+          - Bersedia ditempatkan di wilayah Jakarta dan/atau Tangerang Selatan
+        preferences: []
+  - program: Graduate Talent Programme (GTP)
+    intake_count: null
+    roles:
+      - title: Graduate Talent Programme
+        location: null
+        job_desc_summary: "Pelatihan komprehensif dan pembelajaran melalui rotasi ke berbagai unit/bidang untuk mendorong transformasi di OCBC."
+        qualification:
+          - Lulusan S1 / S2 dari universitas terkemuka
+          - Minimal IPK 3.00 / 4.00
+          - Maksimal pengalaman kerja 2 tahun
+        preferences: []
+  - program: Banking Academy for Service Advisor (BASA)
+    intake_count: null
+    roles:
+      - title: Service Advisor (BASA)
+        location: Jabodetabek
+        job_desc_summary: "Pelayanan langsung kepada nasabah mulai dari pembukaan rekening hingga penyelesaian keluhan secara cepat dan akurat; benefit meliputi uang saku, tunjangan komunikasi, kesehatan, transportasi, dan insentif/bonus."
+        qualification:
+          - Minimal lulusan sarjana (S1), sudah lulus atau sudah memiliki Surat Keterangan Lulus (SKL)
+          - Pengalaman bekerja di bank (non BPR) sebagai Teller dan/atau Customer Service
+          - Terbiasa bekerja dengan target
+          - Memiliki kemampuan komunikasi yang baik dan berpenampilan rapi
+          - Penempatan Jabodetabek
+        preferences: []
+  - program: Banking Academy for IT
+    intake_count: null
+    roles:
+      - title: Banking Academy for IT
+        location: null
+        job_desc_summary: "Program pengembangan talenta untuk menciptakan inovasi digital dan terobosan teknologi di OCBC."
+        qualification:
+          - Fresh graduate dengan konsentrasi di bidang komputer dan teknologi
+          - Minimal IPK 3.00 / 4.00
+          - Maksimal pengalaman kerja 2 tahun
+        preferences: []
+  - program: Banking Academy for Sales
+    intake_count: null
+    roles:
+      - title: Banking Academy for Sales
+        location: null
+        job_desc_summary: "Program dengan berbagai pelatihan ekstensif di bidang penjualan bagi kandidat yang menyukai tantangan dan siap membawa perubahan."
+        qualification:
+          - Fresh graduate, min. S1 dari segala jurusan atau sudah memiliki pengalaman kerja di bidang sales maksimal 2 tahun
+          - Memiliki IPK min. 2.75
+          - Memiliki kemampuan komunikasi dan interpersonal skill yang baik
+          - Memiliki motivasi yang tinggi dan menyukai tantangan
+          - Menyukai bidang penjualan
+        preferences: []
+---
+id: odoo-indonesia
+booth_ref: C4
+company: Odoo Indonesia
+category:
+  - enterprise-software-and-erp
+  - technology
+  - business-development-and-partnerships
+  - accounting-and-finance
+desc: "Join Odoo Indonesia! Become Extra-Odoo-nary Now! Open job and internship positions in accounting, business development, partnerships, and channel sales."
+important_dates: []
+program_links:
+  - url: https://odoo.com/r/9uq
+    label: Application page / more info (QR code also provided on poster, "Find out here!")
+cta: "Join Odoo Indonesia! Become Extra-Odoo-nary Now! — Find out here! (scan the QR code or visit odoo.com/r/9uq)."
+intakes:
+  - program: General Hiring & Internship
+    intake_count: null
+    roles:
+      - title: Accounting Intern
+        location: null
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Business Development
+        location: null
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Partnership Consultant
+        location: null
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Partner Growth & Enablement
+        location: null
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Channel Account Manager (Papua New Guinea)
+        location: Papua New Guinea
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+---
+id: paragon-corp
+booth_ref: D1
+company: ParagonCorp
+category:
+  - fmcg
+  - management-trainee
+  - supply-chain-and-logistics
+  - commercial-and-business-development
+desc: "Paragon Management Trainee — 18-month program designed for fresh graduates to develop functional expertise and leadership skills through real business projects, cross-functional collaboration, and hands-on learning experiences (UGM Integrated Career Days)."
+important_dates:
+  - event: UGM Integrated Career Days
+    date: 28 - 29 November 2026
+    time: null
+    location: null
+    note: null
+  - event: Close Registration / Registration Deadline
+    date: 30 November 2026
+    time: null
+    location: null
+    note: null
+  - event: Selection Process
+    date: November - December 2026
+    time: null
+    location: null
+    note: null
+program_links:
+  - url: https://bit.ly/TalentPoolParagonCorp
+    label: Apply Now / Talent Pool Link (QR code also provided on poster)
+  - url: https://bit.ly/BookletMTParagonCorp
+    label: Management Trainee Booklet
+cta: "APPLY NOW! Registration Deadline: 30 November 2026 via bit.ly/TalentPoolParagonCorp or by scanning the QR code on the poster."
+intakes:
+  - program: Paragon Management Trainee (18-month program)
+    intake_count: null
+    roles:
+      - title: MT Area Business Development
+        location: Across Indonesia
+        job_desc_summary: "Part of the 18-month MT program focusing on real business projects, cross-functional collaboration, and hands-on learning."
+        qualification:
+          - Fresh graduates of 2024-2026 (Bachelor or Master)
+          - Early Professionals with max. 2 years of experience
+          - Open to placement across Indonesia
+        preferences: []
+      - title: MT Commercial
+        location: Across Indonesia
+        job_desc_summary: "Part of the 18-month MT program focusing on real business projects, cross-functional collaboration, and hands-on learning."
+        qualification:
+          - Fresh graduates of 2024-2026 (Bachelor or Master)
+          - Early Professionals with max. 2 years of experience
+          - Open to placement across Indonesia
+        preferences: []
+      - title: MT Logistics & Distribution
+        location: Across Indonesia
+        job_desc_summary: "Part of the 18-month MT program focusing on real business projects, cross-functional collaboration, and hands-on learning."
+        qualification:
+          - Fresh graduates of 2024-2026 (Bachelor or Master)
+          - Early Professionals with max. 2 years of experience
+          - Open to placement across Indonesia
+        preferences: []
+      - title: MT Supply Chain Management
+        location: Across Indonesia
+        job_desc_summary: "Part of the 18-month MT program focusing on real business projects, cross-functional collaboration, and hands-on learning."
+        qualification:
+          - Fresh graduates of 2024-2026 (Bachelor or Master)
+          - Early Professionals with max. 2 years of experience
+          - Open to placement across Indonesia
+        preferences: []
+      - title: Other MT Positions ("and many more...")
+        location: Across Indonesia
+        job_desc_summary: "Additional positions listed in the MT booklet."
+        qualification:
+          - Fresh graduates of 2024-2026 (Bachelor or Master)
+          - Early Professionals with max. 2 years of experience
+          - Open to placement across Indonesia
+        preferences: []
+---
+id: polygon-bikes
+booth_ref: D3
+company: Polygon Bikes (Polygon Group)
+category:
+  - manufacturing-and-engineering
+  - retail-and-ecommerce
+  - customer-service-and-marketing
+  - finance-and-tax
+  - information-technology-and-data
+  - human-resources-and-communications
+desc: "Polygon Group is a global bicycle company with presence in 29 countries and the largest bicycle retail network in Southeast Asia. We value passion, creativity, courage. We value you."
+important_dates: []
+program_links:
+  - url: https://www.polygonbikes.com/id/karir/
+    label: Official Career Portal
+cta: "SEND YOUR APPLICATION VIA WEB https://www.polygonbikes.com/id/karir/"
+intakes:
+  - program: General Hiring
+    intake_count: null
+    roles:
+      - title: Global Customer Care
+        location: Yogyakarta
+        job_desc_summary: "Respond promptly to customer inquiries within SLA across channels per SOP and solve customer issues."
+        qualification:
+          - Minimum Bachelor's degree in any major (fresh graduates welcome)
+          - Proficient understanding of customer support, problem solving, and customer orientation
+          - Fluent in English
+          - "Placement: Yogyakarta"
+        preferences: []
+      - title: System Analyst
+        location: Sidoarjo
+        job_desc_summary: "Analyze business processes/requirements for information systems, write technical specs & documentation, and align with stakeholders."
+        qualification:
+          - Bachelor's degree in Information Technology, Computer Science, or related field
+          - Strong analytical, problem-solving, communication, and teamwork skills
+          - Proficiency in technical areas such as databases
+          - "Placement: Sidoarjo"
+        preferences: []
+      - title: Digital Growth Executive
+        location: Surabaya
+        job_desc_summary: "Drive e-commerce growth for conversion, CX, and online sales, and track website performance, user behavior, and digital campaigns."
+        qualification:
+          - Bachelor's degree in Business, Marketing, Management, Analytics, or related fields
+          - 1-3 years of experience in e-commerce, CRM, digital marketing, growth marketing, or related areas
+          - Experience with digital commerce, CRM, etc.
+          - "Placement: Surabaya"
+        preferences: []
+      - title: Marketing Administrator
+        location: Jakarta
+        job_desc_summary: "Support ATL and BTL campaign execution, coordinate logistics/schedules, and handle daily administration."
+        qualification:
+          - Bachelor's degree in Administration, Marketing, Communications, Business, or related field
+          - Strong organizational, multitasking, communication, and interpersonal skills
+          - Proficient in Microsoft Office
+          - Ability to thrive in a fast-paced, collaborative environment
+          - "Placement: Jakarta"
+        preferences: []
+      - title: PPIC
+        location: Sidoarjo
+        job_desc_summary: "Create production planning, master/weekly production schedules, and schedule availability based on raw materials."
+        qualification:
+          - Minimum Bachelor's degree in Industrial Engineering from a reputable university
+          - Minimum 2 years of experience as PPIC leader/supervisor in manufacturing industry
+          - Good leadership and strategic thinking
+          - "Placement: Sidoarjo"
+        preferences: []
+      - title: Process Engineering
+        location: Sidoarjo
+        job_desc_summary: "Design bicycle frame, fork, and parts with product specs, calculate BOM and product costing, and coordinate cross-sectionally."
+        qualification:
+          - Minimum D3, D4, or Bachelor's degree (S1) in Mechanical Engineering or related field
+          - Advanced in 3D CAD (SolidWorks, MasterCAM, etc.) with a good engineering mindset
+          - Independent and proactive in a work environment
+          - "Placement: Sidoarjo"
+        preferences: []
+      - title: QA & Warranty Supervisor
+        location: Sidoarjo
+        job_desc_summary: "Ensure timely/effective quality policies, procedures, and activities for manufactured products, and investigate/resolve issues."
+        qualification:
+          - Minimum Bachelor's degree (S1) in Industrial Engineering, Material Engineering, or Statistics
+          - Good understanding of ISO 9001:2015 Quality Management System requirements and implementation
+          - "Placement: Sidoarjo"
+        preferences: []
+      - title: Product Development Data Analyst
+        location: Sidoarjo
+        job_desc_summary: "Provide data insights for product development, spot trends/patterns/improvement opportunities, and collaborate cross-functionally."
+        qualification:
+          - Bachelor's degree in Data Science, Statistics, Engineering, Mathematics, or related field
+          - Proven experience as a Data Analyst
+          - Strong analytical and problem-solving skills
+          - "Placement: Sidoarjo"
+        preferences:
+          - Preferably in product development or manufacturing
+      - title: Tax Team Leader
+        location: Sidoarjo
+        job_desc_summary: "Track, analyze, and apply Indonesian tax rules for compliance, and run tax reviews/strategies to spot risks and optimize compliance."
+        qualification:
+          - Bachelor's degree (S1) in Accounting, Taxation, or related field
+          - Minimum 5 years of experience in taxation, including Senior Tax Consultant or equivalent
+          - "Placement: Sidoarjo"
+        preferences: []
+      - title: QA Engineer
+        location: Yogyakarta
+        job_desc_summary: "Review requirements, specs, and technical design docs for feedback, and build detailed test plans and test cases."
+        qualification:
+          - Degree in Computer Science, Engineering, or related subject
+          - Strong knowledge of software QA methodologies, tools, and processes
+          - Strong willingness to update knowledge and be innovative
+          - "Placement: Yogyakarta"
+        preferences: []
+      - title: Financial Planner & Analyst
+        location: Sidoarjo
+        job_desc_summary: "Prepare/analyze monthly, quarterly, and annual financial reports, share financial/operational insights, and flag business/market risks."
+        qualification:
+          - Bachelor's degree in finance management, accounting, international accounting, or related fields
+          - Excellent written and verbal English communication skills
+          - Skilled in MS Office, especially MS Excel
+          - "Placement: Sidoarjo"
+        preferences: []
+      - title: Asst. Store Supervisor
+        location: Denpasar, Bali
+        job_desc_summary: "Act as business consultant for B2B accounts in assigned sales area, oversee sales distribution channels, and run periodic sales/business reviews."
+        qualification:
+          - Minimum Bachelor's degree from any major
+          - Sales and target driven
+          - Persuasive with good communication skills
+          - Willing to travel across Indonesia
+          - "Placement: Denpasar, Bali"
+        preferences:
+          - Fresh graduates welcome; internship experience considered a plus
+  - program: General Hiring & Internship
+    intake_count: null
+    roles:
+      - title: Intern - HR Communication & Content
+        location: Sidoarjo
+        job_desc_summary: "Create HR content for internal comms, employee engagement, and HR programs, and plan/manage LinkedIn content (employer branding, employee stories, workplace culture, careers)."
+        qualification:
+          - Fresh graduate in Visual Communication Design, Communication, Marketing, Digital Marketing, or a related field
+          - Creative and passionate about content creation, graphic design, social media, and employer branding
+          - Strong communication skills and open to receiving feedback
+          - "Placement: Sidoarjo"
+        preferences:
+          - A design or content portfolio is a plus
+      - title: Software Engineer
+        location: Sidoarjo
+        job_desc_summary: "Research/analyze new tech aligned with business needs, develop apps on schedule, handle end-to-end QA/testing/improvements/release management, and coordinate with the product owner."
+        qualification:
+          - Bachelor's degree in Computer Science, Information Technology, Business Information System, or related subject
+          - Experience and capability in Laravel/PHP
+          - Knowledge of core CSS, Javascript, Laravel/PHP, and HTML
+          - "Placement: Sidoarjo"
+        preferences: []
+---
+id: bni
+booth_ref: D2
+company: BNI (Danantara Indonesia)
+category:
+  - banking-and-finance
+desc: "BNI Career Connect 2026 (#MelayaniSepenuhHati) recruitment campaign at the UGM Job Fair."
+important_dates:
+  - event: BNI Career Connect 2026 (UGM Job Fair)
+    date: November 2026
+    time: null
+    location: null
+    note: null
+program_links:
+  - url: https://bni.id/JFUGM_NOV2026
+    label: Apply Now / more info
+  - url: https://bni.co.id
+    label: Official website
+cta: "Apply Now at bni.id/JFUGM_NOV2026 and find more details at the same address."
+intakes:
+  - program: BNI Career Connect 2026
+    intake_count: null
+    roles: []
+---
+id: cobra-dental
+booth_ref: E10
+company: Cobra Dental
+category:
+  - healthcare-and-dental
+  - medical-devices-and-distribution
+  - management-trainee
+desc: "Build Your Future, Let's Grow Together! Cobra Dental Management Trainee program for future leaders at Indonesia's largest dental products import and retail company."
+important_dates: []
+program_links:
+  - url: https://bit.ly/RegistMTCDI
+    label: Application and registration link (QR code also provided on poster)
+  - url: https://www.cobradental.co.id
+    label: Official website
+  - url: mailto:recruitment@cobradental.co.id
+    label: Recruitment email 1
+  - url: mailto:elin.herlina@cobradental.co.id
+    label: Recruitment email 2
+cta: "Send an updated CV by email to recruitment@cobradental.co.id and elin.herlina@cobradental.co.id with the subject 'MT - Full Name', or scan the QR code / go to https://bit.ly/RegistMTCDI."
+intakes:
+  - program: Management Trainee
+    intake_count: null
+    roles:
+      - title: Management Trainee
+        location: Operational areas across Indonesia
+        job_desc_summary: "Management Trainee program that prepares future leaders in a growth-oriented dental and healthcare industry environment."
+        qualification:
+          - Bachelor's degree in any major of study
+          - Fresh graduate or candidates with a maximum of 1-year post-graduation
+          - Demonstrated leadership potential, with strong analytical and problem-solving skills
+          - Excellent interpersonal and communication skills, with ability to adapt to changing environments
+          - Willing to commit to the Management Trainee Program and comply with all applicable program terms and regulation
+          - Willing to be assigned to any of Cobra Dental's operational areas across Indonesia
+        preferences:
+          - Young enthusiast learner with a growth mindset
+---
+id: quick-traktor
+booth_ref: E1   
+company: QUICK (Quick Traktor)
+category:
+  - manufacturing-and-engineering
+  - agriculture-and-machinery
+  - marketing-and-sales
+  - accounting-and-finance
+  - procurement-and-supply-chain
+  - information-and-communication-technology
+  - human-resources-and-people-development
+desc: "QUICK (Quick Traktor — Produk Nasional Sejak 1953) lowongan kerja lintas fungsi mulai dari pemasaran, produksi/teknik, akuntansi, purchasing, ICT, hingga people development; pendaftaran lewat website atau UGM ICD November 2026 (booth E1) dan seleksi offline di Kantor Quick Traktor Yogyakarta."
+important_dates:
+  - event: UGM ICD (booth E1)
+    date: November 2026
+    time: null
+    location: null
+    note: null
+  - event: Proses seleksi
+    date: null
+    time: null
+    location: Kantor Quick Traktor Yogyakarta
+    note: Dilakukan secara offline di Kantor Quick Traktor Yogyakarta
+program_links:
+  - url: https://quick.co.id/recruit/ERS
+    label: Link pendaftaran rekrutmen (pada poster juga tersedia QR code "Scan for apply")
+  - url: https://www.quick.co.id
+    label: Website resmi Quick Traktor
+cta: "Scan for apply — Daftar melalui website (quick.co.id/recruit/ERS) atau datang langsung ke booth E1 di UGM ICD November 2026! Proses seleksi dilakukan secara offline di Kantor Quick Traktor Yogyakarta."
+intakes:
+  - program: General Hiring
+    intake_count: null
+    roles:
+      - title: Staf Marketing
+        location: Yogyakarta (bersedia dimutasi ke seluruh cabang di Indonesia)
+        job_desc_summary: null
+        qualification:
+          - Laki-laki
+          - Lulusan S1 semua jurusan
+          - Bersedia dimutasi ke seluruh cabang di Indonesia
+          - "Penempatan: Yogyakarta"
+        preferences:
+          - Diutamakan Manajemen, Ekonomi, Teknik Pertanian, Agribisnis, Statistika, Matematika, Hubungan Internasional, Bahasa Inggris
+      - title: Staf Produksi - Staf Desain
+        location: Yogyakarta dan Kulon Progo
+        job_desc_summary: "Pada website pendaftaran, pilih 'Staf Produksi'."
+        qualification:
+          - Laki-laki / perempuan
+          - Lulusan S1 Teknik Mesin
+          - "Penempatan: Yogyakarta dan Kulon Progo"
+        preferences: []
+      - title: Staf Produksi - Staf Production Engineering
+        location: Yogyakarta dan Kulon Progo
+        job_desc_summary: "Pada website pendaftaran, pilih 'Staf Produksi'."
+        qualification:
+          - Laki-laki
+          - Lulusan D3/D4/S1 Teknik Mesin
+          - "Penempatan: Yogyakarta dan Kulon Progo"
+        preferences: []
+      - title: Staf Produksi - Staf Quality Control
+        location: Yogyakarta dan Kulon Progo
+        job_desc_summary: "Pada website pendaftaran, pilih 'Staf Produksi'."
+        qualification:
+          - Laki-laki
+          - Lulusan D3/D4/S1 Teknik Mesin
+          - "Penempatan: Yogyakarta dan Kulon Progo"
+        preferences: []
+      - title: Staf Produksi - Staf Maintenance
+        location: Yogyakarta dan Kulon Progo
+        job_desc_summary: "Pada website pendaftaran, pilih 'Staf Produksi'."
+        qualification:
+          - Laki-laki
+          - Lulusan D3/D4/S1 Teknik Elektro, Teknik Mekatronika, Teknik Mesin
+          - "Penempatan: Yogyakarta dan Kulon Progo"
+        preferences: []
+      - title: Staf Produksi - Staf Civil Maintenance
+        location: Yogyakarta dan Kulon Progo
+        job_desc_summary: "Pada website pendaftaran, pilih 'Staf Produksi'."
+        qualification:
+          - Laki-laki
+          - Lulusan D3/D4/S1 Teknik Sipil
+          - "Penempatan: Yogyakarta dan Kulon Progo"
+        preferences: []
+      - title: Staf Akuntansi
+        location: Yogyakarta
+        job_desc_summary: null
+        qualification:
+          - Laki-laki / perempuan
+          - Lulusan S1 Akuntansi, Matematika, Statistika, Aktuaria
+          - Memiliki ketertarikan pada analisa data dan bekerja di lapangan
+          - Mahir menggunakan Ms. Office (khususnya Excel)
+          - "Penempatan: Yogyakarta"
+        preferences: []
+      - title: Staf Purchasing
+        location: Yogyakarta
+        job_desc_summary: null
+        qualification:
+          - Laki-laki / perempuan
+          - Lulusan S1 Teknik Mesin, Teknik Elektro, Teknik Mekatronika
+          - "Penempatan: Yogyakarta"
+        preferences: []
+      - title: Staf ICT
+        location: Yogyakarta
+        job_desc_summary: null
+        qualification:
+          - Laki-laki / perempuan
+          - Lulusan D4/S1 Teknik Informatika, Ilmu Komputer, Sistem Informasi, Teknik Industri, Matematika, Statistika
+          - "Penempatan: Yogyakarta"
+        preferences: []
+      - title: Staf People Development
+        location: Yogyakarta
+        job_desc_summary: null
+        qualification:
+          - Laki-laki / perempuan
+          - Lulusan S1 Psikologi
+          - Memiliki pemahaman terkait psikodiagnostik
+          - "Penempatan: Yogyakarta"
+        preferences:
+          - Diutamakan berpengalaman di bidang pengembangan SDM
+---
+id: surya-internusa
+booth_ref: E2   # E3 is a second booth of the same company
+company: PT Surya Semesta Internusa Tbk (SSIA)
+category:
+  - construction-and-engineering
+  - industrial-estate-and-property
+  - hospitality
+  - corporate-and-it
+desc: "Building A Better Indonesia — PT Surya Semesta Internusa Tbk (SSIA), established in 1971, leading Indonesian holding company operating across Indonesia in construction services, industrial estate development, commercial property, and hospitality (Explore Our 50+ Career Opportunities!)."
+important_dates: []
+program_links:
+  - url: https://www.suryainternusa.com
+    label: Official website (QR code also provided on poster)
+cta: "Explore Our 50+ Career Opportunities! Scan the QR code."
+intakes:
+  - program: Paid Internship Positions
+    intake_count: null
+    roles:
+      - title: Accounting Intern
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: IT Business Analyst Intern
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: HRGA Intern
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Recruitment Intern
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Purchasing Intern
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+  - program: Freshgraduate Positions
+    intake_count: null
+    roles:
+      - title: Accounting & Tax
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Finance, Accounting, and Tax Officer
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Internal Audit
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Land Compliance Staff
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Legal & Corporate Secretary Officer
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Leasing Officer
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Marketing Communication
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Mandarin Desk
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Recruitment Officer
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Strategic Management Analyst
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Sales Executive
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+  - program: Experienced Positions
+    intake_count: null
+    roles:
+      - title: Business Development (B2B & B2C)
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: DevOps Engineer
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: IT Full Stack Developer
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: IT Product Specialist
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Contract Engineer
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Construction Supervisor
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: QA & QC Electrical Supervisor
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Pipeline Supervisor
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: MEP Engineering
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Resource Coordinator
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Master Plan & Urban Design
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Project Management
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Property Commercial & Tenant Relations
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+      - title: Senior Geodetic Engineer
+        location: Across Indonesia
+        job_desc_summary: null
+        qualification: []
+        preferences: []
+---
+id: teach-first-indonesia
+booth_ref: E13
+company: Teach First Indonesia
+category:
+  - education-and-social-impact
+  - fellowship-and-leadership
+desc: "Make Your Mark — Start your career with purpose; Invest in Skills That Last. 2-year paid Fellowship to teach, lead, and serve in schools and communities, building leadership, communication, problem-solving, and project management skills."
+important_dates: []
+program_links:
+  - url: null
+    label: QR code provided on poster ("Apply Now!")
+cta: "Apply Now! Take the first step. Make your mark with Teach First Indonesia."
+intakes:
+  - program: 2-year paid Fellowship
+    intake_count: null
+    roles:
+      - title: Fellow (2-year paid Fellowship)
+        location: Semi-urban and/or remote regions (schools and communities)
+        job_desc_summary: "Teach, lead, and serve in schools and communities with hands-on project management, stakeholder collaboration, mentorship, and professional development; includes monthly salary, benefits package, housing, medical and life insurance, post-Fellowship completion grant, and access to a global alumni network."
+        qualification:
+          - Motivated to drive meaningful change for Indonesia and grow into an impactful leader
+          - Fresh graduate or young professional (maximum age 32)
+          - Have or are about to complete a Bachelor's degree (S1 or D3) in any major
+          - Open to working in semi-urban and/or remote regions
+        preferences:
+          - GPA of 3.00 or above
+          - Organizational/social impact experience
+---
+id: pt-torrecid-indonesia
+booth_ref: E8
+company: PT Torrecid Indonesia (Torrecid Group)
+category:
+  - ceramics-and-glass
+  - manufacturing-and-chemical-engineering
+  - design-and-supply-chain
+  - human-resources
+desc: "PT Torrecid Indonesia — A Family & Green Company, part of Torrecid Group (founded 1963, headquartered in Alcora - Castellón, Spain, present in 29 countries with customers in 150+ countries), providing specialized services and innovative solutions for ceramic tile, glass, tableware, and glass coating industries in Indonesia since 1995."
+important_dates: []
+program_links:
+  - url: https://www.torrecid.com
+    label: Official website (QR code also provided on poster for more information & apply)
+cta: "WE ARE HIRING! More information & apply here via QR code or www.torrecid.com (note: recruitment is free and any money/product requests should be verified with the Bekasi office)."
+intakes:
+  - program: General Hiring (Positions for Staffs)
+    intake_count: null
+    roles:
+      - title: Technical Marketing
+        location: null
+        job_desc_summary: null
+        qualification:
+          - GPA 3.00
+          - Fresh graduate or max. 3 years experience
+          - Bachelor or Master degree, graduation year 2023-2026
+          - Major in Chemical Eng., Chemistry, or Material Eng.
+        preferences: []
+      - title: Designer
+        location: null
+        job_desc_summary: null
+        qualification:
+          - GPA 3.00
+          - Fresh graduate or max. 3 years experience
+          - Bachelor or Master degree, graduation year 2023-2026
+          - Major in Visual Communication Design, Product Design, Architecture, Interior Design, or Fine Art/Kriya
+        preferences: []
+      - title: Process
+        location: null
+        job_desc_summary: null
+        qualification:
+          - GPA 3.00
+          - Fresh graduate or max. 3 years experience
+          - Bachelor or Master degree, graduation year 2023-2026
+          - Major in Industrial Eng. or Chemical Eng.
+        preferences: []
+      - title: Supply Chain Management
+        location: null
+        job_desc_summary: null
+        qualification:
+          - GPA 3.00
+          - Fresh graduate or max. 3 years experience
+          - Bachelor or Master degree, graduation year 2023-2026
+          - Major in Business Administration or Management
+        preferences: []
+      - title: Human Resource
+        location: null
+        job_desc_summary: null
+        qualification:
+          - GPA 3.00
+          - Fresh graduate or max. 3 years experience
+          - Bachelor or Master degree, graduation year 2023-2026
+          - Major in Business Administration, Psychology, or Industrial Eng.
+        preferences: []
+---
+id: zurich-indonesia
+booth_ref: C6
+company: Zurich Indonesia (Zurich Insurance)
+category:
+  - insurance-and-financial-services
+  - human-resources-technology
+  - talent-and-graduate-programs
+desc: "Be a Part of Zurich Indonesia! Let's continue to grow together! — Zurich Insurance is one of the world's leading insurers serving private and corporate customers for 150 years in more than 215 countries, offering talent development and HR technology opportunities."
+important_dates: []
+program_links:
+  - url: https://www.zurich.co.id
+    label: Official website (QR code also provided on ANT'Z poster)
+  - url: mailto:recruitment.dept@zurich.co.id
+    label: Recruitment email for HR Technology
+cta: "Apply Now! Scan QR code on ANT'Z poster or send CV to recruitment.dept@zurich.co.id with subject 'Name - HR Technology'."
+intakes:
+  - program: ANT'Z (Awe-inspiring Next Talent of Zurich)
+    intake_count: null
+    roles:
+      - title: ANT'Z (Next Talent Program)
+        location: All over Indonesia (global exposure challenges)
+        job_desc_summary: "Talent program across business areas with global exposure and opportunities to grow within Zurich."
+        qualification:
+          - Minimum Bachelor degree with minimum GPA 3.25 from any discipline (last-semester students welcome with proof of provisional transcripts)
+          - Adaptive, articulate, personable, strong analytical thinking, initiative, and business sense
+          - Actively involved in organization or committee with passion for organization
+          - Fluent and confident in English, both written and spoken
+          - Willing to be placed all over in Indonesia
+        preferences: []
+  - program: General Hiring & HR Technology
+    intake_count: null
+    roles:
+      - title: HR Technology - Zurich Topas Life (HRIS Specialist)
+        location: Head Office Graha Zurich (Hybrid working)
+        job_desc_summary: "Transform HR operations via data management, HRIS optimization, automation/AI workflows, reporting/analytics, process improvement, and workforce insights across HR & employee lifecycle."
+        qualification:
+          - Bachelor's degree in Information Systems, Computer Science, or related field (final-year students and fresh graduates welcome)
+          - Strong knowledge of HR systems, data management, reporting, and HR processes
+          - Experience building automation/digital workflows (e.g., Power Automate, Power Apps, AI tools) and proficient in MS Excel & HR analytics/reporting tools (e.g., Power BI)
+          - Strong analytical, problem-solving, data interpretation, communication, stakeholder management, project coordination, and attention-to-detail skills
+        preferences:
+          - Experience in system developer, system enhancement, process improvement, and AI-enabled solutions is an advantage

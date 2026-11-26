@@ -1,30 +1,18 @@
 # Backlog
 
-## Deploy — Mongo + Vercel (do before production launch)
+## Deploy — YAML data (no Mongo)
 
-- [ ] **Atlas network access for Vercel builds.** Vercel build IPs are
-      dynamic, so add `0.0.0.0/0` (comment: `vercel-build-readonly`) under
-      Security → Network Access. Keep it safe by using the read-only
-      `icd_build` user only; local seeding keeps Current IP + `icd_seed`.
-      Tighten/remove after the event.
-- [ ] **Vercel env variables.** Add the same keys in the deploy dashboard
-      for Production/Preview/Development (server-only, no `PUBLIC_`
-      prefix):
-      - `MONGODB_URI=mongodb+srv://icd_build:...@cluster0.xxxxx.mongodb.net/icd2026?retryWrites=true&w=majority`
-      - `MONGODB_DB=icd2026`
-      - `MONGODB_OPENINGS_COLLECTION=openings`
-      - `MONGODB_CONNECT_TIMEOUT_MS=10000`
-      - `OPENINGS_INCLUDE_MOCK=false`
-- [ ] **Commit an empty `openings.json`.** Track
-      `src/data/ugm-icd-2026/openings.json` with
-      `{ "meta": { "updatedAt": null, "status": "unavailable" }, "items": [] }`.
-      Never commit the 45 mock rows; the production build overwrites the
-      snapshot from Mongo.
-- [ ] **Deploy flow when new openings are inserted.** Insert/update in
-      Mongo → Vercel **Redeploy** (not Promote) → `sync:openings` runs
-      before the build. Verify build logs show
-      `[openings] synced N openings` and confirm real rows are visible.
-      Optional later: Vercel Deploy Hook + Atlas Trigger to automate.
+- [ ] **Source of truth:** `src/data/ugm-icd-2026/LO_data/UGM-ICD-openings.yaml`
+      (companies, intakes, roles) plus `UGM-ICD-booths.yaml` for booth mapping
+      and profile-only companies (PP KAGAMA).
+- [ ] **Generate before build:** `bun run sync:data` writes `career-fair.json`
+      and regenerates companies/booths/sessions. `bun run build` already runs it.
+- [ ] **Commit the generated JSON** so a clean clone and typecheck do not depend
+      on a prebuild step.
+- [ ] **Deploy flow for new lowongan:** update the YAML → run
+      `bun run sync:data` → commit → Vercel redeploy (not Promote). Verify the
+      build log shows `[sync:data] ... openings, ... profiles`.
+- [ ] No Mongo env, no Atlas network access, no mock flags.
 
 ## SEO — map page follow-ups
 

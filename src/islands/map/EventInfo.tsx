@@ -6,19 +6,19 @@ import {
   ArrowUpRight,
   Check,
 } from 'lucide-react';
-import { useMemo } from 'react';
-import { useMapStore } from '../../stores/mapStore';
 import {
+  careerFairMeta,
   companies,
   event,
   ui,
 } from '../../lib/data';
-import { getCompanyPosterItems } from '../../lib/map/company-posters';
 import { surfaceClasses } from '../../lib/surface-classes';
 import { cn } from '../../lib/utils/cn';
 import RegisterCtas from '../../components/map/RegisterCtas';
 import PosterFolder from '../../components/map/PosterFolder';
 import SocialLinks from '../../components/map/SocialLinks';
+import CompanyBentoGrid from '../../components/map/CompanyBentoGrid';
+import PosterShortcutStrip from '../../components/map/PosterShortcutStrip';
 
 const card = cn(
   'flex h-full min-w-0 flex-col overflow-hidden rounded-md border border-line p-3',
@@ -33,30 +33,41 @@ const icon = 'text-[#8f8f8f]';
 export default function EventInfo() {
   const { venue, hours, whatToBring, help } = ui.info.sections;
   const { overview } = ui.info;
-  const selectedDayId = useMapStore((s) => s.selectedDayId);
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
     ui.info.mapsQuery,
   )}`;
 
-  const day = event.days.find((entry) => entry.id === selectedDayId);
-  const dayLabel = day
-    ? new Date(`${day.date}T00:00:00Z`).toLocaleDateString(event.locale, {
+  const updatedAt = careerFairMeta.updatedAt;
+  const updatedLabel = updatedAt
+    ? new Intl.DateTimeFormat(event.locale, {
         day: 'numeric',
         month: 'short',
-        timeZone: 'UTC',
-      })
-    : '';
-
-  const companyPosterItems = useMemo(
-    () => getCompanyPosterItems(selectedDayId),
-    [selectedDayId],
-  );
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: event.timezone,
+      }).format(new Date(updatedAt))
+    : null;
 
   return (
     <div className="reveal-product">
       <div className="section-label mb-2.5 border-b border-[#232326] pb-2">
         {ui.info.title}
       </div>
+
+      {updatedLabel && (
+        <div className="mb-2 flex justify-end">
+          <time
+            dateTime={updatedAt ?? undefined}
+            className="text-[0.6875rem] text-[#71717a] md:text-[0.625rem]"
+            title="Lowongan diperbarui"
+          >
+            Lowongan diperbarui {updatedLabel} WIB
+          </time>
+        </div>
+      )}
+
+      <PosterShortcutStrip />
 
       <div className="grid grid-cols-2 gap-2">
         <div className="col-span-2 md:hidden">
@@ -69,6 +80,11 @@ export default function EventInfo() {
           <div className="mt-2 font-heading text-[1.5rem] font-bold leading-[0.85] tracking-[-1.2px] text-white md:text-[1.75rem] md:tracking-[-1.4px]">
             {venue.headline}
           </div>
+          {venue.subline && (
+            <div className="mt-0.5 text-[0.75rem] font-medium text-[#a1a1aa] md:text-[11px]">
+              {venue.subline}
+            </div>
+          )}
           <a
             href={mapsUrl}
             target="_blank"
@@ -93,7 +109,11 @@ export default function EventInfo() {
           <div className="mt-2 font-heading text-[1.125rem] font-bold leading-[1.05] tracking-[-0.2px] text-white md:text-[16px]">
             {hours.headline}
           </div>
-          <p className="mt-1.5 text-[0.75rem] leading-snug text-[#8f8f8f] md:text-[10px]">{hours.body}</p>
+          {hours.body && (
+            <p className="mt-1.5 text-[0.75rem] leading-snug text-[#8f8f8f] md:text-[10px]">
+              {hours.body}
+            </p>
+          )}
           <div className="mt-auto flex items-baseline gap-1 pt-2">
             <span className="font-heading text-[1.375rem] font-bold leading-none text-white md:text-[18px]">
               {companies.length}
@@ -110,9 +130,9 @@ export default function EventInfo() {
         <section className={card}>
           <Briefcase size={14} className={icon} />
           <ul className="mt-2 space-y-1.5">
-            {(whatToBring.items ?? []).map((item) => (
+            {(whatToBring.items ?? []).map((item, index) => (
               <li
-                key={item}
+                key={`${item}-${index}`}
                 className="flex items-start gap-1.5 text-[0.75rem] leading-snug text-[#d4d4d8] md:text-[10px]"
               >
                 <Check size={12} className="mt-0.5 shrink-0 text-[var(--accent-pink)]" />
@@ -132,9 +152,6 @@ export default function EventInfo() {
             <div className="font-heading text-[1rem] font-bold leading-tight text-white">
               {ui.social.title}
             </div>
-            <p className="mt-1 truncate text-[0.75rem] text-[#8f8f8f] md:text-[10px]">
-              {ui.social.instagram.handle} · {ui.social.whatsapp.handle}
-            </p>
           </div>
           <SocialLinks variant="sheet" />
         </section>
@@ -144,22 +161,12 @@ export default function EventInfo() {
           <PosterFolder variant="carousel" />
         </div>
 
-        {companyPosterItems.length > 0 && (
-          <div id="company-poster-carousel" className="col-span-2 mt-1 scroll-mt-4">
-            <div className="mb-1 flex items-end justify-between">
-              <div className="font-heading text-[1.0625rem] font-bold leading-none text-white md:text-[15px]">
-                {ui.posters.companyTitle}
-              </div>
-              <div className="text-[0.6875rem] text-[#8f8f8f] md:text-[9px]">{dayLabel}</div>
-            </div>
-            <PosterFolder
-              variant="carousel"
-              items={companyPosterItems}
-              hideTitle
-              consumePosterFocus
-            />
+        <div id="company-directory" className="col-span-2 mt-2 scroll-mt-4">
+          <div className="section-label mb-2 border-b border-[#232326] pb-2">
+            All companies
           </div>
-        )}
+          <CompanyBentoGrid companies={companies} />
+        </div>
       </div>
     </div>
   );

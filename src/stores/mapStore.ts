@@ -25,8 +25,6 @@ interface MapState {
   selectedBoothId: string | null;
   selectedFacilityId: string | null;
   hoveredBoothId: string | null;
-  /** Poster that the map/detail asked the Info carousel to reveal. */
-  posterFocusId: string | null;
   /** Selected 2F walk-in room (F1–F10 id); exclusive with booth/facility. */
   selectedWalkInRoomId: string | null;
 
@@ -57,7 +55,6 @@ interface MapState {
   selectBooth: (boothId: string | null) => void;
   selectFacility: (facilityId: string | null) => void;
   hoverBooth: (boothId: string | null) => void;
-  setPosterFocus: (posterId: string | null) => void;
   /**
    * Select a walk-in room on the 2F plan. An optional `dayId` lets
    * cross-links (session rows on a company card) land on the day the
@@ -94,7 +91,6 @@ export const useMapStore = create<MapState>()(
       selectedBoothId: null,
       selectedFacilityId: null,
       hoveredBoothId: null,
-      posterFocusId: null,
       selectedWalkInRoomId: null,
       sidebarMode: 'list',
       sidebarTab: 'home',
@@ -227,8 +223,6 @@ export const useMapStore = create<MapState>()(
       },
 
       hoverBooth: (boothId) => set({ hoveredBoothId: boothId }),
-
-      setPosterFocus: (posterId) => set({ posterFocusId: posterId }),
 
       selectWalkInRoom: (roomId, dayId) => {
         if (!roomId) {

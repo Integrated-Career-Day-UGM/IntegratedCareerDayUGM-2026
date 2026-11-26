@@ -725,7 +725,7 @@ export default function MapLibreMap() {
           // not a div): opaque surface + honest shadow replaces the
           // translucent bg + backdrop-blur (less glassy, more contrast on
           // the tiles).
-          className={`${surfaceClasses(3)} flex cursor-pointer items-center gap-2 rounded-lg border border-[#34343a] px-3 py-2 text-left text-white transition-colors hover:border-[#4a4a52] active:scale-[0.98]`}
+          className={`${surfaceClasses(3)} flex cursor-pointer items-center gap-2 rounded-lg border border-[#34343a] px-3 py-2 text-left text-white transition-colors md:hover:border-[var(--accent-pink)] active:scale-[0.98]`}
         >
           <MoveUpRight size={16} strokeWidth={2.2} className="shrink-0" />
           <div>

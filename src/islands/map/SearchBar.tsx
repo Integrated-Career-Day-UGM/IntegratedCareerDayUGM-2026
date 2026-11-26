@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useMapStore } from '../../stores/mapStore';
@@ -17,6 +17,7 @@ export default function SearchBar({ tuneFilter = false }: { tuneFilter?: boolean
     (s) => s.searchFilters.tags.length + s.searchFilters.types.length,
   );
   const inputRef = useRef<HTMLInputElement>(null);
+  const searchId = useId();
 
   // Origin-aware filter popover: anchored to the trigger, closes on outside
   // click / Esc, focus enters the panel and returns to the button.
@@ -80,9 +81,14 @@ export default function SearchBar({ tuneFilter = false }: { tuneFilter?: boolean
           <div className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 text-[#d4d4d8] md:left-2.5">
             <Search size={16} strokeWidth={1.8} className="h-[1.125rem] w-[1.125rem] md:h-4 md:w-4" />
           </div>
+          <label htmlFor={searchId} className="sr-only">
+            {ui.search.placeholder}
+          </label>
           <input
             ref={inputRef}
+            id={searchId}
             type="text"
+            name="search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={() => setSidebarTab('search')}

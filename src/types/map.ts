@@ -71,7 +71,13 @@ export type JobOpening = {
   description?: string | null;
   location?: string | null;
   deadline?: string | null;
+  deadlineLabel?: string | null;
   applyUrl?: string | null;
+  applyLabel?: string | null;
+  program?: string | null;
+  intakeCount?: number | null;
+  qualifications?: string[];
+  preferences?: string[];
   posterUrl?: string | null;
   posterDownloadUrl?: string | null;
   updatedAt?: string | null;
@@ -80,15 +86,40 @@ export type JobOpening = {
   availableDays?: string[];
 };
 
+export type ImportantDate = {
+  event: string;
+  date: string | null;
+  time: string | null;
+  location: string | null;
+  note: string | null;
+};
+
+export type ProgramLink = {
+  url: string | null;
+  label: string;
+};
+
+export type CompanyProfile = {
+  description?: string | null;
+  categories: string[];
+  importantDates: ImportantDate[];
+  programLinks: ProgramLink[];
+  cta?: string | null;
+};
+
 export type OpeningsStatus = 'ok' | 'unavailable';
 
-export type OpeningsFile = {
+export type CareerFairFile = {
   meta: {
     updatedAt: string | null;
     status: OpeningsStatus;
   };
+  profiles?: Record<string, CompanyProfile>;
   items: (JobOpening & { companyId: string })[];
 };
+
+/** @deprecated Use CareerFairFile. Kept while old imports settle. */
+export type OpeningsFile = CareerFairFile;
 
 export type Company = {
   id: string;
@@ -101,6 +132,8 @@ export type Company = {
   posterUrl?: string | null;
   posterDownloadUrl?: string | null;
   description?: string | null;
+  profile?: CompanyProfile;
+  posters?: CompanyPoster[];
   openings: JobOpening[];
 };
 
@@ -210,7 +243,7 @@ export type UiStrings = {
     };
     sections: Record<
       string,
-      { heading: string; headline?: string; body: string; items?: string[]; note?: string }
+      { heading: string; headline?: string; subline?: string; body: string; items?: string[]; note?: string }
     >;
   };
   map: Record<string, string>;
@@ -229,6 +262,22 @@ export type PosterInfo = {
   src: string;
   accent: string;
   downloadUrl?: string;
+  thumbUrl?: string;
+  companyId?: string;
+};
+
+export type CompanyPoster = {
+  id: string;
+  companyId: string;
+  companyName: string;
+  companyShortName: string;
+  kind: 'visit-booth' | 'apply-now' | 'gallery';
+  title: string;
+  src: string;
+  thumbUrl: string;
+  downloadUrl: string;
+  bytes?: number;
+  thumbBytes?: number;
 };
 
 export type FacilityInfo = {

@@ -90,7 +90,12 @@ const InputCopy = forwardRef<HTMLDivElement, InputCopyProps>(
       textarea.setSelectionRange(0, textarea.value.length);
       let ok = false;
       try {
-        ok = document.execCommand("copy");
+        // execCommand is the only synchronous fallback; the DOM lib marks it
+        // deprecated, and the async Clipboard API already failed above.
+        const exec = (
+          document as unknown as { execCommand(id: string): boolean }
+        ).execCommand;
+        ok = exec("copy");
       } catch {
         ok = false;
       }

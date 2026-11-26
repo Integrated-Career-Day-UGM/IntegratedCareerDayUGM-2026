@@ -1,5 +1,17 @@
 [
   {
+    "id": "pp-kagama",
+    "name": "PP KAGAMA",
+    "shortName": "PP KAGAMA",
+    "tags": [],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "posterUrl": null,
+    "description": "PP KAGAMA (Pengurus Pusat Keluarga Alumni Universitas Gadjah Mada) adalah badan pengurus pusat organisasi alumni Universitas Gadjah Mada (UGM) yang menghimpun ratusan ribu alumni dari berbagai fakultas, sekolah, dan cabang daerah maupun luar negeri.",
+    "openings": []
+  },
+  {
     "id": "c1-hutama-infra",
     "name": "PT Hutama Karya Infrastruktur",
     "shortName": "Hutama Infra",
@@ -139,6 +151,18 @@
     "logoUrl": null,
     "openings": [],
     "description": "PT Nindya Karya (Persero) is an Indonesian state-owned construction company working on roads, bridges, buildings, and water infrastructure projects across the country."
+  },
+  {
+    "id": "cv-karya-hidup-sentosa-quick-traktor",
+    "name": "CV Karya Hidup Sentosa(Quick Traktor)",
+    "shortName": "CV Karya Hidup Sentosa(Quick Traktor)",
+    "tags": [],
+    "websiteUrl": null,
+    "programUrl": null,
+    "logoUrl": null,
+    "posterUrl": null,
+    "description": "CV Karya Hidup Sentosa manufactures agricultural machinery under the Quick brand, produces metal castings, and distributes farming equipment and diesel engines across Indonesia.",
+    "openings": []
   },
   {
     "id": "e2-surya",

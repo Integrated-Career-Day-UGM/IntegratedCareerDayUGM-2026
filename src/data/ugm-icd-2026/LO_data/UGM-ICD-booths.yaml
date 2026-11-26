@@ -26,20 +26,20 @@ meta:
 # description     : 1–2 sentence public-facing company summary (20–30 words)
 
 booths:
-  - booth: A
-    tier: PLATINUM
-    company: null
-    description: null
-    internal_pic: null
-    reps:
-      - { name: null, logo: false, vacancy: false }
-    logo: { file: null, note: null }
-    vacancy: { note: null, links: [] }
-
   - booth: B
     tier: PLATINUM
-    company: null
-    description: null
+    company: PP KAGAMA
+    description: PP KAGAMA (Pengurus Pusat Keluarga Alumni Universitas Gadjah Mada) adalah badan pengurus pusat organisasi alumni Universitas Gadjah Mada (UGM) yang menghimpun ratusan ribu alumni dari berbagai fakultas, sekolah, dan cabang daerah maupun luar negeri.
+    category:
+      - alumni
+      - community
+    program_links:
+      - { url: "https://www.instagram.com/infokagama/", label: "Instagram @infokagama" }
+      - { url: "https://www.threads.net/@infokagama", label: "Threads @infokagama" }
+      - { url: "https://x.com/infokagama", label: "X @infokagama" }
+      - { url: "https://www.youtube.com/@KAGAMAChannel", label: "YouTube KAGAMA Channel" }
+      - { url: "https://www.facebook.com/kagama", label: "Facebook KAGAMA" }
+    cta: Follow KAGAMA
     internal_pic: null
     reps:
       - { name: null, logo: false, vacancy: false }
@@ -159,6 +159,18 @@ booths:
       - { name: Nur Alysa Saribanong, logo: null, vacancy: null }
     logo: { file: null, note: "udah langsung ke kantor" }
     vacancy: { note: "masih dalam proses fiksasi design", links: [] }
+
+  - booth: E1
+    tier: BRONZE
+    company: CV Karya Hidup Sentosa(Quick Traktor)
+    description: CV Karya Hidup Sentosa manufactures agricultural machinery under the Quick brand, produces metal castings, and distributes farming equipment and diesel engines across Indonesia.
+    internal_pic: unknown 
+    reps:
+      - { name: Nauly Mayo B, logo: true, vacancy: false }
+    logo: { file: null, note: "katanya udah dikirim melalui email tadi pagi" }
+    vacancy: { note: "poster dalam proses pengeditan (katanya besok kelar)", links: [] }
+
+
 
   - booth: E2
     tier: BRONZE

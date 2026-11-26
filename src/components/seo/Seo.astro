@@ -43,7 +43,7 @@ const jsonLdString = jsonLd
 {robots && <meta name="robots" content={robots} />}
 
 {openGraph && (
-  <>
+  <Fragment>
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content={siteName} />
     <meta property="og:locale" content={locale} />
@@ -61,7 +61,7 @@ const jsonLdString = jsonLd
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     {ogImage && <meta name="twitter:image" content={ogImage.href} />}
-  </>
+  </Fragment>
 )}
 
 {jsonLdString && <script type="application/ld+json" set:html={jsonLdString} />}

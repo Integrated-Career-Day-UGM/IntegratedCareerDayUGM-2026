@@ -54,6 +54,8 @@ const TARGETS: TuneTarget[] = [
   { id: 'mobile-search', label: 'Search', origin: 'left top' },
   { id: 'filter-button', label: 'Filter button', origin: 'center center' },
   { id: 'brand-lockup', label: 'Brand art', origin: 'right top' },
+  { id: 'open-hours', label: 'Open hours', origin: 'right top' },
+  { id: 'open-hours-desktop', label: 'Open hours (desktop)', origin: 'right top' },
   { id: 'track-switcher', label: 'Track tabs', origin: 'left top' },
   { id: 'quick-find', label: 'Quick find', origin: 'left top' },
   { id: 'map-controls', label: 'Zoom / compass', origin: 'center center' },
@@ -598,7 +600,11 @@ export default function MobileLayoutTuner() {
       textarea.style.opacity = '0';
       document.body.appendChild(textarea);
       textarea.select();
-      document.execCommand('copy');
+      // execCommand is the only synchronous fallback; the DOM lib marks it
+      // deprecated, and the async Clipboard API already failed above.
+      const exec = (document as unknown as { execCommand(id: string): boolean })
+        .execCommand;
+      exec('copy');
       textarea.remove();
     }
     setCopied(label);
@@ -765,7 +771,7 @@ export default function MobileLayoutTuner() {
     };
   }, [open, selected]);
 
-  if (!DEV_TOOLS) return null;
+  if (!import.meta.env.DEV || !DEV_TOOLS) return null;
 
   return (
     <>

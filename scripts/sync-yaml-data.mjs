@@ -27,6 +27,16 @@ const event = readJson('event.json');
 const boothsYaml = readYaml('UGM-ICD-booths.yaml');
 const walkInYaml = readYaml('UGM-ICD-walk-in.yaml');
 const sessionsYaml = readYaml('UGM-ICD-sessions.yaml');
+let openingDocs = [];
+try {
+  openingDocs = YAML.parseAllDocuments(
+    readFileSync(join(LO, 'UGM-ICD-openings.yaml'), 'utf8'),
+  )
+    .map((document) => document.toJS())
+    .filter((document) => document && typeof document === 'object' && !Array.isArray(document));
+} catch {
+  // The openings source is optional until the parsed company data lands.
+}
 const oldCompanies = readJson('companies.json');
 const zones = readJson('zones.json');
 
@@ -100,6 +110,147 @@ const companyIdForBooth = (code) => {
   return booths.find((booth) => booth.id === boothId)?.companyId ?? null;
 };
 
+// ─── Rich company / lowongan source ─────────────────────────────────────────
+const coreName = (value) =>
+  normalize(value)
+    .replace(/\b(pt|tbk|persero)\b/g, ' ')
+    .replace(/[^a-z0-9 ]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+const COMPANY_ALIASES = {
+  'utpe-group': 'c3-astra',
+  'astra': 'c3-astra',
+  'quick-traktor': companyIdForBooth('E1'),
+};
+
+const companyById = new Map(companies.map((company) => [company.id, company]));
+const companyByCore = new Map();
+for (const company of companies) {
+  companyByCore.set(coreName(company.name), company.id);
+  companyByCore.set(coreName(company.shortName), company.id);
+  companyByCore.set(coreName(company.id), company.id);
+}
+const companyByBoothCode = new Map();
+for (const booth of booths) {
+  if (booth.companyId) companyByBoothCode.set(booth.code.toUpperCase(), booth.companyId);
+}
+
+const resolveCompanyId = (doc) => {
+  if (doc.companyId && companyById.has(doc.companyId)) return doc.companyId;
+  if (doc.booth_ref) {
+    const byBooth = companyByBoothCode.get(String(doc.booth_ref).trim().toUpperCase());
+    if (byBooth) return byBooth;
+  }
+  if (doc.booth) {
+    const byBooth = companyByBoothCode.get(String(doc.booth).trim().toUpperCase());
+    if (byBooth) return byBooth;
+  }
+  if (doc.id && companyById.has(doc.id)) return doc.id;
+  if (doc.id && COMPANY_ALIASES[doc.id] && companyById.has(COMPANY_ALIASES[doc.id])) {
+    return COMPANY_ALIASES[doc.id];
+  }
+  const byName = companyIdByName.get(normalize(doc.company));
+  if (byName) return byName;
+  const byCore = companyByCore.get(coreName(doc.company));
+  if (byCore) return byCore;
+  const bySlug = companyById.has(slug(doc.company)) ? slug(doc.company) : null;
+  if (bySlug) return bySlug;
+  return null;
+};
+
+const deadlineFor = (dates) =>
+  (dates ?? []).find((date) =>
+    /deadline|batas|tutup|closing|penutupan/i.test(String(date.event ?? '')),
+  ) ?? null;
+
+const firstLink = (links) =>
+  (links ?? []).find((link) => /^https?:\/\//i.test(String(link.url ?? ''))) ?? null;
+
+// Profile-only companies (e.g. PP KAGAMA) live in booths.yaml. Openings
+// documents override these fields when the same company appears there.
+const profiles = {};
+for (const row of boothsYaml.booths) {
+  const companyId = row.booth ? companyIdForBooth(row.booth) : null;
+  if (!companyId) continue;
+  if (!row.category && !row.program_links && !row.cta && !row.important_dates) continue;
+  profiles[companyId] = {
+    description: row.description ?? null,
+    categories: Array.isArray(row.category) ? row.category : [],
+    importantDates: Array.isArray(row.important_dates) ? row.important_dates : [],
+    programLinks: Array.isArray(row.program_links) ? row.program_links : [],
+    cta: row.cta ?? null,
+  };
+}
+
+const openingItems = [];
+const openingIds = new Set();
+let unmatchedCompanies = 0;
+
+for (const doc of openingDocs) {
+  const companyId = resolveCompanyId(doc);
+  if (!companyId) {
+    unmatchedCompanies += 1;
+    continue;
+  }
+  const company = companyById.get(companyId);
+  const links = doc.program_links ?? [];
+  const primaryLink = firstLink(links);
+  const deadline = deadlineFor(doc.important_dates);
+  const deadlineLabel = deadline
+    ? [deadline.date, deadline.time].filter(Boolean).join(' · ') || null
+    : null;
+
+  profiles[companyId] = {
+    description: doc.desc ?? null,
+    categories: Array.isArray(doc.category) ? doc.category : [],
+    importantDates: Array.isArray(doc.important_dates) ? doc.important_dates : [],
+    programLinks: links,
+    cta: doc.cta ?? null,
+  };
+
+  for (const intake of doc.intakes ?? []) {
+    for (const role of intake.roles ?? []) {
+      const title = String(role.title ?? '').trim();
+      if (!title) continue;
+      let id = `${companyId}-${slug(intake.program)}-${slug(title)}`;
+      let suffix = 2;
+      while (openingIds.has(id)) id = `${companyId}-${slug(intake.program)}-${slug(title)}-${suffix++}`;
+      openingIds.add(id);
+      openingItems.push({
+        id,
+        companyId,
+        title,
+        type: String(intake.program ?? '').trim() || 'Opening',
+        program: intake.program ?? null,
+        intakeCount: intake.intake_count ?? null,
+        description: role.job_desc_summary ?? null,
+        location: role.location ?? null,
+        deadline: null,
+        deadlineLabel,
+        applyUrl: primaryLink?.url ?? null,
+        applyLabel: primaryLink?.label ?? null,
+        posterUrl: company?.posterUrl ?? null,
+        posterDownloadUrl: company?.posterDownloadUrl ?? null,
+        qualifications: Array.isArray(role.qualification) ? role.qualification : [],
+        preferences: Array.isArray(role.preferences) ? role.preferences : [],
+        updatedAt: new Date().toISOString(),
+        isMock: false,
+        dataSource: 'yaml',
+        availableDays: [],
+        companyName: company?.name ?? doc.company ?? null,
+      });
+    }
+  }
+}
+
+const careerFair = {
+  meta: { updatedAt: new Date().toISOString(), status: 'ok' },
+  profiles,
+  items: openingItems,
+};
+
+
 const dayDate = new Map(
   event.days.map((day, index) => [`d${index + 1}`, day.date]),
 );
@@ -156,8 +307,11 @@ writeJson('booths.json', booths);
 writeJson('walk-in-sessions.json', walkInSessions);
 writeJson('stage-sessions.json', stageSessions);
 writeJson('zones.json', zones);
+writeJson('career-fair.json', careerFair);
 
 console.log(
-  `Synced YAML → JSON: ${companies.length} companies, ${booths.length} booths, ` +
-    `${walkInSessions.length} walk-in bookings, ${stageSessions.length} stage sessions.`,
+  `[sync:data] ${companies.length} companies, ${booths.length} booths, ` +
+    `${walkInSessions.length} walk-in, ${stageSessions.length} stage, ` +
+    `${openingItems.length} openings, ${Object.keys(profiles).length} profiles` +
+    (unmatchedCompanies ? ` (${unmatchedCompanies} unmatched company docs)` : ''),
 );

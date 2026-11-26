@@ -243,11 +243,9 @@ const AskUserQuestions = forwardRef<HTMLDivElement, AskUserQuestionsProps>(
     // carries suppressHydrationWarning to absorb that one-character delta.
     const [isMac] = useState(() => {
       if (typeof navigator === "undefined") return false;
-      const nav = navigator as Navigator & {
-        userAgentData?: { platform?: string };
-      };
-      const platform = nav.userAgentData?.platform || nav.platform || "";
-      return /mac/i.test(platform);
+      // userAgent, not the deprecated navigator.platform: it is present on
+      // every browser (userAgentData is Chromium-only).
+      return /mac/i.test(navigator.userAgent);
     });
 
     const reactId = useId();

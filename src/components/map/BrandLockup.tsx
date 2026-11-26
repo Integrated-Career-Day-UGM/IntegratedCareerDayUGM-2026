@@ -35,6 +35,16 @@ export default function BrandLockup({ compact = false }: { compact?: boolean }) 
             </span>
           </div>
         </SelectionFrame>
+        <div
+          className="mt-1 flex -rotate-[1.2deg] flex-col items-start"
+          data-layout-tune="open-hours"
+          aria-label="Event open hours"
+        >
+          <span className="bg-white px-2 py-1 font-heading text-[0.8125rem] font-bold leading-none tracking-[-0.1px] text-black">
+            {ui.info.sections.hours.headline}
+          </span>
+          <span className="h-[2px] w-full bg-white" />
+        </div>
       </div>
     );
   }
