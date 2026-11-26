@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
-import { Check, Copy } from 'lucide-react';
+import { Check, Copy, X } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Elevated } from '../../lib/elevated';
@@ -28,6 +28,8 @@ export type SharePopupProps = {
   channels: SharePopupChannel[];
   /** Called after the clipboard attempt; `false` means the copy failed. */
   onCopy: (success: boolean) => void;
+  /** When set, renders an in-card close button at the top right. */
+  onClose?: () => void;
   className?: string;
 };
 
@@ -92,6 +94,7 @@ export default function SharePopup({
   copyHint = 'Or copy link',
   channels,
   onCopy,
+  onClose,
   className,
 }: SharePopupProps) {
   const shape = useShape();
@@ -126,11 +129,26 @@ export default function SharePopup({
       style={fluidSurface}
       className={cn(
         shape.container,
-        'w-full border border-line bg-[#141416] p-4 text-white',
+        'relative w-full border border-line bg-[#141416] p-4 text-white',
         className,
       )}
     >
-      <div className="text-balance font-heading text-[1.25rem] font-bold leading-tight text-white md:text-[18px] md:leading-none">
+      {onClose && (
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute right-1 top-1 z-10 flex size-9 items-center justify-center text-white/70 transition-colors hover:text-white active:scale-95"
+        >
+          <X size={18} />
+        </button>
+      )}
+      <div
+        className={cn(
+          'text-balance font-heading text-[1.25rem] font-bold leading-tight text-white md:text-[18px] md:leading-none',
+          onClose && 'pr-8',
+        )}
+      >
         {title}
       </div>
 

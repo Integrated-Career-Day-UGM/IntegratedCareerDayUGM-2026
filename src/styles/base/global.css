@@ -122,10 +122,6 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   box-sizing: border-box;
 }
 
-button {
-  font: inherit;
-}
-
 /* The mobile filter popover lives inside #map-chrome (z-30). Raise that
    stacking context only while the filter is open so the popover can sit
    above the bottom sheet (z-40) without lifting the whole chrome permanently. */

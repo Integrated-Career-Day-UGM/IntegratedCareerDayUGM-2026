@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   BOOTH_SHAPES,
   PLAN_ANNOTATIONS,
+  PLAN_LABELS,
   PLAN_SPRITES,
 } from '../../lib/map/floorplan';
 import WalkIn2FEditor from './WalkIn2FEditor';
@@ -40,6 +41,19 @@ const INITIAL_LABELS: GeomItem[] = [
   { kind: 'label', id: 'entrance', label: 'Entrance', left: 31.7, top: 339.7, w: 47.943, h: 90.191, innerW: 87.907, innerH: 21.433, rotate: -71.71, color: '#0fae4a' },
   { kind: 'label', id: 'registration', label: 'Registration', left: 42.1, top: 501.7, w: 56.562, h: 116.265, innerW: 115.368, innerH: 21.433, rotate: -70.71, color: '#e5484d' },
   { kind: 'label', id: 'panggung', label: 'Panggung', left: 508.8, top: 214.8, w: 83.646, h: 56.567, innerW: 86.753, innerH: 16.266, rotate: 29.24, color: '#8f8f8f' },
+  ...PLAN_LABELS.map((label) => ({
+    kind: 'label' as const,
+    id: label.id,
+    label: label.label,
+    left: label.left,
+    top: label.top,
+    w: label.w,
+    h: label.h,
+    innerW: label.w,
+    innerH: label.h,
+    rotate: label.rotate,
+    color: label.color,
+  })),
 ];
 
 const INITIAL_BOOTHS: GeomItem[] = BOOTH_SHAPES.map((s) => ({

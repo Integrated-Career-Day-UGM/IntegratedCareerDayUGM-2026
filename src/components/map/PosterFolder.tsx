@@ -92,6 +92,9 @@ export default function PosterFolder({
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [broken, setBroken] = useState<Record<string, boolean>>({});
   const rootRef = useRef<HTMLDivElement>(null);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  // Mouse-only drag-to-scroll. Touch keeps native momentum scrolling.
+  const carouselDrag = useRef({ active: false, startX: 0, startLeft: 0, moved: false });
   const isSkeleton = items.length === 0;
   const displayItems = useMemo(
     () =>
@@ -119,6 +122,34 @@ export default function PosterFolder({
   // All posters missing/broken: render no folder at all.
   if (!isSkeleton && displayItems.length === 0) return null;
 
+  const onCarouselPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType !== 'mouse') return;
+    const el = event.currentTarget;
+    carouselDrag.current = {
+      active: true,
+      startX: event.clientX,
+      startLeft: el.scrollLeft,
+      moved: false,
+    };
+    el.setPointerCapture(event.pointerId);
+  };
+
+  const onCarouselPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!carouselDrag.current.active) return;
+    const dx = event.clientX - carouselDrag.current.startX;
+    if (Math.abs(dx) > 4) carouselDrag.current.moved = true;
+    event.currentTarget.scrollLeft = carouselDrag.current.startLeft - dx;
+  };
+
+  const endCarouselDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    carouselDrag.current.active = false;
+    try {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    } catch {
+      // Pointer was never captured (touch or synthetic events).
+    }
+  };
+
   return (
     <div ref={rootRef} className={cn('select-none', className)}>
       {variant === 'carousel' ? (
@@ -136,8 +167,20 @@ export default function PosterFolder({
             </div>
           </div>
           <div
-            className="flex snap-x snap-mandatory gap-2 overflow-x-auto overscroll-x-contain pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            ref={carouselRef}
+            className="flex cursor-grab snap-x snap-mandatory gap-2 overflow-x-auto overscroll-x-contain pb-1 select-none active:cursor-grabbing [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             style={{ scrollbarWidth: 'none' }}
+            onPointerDown={onCarouselPointerDown}
+            onPointerMove={onCarouselPointerMove}
+            onPointerUp={endCarouselDrag}
+            onPointerCancel={endCarouselDrag}
+            onLostPointerCapture={endCarouselDrag}
+            onClickCapture={(event) => {
+              if (!carouselDrag.current.moved) return;
+              carouselDrag.current.moved = false;
+              event.preventDefault();
+              event.stopPropagation();
+            }}
             onScroll={(event) => {
               const el = event.currentTarget;
               const center = el.scrollLeft + el.clientWidth / 2;
@@ -164,7 +207,7 @@ export default function PosterFolder({
                   if (!isSkeleton) setSelected(index);
                 }}
                 className={cn(
-                  'w-[calc(50%_-_0.25rem)] shrink-0 snap-start overflow-hidden rounded-md border border-line text-left',
+                  'w-[calc(50%_-_0.25rem)] shrink-0 snap-start overflow-hidden rounded-md border border-line text-left md:rounded-none',
                   surfaceClasses(3, 3),
                 )}
               >

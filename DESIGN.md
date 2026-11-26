@@ -174,7 +174,6 @@ Zustand store (`mapStore.ts`) with persist middleware:
 - `sidebarMode`: `'list' | 'detail' | 'search'`
 - `sidebarTab`: `'home' | 'saved' | 'stats' | 'info' | 'help'`
 - `searchQuery`
-- `isMobileSheetOpen`
 - `mapView`
 - `bookmarkedIds` (persisted)
 

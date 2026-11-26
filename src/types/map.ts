@@ -141,6 +141,7 @@ export type Session = {
   id: string;
   areaId: string;
   companyId: string;
+  companyName?: string | null;
   trackId: string;
   dayId: string;
   start: string;

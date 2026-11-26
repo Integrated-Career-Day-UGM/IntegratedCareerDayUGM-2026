@@ -76,6 +76,7 @@ export const sessions: Session[] = [
     id: booking.id,
     areaId: 'hall-b',
     companyId: booking.companyId ?? '',
+    companyName: booking.companyName,
     trackId: 'walk-in-interview',
     dayId: booking.dayId,
     start: booking.start,

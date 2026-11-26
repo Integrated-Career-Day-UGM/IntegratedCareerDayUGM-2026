@@ -59,7 +59,7 @@ sessions:
     note: "Ppt aja"
 
   - booth_ref: D1
-    company: Paragon Corps
+    company: ParagonCorp
     day: 1
     start: "13:00"
     end: "13:30"
@@ -119,7 +119,7 @@ sessions:
     play_order: []
 
   - booth_ref: C5
-    company: PT Hutama Karya (Persero)
+    company: PT HAKAASTON (HKA)
     day: 2
     start: "12:30"
     end: "13:00"

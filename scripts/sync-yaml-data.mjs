@@ -50,9 +50,11 @@ for (const company of oldCompanies) {
 
 const companyIdByName = new Map();
 const descriptionByName = new Map();
+const websiteByName = new Map();
 for (const row of boothsYaml.booths) {
-  if (!row.company || !row.description) continue;
-  descriptionByName.set(normalize(row.company), row.description);
+  if (!row.company) continue;
+  if (row.description) descriptionByName.set(normalize(row.company), row.description);
+  if (row.website) websiteByName.set(normalize(row.company), row.website);
 }
 const companies = [];
 for (const row of boothsYaml.booths) {
@@ -67,6 +69,7 @@ for (const row of boothsYaml.booths) {
       ? {
           ...existing,
           description: descriptionByName.get(key) ?? existing.description ?? null,
+          websiteUrl: websiteByName.get(key) ?? existing.websiteUrl ?? null,
           openings: [],
         }
       : {
@@ -74,7 +77,7 @@ for (const row of boothsYaml.booths) {
           name: row.company,
           shortName: row.company.replace(/^PT\s+/i, '').replace(/\s*\(Persero\).*$/i, ''),
           tags: [],
-          websiteUrl: null,
+          websiteUrl: websiteByName.get(key) ?? null,
           programUrl: null,
           logoUrl: null,
           posterUrl: null,

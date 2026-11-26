@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { ArrowDown } from 'lucide-react';
+import { useRef, useState } from 'react';
 import { booths, companies } from '../../lib/data';
 import { useMapStore } from '../../stores/mapStore';
 import PosterGalleryModal from './PosterGalleryModal';
@@ -10,43 +9,77 @@ const posterCompanies = companies.filter(
 );
 
 /**
- * Horizontal shortcut to company job posters, above the Info bento. The
- * footer link hooks down to the full company directory instead of duplicating
- * the whole grid here.
+ * Company job posters, under the info bento. Mouse drag and touch both pan
+ * the strip; no scrollbar. Cards are sharp on desktop, softly rounded on
+ * mobile (the sheet's own radius language).
  */
 export default function PosterShortcutStrip() {
   const [gallery, setGallery] = useState<Company | null>(null);
   const selectBooth = useMapStore((s) => s.selectBooth);
+  const drag = useRef({ active: false, startX: 0, startLeft: 0, moved: false });
 
   if (posterCompanies.length === 0) return null;
 
-  const scrollToDirectory = () => {
-    document
-      .getElementById('company-directory')
-      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType !== 'mouse') return;
+    const el = event.currentTarget;
+    drag.current = {
+      active: true,
+      startX: event.clientX,
+      startLeft: el.scrollLeft,
+      moved: false,
+    };
+    el.setPointerCapture(event.pointerId);
+  };
+
+  const onPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!drag.current.active) return;
+    const dx = event.clientX - drag.current.startX;
+    if (Math.abs(dx) > 4) drag.current.moved = true;
+    event.currentTarget.scrollLeft = drag.current.startLeft - dx;
+  };
+
+  const endDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    drag.current.active = false;
+    try {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    } catch {
+      // Never captured (touch / synthetic).
+    }
   };
 
   return (
-    <section className="mb-3">
-      <div className="mb-1.5 flex items-end justify-between gap-2">
-        <div className="section-label">Poster lowongan</div>
-        <button
-          type="button"
-          onClick={scrollToDirectory}
-          className="flex items-center gap-1 text-[0.6875rem] font-semibold text-[#8f8f8f] transition-colors hover:text-white"
-        >
-          Lihat semua
-          <ArrowDown size={12} />
-        </button>
+    <section className="select-none">
+      <div className="mb-2 flex items-end justify-between">
+        <div className="font-heading text-[1.0625rem] font-bold leading-none text-white md:text-[15px]">
+          Company posters
+        </div>
+        <div className="text-[0.6875rem] text-[#8f8f8f] md:text-[9px]">
+          {posterCompanies.length} companies
+        </div>
       </div>
 
-      <div className="-mx-1 flex snap-x gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div
+        className="flex cursor-grab snap-x gap-2 overflow-x-auto overscroll-x-contain pb-1 active:cursor-grabbing [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        style={{ scrollbarWidth: 'none' }}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        onLostPointerCapture={endDrag}
+        onClickCapture={(event) => {
+          if (!drag.current.moved) return;
+          drag.current.moved = false;
+          event.preventDefault();
+          event.stopPropagation();
+        }}
+      >
         {posterCompanies.map((company) => (
           <button
             key={company.id}
             type="button"
             onClick={() => setGallery(company)}
-            className="group w-[92px] shrink-0 snap-start overflow-hidden rounded-[6px] border border-line bg-[#141416] text-left transition-colors hover:border-[#4a4a52] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#141416]"
+            className="group w-[calc((100%-1rem)/3)] shrink-0 snap-start overflow-hidden rounded-[6px] border border-line bg-[#141416] text-left transition-colors hover:border-[#4a4a52] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#141416] md:w-[92px] md:rounded-none"
           >
             <span className="block aspect-[3/4] overflow-hidden border-b border-line bg-[#0a0a0c]">
               <img
@@ -69,12 +102,12 @@ export default function PosterShortcutStrip() {
           items={gallery.posters ?? []}
           company={gallery}
           index={0}
-          onOpenBooth={() => {
-            const booth = booths.find((item) => item.companyId === gallery.id);
-            setGallery(null);
-            if (booth) selectBooth(booth.id);
-          }}
           onClose={() => setGallery(null)}
+          onOpenBooth={() => {
+            const booth = booths.find((b) => b.companyId === gallery.id);
+            if (booth) selectBooth(booth.id);
+            setGallery(null);
+          }}
         />
       )}
     </section>

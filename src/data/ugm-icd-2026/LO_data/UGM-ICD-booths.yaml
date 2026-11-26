@@ -97,8 +97,9 @@ booths:
 
   - booth: C5
     tier: GOLD
-    company: PT Hutama Karya (Persero)
-    description: PT Hutama Karya (Persero) is a state-owned Indonesian construction company responsible for the Trans-Sumatra Toll Road and other road, bridge, and building projects.
+    company: PT HAKAASTON (HKA)
+    description: PT Hakaaston (HKA) is a subsidiary of state-owned PT Hutama Karya (Persero), producing construction materials such as hot-mix asphalt and precast concrete, and operating and maintaining roads.
+    website: https://www.hakaaston.co.id/
     internal_pic: Woro
     reps:
       - { name: Benny Dwi Chaniago, logo: true, vacancy: false }
@@ -119,7 +120,7 @@ booths:
 
   - booth: D1
     tier: SILVER
-    company: Paragon Corps
+    company: ParagonCorp
     description: ParagonCorp is an Indonesian cosmetics and personal-care manufacturer behind brands including Wardah, Make Over, Emina, and Kahf, sold domestically and in export markets.
     internal_pic: Ayesha
     reps:
@@ -174,7 +175,7 @@ booths:
 
   - booth: E2
     tier: BRONZE
-    company: PT Surya Semesta Internusa Tbk
+    company: PT Surya Semesta Internusa Tbk & Group
     description: PT Surya Semesta Internusa Tbk develops industrial estates and real estate, builds commercial and infrastructure projects, and operates hotels in Indonesia.
     internal_pic: Madeline
     reps:
@@ -184,7 +185,7 @@ booths:
 
   - booth: E3
     tier: BRONZE
-    company: PT Surya Semesta Internusa Tbk
+    company: PT Surya Semesta Internusa Tbk & Group
     description: PT Surya Semesta Internusa Tbk develops industrial estates and real estate, builds commercial and infrastructure projects, and operates hotels in Indonesia.
     internal_pic: null
     reps:

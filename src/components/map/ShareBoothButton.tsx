@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Popover } from '@base-ui/react/popover';
-import { Share2, X } from 'lucide-react';
+import { Share2 } from 'lucide-react';
 import { cn } from '../../lib/utils/cn';
 import { getBoothShareUrl, getShareIntent } from '../../lib/map/share';
 import { track } from '../../lib/analytics';
@@ -91,6 +91,7 @@ export default function ShareBoothButton({
       onCopy={(success) =>
         track('share.send', { ...details, channel: 'copy', success })
       }
+      onClose={() => setOpen(false)}
     />
   );
 
@@ -120,14 +121,6 @@ export default function ShareBoothButton({
                 className="relative w-full max-w-[26rem]"
                 onClick={(event) => event.stopPropagation()}
               >
-                <button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  aria-label={ui.boothDetail.closeLabel}
-                  className="absolute -top-12 right-0 flex size-11 items-center justify-center text-white/80 transition-colors hover:text-white"
-                >
-                  <X size={22} />
-                </button>
                 {sharePopup}
               </div>
             </div>,

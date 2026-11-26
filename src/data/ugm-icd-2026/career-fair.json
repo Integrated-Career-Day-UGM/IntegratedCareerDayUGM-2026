@@ -1,6 +1,6 @@
 {
   "meta": {
-    "updatedAt": "2026-11-26T05:34:33.982Z",
+    "updatedAt": "2026-11-26T09:06:21.909Z",
     "status": "ok"
   },
   "profiles": {
@@ -367,11 +367,15 @@
       "importantDates": [],
       "programLinks": [
         {
+          "url": "https://linktr.ee/hrdssia?utm_source=qr_code",
+          "label": "Apply via Linktree (QR code also provided on poster)"
+        },
+        {
           "url": "https://www.suryainternusa.com",
-          "label": "Official website (QR code also provided on poster)"
+          "label": "Company website"
         }
       ],
-      "cta": "Explore Our 50+ Career Opportunities! Scan the QR code."
+      "cta": "Explore Our 50+ Career Opportunities! Apply through the Linktree or scan the QR code."
     },
     "e13-teachfirst": {
       "description": "Make Your Mark — Start your career with purpose; Invest in Skills That Last. 2-year paid Fellowship to teach, lead, and serve in schools and communities, building leadership, communication, problem-solving, and project management skills.",
@@ -454,7 +458,7 @@
       "preferences": [
         "Adaptable person that has profound organizational skills, proven with excellent organizational experiences"
       ],
-      "updatedAt": "2026-11-26T05:34:33.981Z",
+      "updatedAt": "2026-11-26T09:06:21.907Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -483,7 +487,7 @@
         "Willing to be placed in all operational area"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.981Z",
+      "updatedAt": "2026-11-26T09:06:21.908Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -515,7 +519,7 @@
       "preferences": [
         "Knowledge of Lean Manufacturing and Continuous Improvement principles is an advantage"
       ],
-      "updatedAt": "2026-11-26T05:34:33.981Z",
+      "updatedAt": "2026-11-26T09:06:21.908Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -547,7 +551,7 @@
         "Willing to be placed at Serang Mill, Banten"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.981Z",
+      "updatedAt": "2026-11-26T09:06:21.908Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -579,7 +583,7 @@
       "preferences": [
         "Active involvement in student organizations, committees, or extracurricular activities is an advantage"
       ],
-      "updatedAt": "2026-11-26T05:34:33.981Z",
+      "updatedAt": "2026-11-26T09:06:21.908Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -611,7 +615,7 @@
       "preferences": [
         "Active involvement in student organizations, committees, or extracurricular activities is an advantage"
       ],
-      "updatedAt": "2026-11-26T05:34:33.981Z",
+      "updatedAt": "2026-11-26T09:06:21.908Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -643,7 +647,7 @@
       "preferences": [
         "Active involvement in student organizations, committees, or extracurricular activities is an advantage"
       ],
-      "updatedAt": "2026-11-26T05:34:33.981Z",
+      "updatedAt": "2026-11-26T09:06:21.908Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -675,7 +679,7 @@
       "preferences": [
         "Active involvement in student organizations, committees, or extracurricular activities is an advantage"
       ],
-      "updatedAt": "2026-11-26T05:34:33.981Z",
+      "updatedAt": "2026-11-26T09:06:21.908Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -707,7 +711,7 @@
       "preferences": [
         "Active involvement in student organizations, committees, or extracurricular activities is an advantage"
       ],
-      "updatedAt": "2026-11-26T05:34:33.981Z",
+      "updatedAt": "2026-11-26T09:06:21.908Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -732,7 +736,7 @@
         "Exclusive Hiring for UGM Students"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -757,7 +761,7 @@
         "Exclusive Hiring for UGM Students"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -782,7 +786,7 @@
         "Exclusive Hiring for UGM Students"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -808,7 +812,7 @@
         "Mandarin Speaker"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -833,7 +837,7 @@
         "Exclusive Hiring for UGM Students"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -858,7 +862,7 @@
         "Exclusive Hiring for UGM Students"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -883,7 +887,7 @@
         "Exclusive Hiring for UGM Students"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -908,7 +912,7 @@
         "Exclusive Hiring for UGM Students"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -933,7 +937,7 @@
         "Exclusive Hiring for UGM Students"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -958,7 +962,7 @@
         "Exclusive Hiring for UGM Students"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -983,7 +987,7 @@
         "Exclusive Hiring for UGM Students"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1008,7 +1012,7 @@
         "Exclusive Hiring for UGM Students"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1033,7 +1037,7 @@
         "Exclusive Hiring for UGM Students"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1058,7 +1062,7 @@
         "Exclusive Hiring for UGM Students"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1083,7 +1087,7 @@
         "Exclusive Hiring for UGM Students"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1106,7 +1110,7 @@
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1129,7 +1133,7 @@
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1152,7 +1156,7 @@
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1175,7 +1179,7 @@
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1198,7 +1202,7 @@
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1221,7 +1225,7 @@
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1246,7 +1250,7 @@
         "Terbuka untuk umum (Open to the general public)"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1275,7 +1279,7 @@
       "preferences": [
         "Preferably in the fintech or BNPL industry"
       ],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1306,7 +1310,7 @@
         "SQL experience is a plus, not required",
         "Prior experience or knowledge in Investment, Insurance, or other fintech products is a plus, not required"
       ],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1336,7 +1340,7 @@
       "preferences": [
         "Bachelor's Degree preferably in Mathematics, Statistics, or related fields"
       ],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1366,7 +1370,7 @@
       "preferences": [
         "Proficiency in Python (for data analysis/modeling) is a strong plus"
       ],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1396,7 +1400,7 @@
       "preferences": [
         "Bachelor's degree preferably in STEM, Business, Economics, Mathematics, or related fields"
       ],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1423,7 +1427,7 @@
         "Good written and verbal English proficiency in a professional environment"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1446,7 +1450,7 @@
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1469,7 +1473,7 @@
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1492,7 +1496,7 @@
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1519,7 +1523,7 @@
         "Experience building something with LLMs (through thesis, internship, side project, or hackathon) and able to explain the concept and objective simply"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1549,7 +1553,7 @@
       "preferences": [
         "Organizational experience, international exposure, or competition achievement"
       ],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1577,7 +1581,7 @@
         "Bersedia ditempatkan di wilayah Jakarta dan/atau Tangerang Selatan"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1604,7 +1608,7 @@
         "Maksimal pengalaman kerja 2 tahun"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1633,7 +1637,7 @@
         "Penempatan Jabodetabek"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1660,7 +1664,7 @@
         "Maksimal pengalaman kerja 2 tahun"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1689,7 +1693,7 @@
         "Menyukai bidang penjualan"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1712,7 +1716,7 @@
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1735,7 +1739,7 @@
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1758,7 +1762,7 @@
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1781,7 +1785,7 @@
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1804,7 +1808,7 @@
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1831,11 +1835,11 @@
         "Open to placement across Indonesia"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "Paragon Corps"
+      "companyName": "ParagonCorp"
     },
     {
       "id": "d1-paragon-paragon-management-trainee-18-month-program-mt-commercial",
@@ -1858,11 +1862,11 @@
         "Open to placement across Indonesia"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "Paragon Corps"
+      "companyName": "ParagonCorp"
     },
     {
       "id": "d1-paragon-paragon-management-trainee-18-month-program-mt-logistics-distribution",
@@ -1885,11 +1889,11 @@
         "Open to placement across Indonesia"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "Paragon Corps"
+      "companyName": "ParagonCorp"
     },
     {
       "id": "d1-paragon-paragon-management-trainee-18-month-program-mt-supply-chain-management",
@@ -1912,11 +1916,11 @@
         "Open to placement across Indonesia"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "Paragon Corps"
+      "companyName": "ParagonCorp"
     },
     {
       "id": "d1-paragon-paragon-management-trainee-18-month-program-other-mt-positions-and-many-more",
@@ -1939,11 +1943,11 @@
         "Open to placement across Indonesia"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "Paragon Corps"
+      "companyName": "ParagonCorp"
     },
     {
       "id": "d3-polygon-general-hiring-global-customer-care",
@@ -1967,7 +1971,7 @@
         "Placement: Yogyakarta"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -1995,7 +1999,7 @@
         "Placement: Sidoarjo"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2023,7 +2027,7 @@
         "Placement: Surabaya"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2052,7 +2056,7 @@
         "Placement: Jakarta"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2080,7 +2084,7 @@
         "Placement: Sidoarjo"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2108,7 +2112,7 @@
         "Placement: Sidoarjo"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2135,7 +2139,7 @@
         "Placement: Sidoarjo"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2165,7 +2169,7 @@
       "preferences": [
         "Preferably in product development or manufacturing"
       ],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2192,7 +2196,7 @@
         "Placement: Sidoarjo"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2220,7 +2224,7 @@
         "Placement: Yogyakarta"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2248,7 +2252,7 @@
         "Placement: Sidoarjo"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2279,7 +2283,7 @@
       "preferences": [
         "Fresh graduates welcome; internship experience considered a plus"
       ],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2309,7 +2313,7 @@
       "preferences": [
         "A design or content portfolio is a plus"
       ],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2337,7 +2341,7 @@
         "Placement: Sidoarjo"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2369,7 +2373,7 @@
       "preferences": [
         "Young enthusiast learner with a growth mindset"
       ],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2399,7 +2403,7 @@
       "preferences": [
         "Diutamakan Manajemen, Ekonomi, Teknik Pertanian, Agribisnis, Statistika, Matematika, Hubungan Internasional, Bahasa Inggris"
       ],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2426,7 +2430,7 @@
         "Penempatan: Yogyakarta dan Kulon Progo"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2453,7 +2457,7 @@
         "Penempatan: Yogyakarta dan Kulon Progo"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2480,7 +2484,7 @@
         "Penempatan: Yogyakarta dan Kulon Progo"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2507,7 +2511,7 @@
         "Penempatan: Yogyakarta dan Kulon Progo"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2534,7 +2538,7 @@
         "Penempatan: Yogyakarta dan Kulon Progo"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2563,7 +2567,7 @@
         "Penempatan: Yogyakarta"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2590,7 +2594,7 @@
         "Penempatan: Yogyakarta"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2617,7 +2621,7 @@
         "Penempatan: Yogyakarta"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2647,7 +2651,7 @@
       "preferences": [
         "Diutamakan berpengalaman di bidang pengembangan SDM"
       ],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -2664,17 +2668,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-paid-internship-positions-it-business-analyst-intern",
@@ -2687,17 +2691,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-paid-internship-positions-hrga-intern",
@@ -2710,17 +2714,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-paid-internship-positions-recruitment-intern",
@@ -2733,17 +2737,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-paid-internship-positions-purchasing-intern",
@@ -2756,17 +2760,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-freshgraduate-positions-accounting-tax",
@@ -2779,17 +2783,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-freshgraduate-positions-finance-accounting-and-tax-officer",
@@ -2802,17 +2806,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-freshgraduate-positions-internal-audit",
@@ -2825,17 +2829,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-freshgraduate-positions-land-compliance-staff",
@@ -2848,17 +2852,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-freshgraduate-positions-legal-corporate-secretary-officer",
@@ -2871,17 +2875,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-freshgraduate-positions-leasing-officer",
@@ -2894,17 +2898,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-freshgraduate-positions-marketing-communication",
@@ -2917,17 +2921,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-freshgraduate-positions-mandarin-desk",
@@ -2940,17 +2944,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-freshgraduate-positions-recruitment-officer",
@@ -2963,17 +2967,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-freshgraduate-positions-strategic-management-analyst",
@@ -2986,17 +2990,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-freshgraduate-positions-sales-executive",
@@ -3009,17 +3013,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-experienced-positions-business-development-b2b-b2c",
@@ -3032,17 +3036,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-experienced-positions-devops-engineer",
@@ -3055,17 +3059,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-experienced-positions-it-full-stack-developer",
@@ -3078,17 +3082,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-experienced-positions-it-product-specialist",
@@ -3101,17 +3105,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-experienced-positions-contract-engineer",
@@ -3124,17 +3128,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-experienced-positions-construction-supervisor",
@@ -3147,17 +3151,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-experienced-positions-qa-qc-electrical-supervisor",
@@ -3170,17 +3174,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-experienced-positions-pipeline-supervisor",
@@ -3193,17 +3197,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-experienced-positions-mep-engineering",
@@ -3216,17 +3220,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-experienced-positions-resource-coordinator",
@@ -3239,17 +3243,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-experienced-positions-master-plan-urban-design",
@@ -3262,17 +3266,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-experienced-positions-project-management",
@@ -3285,17 +3289,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-experienced-positions-property-commercial-tenant-relations",
@@ -3308,17 +3312,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e2-surya-experienced-positions-senior-geodetic-engineer",
@@ -3331,17 +3335,17 @@
       "location": "Across Indonesia",
       "deadline": null,
       "deadlineLabel": null,
-      "applyUrl": "https://www.suryainternusa.com",
-      "applyLabel": "Official website (QR code also provided on poster)",
+      "applyUrl": "https://linktr.ee/hrdssia?utm_source=qr_code",
+      "applyLabel": "Apply via Linktree (QR code also provided on poster)",
       "posterUrl": null,
       "posterDownloadUrl": null,
       "qualifications": [],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
-      "companyName": "PT Surya Semesta Internusa Tbk"
+      "companyName": "PT Surya Semesta Internusa Tbk & Group"
     },
     {
       "id": "e13-teachfirst-2-year-paid-fellowship-fellow-2-year-paid-fellowship",
@@ -3368,7 +3372,7 @@
         "GPA of 3.00 or above",
         "Organizational/social impact experience"
       ],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -3396,7 +3400,7 @@
         "Major in Chemical Eng., Chemistry, or Material Eng."
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -3424,7 +3428,7 @@
         "Major in Visual Communication Design, Product Design, Architecture, Interior Design, or Fine Art/Kriya"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -3452,7 +3456,7 @@
         "Major in Industrial Eng. or Chemical Eng."
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -3480,7 +3484,7 @@
         "Major in Business Administration or Management"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -3508,7 +3512,7 @@
         "Major in Business Administration, Psychology, or Industrial Eng."
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -3537,7 +3541,7 @@
         "Willing to be placed all over in Indonesia"
       ],
       "preferences": [],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
@@ -3567,7 +3571,7 @@
       "preferences": [
         "Experience in system developer, system enhancement, process improvement, and AI-enabled solutions is an advantage"
       ],
-      "updatedAt": "2026-11-26T05:34:33.982Z",
+      "updatedAt": "2026-11-26T09:06:21.909Z",
       "isMock": false,
       "dataSource": "yaml",
       "availableDays": [],
