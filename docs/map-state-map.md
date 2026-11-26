@@ -56,12 +56,12 @@ screen → URL, plus the transitions and invariants the UI must keep.
 | `setSearchQuery(q)` | query; mode `search` if q, else `detail` if booth, else `list` | — |
 | `toggleSearchFilter` / `clearSearchFilters` | filters only | — |
 | `setSidebarTab(tab)` | tab; non-home/search also clears query + mode `list` (keeps booth) | Home handler also clears booth + filters |
-| `setGikMode(true)` | gik on | `easeTo` GIK overview (16.3) |
+| `setGikMode(true)` | gik on **and routes to the career-expo (1F) area**, clearing any walk-in/booth/facility selection | `easeTo` GIK overview (16.3) |
 | `setGikMode(false)` | gik off | `fitHall` unless a booth is selected |
 | Track pill / dropdown | `setSelectedArea` (or `setGikMode`) | above |
 | Hall C1 card | GIK: `setSelectedArea(career-expo)` + `setGikMode(false)`; else `fitHall` | one fit |
 | Map booth click | `selectBooth(id)` | booth fly-to |
-| Map empty click | `selectBooth(null)` | none; mobile lowers tray |
+| Map empty click | `selectBooth(null)` + `selectFacility(null)`; if `sidebarTab === 'search'` → `setSidebarTab('home')` | none; mobile lowers tray |
 | URL `?booth=id` (mount) | valid id → `selectBooth`; invalid → home | booth fly-to |
 
 ## 4. URL map
@@ -83,15 +83,21 @@ selects a booth (the share hook builds links separately).
 2. `selectedTrackId` always matches `selectedAreaId`'s track.
 3. One camera owner per action: booth fly-to suppresses hall fits; GIK
    toggles suppress hall fits while a booth is selected.
-4. Every detail has an exit: Close, `selectBooth(null)`, Home, map empty
+4. GIK is always the career-expo (1F) overview: entering it from the
+   walk-in plan resets `selectedAreaId`/`selectedTrackId` to the career-expo
+   area, so the floor overlay, pins and dimming all return to 1F.
+5. Every detail has an exit: Close, `selectBooth(null)`, Home, map empty
    click, Esc (sheet).
-5. Detail renders only through `sidebarMode === 'detail'` **or
+6. A map tap always returns the sheet to the Home (navigate) tab: if the
+   sidebar was on `search`, the empty-click handler switches the tab back to
+   `home` (and clears any open detail).
+7. Detail renders only through `sidebarMode === 'detail'` **or
    `'facility'`**, over whichever tab it was opened from (`detailOriginTab`);
    closing restores that tab, so search results / saved rows survive.
-6. No `padding` is left on the map; mobile uses a transient `offset` sized
+8. No `padding` is left on the map; mobile uses a transient `offset` sized
    from the detail card's resting height.
-7. Only `bookmarkedIds` restores across reloads.
-8. A gesture-opened detail pushes one history entry; Back closes the card.
+9. Only `bookmarkedIds` restores across reloads.
+10. A gesture-opened detail pushes one history entry; Back closes the card.
    Card → card replaces, and a `?booth=` landing card replaces (never
    pushes) so the first Back never leaves the site.
 

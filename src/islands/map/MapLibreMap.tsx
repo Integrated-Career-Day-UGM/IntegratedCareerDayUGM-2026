@@ -1,15 +1,25 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import { ArrowRight, Briefcase, Car, Star, Toilet } from 'lucide-react';
+import type { ExpressionSpecification } from 'maplibre-gl';
 import { useMapStore } from '../../stores/mapStore';
 import FloorPlanOverlay from './FloorPlanOverlay';
 import WalkInFloorPlanOverlay from './WalkInFloorPlanOverlay';
 import MapControls from './MapControls';
 import MapTooltipHost from './MapTooltipHost';
+import MapFixedPins, { type FixedPinSpec } from './MapFixedPins';
+import {
+  CAREER_EXPO_CENTER,
+  NPC_GEOJSON,
+  SITE_AREAS_GEOJSON,
+  SITE_POINTS,
+  TOILET_CENTER,
+} from '../../lib/map/site-areas';
 import FloorWipe from './FloorWipe';
+import SparkyEyes from '../../components/map/sparky/SparkyEyes';
 import { DEV_TOOLS } from '../../lib/dev-tools';
 import { ui, getVenue, getTrack, walkInSessions } from '../../lib/data';
-import { surfaceClasses } from '../../lib/surface-classes';
 import { trayDetailTarget } from '../../lib/map/tray';
 import { SNAP_PEEK, TAB_RAIL_H } from './MobileBottomSheet';
 import {
@@ -49,6 +59,24 @@ const GIK_ZOOM_KEY = 'icd-gik-zoom';
 /** iPhone 16 Pro Max reference framing for a clicked venue/list item. */
 const MOBILE_FOCUS_CENTER: [number, number] = [110.37614532080488, -7.774196398740571];
 const MOBILE_FOCUS_ZOOM = 19.4807;
+
+/** Base-map pins. The head+needle is our FixedMarker port; one entry per
+ *  site area. Icons stay in the island so the geo data module stays pure. */
+const PIN_ICONS = { toilet: Toilet, vip: Star, parking: Car } as const;
+const SITE_PINS: FixedPinSpec[] = [
+  ...SITE_POINTS.map((point) => ({
+    ...point,
+    icon: PIN_ICONS[point.id as keyof typeof PIN_ICONS],
+    interactive: point.id === 'toilet',
+  })),
+  {
+    id: 'career-expo',
+    label: 'Career Expo',
+    center: CAREER_EXPO_CENTER,
+    color: '#ff2d6f',
+    icon: Briefcase,
+  },
+];
 
 /** DEV_TOOLS: the tuning panel writes a localStorage override so the number
  *  can be previewed across reloads without editing source. Prod always uses
@@ -90,6 +118,9 @@ export default function MapLibreMap() {
   const positionTooltipRef = useRef<() => void>(() => {});
   const compassNeedleRef = useRef<SVGGElement>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
+  // State copy of the live map instance: pins must re-bind if the map is
+  // ever recreated (StrictMode/HMR), where a ref would stay stale.
+  const [mapInstance, setMapInstance] = useState<maplibregl.Map | null>(null);
   // Field selectors, not a whole-store subscription: mapView changes at
   // moveend rate, and hover is owned by MapTooltipHost. A whole-store
   // subscribe re-rendered this island (and every other island) on each
@@ -106,6 +137,25 @@ export default function MapLibreMap() {
   const setGikMode = useMapStore((s) => s.setGikMode);
   const walkInMode = selectedTrackId === 'walk-in-interview' || selectedAreaId === 'hall-b';
   const walkInConfig = useMapStore((s) => s.walkIn2FConfig);
+
+  // Floor-aware pins: the walk-in pin only exists on the 2F plan; the 1F area
+  // pins drop to 30% there so the active floor reads first.
+  const pins = useMemo<FixedPinSpec[]>(() => {
+    if (!walkInMode) return SITE_PINS;
+    return [
+      ...SITE_PINS.filter((pin) => pin.id !== 'career-expo').map((pin) => ({
+        ...pin,
+        dimmed: true,
+      })),
+      {
+        id: 'walk-in',
+        label: 'Walk-in Interview',
+        center: CAREER_EXPO_CENTER,
+        color: '#ff2d6f',
+        icon: Briefcase,
+      },
+    ];
+  }, [walkInMode]);
 
   useEffect(() => {
     // A floor swap changes the overlay root while the camera is still; force
@@ -169,15 +219,22 @@ export default function MapLibreMap() {
   const areaName = area?.name ?? ui.map.hallLabel;
   const trackLabel = getTrack(selectedTrackId)?.label ?? ui.map.hallSublabel;
 
-  // QuickFind / facility markers: bring the facility point into view.
+  // QuickFind / facility markers: bring the facility point into view. The
+  // toilet is a real basemap area now (outside the hull frame), so it uses
+  // its lng/lat center instead of a frame point.
   useEffect(() => {
     if (!mapLoaded || !selectedFacilityId) return;
     const map = mapRef.current;
     if (!map) return;
     const facility = FACILITY_FRAME_POINTS[selectedFacilityId];
-    if (!facility) return;
+    const center =
+      selectedFacilityId === 'toilet'
+        ? TOILET_CENTER
+        : facility
+          ? frameToLngLat(facility.point)
+          : null;
+    if (!center) return;
     try {
-      const center = frameToLngLat(facility.point);
       map.easeTo({
         center: center as maplibregl.LngLatLike,
         zoom: Math.max(map.getZoom(), 18.1),
@@ -187,6 +244,65 @@ export default function MapLibreMap() {
       console.error('[maplibre] facility focus', error);
     }
   }, [selectedFacilityId, mapLoaded]);
+
+  // Toilet focus pulse. Booths use the DOM `venue-ring` animation inside the
+  // warped plan; the toilet is a MapLibre polygon, so the same 1.8s
+  // expand-and-fade is driven through paint properties instead.
+  useEffect(() => {
+    if (!mapLoaded) return;
+    const map = mapRef.current;
+    if (!map || !map.getLayer('toilet-pulse')) return;
+
+    const reset = () => {
+      if (mapRef.current !== map) return;
+      map.setPaintProperty('toilet-pulse', 'line-opacity', 0);
+      map.setPaintProperty('toilet-pulse', 'line-width', 2);
+    };
+
+    if (selectedFacilityId !== 'toilet') {
+      reset();
+      return;
+    }
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      map.setPaintProperty('toilet-pulse', 'line-opacity', walkInMode ? 0.14 : 0.45);
+      map.setPaintProperty('toilet-pulse', 'line-width', 3);
+      return;
+    }
+
+    let frame = 0;
+    const started = performance.now();
+    const tick = (now: number) => {
+      const phase = ((now - started) % 1800) / 1800;
+      map.setPaintProperty('toilet-pulse', 'line-width', 2 + phase * 38);
+      map.setPaintProperty(
+        'toilet-pulse',
+        'line-opacity',
+        0.5 * (1 - phase) * (walkInMode ? 0.3 : 1),
+      );
+      frame = window.requestAnimationFrame(tick);
+    };
+    frame = window.requestAnimationFrame(tick);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      reset();
+    };
+  }, [mapLoaded, selectedFacilityId, walkInMode]);
+
+  // Floor focus: on the 2F walk-in plan the 1F site geometry (NPC, toilet,
+  // VIP, parking) drops to 30% so the active floor reads first.
+  useEffect(() => {
+    if (!mapLoaded) return;
+    const map = mapRef.current;
+    if (!map) return;
+    const opacity = walkInMode ? 0.3 : 1;
+    const paint = (id: string, prop: string) => {
+      if (map.getLayer(id)) map.setPaintProperty(id, prop, opacity);
+    };
+    paint('npc-fill', 'fill-opacity');
+    paint('npc-line', 'line-opacity');
+    paint('site-fill', 'fill-opacity');
+    paint('site-line', 'line-opacity');
+  }, [walkInMode, mapLoaded]);
 
   /* ---------------------------------------------------------------- */
   /* Map init                                                          */
@@ -209,7 +325,7 @@ export default function MapLibreMap() {
       // above entry (detail without pixel-mush), and panning is boxed to the
       // hall + one short walk of context. All three are tuned from the DEV
       // CAM readout.
-      minZoom: entryZoom - 0.8,
+      minZoom: entryZoom - 1.2,
       maxZoom: entryZoom + 2.2,
       maxBounds: MAX_BOUNDS as maplibregl.LngLatBoundsLike,
       bearing: 0,
@@ -219,6 +335,7 @@ export default function MapLibreMap() {
     });
 
     mapRef.current = map;
+    setMapInstance(map);
 
     // OpenFreeMap's dark style still points `landcover_wood` at a
     // `wood-pattern` sprite that is no longer in their sprite sheet. We use
@@ -396,6 +513,105 @@ export default function MapLibreMap() {
         }
       }
 
+      // Site geometry (decoupled from the 818×820 hull frame): NPC buildings
+      // are exterior context, the named areas carry their own colour.
+      // Anchor above basemap buildings/roads: this style's first symbol is
+      // `water_name` (index 12) and `building` + roads come AFTER it, so
+      // "before the first symbol" would bury the fills under the basemap.
+      const styleLayers = map.getStyle().layers ?? [];
+      const beforeId =
+        styleLayers.find((layer) => layer.id === 'highway_name_other')?.id ??
+        styleLayers.find((layer) => layer.type === 'symbol')?.id;
+
+      // Stroke width in MAP space: it doubles per zoom level, so the border
+      // keeps the same geographic thickness instead of staying 10px on
+      // screen. 10px is the reference at the GIK zoom (18.3).
+      const zoomLineWidth = (base: number): ExpressionSpecification =>
+        [
+          'interpolate',
+          ['exponential', 2],
+          ['zoom'],
+          16.3,
+          base / 4,
+          17.3,
+          base / 2,
+          18.3,
+          base,
+          19.3,
+          base * 2,
+          20.3,
+          base * 4,
+        ] as ExpressionSpecification;
+
+      map.addSource('npc-buildings', { type: 'geojson', data: NPC_GEOJSON });
+      map.addLayer(
+        {
+          id: 'npc-fill',
+          source: 'npc-buildings',
+          type: 'fill',
+          paint: { 'fill-color': '#3b3b42', 'fill-opacity': 1 },
+        },
+        beforeId,
+      );
+      map.addLayer(
+        {
+          id: 'npc-line',
+          source: 'npc-buildings',
+          type: 'line',
+          paint: {
+            'line-color': '#6b6b73',
+            'line-width': 1,
+            'line-opacity': 1,
+          },
+        },
+        beforeId,
+      );
+
+      map.addSource('site-areas', { type: 'geojson', data: SITE_AREAS_GEOJSON });
+      map.addLayer(
+        {
+          id: 'site-fill',
+          source: 'site-areas',
+          type: 'fill',
+          paint: {
+            'fill-color': ['get', 'color'],
+            'fill-opacity': 1,
+          },
+        },
+        beforeId,
+      );
+      map.addLayer(
+        {
+          id: 'site-line',
+          source: 'site-areas',
+          type: 'line',
+          paint: {
+            'line-color': '#000000',
+            'line-width': zoomLineWidth(1),
+            'line-opacity': 1,
+          },
+        },
+        beforeId,
+      );
+
+      // Focus pulse for the toilet area, mirroring the booth `venue-ring`
+      // (1.8s expand + fade). Paint is animated from JS while selected.
+      map.addLayer(
+        {
+          id: 'toilet-pulse',
+          source: 'site-areas',
+          type: 'line',
+          filter: ['==', ['get', 'id'], 'toilet'],
+          paint: {
+            'line-color': '#5b8def',
+            'line-width': 2,
+            'line-opacity': 0,
+            'line-blur': 1,
+          },
+        },
+        beforeId,
+      );
+
       // Real building footprint under the floor-plan — soft "location aura".
       // The ring is an approximate hand-traced anchor (the footprint is not
       // in OSM), so no crisp outline: it would advertise the 3–5 m slop.
@@ -502,12 +718,22 @@ export default function MapLibreMap() {
         if (state.selectedBoothId) state.selectBooth(null);
         if (state.selectedFacilityId) state.selectFacility(null);
         if (state.selectedWalkInRoomId) state.selectWalkInRoom(null);
+        // A map tap leaves the Search view: back to the Home (navigate) list.
+        if (state.sidebarTab === 'search') state.setSidebarTab('home');
         if (window.matchMedia('(max-width: 767px)').matches) {
           window.dispatchEvent(new CustomEvent('icd:tray-collapse'));
         }
         return;
       }
       // MapLibre suppresses click after a drag, so pan-then-release is safe.
+      // Basemap site areas: the toilet polygon opens the toilet facility.
+      if (map.getLayer('site-fill')) {
+        const siteHit = map.queryRenderedFeatures(e.point, { layers: ['site-fill'] })[0];
+        if (siteHit?.properties?.id === 'toilet') {
+          useMapStore.getState().selectFacility('toilet');
+          return;
+        }
+      }
       const id = boothFromEvent(e);
       if (id) {
         useMapStore.getState().selectBooth(id);
@@ -519,6 +745,8 @@ export default function MapLibreMap() {
           useMapStore.getState().selectBooth(null);
           useMapStore.getState().selectFacility(null);
         }
+        // A map tap leaves the Search view: back to the Home (navigate) list.
+        if (state.sidebarTab === 'search') state.setSidebarTab('home');
         if (window.matchMedia('(max-width: 767px)').matches) {
           window.dispatchEvent(new CustomEvent('icd:tray-collapse'));
         }
@@ -684,6 +912,18 @@ export default function MapLibreMap() {
         )}
       </div>
 
+      {/* Site pins above the warped plan: screen-space, so the in-hull
+          Career Expo pin is not covered by the plan art. */}
+      {mapLoaded && (
+        <MapFixedPins
+          map={mapInstance}
+          pins={pins}
+          onSelect={(id) => {
+            if (id === 'toilet') useMapStore.getState().selectFacility('toilet');
+          }}
+        />
+      )}
+
       {/* Short pixel veil on every map-shell tab/floor swap. */}
       <FloorWipe />
 
@@ -704,40 +944,57 @@ export default function MapLibreMap() {
           the quick-find bar. Tappable: re-fits the hall into view. */}
       <div
         data-layout-tune="hall-card"
-        className="absolute inset-x-3 z-10 flex justify-end bottom-(--hall-card-bottom) md:inset-x-auto md:bottom-0 md:left-3 md:justify-start"
+        className="absolute inset-x-3 z-10 flex justify-end bottom-(--hall-card-bottom) md:inset-x-auto md:bottom-4 md:left-3 md:justify-start"
         style={{ '--hall-card-bottom': `calc(${SNAP_PEEK}px + ${TAB_RAIL_H}px + 6px)` } as React.CSSProperties}
       >
-        <button
-          type="button"
-          onClick={() => {
-            // In the GIK overview the card is the way into the hall: leave
-            // the overview and light the venue's Career Expo tab. Outside
-            // GIK it stays a plain re-fit.
-            if (!gikMode) {
-              // Desktop focus lands on the measured framing; mobile keeps
-              // the fit-bounds framing that respects the sheet.
-              if (window.matchMedia('(max-width: 767px)').matches) focusVenue();
-              else mapRef.current?.easeTo({ center: DESKTOP_FOCUS_CENTER, duration: 400 });
-              return;
-            }
-            const expoArea = venue?.areas.find((a) => a.trackId === 'career-expo');
-            if (expoArea) {
-              setSelectedArea(expoArea.id);
-            }
-            setGikMode(false);
-            if (!expoArea) fitHall();
-          }}
-          // FF Surfaces, fixed level 3 (manually — the element is a button,
-          // not a div): opaque surface + honest shadow replaces the
-          // translucent bg + backdrop-blur (less glassy, more contrast on
-          // the tiles).
-          className={`${surfaceClasses(3)} flex cursor-pointer items-center rounded-lg border border-[#34343a] px-3 py-2 text-left text-white transition-colors md:hover:border-[var(--accent-pink)] active:scale-[0.98]`}
-        >
-          <div>
-            <div className="text-sm leading-tight font-semibold">{areaName}</div>
-            <div className="text-[11px] text-zinc-400">{trackLabel}</div>
+        <div className="flex flex-col items-start">
+          <div className="hidden md:block">
+            <SparkyEyes size={132} />
           </div>
-        </button>
+          <button
+            type="button"
+            onClick={() => {
+              // In the GIK overview the card is the way into the hall: leave
+              // the overview and light the venue's Career Expo tab. Outside
+              // GIK it stays a plain re-fit.
+              if (!gikMode) {
+                // Desktop focus lands on the measured framing; mobile keeps
+                // the fit-bounds framing that respects the sheet.
+                if (window.matchMedia('(max-width: 767px)').matches) focusVenue();
+                else
+                  mapRef.current?.easeTo({
+                    center: DESKTOP_FOCUS_CENTER,
+                    duration: 400,
+                  });
+                return;
+              }
+              const expoArea = venue?.areas.find((a) => a.trackId === 'career-expo');
+              if (expoArea) {
+                setSelectedArea(expoArea.id);
+              }
+              setGikMode(false);
+              if (!expoArea) fitHall();
+            }}
+            aria-label={`${areaName}, ${trackLabel}`}
+            className="group relative z-10 flex cursor-pointer flex-col items-start text-left transition-transform active:scale-[0.98]"
+          >
+          {/* Primary plate: light backfill, black arrow + bold location. */}
+          <span className="relative z-10 flex items-center gap-2 bg-[#e9e9e9] px-2.5 py-1.5 text-black shadow-[3px_3px_0_rgba(0,0,0,0.28)] md:gap-2.5 md:px-3.5 md:py-2">
+            <ArrowRight
+              size={20}
+              strokeWidth={3}
+              className="shrink-0 md:h-6 md:w-6"
+            />
+            <span className="max-w-[168px] font-heading text-[1.0625rem] font-extrabold leading-[1.02] tracking-[-0.2px] md:max-w-[190px] md:text-[1.125rem]">
+              {areaName}
+            </span>
+          </span>
+          {/* Secondary plate: offset right, tucked under the primary edge. */}
+          <span className="relative z-0 -mt-0.5 ml-5 bg-[#d6d6d6] px-2.5 py-1 text-[0.875rem] font-semibold leading-tight text-[#8a8a8a] md:ml-6 md:px-3 md:py-1.5 md:text-[0.875rem]">
+            {trackLabel}
+          </span>
+          </button>
+        </div>
       </div>
 
       {/* Screen-space tooltip host (upright — outside the plan warp).

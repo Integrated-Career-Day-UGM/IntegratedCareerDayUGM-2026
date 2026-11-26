@@ -51,14 +51,14 @@ export default function BrandLockup({ compact = false }: { compact?: boolean }) 
 
   return (
     <>
-      {/* Rotated badge */}
-      <div className="tag-ribbon absolute left-5 top-9 z-10">
-        {ui.event.exploreBadge}
+      {/* Rotated badge — fluid hover nudge, desktop only. */}
+      <div className="absolute left-5 top-9 z-10 transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:hover:rotate-[3deg] motion-reduce:transform-none">
+        <div className="tag-ribbon">{ui.event.exploreBadge}</div>
       </div>
 
       {/* UGM lockup + selection box (Figma 1742:24528); the frame extends
           past the text on the right and below, per design */}
-      <div className="absolute left-6 top-[84px]">
+      <div className="absolute left-6 top-[84px] transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:hover:-rotate-[1.5deg] motion-reduce:transform-none">
         <SelectionFrame frameClassName="-left-[4px] -top-[5px] -right-[22px] -bottom-[7px]">
           <div
             className="flex items-center gap-[2px]"

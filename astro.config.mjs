@@ -40,7 +40,8 @@ export default defineConfig({
     server: {
       watch: {
         usePolling: true,
-        interval: 500,
+        interval: 60000,
+        ignored: ['**/node_modules/**', '**/.git/**', '**/dist/**'],
       },
       hmr: {
         clientPort:4321

@@ -8,6 +8,7 @@ import { FluidHoverHighlight } from '../../components/ui/fluid-hover-highlight';
 import { MapFluidRoot } from '../../components/map/map-fluid-root';
 import { quickfind, ui } from '../../lib/data';
 import { cn } from '../../lib/utils/cn';
+import { surfaceClasses } from '../../lib/surface-classes';
 
 const iconMap: Record<
   string,
@@ -71,7 +72,7 @@ export default function QuickFind() {
         {/* Desktop keeps the labelled chip row. */}
         <div
           ref={chipsRef}
-          className="relative hidden w-max max-w-full flex-wrap items-center justify-start gap-1.5 md:flex"
+          className="relative mt-2 hidden w-fit max-w-full grid-cols-2 items-center justify-start gap-1.5 md:grid"
           {...hover.handlers}
         >
           <FluidHoverHighlight hover={hover} className="bg-field-hover rounded-full" />
@@ -95,24 +96,30 @@ export default function QuickFind() {
                   openFacility(item.id);
                 }}
                 className={cn(
-                  'group relative flex min-h-7 shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-0 text-[0.6875rem] font-semibold transition-colors',
+                  'group relative flex min-h-10 shrink-0 items-center gap-2 rounded-full border border-[#34343a] py-1 pl-1 pr-3.5 text-[0.8125rem] font-semibold text-white transition-colors',
+                  surfaceClasses(3, 3),
                   disabled
-                    ? 'cursor-not-allowed border-[#3a3a3a] bg-[#222225] text-[#6b6b70] opacity-55'
-                    : 'border-[#4a4a4a] bg-[#2a2a2a] text-ink-body active:scale-[0.98] md:hover:border-[var(--accent-pink)]',
+                    ? 'cursor-not-allowed opacity-50'
+                    : 'active:scale-[0.98] hover:border-[#4a4a52]',
                 )}
               >
-                <Icon
-                  size={14}
-                  strokeWidth={1.5}
-                  fill="currentColor"
-                  className="h-2.5 w-2.5 shrink-0"
-                />
+                <span
+                  className={cn(
+                    'flex size-7 shrink-0 items-center justify-center rounded-full text-white',
+                    surfaceClasses(5, 5),
+                  )}
+                >
+                  <Icon
+                    size={14}
+                    strokeWidth={1.6}
+                    fill="currentColor"
+                    className="h-3.5 w-3.5"
+                  />
+                </span>
                 <span
                   className={cn(
                     'transition-colors',
-                    disabled
-                      ? 'text-[#6b6b70]'
-                      : 'text-[#d4d4d8]/65 group-hover:text-[#d4d4d8]',
+                    disabled ? 'text-[#6b6b70]' : 'text-white',
                   )}
                 >
                   {label}
@@ -129,7 +136,10 @@ export default function QuickFind() {
             onClick={() => setOpen((value) => !value)}
             aria-label={ui.quickFind.title}
             aria-expanded={open}
-            className="relative z-20 flex size-11 items-center justify-center rounded-full border border-[#4a4a4a] bg-[#2a2a2a] text-white shadow-lg transition-[transform,colors] active:scale-95"
+            className={cn(
+              'relative z-20 flex size-11 items-center justify-center rounded-full border border-[#34343a] text-white transition-[transform,colors] active:scale-95',
+              surfaceClasses(4, 4),
+            )}
           >
             <Plus
               size={19}
@@ -153,10 +163,11 @@ export default function QuickFind() {
                       key={item.id}
                       type="button"
                       initial={{ opacity: 0, y: -6, scale: 0.9 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      animate={{ opacity: disabled ? 0.5 : 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -4, scale: 0.95 }}
                       transition={{ duration: 0.16, ease: 'easeOut', delay: index * 0.03 }}
                       disabled={disabled}
+                      aria-disabled={disabled || undefined}
                       aria-label={label}
                       title={label}
                       onClick={() => {
@@ -166,13 +177,29 @@ export default function QuickFind() {
                         openFacility(item.id);
                       }}
                       className={cn(
-                        'flex size-11 items-center justify-center rounded-full border shadow-lg transition-colors',
+                        'flex min-h-10 items-center gap-2 rounded-full border py-1 pl-1 pr-3.5 font-heading text-[0.75rem] font-bold shadow-lg transition-colors',
+                        surfaceClasses(3, 3),
                         disabled
-                          ? 'cursor-not-allowed border-[#333338] bg-[#1c1c20] text-[#5f5f66] opacity-60'
-                          : 'border-[#4a4a4a] bg-[#2a2a2a] text-white active:scale-95',
+                          ? 'cursor-not-allowed border-[#333338]'
+                          : 'border-[#34343a] text-white active:scale-95',
                       )}
                     >
-                      <Icon size={17} strokeWidth={1.7} />
+                      <span
+                        className={cn(
+                          'flex size-7 shrink-0 items-center justify-center rounded-full text-white',
+                          surfaceClasses(5, 5),
+                        )}
+                      >
+                        <Icon
+                          size={15}
+                          strokeWidth={1.7}
+                          fill="currentColor"
+                          className="h-3.5 w-3.5"
+                        />
+                      </span>
+                      <span className={disabled ? 'text-[#6b6b70]' : 'text-white'}>
+                        {label}
+                      </span>
                     </motion.button>
                   );
                 })}

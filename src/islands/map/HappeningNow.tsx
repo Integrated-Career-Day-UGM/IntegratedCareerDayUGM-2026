@@ -174,22 +174,15 @@ export default function HappeningNow() {
         </div>
       </div>
 
-      {/* Footer: the single up-next line — the carousel above is the only
-          session browser. The session type is a white block so the schedule
-          itself reads at a glance. */}
-      <div className="mt-2 flex min-w-0 items-center gap-1.5 border-t border-line pt-1.5 text-[0.75rem] text-ink-dim">
+      {/* Footer: one plain up-next line — the carousel above is the only
+          session browser. No chip here; only the top meta is a label. */}
+      <div className="mt-2 min-w-0 border-t border-line pt-1.5 text-[0.75rem] text-ink-dim">
         {next ? (
-          <>
-            <span className="shrink-0">
-              {ui.happeningNow.scheduleLabel} · {formatTime(next.start)}
-            </span>
-            <span className="shrink-0 bg-white px-1 py-px font-heading text-[0.625rem] font-bold uppercase tracking-[0.04em] text-black">
-              {next.title}
-            </span>
-            {nextDisplayName && <span className="min-w-0 truncate">{nextDisplayName}</span>}
-          </>
+          <span className="block truncate">
+            Next: {nextDisplayName ?? next.title} · {formatTime(next.start)}
+          </span>
         ) : (
-          <span className="truncate">{ui.happeningNow.noMoreSessions}</span>
+          <span className="block truncate">{ui.happeningNow.noMoreSessions}</span>
         )}
       </div>
 

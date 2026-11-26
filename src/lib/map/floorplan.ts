@@ -256,11 +256,10 @@ export const HALL_BOUNDS: [[number, number], [number, number]] = [
   ],
 ];
 
-/** Hard camera pan limit: the hall plus a short walk of surrounding context.
- *  Keeps the building on screen without exposing the whole campus. */
+/** Hard camera pan limit: the hall plus ~100 m more context on every side. */
 export const MAX_BOUNDS: [[number, number], [number, number]] = [
-  [HALL_BOUNDS[0][0] - 0.0012, HALL_BOUNDS[0][1] - 0.0009],
-  [HALL_BOUNDS[1][0] + 0.0012, HALL_BOUNDS[1][1] + 0.0009],
+  [HALL_BOUNDS[0][0] - 0.0021, HALL_BOUNDS[0][1] - 0.0018],
+  [HALL_BOUNDS[1][0] + 0.0021, HALL_BOUNDS[1][1] + 0.0018],
 ];
 
 /** Second-floor walk-in layout (Figma 2136:22531 / 2136:22594 / 2136:22608).
@@ -684,11 +683,12 @@ export function boothAtFramePoint(p: { x: number; y: number }): string | null {
 }
 
 /**
- * Static SVG fixtures on the plan (toilet, mushola, panggung platform,
- * horseshoe island, seat grid, entrance arrows). Positions are frame px and
- * were derived from Figma node 2063:22749 through the same hull transform as
+ * Static SVG fixtures on the plan (mushola, panggung platform, horseshoe
+ * island, seat grid, entrance arrows). Positions are frame px and were
+ * derived from Figma node 2063:22749 through the same hull transform as
  * `hall-pillars.svg`; the geometry editor can nudge/rotate them and export
- * replacements.
+ * replacements. The toilet is no longer a sprite: the real toilet is a
+ * basemap GeoJSON area (`lib/map/site-areas`).
  */
 export type PlanSprite = {
   id: string;
@@ -702,16 +702,6 @@ export type PlanSprite = {
 };
 
 export const PLAN_SPRITES: PlanSprite[] = [
-  {
-    id: 'toilet',
-    label: 'Toilet',
-    src: '/maps/assets/toilet.svg',
-    left: 396.2,
-    top: 150.4,
-    w: 71.4,
-    h: 25.2,
-    rotate: -41.04,
-  },
   {
     id: 'mushola',
     label: 'Mushola',
@@ -806,16 +796,17 @@ export const PLAN_SPRITES: PlanSprite[] = [
     id: 'ugm-icd-map-art',
     label: 'UGM ICD map art (Figma 2115:22565)',
     src: '/maps/assets/ugm-icd-art.svg',
-    left: -256.3,
-    top: 185.2,
+    left: 15.7,
+    top: 745.2,
     w: 337.2,
     h: 109.3,
-    rotate: 0,
+    rotate: 28,
   },
 ];
 
 /** Facility anchors in frame space — used for map focus, the selection pulse
- *  and the registration tooltip. Colors mirror the facility accents. */
+ *  and the registration tooltip. Colors mirror the facility accents. The
+ *  toilet is a real basemap area (see `lib/map/site-areas`), not a frame point. */
 export const FACILITY_FRAME_POINTS: Record<
   string,
   { point: Point; color: string }
@@ -825,7 +816,6 @@ export const FACILITY_FRAME_POINTS: Record<
   photobooth: { point: [226.3, 204.1], color: '#ff2d6f' },
   'photo-wall': { point: [301.1, 68.1], color: '#0e7490' },
   panggung: { point: [550.6, 243.1], color: '#d4d4d8' },
-  toilet: { point: [431.9, 163.0], color: '#5b8def' },
   mushola: { point: [459.8, 187.4], color: '#4fc3a1' },
   'pusat-bantuan': { point: [479.8, 207.4], color: '#f0c71d' },
 };
@@ -837,17 +827,6 @@ export const PLAN_ANNOTATIONS: {
   color: string;
   points: [number, number][];
 }[] = [
-  {
-    id: 'toilet',
-    name: 'Toilet',
-    color: '#f0c71d',
-    points: [
-      [393.9, 178.4],
-      [453.9, 235.3],
-      [547.7, 143],
-      [467.7, 109.2],
-    ],
-  },
   {
     id: 'seat',
     name: 'Seat',

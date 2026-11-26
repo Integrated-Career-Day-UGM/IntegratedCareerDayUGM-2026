@@ -4,6 +4,7 @@ import {
   getCompanyForBooth,
   getZonesByArea,
 } from '@/lib/data';
+import TooltipNeedle from './TooltipNeedle';
 
 /** Optional walk-in context so the same bubble can describe a 2F room. */
 export interface MapTooltipWalkIn {
@@ -38,16 +39,14 @@ export default function MapTooltip({ boothId, walkIn, x, y }: MapTooltipProps) {
 
   return (
     <div
-      className="map-tooltip pointer-events-none fixed z-50 w-[266px] border border-line bg-[#141416] md:w-[280px]"
+      className="map-tooltip pointer-events-none fixed z-50 w-[266px] rounded-[4px] border border-line bg-[#141416] md:w-[280px]"
       style={{ left: x, top: y }}
     >
-      <div
-        className="relative min-h-[53px] w-full overflow-hidden border-b border-line md:h-14"
+      <div className="relative min-h-[53px] w-full overflow-hidden rounded-t-[4px] border-b border-line md:h-14"
         style={{
           background: `linear-gradient(135deg, ${zone?.color ?? (walkIn ? '#6d6a16' : '#27272a')}33 0%, #141416 70%)`,
         }}
-      >
-        <div className="absolute inset-0 flex items-center justify-center px-12">
+      >        <div className="absolute inset-0 flex items-center justify-center px-12">
           {company?.logoUrl ? (
             <img
               src={company.logoUrl}
@@ -80,9 +79,8 @@ export default function MapTooltip({ boothId, walkIn, x, y }: MapTooltipProps) {
         )}
       </div>
 
-      <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2">
-        <div className="map-tooltip-pointer h-3 w-3 rotate-45 border-b border-r border-line bg-[#141416]" />
-      </div>
+      {/* Uber-style needle: black and longer for the venue/facility card. */}
+      <TooltipNeedle color="#000000" height={22} />
     </div>
   );
 }

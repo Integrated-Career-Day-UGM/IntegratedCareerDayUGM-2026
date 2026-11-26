@@ -9,8 +9,12 @@ import QuickFind from '../islands/map/QuickFind';
 import MobileBottomSheet from '../islands/map/MobileBottomSheet';
 import MobileLayoutTuner from '../islands/map/MobileLayoutTuner';
 import GeometryEditor from '../islands/map/GeometryEditor';
+import GeoJsonEditor from '../islands/map/GeoJsonEditor';
 import RegisterLinks from '../islands/map/RegisterLinks';
 import MapSplash from '../islands/map/MapSplash';
+import MatchingTrigger from '../islands/matching/MatchingTrigger';
+import MatchingModal from '../islands/matching/MatchingModal';
+import MobileDayPicker from '../islands/map/MobileDayPicker';
 import BrandLockup from '../components/map/BrandLockup';
 import { event, ui } from '../lib/data';
 import '../styles/base/global.css';
@@ -115,15 +119,24 @@ const eventJsonLd = {
           >
             <TrackSwitcher client:only="react" />
           </div>
-          <div data-layout-tune="brand-lockup" class="pointer-events-none shrink-0 pt-1">
+          <div data-layout-tune="brand-lockup" class="pointer-events-none flex shrink-0 flex-col items-end gap-1.5 pt-1">
             <BrandLockup compact />
+            <div class="pointer-events-auto">
+              <MobileDayPicker client:idle />
+            </div>
           </div>
         </div>
 
         {/* Quick find — directly under the track row on mobile; under the
             track switcher on desktop. */}
-        <div data-layout-tune="quick-find" class="pointer-events-auto">
-          <QuickFind client:only="react" />
+        {/* QuickFind + Job Matcher: one row on mobile, stacked on desktop. */}
+        <div class="pointer-events-auto flex w-full items-stretch gap-2 md:w-auto md:flex-col md:items-start">
+          <div data-layout-tune="quick-find" class="pointer-events-auto">
+            <QuickFind client:only="react" />
+          </div>
+          <div class="pointer-events-auto">
+            <MatchingTrigger client:idle />
+          </div>
         </div>
       </div>
 
@@ -164,10 +177,15 @@ const eventJsonLd = {
           with client:load so the splash is in the first HTML paint. */}
       <MapSplash client:load />
 
+      {/* Career matching sidecar — decoupled islands, engine loads on open. */}
+      <MatchingModal client:idle />
+
       {/* DEV-only mobile layout tuner (drag + scale + copy values). */}
       {import.meta.env.DEV && <MobileLayoutTuner client:only="react" />}
       {/* DEV-only frame geometry editor (booths, fixtures, Career Star/Counseling labels). */}
       {import.meta.env.DEV && <GeometryEditor client:only="react" />}
+      {/* DEV-only GeoJSON debug for the decoupled basemap site geometry. */}
+      {import.meta.env.DEV && <GeoJsonEditor client:only="react" />}
 
       <script is:inline>
         window.addEventListener('icd:splash-done', function () {

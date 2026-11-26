@@ -17,6 +17,7 @@
     "compress:posters": "node scripts/compress-posters.mjs",
     "sync:data": "node scripts/sync-yaml-data.mjs",
     "sync:posters": "node scripts/sync-company-posters.mjs",
+    "r2:prepare": "node scripts/prepare-r2-posters.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test"

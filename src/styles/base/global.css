@@ -543,6 +543,88 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   }
 }
 
+/* INFO bento: hard-edged cards, mount stagger. */
+.info-enter {
+  animation: info-enter 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes info-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .info-enter {
+    animation: none;
+  }
+}
+
+/* Career matching quiz: directional step slides. */
+.matching-forward {
+  animation: matching-forward 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes matching-forward {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.matching-back {
+  animation: matching-back 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes matching-back {
+  from {
+    opacity: 0;
+    transform: translateX(-14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .matching-forward,
+  .matching-back {
+    animation: none;
+  }
+}
+
+/* Job Matcher trigger: slow AI-style shimmer sweep. */
+@keyframes matching-shimmer {
+  0% {
+    transform: translateX(-150%) skewX(-12deg);
+  }
+  55%,
+  100% {
+    transform: translateX(420%) skewX(-12deg);
+  }
+}
+
+.matching-shimmer {
+  animation: matching-shimmer 3.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .matching-shimmer {
+    animation: none;
+    opacity: 0;
+  }
+}
+
 /* MapLibre popup & control overrides */
 .maplibregl-ctrl-group {
   background: var(--surface);

@@ -60,7 +60,7 @@ export default function FacilityDetail() {
         </div>
       </div>
 
-      <div className="px-3 pt-3">
+      <div className="px-3 pb-3 pt-3">
         <div className="inline-block bg-[var(--accent-pink)] px-2 py-0.5 font-heading text-[0.6875rem] font-bold leading-tight text-white md:text-[10px]">
           Facility
         </div>
