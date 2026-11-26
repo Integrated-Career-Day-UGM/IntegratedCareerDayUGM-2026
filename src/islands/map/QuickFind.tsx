@@ -31,9 +31,7 @@ const shortcutKeys = ['T', 'M', 'H'];
 const DISABLED_FACILITY_IDS = new Set(['mushola', 'pusat-bantuan']);
 
 const openFacility = (id: string) => {
-  const store = useMapStore.getState();
-  store.selectFacility(id);
-  store.openMobileSheet();
+  useMapStore.getState().selectFacility(id);
 };
 
 export default function QuickFind() {

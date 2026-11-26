@@ -133,9 +133,11 @@ export default function HappeningNow() {
             <h3 className="text-balance font-heading text-[1.1875rem] font-bold leading-tight tracking-[-0.3px] text-white md:text-[1.0625rem]">
               {displayCompanyName ?? session.title}
             </h3>
-            <p className="text-pretty text-[0.8125rem] leading-snug text-ink-dim md:text-[0.75rem]">
-              {session.title}
-              {areaName ? ` · ${areaName}` : ''}
+            <p className="flex flex-wrap items-center gap-1.5 text-[0.8125rem] leading-snug text-ink-dim md:text-[0.75rem]">
+              <span className="bg-white px-1.5 py-px font-heading text-[0.6875rem] font-bold uppercase leading-tight tracking-[0.04em] text-black md:text-[9px]">
+                {session.title}
+              </span>
+              {areaName && <span>{areaName}</span>}
             </p>
             {current.countdown && (
               <div className="mt-1 text-[0.75rem] text-[#f5b400]">
@@ -173,13 +175,22 @@ export default function HappeningNow() {
       </div>
 
       {/* Footer: the single up-next line — the carousel above is the only
-          session browser. */}
-      <div className="mt-2 truncate border-t border-line pt-1.5 text-[0.75rem] text-ink-dim">
-        {next
-          ? `${ui.happeningNow.scheduleLabel} · ${formatTime(next.start)} ${next.title}${
-              nextDisplayName ? `, ${nextDisplayName}` : ''
-            }`
-          : ui.happeningNow.noMoreSessions}
+          session browser. The session type is a white block so the schedule
+          itself reads at a glance. */}
+      <div className="mt-2 flex min-w-0 items-center gap-1.5 border-t border-line pt-1.5 text-[0.75rem] text-ink-dim">
+        {next ? (
+          <>
+            <span className="shrink-0">
+              {ui.happeningNow.scheduleLabel} · {formatTime(next.start)}
+            </span>
+            <span className="shrink-0 bg-white px-1 py-px font-heading text-[0.625rem] font-bold uppercase tracking-[0.04em] text-black">
+              {next.title}
+            </span>
+            {nextDisplayName && <span className="min-w-0 truncate">{nextDisplayName}</span>}
+          </>
+        ) : (
+          <span className="truncate">{ui.happeningNow.noMoreSessions}</span>
+        )}
       </div>
 
       {/* Carousel index: one segment per session; the active segment fills

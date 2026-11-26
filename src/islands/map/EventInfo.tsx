@@ -15,7 +15,6 @@ import {
 import { surfaceClasses } from '../../lib/surface-classes';
 import { cn } from '../../lib/utils/cn';
 import RegisterCtas from '../../components/map/RegisterCtas';
-import PosterFolder from '../../components/map/PosterFolder';
 import SocialLinks from '../../components/map/SocialLinks';
 import CompanyBentoGrid from '../../components/map/CompanyBentoGrid';
 import PosterShortcutStrip from '../../components/map/PosterShortcutStrip';
@@ -51,23 +50,18 @@ export default function EventInfo() {
 
   return (
     <div className="reveal-product">
-      <div className="section-label mb-2.5 border-b border-[#232326] pb-2 text-white!">
-        {ui.info.title}
-      </div>
-
-      {updatedLabel && (
-        <div className="mb-2 flex justify-end">
+      <div className="mb-2.5 flex items-baseline justify-between gap-3 border-b border-[#232326] pb-2">
+        <div className="section-label text-white!">{ui.info.title}</div>
+        {updatedLabel && (
           <time
             dateTime={updatedAt ?? undefined}
-            className="text-[0.6875rem] text-[#71717a] md:text-[0.625rem]"
-            title="Lowongan diperbarui"
+            className="shrink-0 text-[0.6875rem] text-[#71717a] md:text-[0.625rem]"
+            title="Last updated"
           >
-            Lowongan diperbarui {updatedLabel} WIB
+            Last updated: {updatedLabel} WIB
           </time>
-        </div>
-      )}
-
-      <PosterShortcutStrip />
+        )}
+      </div>
 
       <div className="grid grid-cols-2 gap-2">
         <div className="col-span-2 md:hidden">
@@ -156,9 +150,9 @@ export default function EventInfo() {
           <SocialLinks variant="sheet" />
         </section>
 
-        {/* Poster carousels live under the info bento, not above it. */}
-        <div id="icd-poster-carousel" className="col-span-2 mt-1 scroll-mt-4">
-          <PosterFolder variant="carousel" />
+        {/* Company posters live under the info bento, not above it. */}
+        <div id="icd-poster-carousel" className="col-span-2 mt-4 scroll-mt-4">
+          <PosterShortcutStrip />
         </div>
 
         <div id="company-directory" className="col-span-2 mt-2 scroll-mt-4">

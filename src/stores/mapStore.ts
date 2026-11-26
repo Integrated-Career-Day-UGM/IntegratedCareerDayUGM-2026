@@ -27,6 +27,11 @@ interface MapState {
   hoveredBoothId: string | null;
   /** Selected 2F walk-in room (F1–F10 id); exclusive with booth/facility. */
   selectedWalkInRoomId: string | null;
+  /**
+   * Tab the user was on before a detail card opened. Closing the card returns
+   * there (search results, saved list) instead of dumping them on Home.
+   */
+  detailOriginTab: SidebarTab | null;
 
   // UI
   sidebarMode: SidebarMode;
@@ -34,7 +39,8 @@ interface MapState {
   searchQuery: string;
   /** Faceted search: company sectors (tags) and opening types. */
   searchFilters: SearchFilters;
-  isMobileSheetOpen: boolean;
+  /** Search result surface: everything, or one type. */
+  searchKind: 'all' | 'company' | 'opening' | 'session';
   /** GIK mode: zoomed-out event overview; will host geojson pathfinding. */
   gikMode: boolean;
 
@@ -61,14 +67,15 @@ interface MapState {
    * booking actually exists.
    */
   selectWalkInRoom: (roomId: string | null, dayId?: string) => void;
+  /** Close booth / room / facility detail and restore the origin tab. */
+  closeDetail: () => void;
   setSearchQuery: (query: string) => void;
   toggleSearchFilter: (kind: keyof SearchFilters, value: string) => void;
   clearSearchFilters: () => void;
+  setSearchKind: (kind: 'all' | 'company' | 'opening' | 'session') => void;
   setSidebarMode: (mode: SidebarMode) => void;
   setSidebarTab: (tab: SidebarTab) => void;
   setGikMode: (on: boolean) => void;
-  openMobileSheet: () => void;
-  closeMobileSheet: () => void;
   setMapView: (view: Partial<MapViewState>) => void;
   setWalkIn2FConfig: (config: WalkIn2FConfig) => void;
   toggleBookmark: (id: string) => void;
@@ -81,6 +88,15 @@ const defaultArea = defaultVenue?.areas.find((a) => a.trackId === 'career-expo')
 const defaultTrackId = defaultArea?.trackId ?? event.tracks[0].id;
 const defaultAreaId = defaultArea?.id ?? defaultVenue?.areas[0].id ?? '';
 
+const originTabFor = (state: {
+  sidebarMode: SidebarMode;
+  sidebarTab: SidebarTab;
+  detailOriginTab: SidebarTab | null;
+}): SidebarTab =>
+  ['detail', 'facility'].includes(state.sidebarMode)
+    ? state.detailOriginTab ?? state.sidebarTab
+    : state.sidebarTab;
+
 export const useMapStore = create<MapState>()(
   persist(
     (set, get) => ({
@@ -92,11 +108,12 @@ export const useMapStore = create<MapState>()(
       selectedFacilityId: null,
       hoveredBoothId: null,
       selectedWalkInRoomId: null,
+      detailOriginTab: null,
       sidebarMode: 'list',
       sidebarTab: 'home',
       searchQuery: '',
       searchFilters: { tags: [], types: [] },
-      isMobileSheetOpen: false,
+      searchKind: 'all',
       gikMode: true,
       mapView: {
         center: [110.3761, -7.7743],
@@ -172,17 +189,28 @@ export const useMapStore = create<MapState>()(
 
       selectBooth: (boothId) => {
         if (!boothId) {
-          set({ selectedBoothId: null, selectedFacilityId: null, sidebarMode: 'list' });
+          const current = get();
+          const stillDetail = Boolean(current.selectedWalkInRoomId);
+          set({
+            selectedBoothId: null,
+            selectedFacilityId: null,
+            sidebarMode: stillDetail ? 'detail' : 'list',
+            sidebarTab: stillDetail
+              ? current.sidebarTab
+              : current.detailOriginTab ?? current.sidebarTab,
+            detailOriginTab: stillDetail ? current.detailOriginTab : null,
+          });
           return;
         }
         const booth = getBooth(boothId);
         track('booth.select', { boothId, companyId: booth?.companyId });
         if (!booth) {
-          // Unknown id (bad ?booth= URL, removed booth) — fall back to the
-          // home state instead of a half-applied selection.
-          set({ selectedBoothId: null, selectedFacilityId: null, sidebarMode: 'list' });
+          // Unknown id (bad ?booth= URL, removed booth) — clean exit instead
+          // of a half-applied selection.
+          get().closeDetail();
           return;
         }
+        const current = get();
         // The venue/track state follows the booth: the tab switcher must
         // reflect the venue the clicked item belongs to. Saved rows, search
         // results and ?booth= links can all cross tracks, and without this
@@ -197,18 +225,23 @@ export const useMapStore = create<MapState>()(
           selectedAreaId: area?.id ?? get().selectedAreaId,
           selectedTrackId: area?.trackId ?? get().selectedTrackId,
           gikMode: false,
-          sidebarTab: 'home',
+          // Keep the tab the card was opened from; closing returns there.
+          detailOriginTab: originTabFor(current),
           sidebarMode: 'detail',
         });
       },
 
       selectFacility: (facilityId) => {
+        const current = get();
         if (!facilityId) {
+          const stillDetail = Boolean(current.selectedBoothId || current.selectedWalkInRoomId);
           set({
             selectedFacilityId: null,
-            sidebarMode: get().selectedBoothId || get().selectedWalkInRoomId
-              ? 'detail'
-              : 'list',
+            sidebarMode: stillDetail ? 'detail' : 'list',
+            sidebarTab: stillDetail
+              ? current.sidebarTab
+              : current.detailOriginTab ?? current.sidebarTab,
+            detailOriginTab: stillDetail ? current.detailOriginTab : null,
           });
           return;
         }
@@ -217,20 +250,38 @@ export const useMapStore = create<MapState>()(
           selectedBoothId: null,
           selectedWalkInRoomId: null,
           gikMode: false,
-          sidebarTab: 'home',
+          detailOriginTab: originTabFor(current),
           sidebarMode: 'facility',
+        });
+      },
+
+      closeDetail: () => {
+        const current = get();
+        set({
+          selectedBoothId: null,
+          selectedFacilityId: null,
+          selectedWalkInRoomId: null,
+          sidebarMode: 'list',
+          sidebarTab: current.detailOriginTab ?? current.sidebarTab,
+          detailOriginTab: null,
         });
       },
 
       hoverBooth: (boothId) => set({ hoveredBoothId: boothId }),
 
       selectWalkInRoom: (roomId, dayId) => {
+        const current = get();
         if (!roomId) {
           // Deselect (map tap, close button, tab switch) — mirror selectBooth:
           // keep a booth detail open if one is somehow active.
+          const stillDetail = Boolean(current.selectedBoothId);
           set({
             selectedWalkInRoomId: null,
-            sidebarMode: get().selectedBoothId ? 'detail' : 'list',
+            sidebarMode: stillDetail ? 'detail' : 'list',
+            sidebarTab: stillDetail
+              ? current.sidebarTab
+              : current.detailOriginTab ?? current.sidebarTab,
+            detailOriginTab: stillDetail ? current.detailOriginTab : null,
           });
           return;
         }
@@ -265,7 +316,7 @@ export const useMapStore = create<MapState>()(
           selectedAreaId: area?.id ?? get().selectedAreaId,
           selectedTrackId: area?.trackId ?? get().selectedTrackId,
           gikMode: false,
-          sidebarTab: 'home',
+          detailOriginTab: originTabFor(current),
           sidebarMode: 'detail',
         });
       },
@@ -296,39 +347,23 @@ export const useMapStore = create<MapState>()(
 
       clearSearchFilters: () => set({ searchFilters: { tags: [], types: [] } }),
 
+      setSearchKind: (kind) => set({ searchKind: kind }),
+
       setSidebarMode: (mode) => set({ sidebarMode: mode }),
 
       setSidebarTab: (tab) => {
         track('sidebar.tab.switch', { tab });
-        // Tabs are views, not overlays: never leave a hidden booth/facility
-        // selection behind a saved/stats/info/search surface (dead-end state).
-        if (tab === 'home') {
-          set({
-            sidebarTab: tab,
-            sidebarMode: 'list',
-            selectedBoothId: null,
-            selectedFacilityId: null,
-            selectedWalkInRoomId: null,
-          });
-          return;
-        }
-        if (tab === 'search') {
-          set({
-            sidebarTab: tab,
-            sidebarMode: 'list',
-            selectedBoothId: null,
-            selectedFacilityId: null,
-            selectedWalkInRoomId: null,
-          });
-          return;
-        }
+        // Tabs are views, not overlays: any detail card (booth, room,
+        // facility) closes on a tab switch — a hidden selection behind
+        // another surface is a dead end.
         set({
           sidebarTab: tab,
-          searchQuery: '',
           sidebarMode: 'list',
           selectedBoothId: null,
           selectedFacilityId: null,
           selectedWalkInRoomId: null,
+          detailOriginTab: null,
+          ...(tab !== 'home' && tab !== 'search' ? { searchQuery: '' } : {}),
         });
       },
 
@@ -336,9 +371,6 @@ export const useMapStore = create<MapState>()(
         track('gik.mode', { on });
         set({ gikMode: on });
       },
-
-      openMobileSheet: () => set({ isMobileSheetOpen: true }),
-      closeMobileSheet: () => set({ isMobileSheetOpen: false }),
 
       setMapView: (view) => set({ mapView: { ...get().mapView, ...view } }),
 

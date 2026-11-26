@@ -905,6 +905,6 @@ export type PlanLabel = {
 
 /** Persistent / contextual frame labels (Career Star, Counseling). */
 export const PLAN_LABELS: PlanLabel[] = [
-  { id: 'career-star', label: 'CAREER STAR', left: 374, top: 410, w: 54, h: 30, rotate: 0, color: '#d7f24b', textColor: '#111111', fontSize: 9 },
-  { id: 'counseling-b', label: 'COUNSELING', left: 374, top: 442, w: 54, h: 14, rotate: 0, color: '#0a0a0c', textColor: '#ffffff', fontSize: 8 },
+  { id: 'career-star', label: 'CAREER STAR', left: 351.8, top: 545.4, w: 54, h: 30, rotate: 19, color: '#d7f24b', textColor: '#111111', fontSize: 9 },
+  { id: 'counseling-b', label: 'COUNSELING', left: 391.2, top: 446.9, w: 54, h: 14, rotate: 19, color: '#0a0a0c', textColor: '#ffffff', fontSize: 8 },
 ];

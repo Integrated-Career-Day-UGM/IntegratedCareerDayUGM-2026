@@ -9,7 +9,7 @@ import {
 import { useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import { useMapStore } from '../../stores/mapStore';
-import { useBoothFromUrl } from '../../hooks/map/useBoothFromUrl';
+import { useSheetHistory } from '../../hooks/map/useSheetHistory';
 import { trackPageView } from '../../lib/analytics';
 import { useFluidHover } from '../../hooks/use-fluid-hover';
 import { spring } from '../../lib/springs';
@@ -53,7 +53,7 @@ export default function MapSidebar() {
   const selectedTrackId = useMapStore((s) => s.selectedTrackId);
   const setSearchQuery = useMapStore((s) => s.setSearchQuery);
   const clearSearchFilters = useMapStore((s) => s.clearSearchFilters);
-  useBoothFromUrl();
+  useSheetHistory();
   const contentScrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -116,15 +116,18 @@ export default function MapSidebar() {
       : null;
 
   const renderMainContent = () => {
-    if (sidebarTab === 'saved') return <BookmarkList />;
-    if (sidebarTab === 'stats') return <Insights />;
-    if (sidebarTab === 'info') return <EventInfo />;
-
+    // Detail is a mode, not a tab: it renders over whichever tab it was
+    // opened from (search results, saved rows), so closing returns there.
     if (sidebarMode === 'facility') return <FacilityDetail />;
     // Detail mode is shared by booth and walk-in room selections; the store
     // keeps them mutually exclusive, so the career-expo path is unchanged.
     if (sidebarMode === 'detail')
       return selectedWalkInRoomId ? <WalkInDetail /> : <BoothDetail />;
+
+    if (sidebarTab === 'saved') return <BookmarkList />;
+    if (sidebarTab === 'stats') return <Insights />;
+    if (sidebarTab === 'info') return <EventInfo />;
+
     // Hall B holds no expo booths — the venue list would read "0 booths".
     // List every bilik booking (all days) instead.
     if (walkInMode) return <WalkInList />;

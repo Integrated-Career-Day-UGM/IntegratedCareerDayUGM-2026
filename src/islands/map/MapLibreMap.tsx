@@ -10,6 +10,7 @@ import FloorWipe from './FloorWipe';
 import { DEV_TOOLS } from '../../lib/dev-tools';
 import { ui, getVenue, getTrack, walkInSessions } from '../../lib/data';
 import { surfaceClasses } from '../../lib/surface-classes';
+import { trayDetailTarget } from '../../lib/map/tray';
 import { SNAP_PEEK, TAB_RAIL_H } from './MobileBottomSheet';
 import {
   BOOTH_LNGLATS,
@@ -48,7 +49,6 @@ const GIK_ZOOM_KEY = 'icd-gik-zoom';
 /** iPhone 16 Pro Max reference framing for a clicked venue/list item. */
 const MOBILE_FOCUS_CENTER: [number, number] = [110.37614532080488, -7.774196398740571];
 const MOBILE_FOCUS_ZOOM = 19.4807;
-const MOBILE_FOCUS_OFFSET_RATIO = 0.115;
 
 /** DEV_TOOLS: the tuning panel writes a localStorage override so the number
  *  can be previewed across reloads without editing source. Prod always uses
@@ -551,8 +551,9 @@ export default function MapLibreMap() {
     // iPhone 16 Pro Max reference framing (user-provided CAM JSON): the
     // selected booth sits above the detail tray, clear of the top chrome.
     // The offset is negative because MapLibre places a positive offset BELOW
-    // the container centre (verified via map.project).
-    const focusOffset = Math.round(map.getContainer().clientHeight * MOBILE_FOCUS_OFFSET_RATIO);
+    // the container centre (verified via map.project). Half the sheet's
+    // resting height centres the booth in the map area the tray leaves free.
+    const focusOffset = Math.round(trayDetailTarget() / 2);
     // NOTE: never pass `offset: undefined` — MapLibre's option validation
     // runs Point.convert(undefined) which throws "reading 'x'", killing
     // this effect and unmounting the island (the desktop black-map bug).
@@ -586,9 +587,7 @@ export default function MapLibreMap() {
       const detailOpen = useMapStore.getState().sidebarMode === 'detail';
       // Cancel any in-flight camera move first (see the booth fly-to).
       map.stop();
-      const focusOffset = Math.round(
-        map.getContainer().clientHeight * MOBILE_FOCUS_OFFSET_RATIO,
-      );
+      const focusOffset = Math.round(trayDetailTarget() / 2);
       map.easeTo({
         center: target as maplibregl.LngLatLike,
         zoom: Math.max(map.getZoom(), isMobile ? MOBILE_FOCUS_ZOOM : 19.4),

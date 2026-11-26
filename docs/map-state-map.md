@@ -18,9 +18,10 @@ screen → URL, plus the transitions and invariants the UI must keep.
 | `hoveredBoothId` | string \| null | `null` | no | Tooltip + glow only |
 | `sidebarMode` | `list \| detail \| facility \| search` | `list` | no | |
 | `sidebarTab` | `home \| search \| saved \| stats \| info` | `home` | no | |
+| `detailOriginTab` | `SidebarTab \| null` | `null` | no | Tab a detail card opened from; closing returns there |
 | `searchQuery` | string | `""` | no | |
 | `searchFilters` | `{ tags: string[]; types: string[] }` | empty | no | Sector / role facets |
-| `isMobileSheetOpen` | boolean | `false` | no | Legacy flag; sheet height is local |
+| `searchKind` | `all \| company \| opening \| session` | `all` | no | Search quick filters |
 | `gikMode` | boolean | `true` | no | Overview camera |
 | `mapView` | `{ center, zoom, bearing, pitch }` | GIK overview | no | Written on `moveend` |
 | `bookmarkedIds` | string[] | `[]` | **yes** (`icd-2026-map`) | Only persisted slice |
@@ -85,21 +86,26 @@ selects a booth (the share hook builds links separately).
 4. Every detail has an exit: Close, `selectBooth(null)`, Home, map empty
    click, Esc (sheet).
 5. Detail renders only through `sidebarMode === 'detail'` **or
-   `'facility'`**, and the sidebar/sheet is on `home`; `selectBooth` and
-   `selectFacility` set both, and each clears the other selection.
-6. No `padding` is left on the map; mobile uses a transient `offset`.
+   `'facility'`**, over whichever tab it was opened from (`detailOriginTab`);
+   closing restores that tab, so search results / saved rows survive.
+6. No `padding` is left on the map; mobile uses a transient `offset` sized
+   from the detail card's resting height.
 7. Only `bookmarkedIds` restores across reloads.
+8. A gesture-opened detail pushes one history entry; Back closes the card.
+   Card → card replaces, and a `?booth=` landing card replaces (never
+   pushes) so the first Back never leaves the site.
 
 ## 6. Gaps / risks (report only)
 
 - **QuickFind is inert**: the chips only emit analytics; they do not pan,
   filter, or select anything.
-- `setSidebarTab('saved'|'stats'|'info')` leaves `selectedBoothId` set, so
-  the map keeps a glow while the panel shows another tab. Home clears it.
-- Booth selection does not write the URL; `?booth=` is read once and never
-  updated, so Back/Forward cannot replay in-page selections.
+- `setSidebarTab(...)` clears any open detail card (a tab switch leaves the
+  card), and `detailOriginTab` restores the previous tab on close.
+- Booth selection no longer writes the URL; history entries are state-only,
+  so Back closes the card but the address bar keeps `?booth=` when shared.
 - Search query, facets, track, area, day, and `gikMode` are not URL state.
-- `isMobileSheetOpen` exists but the sheet's real state is local height.
+- The mobile sheet's open/height state is local to `MobileBottomSheet`
+  (no store flag); dead `isMobileSheetOpen` was removed.
 - No `webglcontextrestored` recovery path beyond a console warning.
 
 ## 7. Test checklist (matrix)

@@ -1,5 +1,4 @@
 import { forwardRef, useMemo } from 'react';
-import { Bookmark } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
 import { facilities } from '../../lib/data';
 import {
@@ -319,13 +318,14 @@ const FloorPlanOverlay = forwardRef<HTMLDivElement>(function FloorPlanOverlay(_,
             }}
             aria-hidden="true"
           >
-            <Bookmark
-              size={22}
-              fill="var(--accent-pink)"
-              stroke="none"
-              strokeWidth={0}
-              className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.65)]"
-            />
+            <svg
+              width="26"
+              height="32"
+              viewBox="0 0 24 30"
+              className="drop-shadow-[0_2px_3px_rgba(0,0,0,0.7)]"
+            >
+              <path d="M0 0H24V30L12 22.4L0 30Z" fill="var(--accent-pink)" />
+            </svg>
           </div>
         ),
       )}
