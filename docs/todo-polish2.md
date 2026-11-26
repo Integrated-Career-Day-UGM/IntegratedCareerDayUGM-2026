@@ -206,9 +206,9 @@ and measured bottlenecks; do not add manual chunking or self-host the basemap.
 - [x] **Splash timing:** reduce `MIN_VISIBLE_MS` to **400ms** and `EXIT_MS`
       to **400ms**. Keep the map-ready signal and maximum safety timeout; check
       the transition on both fast and slow mobile connections.
-  - Done: `MIN_VISIBLE_MS = 400`, `EXIT_MS = 400`, PixelTransition step
-    matched to **0.18s** (~360ms) so the exit is not cut off. `MAX_VISIBLE_MS`
-    stays 6000 as the safety cap.
+  - Done: `MIN_VISIBLE_MS = 250` (lowered another 150ms later), `EXIT_MS = 400`,
+    PixelTransition step matched to **0.18s** (~360ms) so the exit is not cut
+    off. `MAX_VISIBLE_MS` stays 6000 as the safety cap.
 - [x] **Warm the basemap origin:** add `preconnect` (and `dns-prefetch` as a
       fallback) for the actual OpenFreeMap/style resource origins. Keep the
       existing remote style; do not self-host it. Inspect the style's sprite,
@@ -321,3 +321,20 @@ and measured bottlenecks; do not add manual chunking or self-host the basemap.
 - [ ] **Delight allowed (rare):** first-visit entry reveal, empty states.
 - [ ] Map camera moves (flyTo/easeTo) are MapLibre's domain — leave their
       easing alone; only UI chrome follows this section.
+
+## 22 — Low-end mobile performance
+
+Method TBD (research it first — do not micro-optimise on vibes). Target the
+low-end Android / throttled-4G experience, not only desktop DevTools.
+
+- [ ] Choose a repeatable measurement method: real low-end device or DevTools
+      **4–6× CPU throttle + slow 4G**, same script every run (open map,
+      pan/zoom, open a booth, open the matcher, search). Capture long tasks,
+      INP, first usable map frame, dropped frames. Save the baseline.
+- [ ] Set the budget and where it is checked (e.g. interaction p95 main thread
+      < 8ms, no frame > 50ms, hydration long task < 100ms).
+- [ ] Fix only what the trace ranks first. Known suspects: hydration message
+      handler (~166ms), MapLibre render loop (`pixelRatio` now capped at 2,
+      `renderWorldCopies` off), `use-fluid-hover` measurement pass.
+- [ ] Re-run the same script and record before/after; keep the method here so
+      the next person does not re-invent it.

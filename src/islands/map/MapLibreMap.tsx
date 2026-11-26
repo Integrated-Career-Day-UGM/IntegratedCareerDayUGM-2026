@@ -331,6 +331,11 @@ export default function MapLibreMap() {
       bearing: 0,
       pitch: 0,
       maxPitch: 0,
+      // The hall never shows a second world copy, and a 3x phone DPR triples
+      // the pixels WebGL has to draw every frame; 2x is the point of
+      // diminishing returns and halves the fill cost on mobile.
+      renderWorldCopies: false,
+      pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
       attributionControl: false,
     });
 

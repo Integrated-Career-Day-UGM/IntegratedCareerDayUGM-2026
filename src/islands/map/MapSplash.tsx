@@ -4,7 +4,7 @@ import SelectionFrame from '../../components/ui/SelectionFrame';
 import Shuffle from '../../components/map/Shuffle';
 import { ui } from '../../lib/data';
 
-const MIN_VISIBLE_MS = 400;
+const MIN_VISIBLE_MS = 250;
 const MAX_VISIBLE_MS = 6000;
 const EXIT_MS = 400;
 
