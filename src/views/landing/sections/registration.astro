@@ -1,0 +1,49 @@
+---
+// Registration / "Alur Pendaftaran" section.
+// Desktop frame is 1440×909 and scales down; mobile is a stacked 390px layout.
+import RegistrationBackground from './registration/background.tsx';
+import DesktopContent from './registration/desktop-content.astro';
+import MobileContent from './registration/mobile-content.astro';
+---
+
+<section class="registration-section relative w-full overflow-clip" data-name="Registration Section" id="pendaftaran">
+  {/* Desktop layout */}
+  <div class="hidden md:block">
+    <div class="registration-scale-wrapper relative mx-auto">
+      <div class="registration-scale-inner absolute inset-0">
+        <RegistrationBackground variant="desktop" client:visible />
+        <DesktopContent />
+      </div>
+    </div>
+  </div>
+
+  {/* Mobile layout */}
+  <div class="block md:hidden">
+    <div class="relative w-full overflow-clip">
+      <RegistrationBackground variant="mobile" client:visible />
+      <MobileContent />
+    </div>
+  </div>
+</section>
+
+<style>
+  .registration-scale-wrapper {
+    width: min(1440px, 100vw);
+    aspect-ratio: 1440 / 909;
+  }
+
+  .registration-scale-inner {
+    --registration-scale: min(1, 100vw / 1440);
+    width: 1440px;
+    height: 909px;
+    transform-origin: top center;
+    transform: scale(var(--registration-scale));
+  }
+
+  @media (min-width: 1440px) {
+    .registration-scale-inner {
+      left: 50%;
+      transform: translateX(-50%) scale(1);
+    }
+  }
+</style>

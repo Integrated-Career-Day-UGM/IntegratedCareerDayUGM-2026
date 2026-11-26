@@ -1,0 +1,28 @@
+---
+// "Alur Pendaftaran" heading.
+interface Props {
+  variant: 'desktop' | 'mobile';
+}
+
+const { variant } = Astro.props;
+const isDesktop = variant === 'desktop';
+---
+
+<div
+  class={isDesktop
+    ? 'absolute left-1/2 top-[34px] z-20 flex h-[77.98px] w-[479.015px] -translate-x-1/2 items-center justify-center'
+    : 'relative z-20 flex justify-center pb-2 pt-8'}
+  data-name="registration-title"
+>
+  <p
+    class={isDesktop
+      ? 'font-priego w-[477px] rotate-[-2.41deg] text-center text-[57.996px] font-bold leading-normal text-white'
+      : 'font-priego text-center text-[34px] font-bold leading-tight text-white'}
+    style={{
+      WebkitTextStroke: isDesktop ? '3px var(--icd-teal-dark)' : '2.5px var(--icd-teal-dark)',
+      paintOrder: 'stroke fill',
+    }}
+  >
+    Alur Pendaftaran
+  </p>
+</div>

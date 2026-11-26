@@ -1,0 +1,44 @@
+---
+// Desktop company-session rundown.
+// Uses the friend's pre-exported 1440×1481 schedule artwork as the base and
+// overlays the data-driven day rows on top.
+import ScheduleDay from './ScheduleDay.tsx';
+import { scheduleDays } from './data';
+---
+
+<div class="absolute inset-0 z-10" data-name="desktop-schedule-content">
+  <img
+    src="/landing/schedule/original.svg"
+    alt=""
+    width="1440"
+    height="1481"
+    class="pointer-events-none absolute inset-0 size-full"
+  />
+
+  <img
+    src="/landing/schedule/heading-mobile.svg"
+    alt="Company Session Rundown"
+    class="absolute left-[142px] top-[80px] w-[450px] max-w-none"
+  />
+
+  <div class="absolute left-[346px] top-[calc(20%+37.8px)]">
+    <ScheduleDay day={scheduleDays[0]} variant="desktop" client:visible />
+  </div>
+
+  <div class="absolute left-[342px] top-[calc(60%+35.4px)]">
+    <ScheduleDay day={scheduleDays[1]} variant="desktop" client:visible />
+  </div>
+
+  <img
+    src="/landing/schedule/tomorrow-badge.svg"
+    alt=""
+    class="pointer-events-none absolute left-[123px] top-[871px] h-[201px] w-[186px]"
+  />
+
+  <a
+    href="/map/#zone=presentation"
+    class="figma-link absolute right-[181px] top-[1370px] bg-[var(--icd-lime)] px-5 py-2.5 font-priego font-bold text-[var(--icd-ink)]"
+  >
+    Lihat rundown lengkap ↗
+  </a>
+</div>

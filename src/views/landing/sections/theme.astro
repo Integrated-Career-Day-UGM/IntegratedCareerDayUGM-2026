@@ -1,0 +1,132 @@
+---
+// "From One Spark / Beyond a Thousand Vision" theme section.
+// Faithful to Figma node 1487:20569: the header, TV, desk, title and Sparky
+// card are exported as SVG/PNG from the exact nodes instead of being rebuilt
+// in CSS. Percent positions let the 390×796 composition scale responsively.
+---
+
+<section
+  class="theme-section relative w-full overflow-clip"
+  style="background-image: linear-gradient(168.105deg, #f4faff 9.9516%, #6896e0 41.38%, #05123d 73.446%)"
+  data-name="Theme and Executive Summary"
+  id="tema"
+>
+  <div class="theme-stage">
+    {/* Pixel accents */}
+    <img
+      src="/landing/theme/theme-pixel-tr.svg"
+      alt=""
+      class="theme-layer z-0"
+      style="left: 75.64%; top: -3.77%; width: 40.31%"
+      loading="lazy"
+      decoding="async"
+    />
+    <img
+      src="/landing/theme/theme-pixel-left.svg"
+      alt=""
+      class="theme-layer z-0"
+      style="left: -10.51%; top: 58.04%; width: 48.68%"
+      loading="lazy"
+      decoding="async"
+    />
+    <img
+      src="/landing/theme/theme-pixel-right.svg"
+      alt=""
+      class="theme-layer z-0"
+      style="left: 72.56%; top: 80.28%; width: 48.68%"
+      loading="lazy"
+      decoding="async"
+    />
+
+    {/* Desk + computer */}
+    <img
+      src="/landing/theme/theme-desk.png"
+      alt=""
+      class="theme-layer z-10"
+      style="left: -6.67%; top: 38.07%; width: 104.47%"
+      loading="lazy"
+      decoding="async"
+    />
+    <img
+      src="/landing/theme/theme-tv.png"
+      alt="Retro teal computer showing UGM Integrated Career Days"
+      class="theme-layer z-20"
+      style="left: 28.72%; top: 26.65%; width: 61.7%"
+      loading="lazy"
+      decoding="async"
+    />
+
+    {/* Header artwork (exported node 1493:23966) */}
+    <p class="theme-kicker theme-layer z-30 font-poppins font-medium text-[#1f2f48]">
+      Tema kami tahun ini
+    </p>
+    <p class="theme-event theme-layer z-30 font-poppins font-medium text-[#1f2f48]" style="left: 21.79%; top: 7.29%; width: 30.77%">
+      Integrated Career<br />Day 2026
+    </p>
+    <img
+      src="/landing/theme/theme-header.svg"
+      alt="From One Spark"
+      class="theme-layer z-20"
+      style="left: 9.74%; top: 6.03%; width: 64.31%"
+      loading="lazy"
+      decoding="async"
+    />
+
+    {/* Mid-page title (exported node 1493:24272) */}
+    <img
+      src="/landing/theme/theme-beyond.svg"
+      alt="Beyond a Thousand Vision"
+      class="theme-layer z-30"
+      style="left: 20.51%; top: 48.87%; width: 70.43%"
+      loading="lazy"
+      decoding="async"
+    />
+
+    {/* Sparky card stack (exported node 1493:24558) */}
+    <img
+      src="/landing/theme/theme-sparky.png"
+      alt="Sparky, the ICD 2026 mascot card"
+      class="theme-layer z-30"
+      style="left: 24.36%; top: 67.34%; width: 54.54%"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+</section>
+
+<style>
+  .theme-stage {
+    position: relative;
+    width: 100%;
+    max-width: 390px;
+    margin: 0 auto;
+    aspect-ratio: 390 / 796;
+    container-type: inline-size;
+  }
+
+  .theme-layer {
+    position: absolute;
+    display: block;
+    max-width: none;
+    margin: 0;
+  }
+
+  .theme-kicker {
+    left: 9.74%;
+    top: 3.01%;
+    font-size: 2.82cqw;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .theme-event {
+    font-size: 3.6cqw;
+    line-height: 1.15;
+  }
+
+  @media (min-width: 768px) {
+    .theme-stage {
+      max-width: 585px;
+    }
+  }
+</style>

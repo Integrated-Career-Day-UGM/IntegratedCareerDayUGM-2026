@@ -1,0 +1,45 @@
+---
+// Native mobile step card matching Figma node 1487:18218.
+import { ICONS, type Step } from './data';
+
+interface Props {
+  step: Step;
+}
+
+const { step } = Astro.props;
+const icon = step.icon ? ICONS[step.icon] : null;
+---
+
+<div
+  class="relative flex w-full shrink-0 flex-col gap-[8px] bg-[#22969a] p-[12px] text-white"
+  style={step.mobileHeight
+    ? { height: `${step.mobileHeight}px` }
+    : { minHeight: '92px' }}
+  data-name="mobile-step-card"
+>
+  <div class="flex w-full shrink-0 items-center justify-between">
+    <span class="font-priego shrink-0 whitespace-nowrap text-[22px] font-bold leading-[26px] text-white">
+      {step.number}
+    </span>
+    {icon ? (
+      <img
+        alt=""
+        src={icon.src}
+        class="size-[22px] shrink-0 object-cover"
+        loading="lazy"
+        decoding="async"
+      />
+    ) : (
+      <span class="size-[22px]" aria-hidden="true" />
+    )}
+  </div>
+
+  <div class="flex min-h-px flex-1 flex-col justify-end break-words font-priego text-[12.5px] font-bold leading-[17px] text-white">
+    {step.segments.map((seg) => (
+      <>
+        {seg.newLine && <br />}
+        <span>{seg.text}</span>
+      </>
+    ))}
+  </div>
+</div>

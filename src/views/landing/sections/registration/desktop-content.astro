@@ -1,0 +1,18 @@
+---
+// Desktop registration content layer.
+import TitleBlock from './title-block.astro';
+import RegistrationColumn from './RegistrationColumn.astro';
+import { columns } from './data';
+---
+
+<div class="absolute inset-0 z-10" data-name="desktop-registration-content">
+  <TitleBlock variant="desktop" />
+
+  <div class="absolute left-[193px] top-[199px]">
+    <RegistrationColumn column={columns[0]} variant="desktop" />
+  </div>
+
+  <div class="absolute left-[731px] top-[198px]">
+    <RegistrationColumn column={columns[1]} variant="desktop" />
+  </div>
+</div>

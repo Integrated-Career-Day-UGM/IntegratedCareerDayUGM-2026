@@ -1,8 +1,6 @@
 import { useMemo } from 'react';
 import {
   event,
-  getArea,
-  getSessionsByCompany,
   getStageSessionsByCompany,
   getTrack,
   getWalkInSessionsByCompany,
@@ -10,6 +8,7 @@ import {
 } from '../../lib/data';
 import { formatTime } from '../../lib/map/happening-carousel';
 import { useMapStore } from '../../stores/mapStore';
+import EmptyState from './EmptyState';
 
 type SessionRow = {
   id: string;
@@ -81,18 +80,6 @@ export default function CompanySessions({
         walkIn: { room: booking.room, dayId: booking.dayId },
       });
     }
-    for (const session of getSessionsByCompany(companyId ?? '')) {
-      out.push({
-        id: session.id,
-        label: getTrack(session.trackId)?.label ?? session.title,
-        title: session.title,
-        place: getArea(event.defaultVenueId, session.areaId)?.name ?? '',
-        dayId: session.dayId,
-        start: session.start,
-        end: session.end,
-        highlight: false,
-      });
-    }
     for (const stage of getStageSessionsByCompany(companyId ?? '')) {
       const speaker = stage.speakers[0]?.name;
       out.push({
@@ -118,7 +105,19 @@ export default function CompanySessions({
     return out;
   }, [companyId, companyName, highlightId]);
 
-  if (rows.length === 0) return null;
+  if (rows.length === 0) {
+    return (
+      <div className="border-t border-line p-3">
+        <div className="section-label mb-2">{ui.companySessions.title}</div>
+        <EmptyState
+          variant="inline"
+          title={ui.companySessions.emptyTitle}
+          description={ui.companySessions.emptyBody}
+          className="border-0 bg-transparent p-0"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="border-t border-line p-3">

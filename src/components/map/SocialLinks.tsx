@@ -32,7 +32,7 @@ export default function SocialLinks({
 
   return (
     <div
-      className={rail ? 'flex flex-col items-center gap-0.5' : 'flex items-center gap-0.5'}
+      className={rail ? 'flex flex-col items-center gap-1' : 'flex items-center gap-1'}
       role="group"
       aria-label={ui.social.title}
     >
@@ -45,7 +45,7 @@ export default function SocialLinks({
           aria-label={`${social.label}: ${social.handle}`}
           title={`${social.label} — ${social.handle}`}
           className={`flex items-center justify-center transition-colors hover:text-white focus-visible:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-pink)] active:text-white ${
-            rail ? 'size-8 text-[#71717a]' : 'size-7 text-[#9a9aa2]'
+            rail ? 'size-9 text-[#71717a]' : 'size-11 text-[#9a9aa2]'
           }`}
         >
           <svg
@@ -53,7 +53,7 @@ export default function SocialLinks({
             role="img"
             aria-hidden="true"
             focusable="false"
-            className={rail ? 'size-[15px]' : 'size-[14px]'}
+            className={rail ? 'size-[18px]' : 'size-[22px]'}
             fill="currentColor"
           >
             <path d={social.path} />

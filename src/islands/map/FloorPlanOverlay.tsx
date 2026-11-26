@@ -9,6 +9,9 @@ import {
   PLAN_SPRITES,
 } from '../../lib/map/floorplan';
 
+// PP KAGAMA sits at booth B; counseling is a label over it, not a tab.
+const COUNSELING_SHAPE = BOOTH_SHAPES.find((shape) => shape.id === 'b');
+
 /**
  * Hall C1 floor-plan, implemented from the Figma frame "Frame 1686561279"
  * (node 1729:23400, 818 x 820). The root element is warped onto the map by
@@ -295,19 +298,33 @@ const FloorPlanOverlay = forwardRef<HTMLDivElement>(function FloorPlanOverlay(_,
                 >
                   {shape.code}
                 </span>
-                {shape.id === 'a' && (
-                  <span
-                    className="mt-0.5 leading-none text-white"
-                    style={{ fontFamily: 'Priego, sans-serif', fontSize: 7, fontWeight: 700 }}
-                  >
-                    CAREER STAR
-                  </span>
-                )}
               </div>
             </div>
           </div>
         );
       })}
+
+      {/* Counseling tooltip above PP KAGAMA / booth B. */}
+      {COUNSELING_SHAPE && (
+        <div
+          className="pointer-events-none absolute flex flex-col items-center"
+          style={{
+            left: COUNSELING_SHAPE.left + COUNSELING_SHAPE.w / 2,
+            top: COUNSELING_SHAPE.top - 38,
+            zIndex: 11,
+            transform: 'translateX(-50%)',
+          }}
+          aria-hidden="true"
+        >
+          <span
+            className="whitespace-nowrap rounded-[2px] border border-white/25 bg-[#0a0a0c] px-2 py-1 text-[16px] font-bold uppercase leading-none tracking-[0.08em] text-white"
+            style={{ fontFamily: 'Inter, sans-serif' }}
+          >
+            Counseling
+          </span>
+          <span className="h-2 w-px bg-white/25" />
+        </div>
+      )}
 
       {selectedFacilityId &&
         (() => {

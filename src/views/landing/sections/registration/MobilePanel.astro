@@ -1,0 +1,43 @@
+---
+// Native mobile registration panel matching Figma node 1487:18218.
+import MobileStepCard from './MobileStepCard.astro';
+import type { RegistrationColumn } from './data';
+
+interface Props {
+  column: RegistrationColumn;
+}
+
+const { column } = Astro.props;
+---
+
+<div class="relative flex w-full flex-col gap-4 border-[1.5px] border-solid border-[#22969a] p-4" data-name={`mobile-panel-${column.title}`}>
+  <div class="flex w-full items-start gap-3">
+    <div class="flex min-w-px flex-1 flex-col gap-[10px]">
+      {column.left.map((step) => <MobileStepCard step={step} />)}
+    </div>
+    <div class="flex min-w-px flex-1 flex-col gap-[10px]">
+      {column.right.map((step) => <MobileStepCard step={step} />)}
+    </div>
+  </div>
+
+  <a
+    href={column.ctaHref}
+    target="_blank"
+    rel="noreferrer"
+    aria-label={column.ctaLabel}
+    class="figma-link flex min-h-[44px] w-full items-center justify-center gap-[12.885px] bg-[#0f0f0f] px-[17.841px] py-[5.947px]"
+  >
+    <span class="flex rotate-180 items-center justify-center">
+      <img alt="" src={column.ctaIcon} class="block size-[20.294px] max-w-none" />
+    </span>
+    <span class="font-priego whitespace-nowrap text-[16px] font-bold leading-normal text-white">
+      {column.ctaLabel}
+    </span>
+  </a>
+
+  {/* Corner pixels */}
+  <div class="absolute -left-[5.5px] -top-[5.5px] size-2 bg-[#22969a]" aria-hidden="true" />
+  <div class="absolute -right-[5.5px] -top-[5.5px] size-2 bg-[#22969a]" aria-hidden="true" />
+  <div class="absolute -bottom-[5.5px] -left-[5.5px] size-2 bg-[#22969a]" aria-hidden="true" />
+  <div class="absolute -bottom-[5.5px] -right-[5.5px] size-2 bg-[#22969a]" aria-hidden="true" />
+</div>

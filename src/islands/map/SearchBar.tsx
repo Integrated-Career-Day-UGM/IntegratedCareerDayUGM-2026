@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useMapStore } from '../../stores/mapStore';
@@ -9,7 +9,7 @@ import { MapFluidRoot } from '../../components/map/map-fluid-root';
 import SearchFilters from '../../components/map/SearchFilters';
 import { ui } from '../../lib/data';
 
-export default function SearchBar() {
+export default function SearchBar({ tuneFilter = false }: { tuneFilter?: boolean }) {
   const searchQuery = useMapStore((s) => s.searchQuery);
   const setSearchQuery = useMapStore((s) => s.setSearchQuery);
   const setSidebarTab = useMapStore((s) => s.setSidebarTab);
@@ -17,6 +17,7 @@ export default function SearchBar() {
     (s) => s.searchFilters.tags.length + s.searchFilters.types.length,
   );
   const inputRef = useRef<HTMLInputElement>(null);
+  const searchId = useId();
 
   // Origin-aware filter popover: anchored to the trigger, closes on outside
   // click / Esc, focus enters the panel and returns to the button.
@@ -76,18 +77,23 @@ export default function SearchBar() {
   return (
     <MapFluidRoot>
       <div className="flex items-center gap-2">
-        <div className="relative h-[42px] flex-1 rounded-2xl border-[3px] border-[#6a6a6a]/80 bg-[#2a2a2a]/40 backdrop-blur-md md:h-8 md:rounded-none md:border md:border-[#6a6a6a]/60 md:bg-field/30 md:backdrop-blur-none">
+        <div className="relative min-h-14 flex-1 rounded-[18px] border-[3px] border-[#6a6a6a]/80 bg-[#1b1b1f]/95 md:h-8 md:min-h-0 md:rounded-none md:border md:border-[#6a6a6a]/60 md:bg-field/30" data-search-field>
           <div className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 text-[#d4d4d8] md:left-2.5">
-            <Search size={16} strokeWidth={1.8} />
+            <Search size={16} strokeWidth={1.8} className="h-[1.125rem] w-[1.125rem] md:h-4 md:w-4" />
           </div>
+          <label htmlFor={searchId} className="sr-only">
+            {ui.search.placeholder}
+          </label>
           <input
             ref={inputRef}
+            id={searchId}
             type="text"
+            name="search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={() => setSidebarTab('search')}
             placeholder={ui.search.placeholder}
-            className="search-input h-full w-full bg-transparent pl-10 pr-20 text-[15px] text-white placeholder-[#d4d4d8] outline-none md:pl-9 md:pr-16 md:text-[13px]"
+            className="search-input w-full bg-transparent py-3 pl-11 pr-20 text-base leading-6 text-white placeholder-[#d4d4d8] outline-none md:h-full md:py-0 md:pl-9 md:pr-16 md:text-[0.8125rem] md:leading-normal"
           />
           {searchQuery ? (
             <button
@@ -116,6 +122,8 @@ export default function SearchBar() {
           <button
             type="button"
             ref={filterButtonRef}
+            data-search-filter
+            data-layout-tune={tuneFilter ? 'filter-button' : undefined}
             onClick={() => {
               setSidebarTab('search');
               setFiltersOpen((open) => !open);
@@ -123,7 +131,7 @@ export default function SearchBar() {
             aria-label={ui.search.filters.trigger}
             aria-expanded={filtersOpen}
             aria-haspopup="dialog"
-            className={`relative flex h-[42px] w-[42px] items-center justify-center rounded-2xl border-[3px] border-[#6a6a6a]/80 bg-[#2a2a2a]/40 text-[#d4d4d8] backdrop-blur-md transition-colors md:h-8 md:w-8 md:rounded-none md:border md:border-[#6a6a6a]/60 md:bg-field/30 md:backdrop-blur-none ${
+            className={`relative flex h-14 w-14 items-center justify-center rounded-[18px] border-[3px] border-[#6a6a6a]/80 bg-[#1b1b1f]/95 text-[#d4d4d8] transition-colors md:h-8 md:w-8 md:rounded-none md:border md:border-[#6a6a6a]/60 md:bg-field/30 ${
               filtersOpen || activeFilterCount > 0
                 ? 'text-white md:border-[var(--accent-pink)]/60 md:bg-[#26262b]'
                 : 'md:hover:bg-[#26262b] md:hover:text-white'

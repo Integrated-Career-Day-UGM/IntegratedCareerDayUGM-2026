@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { Bookmark } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
 import { track } from '../../lib/analytics';
+import EmptyState from '../../components/map/EmptyState';
 import {
   useFluidHover,
   useRegisterFluidHoverItem,
@@ -48,15 +49,18 @@ function BoothRow({
   const ref = useRef<HTMLDivElement>(null);
   useRegisterFluidHoverItem(registerItem, index, ref);
   return (
-    <div ref={ref} className={`relative flex items-center ${rowState(selected)}`}>
+    <div
+      ref={ref}
+      className={`relative flex items-center border border-transparent transition-colors md:hover:border-[var(--accent-pink)] ${rowState(selected)}`}
+    >
       <button
         type="button"
         onClick={onClick}
         onFocus={() => index !== undefined && onRowFocus?.(index)}
-        className="flex min-w-0 flex-1 items-center gap-2.5 px-3 py-2 text-left text-[13px] font-semibold leading-[1.2]"
+        className="flex min-w-0 flex-1 items-center gap-2.5 px-3 py-2.5 text-left text-[0.9375rem] font-semibold leading-[1.25] md:py-2 md:text-[13px]"
       >
         <span
-          className="font-heading min-w-[30px] shrink-0 rounded-[2px] px-1 text-center text-[12px] font-bold leading-[1.5] text-white"
+          className="font-heading min-w-[30px] shrink-0 rounded-[2px] px-1 text-center text-[0.8125rem] font-bold leading-[1.5] text-white md:text-[12px]"
           style={{ backgroundColor: zoneColor ?? 'var(--color-chip)' }}
         >
           {boothCode}
@@ -67,12 +71,12 @@ function BoothRow({
         <button
           type="button"
           onClick={onToggleBookmark}
-          className={`shrink-0 p-2 transition-[transform,colors] active:scale-95 ${
+          className={`shrink-0 p-3 transition-[transform,colors] active:scale-95 md:p-2 ${
             bookmarked ? 'text-[var(--accent-pink)]' : 'text-ink-dim hover:text-white'
           }`}
           aria-label={bookmarkLabel}
         >
-          <Bookmark size={16} fill={bookmarked ? 'currentColor' : 'none'} />
+          <Bookmark size={20} fill={bookmarked ? 'currentColor' : 'none'} className="md:h-4 md:w-4" />
         </button>
       )}
     </div>
@@ -85,6 +89,8 @@ export default function VenueList() {
   const selectedBoothId = useMapStore((s) => s.selectedBoothId);
   const searchQuery = useMapStore((s) => s.searchQuery);
   const searchFilters = useMapStore((s) => s.searchFilters);
+  const setSearchQuery = useMapStore((s) => s.setSearchQuery);
+  const clearSearchFilters = useMapStore((s) => s.clearSearchFilters);
   const toggleBookmark = useMapStore((s) => s.toggleBookmark);
   // The array itself, not the isBookmarked() helper: without it the row
   // icons render once and never flip when toggled.
@@ -148,9 +154,18 @@ export default function VenueList() {
           </span>
         </div>
         {count === 0 ? (
-          <div className="panel-list px-3 py-4 text-[13px] text-ink-dim">
-            {ui.search.emptyResults}
-          </div>
+          <EmptyState
+            className="panel-list"
+            title={ui.search.emptyTitle}
+            description={ui.search.emptyBody}
+            action={{
+              label: ui.search.emptyAction,
+              onClick: () => {
+                setSearchQuery('');
+                clearSearchFilters();
+              },
+            }}
+          />
         ) : (
           <div className="panel-list reveal-items divide-y divide-[#2a2a2a]">
             {filteredBooths.map((booth, i) => {

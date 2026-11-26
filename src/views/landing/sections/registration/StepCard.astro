@@ -1,0 +1,57 @@
+---
+// A single numbered registration step card.
+import { ICONS, type Step } from './data';
+
+interface Props {
+  step: Step;
+  variant?: 'desktop' | 'mobile';
+}
+
+const { step, variant = 'desktop' } = Astro.props;
+const isDesktop = variant === 'desktop';
+const icon = step.icon ? ICONS[step.icon] : null;
+
+const numberSize = step.number === '1' ? (isDesktop ? 50.984 : 34) : isDesktop ? 32.683 : 24;
+const cardHeight = isDesktop ? step.height : undefined;
+const minHeight = isDesktop ? undefined : Math.max(78, Math.round(step.height * 0.6));
+---
+
+<div
+  class:list={[
+    'relative flex flex-col justify-between overflow-hidden bg-[#22969a] text-white',
+    isDesktop ? 'p-[15.899px] py-[9px]' : 'rounded-sm p-3',
+  ]}
+  style={{ height: cardHeight ? `${cardHeight}px` : undefined, minHeight: minHeight ? `${minHeight}px` : undefined }}
+  data-name="step-card"
+>
+  <span
+    class="font-priego font-bold leading-none text-white"
+    style={{ fontSize: `${numberSize}px` }}
+  >
+    {step.number}
+  </span>
+
+  {icon && (
+    <img
+      alt=""
+      src={icon.src}
+      class="absolute right-[12px] top-[10px] max-w-none"
+      style={{ width: `${isDesktop ? icon.w : icon.w * 0.62}px`, height: `${isDesktop ? icon.h : icon.h * 0.62}px` }}
+    />
+  )}
+
+  <p
+    class:list={[
+      'break-words font-poppins leading-[1.05] text-white',
+      isDesktop ? 'text-[18px]' : 'text-[14px]',
+      icon ? 'max-w-[78%]' : 'max-w-full',
+    ]}
+  >
+    {step.segments.map((seg) => (
+      <>
+        {seg.newLine && <br />}
+        <span class:list={[seg.bold && 'font-bold', seg.italic && 'italic']}>{seg.text}</span>
+      </>
+    ))}
+  </p>
+</div>

@@ -21,7 +21,7 @@ export default function CompassButton({
     <button
       type="button"
       onClick={onClick}
-      className="group flex h-10 w-10 items-center justify-center rounded-full border border-[#34343a] bg-[#141416] text-white transition-[transform,colors] hover:border-[#4a4a52] active:scale-95"
+      className="group flex h-11 w-11 items-center justify-center rounded-full border border-[#34343a] bg-[#141416] text-white transition-[transform,colors] hover:border-[#4a4a52] active:scale-95 md:h-10 md:w-10"
       aria-label={label}
       title={label}
     >

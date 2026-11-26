@@ -84,6 +84,23 @@
   --font-body: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
+/* Mobile-first text steps. The dense desktop ladder (13/12/11/10) stays for
+   the 390px sidebar, but phones get one readable step up while fixed control
+   heights still fit (14/20 in 36px, 13/18 in 28px). Declared in rem so the
+   `text-scale` meta and browser zoom can grow every consuming component. */
+@media (width < 48rem) {
+  :root {
+    --fs-body: 0.875rem;
+    --lh-body: 1.4286;
+    --fs-body-compact: 0.8125rem;
+    --lh-body-compact: 1.3846;
+    --fs-caption: 0.8125rem;
+    --lh-caption: 1.3846;
+    --fs-micro: 0.75rem;
+    --lh-micro: 1.3333;
+  }
+}
+
 html,
 body {
   height: 100%;
@@ -109,10 +126,22 @@ button {
   font: inherit;
 }
 
+/* The mobile filter popover lives inside #map-chrome (z-30). Raise that
+   stacking context only while the filter is open so the popover can sit
+   above the bottom sheet (z-40) without lifting the whole chrome permanently. */
+#map-chrome:has([data-search-filter][aria-expanded='true']) {
+  z-index: 50;
+}
+
 /* Press feedback for all buttons (low specificity so Tailwind utilities can override) */
+:where(button),
+:where([role='button']) {
+  transition: scale 200ms ease-out;
+}
+
 :where(button):active,
 :where([role='button']):active {
-  transform: scale(0.97);
+  scale: 0.97;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -125,7 +154,7 @@ button {
   }
   :where(button):active,
   :where([role='button']):active {
-    transform: none;
+    scale: none;
   }
   :is(.reveal-landing, .reveal-landing-subtle) {
     --reveal-distance: 0px;
@@ -383,6 +412,28 @@ button {
   }
 }
 
+/* One-shot empty-state entrance: never loops, never delays interaction. */
+.empty-state-enter {
+  animation: empty-state-enter 200ms var(--ease-out) both;
+}
+
+@keyframes empty-state-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .empty-state-enter {
+    animation: none;
+  }
+}
+
 .map-skeleton::after {
   content: '';
   position: absolute;
@@ -540,6 +591,13 @@ button {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #8f8f8f;
+}
+
+@media (width < 48rem) {
+  .section-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+  }
 }
 
 .panel-list {
