@@ -1,5 +1,5 @@
-@import 'tailwindcss';
 @import './fonts.css';
+@import 'tailwindcss';
 
 /* shadcn/FF theme tokens mapped onto the granite palette (§0/§2). The FF
    components consume these via Tailwind utilities — bg-hover (the gliding
