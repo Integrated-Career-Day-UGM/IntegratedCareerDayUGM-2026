@@ -4,7 +4,7 @@ import SelectionFrame from '../../components/ui/SelectionFrame';
 import Shuffle from '../../components/map/Shuffle';
 import { ui } from '../../lib/data';
 
-const MIN_VISIBLE_MS = 400;
+const MIN_VISIBLE_MS = 250;
 const MAX_VISIBLE_MS = 6000;
 const EXIT_MS = 400;
 
@@ -21,6 +21,21 @@ const lockupLine2 = lockupRest.join(' ');
 export default function MapSplash() {
   const [active, setActive] = useState(false);
   const [done, setDone] = useState(false);
+  // Fewer columns on mobile => noticeably larger mosaic pixels.
+  const [gridSize, setGridSize] = useState(() =>
+    typeof window !== 'undefined' &&
+    window.matchMedia('(max-width: 767px)').matches
+      ? 12
+      : 24,
+  );
+
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 767px)');
+    const sync = () => setGridSize(media.matches ? 12 : 24);
+    sync();
+    media.addEventListener('change', sync);
+    return () => media.removeEventListener('change', sync);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -110,7 +125,7 @@ export default function MapSplash() {
           </div>
         }
         secondContent={<div className="absolute inset-0" />}
-        gridSize={24}
+        gridSize={gridSize}
         pixelColor="#2a2a2a"
         pixelFill="#2a2a2a"
         pixelBorder="#ff2d6f"

@@ -44,8 +44,8 @@ export default function SocialLinks({
           rel="noreferrer"
           aria-label={`${social.label}: ${social.handle}`}
           title={`${social.label} — ${social.handle}`}
-          className={`flex items-center justify-center transition-colors hover:text-white focus-visible:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-pink)] active:text-white ${
-            rail ? 'size-9 text-[#71717a]' : 'size-11 text-[#9a9aa2]'
+          className={`group flex items-center justify-center transition-[color,transform] duration-200 hover:-translate-y-0.5 hover:text-white focus-visible:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-pink)] active:scale-95 active:text-white motion-reduce:transform-none ${
+            rail ? 'size-9 text-[#71717a]' : 'size-9 text-[#9a9aa2]'
           }`}
         >
           <svg
@@ -53,7 +53,9 @@ export default function SocialLinks({
             role="img"
             aria-hidden="true"
             focusable="false"
-            className={rail ? 'size-[18px]' : 'size-[22px]'}
+            className={`transition-transform duration-200 group-hover:scale-110 ${
+              rail ? 'size-[18px]' : 'size-[18px]'
+            }`}
             fill="currentColor"
           >
             <path d={social.path} />

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&display=swap');
+
 /* Priego (local display face) — one @font-face per real weight.
    NOTE: the family ships no Medium cut; weight 500 falls back to Regular
    via CSS font matching (500 → 400), so don't declare a fake 500. */
@@ -71,4 +73,9 @@
   font-weight: 900;
   font-style: normal;
   font-display: swap;
+}
+
+/* Canvas-written links (desktop registration paper). */
+.font-canvas {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
 }
