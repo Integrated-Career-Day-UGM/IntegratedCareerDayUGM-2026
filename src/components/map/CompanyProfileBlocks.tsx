@@ -84,7 +84,7 @@ export default function CompanyProfileBlocks({ profile }: { profile?: CompanyPro
       {links.length > 0 && (
         <section className="border-t border-line p-3">
           <div className="section-label mb-2">{ui.boothDetail.programLinksLabel}</div>
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-col gap-1.5">
             {links.map((link, index) => {
               const key = `${link.label}-${index}`;
               return link.url ? (
@@ -93,15 +93,15 @@ export default function CompanyProfileBlocks({ profile }: { profile?: CompanyPro
                   href={link.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1 border border-line bg-[#1a1a1e] px-2.5 py-1.5 text-[0.75rem] font-semibold text-white transition-colors hover:border-[var(--accent-pink)] md:text-[11px]"
+                  className="flex min-h-11 items-center justify-between gap-3 border border-line bg-[#1a1a1e] px-3 py-2.5 text-[0.8125rem] font-semibold text-white transition-colors hover:border-[var(--accent-pink)] md:text-[12.5px]"
                 >
-                  {link.label}
-                  <ArrowUpRight size={12} strokeWidth={2} />
+                  <span className="min-w-0 break-words">{link.label}</span>
+                  <ArrowUpRight size={14} strokeWidth={2} className="shrink-0" />
                 </a>
               ) : (
                 <span
                   key={key}
-                  className="inline-flex items-center border border-line bg-[#1a1a1e] px-2.5 py-1.5 text-[0.75rem] font-semibold text-[#a1a1aa] md:text-[11px]"
+                  className="flex min-h-11 items-center border border-line bg-[#1a1a1e] px-3 py-2.5 text-[0.8125rem] font-semibold text-[#a1a1aa] md:text-[12.5px]"
                 >
                   {link.label}
                 </span>
@@ -109,7 +109,7 @@ export default function CompanyProfileBlocks({ profile }: { profile?: CompanyPro
             })}
           </div>
           {profile.cta && (
-            <p className="mt-2 text-[0.75rem] leading-snug text-[#8f8f8f] md:text-[11px]">
+            <p className="mt-2.5 text-[0.8125rem] leading-relaxed text-[#a1a1aa] md:text-[12.5px]">
               {profile.cta}
             </p>
           )}

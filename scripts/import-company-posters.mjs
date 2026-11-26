@@ -31,6 +31,7 @@ const FOLDER_ALIASES = {
   elnusa: 'e11-elnusa',
   monee: 'c2-monee',
   ocbc: 'e14-ocbc',
+  'ocbc new': 'e14-ocbc',
   odoo: 'c4-odoo',
   'paragon corp': 'd1-paragon',
   polygon: 'd3-polygon',

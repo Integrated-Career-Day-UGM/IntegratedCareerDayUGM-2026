@@ -68,18 +68,18 @@
     "description": "Odoo develops open-source business applications for CRM, sales, accounting, inventory, and operations, used by companies worldwide through its Belgium-based software platform."
   },
   {
-    "id": "c5-hutama",
-    "name": "PT Hutama Karya (Persero)",
-    "shortName": "Hutama Karya",
+    "id": "c5-hakaaston",
+    "name": "PT HAKAASTON (HKA)",
+    "shortName": "Hakaaston",
     "tags": [
       "Construction",
       "BUMN"
     ],
-    "websiteUrl": "https://hutamakarya.com",
+    "websiteUrl": "https://www.hakaaston.co.id/",
     "programUrl": null,
     "logoUrl": null,
     "openings": [],
-    "description": "PT Hutama Karya (Persero) is a state-owned Indonesian construction company responsible for the Trans-Sumatra Toll Road and other road, bridge, and building projects."
+    "description": "PT Hakaaston (HKA) is a subsidiary of state-owned PT Hutama Karya (Persero), producing construction materials such as hot-mix asphalt and precast concrete, and operating and maintaining roads."
   },
   {
     "id": "c6-zurich",
@@ -98,7 +98,7 @@
   },
   {
     "id": "d1-paragon",
-    "name": "Paragon Corps",
+    "name": "ParagonCorp",
     "shortName": "Paragon",
     "tags": [
       "FMCG",
@@ -166,13 +166,13 @@
   },
   {
     "id": "e2-surya",
-    "name": "PT Surya Semesta Internusa Tbk",
-    "shortName": "Surya Semesta",
+    "name": "PT Surya Semesta Internusa Tbk & Group",
+    "shortName": "Surya Internusa",
     "tags": [
       "Construction",
       "Property"
     ],
-    "websiteUrl": "https://www.suryasemesta.com",
+    "websiteUrl": "https://www.suryainternusa.com",
     "programUrl": null,
     "logoUrl": null,
     "openings": [],

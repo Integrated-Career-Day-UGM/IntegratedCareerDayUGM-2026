@@ -51,7 +51,7 @@ export default function EventInfo() {
 
   return (
     <div className="reveal-product">
-      <div className="section-label mb-2.5 border-b border-[#232326] pb-2">
+      <div className="section-label mb-2.5 border-b border-[#232326] pb-2 text-white!">
         {ui.info.title}
       </div>
 

@@ -889,3 +889,22 @@ export const SEAT_DOTS: Point[] = [
   [542.0, 309.48], [535.21, 305.3], [528.42, 301.11], [521.63, 296.93], [514.84, 292.75],
   [535.06, 320.74], [528.27, 316.56], [521.48, 312.38], [514.69, 308.19], [507.9, 304.01],
 ];
+
+export type PlanLabel = {
+  id: string;
+  label: string;
+  left: number;
+  top: number;
+  w: number;
+  h: number;
+  rotate: number;
+  color: string;
+  textColor: string;
+  fontSize: number;
+};
+
+/** Persistent / contextual frame labels (Career Star, Counseling). */
+export const PLAN_LABELS: PlanLabel[] = [
+  { id: 'career-star', label: 'CAREER STAR', left: 374, top: 410, w: 54, h: 30, rotate: 0, color: '#d7f24b', textColor: '#111111', fontSize: 9 },
+  { id: 'counseling-b', label: 'COUNSELING', left: 374, top: 442, w: 54, h: 14, rotate: 0, color: '#0a0a0c', textColor: '#ffffff', fontSize: 8 },
+];

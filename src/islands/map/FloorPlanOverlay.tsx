@@ -1,4 +1,5 @@
 import { forwardRef, useMemo } from 'react';
+import { Bookmark } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
 import { facilities } from '../../lib/data';
 import {
@@ -6,11 +7,10 @@ import {
   FACILITY_FRAME_POINTS,
   FRAME_HEIGHT,
   FRAME_WIDTH,
+  PLAN_LABELS,
   PLAN_SPRITES,
 } from '../../lib/map/floorplan';
 
-// PP KAGAMA sits at booth B; counseling is a label over it, not a tab.
-const COUNSELING_SHAPE = BOOTH_SHAPES.find((shape) => shape.id === 'b');
 
 /**
  * Hall C1 floor-plan, implemented from the Figma frame "Frame 1686561279"
@@ -22,6 +22,7 @@ const FloorPlanOverlay = forwardRef<HTMLDivElement>(function FloorPlanOverlay(_,
   const hoveredBoothId = useMapStore((s) => s.hoveredBoothId);
   const selectedBoothId = useMapStore((s) => s.selectedBoothId);
   const selectedFacilityId = useMapStore((s) => s.selectedFacilityId);
+  const bookmarkedIds = useMapStore((s) => s.bookmarkedIds);
   const activeBoothId = hoveredBoothId ?? selectedBoothId;
 
   // The plan's art never changes: build it once so hover/selection only
@@ -304,27 +305,68 @@ const FloorPlanOverlay = forwardRef<HTMLDivElement>(function FloorPlanOverlay(_,
         );
       })}
 
-      {/* Counseling tooltip above PP KAGAMA / booth B. */}
-      {COUNSELING_SHAPE && (
-        <div
-          className="pointer-events-none absolute flex flex-col items-center"
-          style={{
-            left: COUNSELING_SHAPE.left + COUNSELING_SHAPE.w / 2,
-            top: COUNSELING_SHAPE.top - 38,
-            zIndex: 11,
-            transform: 'translateX(-50%)',
-          }}
-          aria-hidden="true"
-        >
-          <span
-            className="whitespace-nowrap rounded-[2px] border border-white/25 bg-[#0a0a0c] px-2 py-1 text-[16px] font-bold uppercase leading-none tracking-[0.08em] text-white"
-            style={{ fontFamily: 'Inter, sans-serif' }}
+      {/* Saved-booth markers sit above the venue art. */}
+      {BOOTH_SHAPES.filter((shape) => bookmarkedIds.includes(shape.id)).map(
+        (shape) => (
+          <div
+            key={`bookmark-${shape.id}`}
+            className="pointer-events-none absolute"
+            style={{
+              left: shape.left + shape.w / 2,
+              top: shape.top + 6,
+              zIndex: 12,
+              transform: 'translateX(-50%)',
+            }}
+            aria-hidden="true"
           >
-            Counseling
-          </span>
-          <span className="h-2 w-px bg-white/25" />
-        </div>
+            <Bookmark
+              size={22}
+              fill="var(--accent-pink)"
+              stroke="none"
+              strokeWidth={0}
+              className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.65)]"
+            />
+          </div>
+        ),
       )}
+
+      {/* Career Star is persistent; Counseling is a small contextual tooltip. */}
+      {PLAN_LABELS.map((label) => {
+        if (label.id === 'counseling-b' && activeBoothId !== 'b') return null;
+        const careerStar = label.id === 'career-star';
+        return (
+          <div
+            key={label.id}
+            className="pointer-events-none absolute"
+            style={{
+              left: label.left,
+              top: label.top,
+              width: label.w,
+              zIndex: 11,
+              transform: `rotate(${label.rotate}deg)`,
+            }}
+            aria-hidden="true"
+          >
+            <div
+              className={
+                careerStar
+                  ? 'flex w-full items-center justify-center text-center font-bold uppercase leading-[0.9] tracking-[0.04em]'
+                  : 'flex w-full items-center justify-center whitespace-nowrap rounded-[2px] border border-white/25 uppercase leading-none tracking-[0.06em]'
+              }
+              style={{
+                minHeight: label.h,
+                background: careerStar ? label.color : '#0a0a0c',
+                color: careerStar ? label.textColor : label.textColor,
+                fontSize: label.fontSize,
+                fontFamily: 'Inter, sans-serif',
+                padding: careerStar ? '3px 4px' : '2px 3px',
+              }}
+            >
+              {label.label}
+            </div>
+          </div>
+        );
+      })}
 
       {selectedFacilityId &&
         (() => {

@@ -65,6 +65,9 @@ export default function HappeningNow() {
   const session = current.session;
   const live = current.live;
   const company = getCompany(session.companyId);
+  // Unrostered walk-in companies have no company row; the session carries the
+  // display name from walk-in-sessions.json.
+  const displayCompanyName = company?.name ?? session.companyName ?? null;
   const area = getArea(event.defaultVenueId, session.areaId);
   const areaName = session.trackId === 'stage' ? 'Panggung' : area?.name;
   // Save targets the company's booth in the session's area (bookmarks are booth-based).
@@ -73,6 +76,7 @@ export default function HappeningNow() {
 
   const next = current.next;
   const nextCompany = next ? getCompany(next.companyId) : null;
+  const nextDisplayName = nextCompany?.name ?? next?.companyName ?? null;
 
   const openSession = () => {
     if (session.trackId === 'stage') {
@@ -91,7 +95,7 @@ export default function HappeningNow() {
           live ? 'bg-white text-black' : 'bg-[#1c1c1c] text-ink-body'
         }`}
       >
-        {current.label}
+        {ui.happeningNow.scheduleLabel}
       </span>
 
       <div key={session.id} className="happening-enter">
@@ -105,7 +109,11 @@ export default function HappeningNow() {
                 live ? 'blink-dot' : ''
               }`}
             />
-            {live ? ui.happeningNow.liveLabel : ui.happeningNow.nextLabel}
+            {live
+              ? ui.happeningNow.liveLabel
+              : current.ended
+                ? ui.happeningNow.endedLabel
+                : ui.happeningNow.comingSoonLabel}
           </span>
           <span className="shrink-0 text-[0.8125rem] font-bold normal-case tracking-normal text-white tabular-nums md:text-[0.75rem]">
             {formatTime(session.start)} - {formatTime(session.end)}{' '}
@@ -120,20 +128,20 @@ export default function HappeningNow() {
             type="button"
             onClick={openSession}
             className="min-w-0 flex-1 text-left"
-            aria-label={`Open ${session.title}`}
+            aria-label={`Open ${displayCompanyName ?? session.title}`}
           >
             <h3 className="text-balance font-heading text-[1.1875rem] font-bold leading-tight tracking-[-0.3px] text-white md:text-[1.0625rem]">
-              {session.title}
+              {displayCompanyName ?? session.title}
             </h3>
             <p className="text-pretty text-[0.8125rem] leading-snug text-ink-dim md:text-[0.75rem]">
-              {company?.name}
+              {session.title}
+              {areaName ? ` · ${areaName}` : ''}
             </p>
-            <div className="mt-1 flex items-baseline justify-between gap-2 text-[0.8125rem] font-semibold md:text-[0.75rem]">
-              <span className="truncate text-ink-body">{areaName}</span>
-              {current.countdown && (
-                <span className="shrink-0 text-[#f5b400]">{current.countdown}</span>
-              )}
-            </div>
+            {current.countdown && (
+              <div className="mt-1 text-[0.75rem] text-[#f5b400]">
+                {current.countdown}
+              </div>
+            )}
           </button>
 
           {booth && (
@@ -168,8 +176,8 @@ export default function HappeningNow() {
           session browser. */}
       <div className="mt-2 truncate border-t border-line pt-1.5 text-[0.75rem] text-ink-dim">
         {next
-          ? `${ui.happeningNow.upNext} ${formatTime(next.start)} ${next.title}${
-              nextCompany ? `, ${nextCompany.name}` : ''
+          ? `${ui.happeningNow.scheduleLabel} · ${formatTime(next.start)} ${next.title}${
+              nextDisplayName ? `, ${nextDisplayName}` : ''
             }`
           : ui.happeningNow.noMoreSessions}
       </div>

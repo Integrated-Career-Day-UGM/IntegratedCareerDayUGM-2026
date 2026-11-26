@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { MoveUpRight } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
 import FloorPlanOverlay from './FloorPlanOverlay';
 import WalkInFloorPlanOverlay from './WalkInFloorPlanOverlay';
@@ -503,18 +502,26 @@ export default function MapLibreMap() {
         if (state.selectedBoothId) state.selectBooth(null);
         if (state.selectedFacilityId) state.selectFacility(null);
         if (state.selectedWalkInRoomId) state.selectWalkInRoom(null);
+        if (window.matchMedia('(max-width: 767px)').matches) {
+          window.dispatchEvent(new CustomEvent('icd:tray-collapse'));
+        }
         return;
       }
       // MapLibre suppresses click after a drag, so pan-then-release is safe.
       const id = boothFromEvent(e);
       if (id) {
         useMapStore.getState().selectBooth(id);
-      } else if (useMapStore.getState().selectedBoothId) {
-        // Tapping anywhere that is not a booth deselects (Maps behavior):
-        // the tooltip clears, any facility card closes, and the mobile tray
-        // lowers back to peek.
-        useMapStore.getState().selectBooth(null);
-        useMapStore.getState().selectFacility(null);
+      } else {
+        if (useMapStore.getState().selectedBoothId) {
+          // Tapping anywhere that is not a booth deselects (Maps behavior):
+          // the tooltip clears, any facility card closes, and the mobile tray
+          // lowers back to peek.
+          useMapStore.getState().selectBooth(null);
+          useMapStore.getState().selectFacility(null);
+        }
+        if (window.matchMedia('(max-width: 767px)').matches) {
+          window.dispatchEvent(new CustomEvent('icd:tray-collapse'));
+        }
       }
     });
 
@@ -725,9 +732,8 @@ export default function MapLibreMap() {
           // not a div): opaque surface + honest shadow replaces the
           // translucent bg + backdrop-blur (less glassy, more contrast on
           // the tiles).
-          className={`${surfaceClasses(3)} flex cursor-pointer items-center gap-2 rounded-lg border border-[#34343a] px-3 py-2 text-left text-white transition-colors md:hover:border-[var(--accent-pink)] active:scale-[0.98]`}
+          className={`${surfaceClasses(3)} flex cursor-pointer items-center rounded-lg border border-[#34343a] px-3 py-2 text-left text-white transition-colors md:hover:border-[var(--accent-pink)] active:scale-[0.98]`}
         >
-          <MoveUpRight size={16} strokeWidth={2.2} className="shrink-0" />
           <div>
             <div className="text-sm leading-tight font-semibold">{areaName}</div>
             <div className="text-[11px] text-zinc-400">{trackLabel}</div>

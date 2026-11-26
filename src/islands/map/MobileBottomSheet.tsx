@@ -5,6 +5,7 @@ import { useFluidHover } from '../../hooks/use-fluid-hover';
 import { FluidHoverHighlight } from '../../components/ui/fluid-hover-highlight';
 import { MapFluidRoot } from '../../components/map/map-fluid-root';
 import { ScrollArea } from '../../components/ui/scroll-area';
+import SearchBar from './SearchBar';
 import HappeningNow from './HappeningNow';
 import VenueList from './VenueList';
 import WalkInList from './WalkInList';
@@ -23,11 +24,14 @@ export const SNAP_PEEK = 110;
 /** Opening height for the tray — search and venue detail both start here. */
 const DETAIL_RATIO = 0.4;
 const DETAIL_MAX_RATIO = 0.5;
+const SEARCH_RATIO = 0.7;
 const getDetailHeight = () =>
   Math.max(240, Math.round(window.innerHeight * DETAIL_RATIO));
 const getDetailMaxHeight = () =>
   Math.max(240, Math.round(window.innerHeight * DETAIL_MAX_RATIO));
-const SNAP_FULL_RATIO = 0.94;
+const getSearchHeight = () =>
+  Math.max(320, Math.round(window.innerHeight * SEARCH_RATIO));
+const SNAP_FULL_RATIO = 0.7;
 /** Room kept above the fully-raised sheet. The live chrome bottom is read
  *  from `#map-chrome`, so the tray maxes out just under QuickFind. */
 const TOP_CLEAR = 24;
@@ -56,6 +60,7 @@ export default function MobileBottomSheet() {
     selectedTrackId === 'walk-in-interview' || selectedAreaId === 'hall-b';
   const counselingMode =
     selectedTrackId === 'career-counseling' || selectedAreaId === 'pp-kagama';
+  const detailMode = ['detail', 'facility'].includes(sidebarMode);
   // Gliding hover highlight across the tab rail (§0).
   const railRef = useRef<HTMLElement>(null);
   const hover = useFluidHover(railRef, { axis: 'x' });
@@ -66,6 +71,7 @@ export default function MobileBottomSheet() {
   const dragStartY = useRef(0);
   const startHeight = useRef(0);
   const sheetRef = useRef<HTMLDivElement>(null);
+  const contentScrollRef = useRef<HTMLDivElement>(null);
 
   const detailKey = selectedBoothId ?? selectedWalkInRoomId ?? selectedFacilityId ?? '';
   const [detailLoading, setDetailLoading] = useState(false);
@@ -113,7 +119,7 @@ export default function MobileBottomSheet() {
     // Detail/facility can be pulled to half the viewport; search is capped
     // at its opening height. Other tabs keep the full sheet.
     if (['detail', 'facility'].includes(state.sidebarMode)) return getDetailMaxHeight();
-    if (state.sidebarTab === 'search') return getDetailHeight();
+    if (state.sidebarTab === 'search') return getSearchHeight();
     const chrome = document.getElementById('map-chrome');
     const chromeBottom = chrome
       ? chrome.getBoundingClientRect().bottom
@@ -184,18 +190,45 @@ export default function MobileBottomSheet() {
   };
 
   const setTab = (tab: typeof sidebarTab) => {
+    // Height + focus for the search tab are handled by the effects below;
+    // doing it here too double-snaps before the SearchBar is mounted.
     setSidebarTab(tab);
-    // Search is a working state like venue detail: give the list the 30%
-    // tray height instead of leaving it at peek.
-    if (tab === 'search') snapTo(getDetailHeight());
-    if (tab === 'search') window.dispatchEvent(new CustomEvent('icd:focus-search'));
   };
 
   useEffect(() => {
-    const raiseForSearch = () => snapTo(getDetailHeight());
+    const raiseForSearch = () => snapTo(getSearchHeight());
     window.addEventListener('icd:focus-search', raiseForSearch);
     return () => window.removeEventListener('icd:focus-search', raiseForSearch);
   }, [snapTo]);
+
+  useEffect(() => {
+    const collapse = () => snapTo(SNAP_PEEK);
+    window.addEventListener('icd:tray-collapse', collapse);
+    return () => window.removeEventListener('icd:tray-collapse', collapse);
+  }, [snapTo]);
+
+  useEffect(() => {
+    const viewport = contentScrollRef.current?.querySelector<HTMLElement>(
+      '[data-slot="scroll-area-viewport"]',
+    );
+    viewport?.scrollTo({ top: 0, behavior: 'auto' });
+  }, [
+    sidebarTab,
+    sidebarMode,
+    selectedBoothId,
+    selectedFacilityId,
+    selectedWalkInRoomId,
+  ]);
+
+  // The SearchBar is mounted by the tab switch, so dispatch focus after the
+  // sheet content has rendered.
+  useEffect(() => {
+    if (sidebarTab !== 'search') return;
+    const raf = window.requestAnimationFrame(() =>
+      window.dispatchEvent(new CustomEvent('icd:focus-search')),
+    );
+    return () => window.cancelAnimationFrame(raf);
+  }, [sidebarTab]);
 
   // Raise the sheet when the content context changes — a tab switch (the
   // top search bar focuses 'search' too) or a booth detail opening — but
@@ -205,7 +238,10 @@ export default function MobileBottomSheet() {
   const prevTabRef = useRef(sidebarTab);
   const prevModeRef = useRef(sidebarMode);
   useEffect(() => {
-    if (prevTabRef.current !== sidebarTab && height < getDetailHeight()) snapTo(getDetailHeight());
+    if (prevTabRef.current !== sidebarTab) {
+      const target = sidebarTab === 'search' ? getSearchHeight() : getDetailHeight();
+      if (height < target) snapTo(target);
+    }
     prevTabRef.current = sidebarTab;
   }, [sidebarTab, height, snapTo]);
   useEffect(() => {
@@ -225,6 +261,14 @@ export default function MobileBottomSheet() {
   }, [sidebarMode, height, snapTo]);
 
   const renderContent = () => {
+    if (sidebarTab === 'search') {
+      return (
+        <div className="flex flex-col gap-3">
+          <SearchBar tuneFilter />
+          <VenueList />
+        </div>
+      );
+    }
     if (sidebarTab === 'saved') return <BookmarkList />;
     if (sidebarTab === 'stats') return <Insights />;
     if (sidebarTab === 'info') return <EventInfo />;
@@ -284,6 +328,7 @@ export default function MobileBottomSheet() {
         {/* Sheet content — FF ScrollArea (same engine as the desktop list)
             so native touch scrolling is preserved at every snap. */}
         <ScrollArea
+          ref={contentScrollRef}
           className="min-h-0 flex-1"
           onPointerDown={raiseFromPeek}
           viewportClassName="scroll-fade touch-pan-y overscroll-contain"
@@ -301,8 +346,12 @@ export default function MobileBottomSheet() {
       <nav
         ref={railRef}
         data-layout-tune="sheet-tabs"
-        className="pointer-events-auto relative flex h-[66px] shrink-0 items-center justify-around border-t border-zinc-800 bg-[#0c0c0f] px-2"
-        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+        className={`pointer-events-auto relative flex shrink-0 items-center justify-around overflow-hidden border-t border-zinc-800 bg-[#0c0c0f] px-2 transition-[height,transform,opacity] duration-300 ${
+          detailMode
+            ? 'pointer-events-none h-0 translate-y-full border-t-0 opacity-0'
+            : 'h-[66px]'
+        }`}
+        style={{ paddingBottom: detailMode ? 0 : 'env(safe-area-inset-bottom)' }}
         aria-label="Sheet sections"
         {...hover.handlers}
       >

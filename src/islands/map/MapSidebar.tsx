@@ -46,12 +46,29 @@ export default function MapSidebar() {
   const setSidebarTab = useMapStore((s) => s.setSidebarTab);
   const selectBooth = useMapStore((s) => s.selectBooth);
   const selectFacility = useMapStore((s) => s.selectFacility);
+  const selectedBoothId = useMapStore((s) => s.selectedBoothId);
+  const selectedFacilityId = useMapStore((s) => s.selectedFacilityId);
   const selectedWalkInRoomId = useMapStore((s) => s.selectedWalkInRoomId);
   const selectedAreaId = useMapStore((s) => s.selectedAreaId);
   const selectedTrackId = useMapStore((s) => s.selectedTrackId);
   const setSearchQuery = useMapStore((s) => s.setSearchQuery);
   const clearSearchFilters = useMapStore((s) => s.clearSearchFilters);
   useBoothFromUrl();
+  const contentScrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const viewport = contentScrollRef.current?.querySelector<HTMLElement>(
+      '[data-slot="scroll-area-viewport"]',
+    );
+    viewport?.scrollTo({ top: 0, behavior: 'auto' });
+  }, [
+    sidebarMode,
+    sidebarTab,
+    selectedBoothId,
+    selectedFacilityId,
+    selectedWalkInRoomId,
+    selectedAreaId,
+  ]);
   const walkInMode =
     selectedTrackId === 'walk-in-interview' || selectedAreaId === 'hall-b';
   const counselingMode =
@@ -273,7 +290,7 @@ export default function MapSidebar() {
 
           {/* Scrollable content — FF ScrollArea: the bar paints only while
               scrolling (scroll-fade cue); touch keeps native overflow. */}
-          <ScrollArea className="min-h-0 flex-1" viewportClassName="scroll-fade">
+          <ScrollArea ref={contentScrollRef} className="min-h-0 flex-1" viewportClassName="scroll-fade">
             <div className="@container px-4 pb-5 pt-2">{renderMainContent()}</div>
           </ScrollArea>
         </div>

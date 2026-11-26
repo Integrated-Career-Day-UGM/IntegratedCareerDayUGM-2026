@@ -28,12 +28,11 @@ export default function PosterShortcutStrip() {
 
   return (
     <section className="mb-3">
-      <div className="mb-1.5 flex items-end justify-between gap-2">
-        <div className="section-label">Poster lowongan</div>
+      <div className="mb-1.5 flex items-center justify-end">
         <button
           type="button"
           onClick={scrollToDirectory}
-          className="flex items-center gap-1 text-[0.6875rem] font-semibold text-[#8f8f8f] transition-colors hover:text-white"
+          className="inline-flex min-h-9 items-center gap-1.5 bg-white px-3 py-1.5 text-[0.6875rem] font-bold text-black transition-colors hover:bg-white/90"
         >
           Lihat semua
           <ArrowDown size={12} />
@@ -46,7 +45,7 @@ export default function PosterShortcutStrip() {
             key={company.id}
             type="button"
             onClick={() => setGallery(company)}
-            className="group w-[92px] shrink-0 snap-start overflow-hidden rounded-[6px] border border-line bg-[#141416] text-left transition-colors hover:border-[#4a4a52] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#141416]"
+            className="group w-[calc((100%-1rem)/3)] shrink-0 snap-start overflow-hidden rounded-[6px] border border-line bg-[#141416] text-left transition-colors hover:border-[#4a4a52] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#141416] md:w-[92px]"
           >
             <span className="block aspect-[3/4] overflow-hidden border-b border-line bg-[#0a0a0c]">
               <img
