@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { MoveUpRight } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
 import FloorPlanOverlay from './FloorPlanOverlay';
 import WalkInFloorPlanOverlay from './WalkInFloorPlanOverlay';
@@ -11,6 +10,7 @@ import FloorWipe from './FloorWipe';
 import { DEV_TOOLS } from '../../lib/dev-tools';
 import { ui, getVenue, getTrack, walkInSessions } from '../../lib/data';
 import { surfaceClasses } from '../../lib/surface-classes';
+import { trayDetailTarget } from '../../lib/map/tray';
 import { SNAP_PEEK, TAB_RAIL_H } from './MobileBottomSheet';
 import {
   BOOTH_LNGLATS,
@@ -49,7 +49,6 @@ const GIK_ZOOM_KEY = 'icd-gik-zoom';
 /** iPhone 16 Pro Max reference framing for a clicked venue/list item. */
 const MOBILE_FOCUS_CENTER: [number, number] = [110.37614532080488, -7.774196398740571];
 const MOBILE_FOCUS_ZOOM = 19.4807;
-const MOBILE_FOCUS_OFFSET_RATIO = 0.115;
 
 /** DEV_TOOLS: the tuning panel writes a localStorage override so the number
  *  can be previewed across reloads without editing source. Prod always uses
@@ -503,18 +502,26 @@ export default function MapLibreMap() {
         if (state.selectedBoothId) state.selectBooth(null);
         if (state.selectedFacilityId) state.selectFacility(null);
         if (state.selectedWalkInRoomId) state.selectWalkInRoom(null);
+        if (window.matchMedia('(max-width: 767px)').matches) {
+          window.dispatchEvent(new CustomEvent('icd:tray-collapse'));
+        }
         return;
       }
       // MapLibre suppresses click after a drag, so pan-then-release is safe.
       const id = boothFromEvent(e);
       if (id) {
         useMapStore.getState().selectBooth(id);
-      } else if (useMapStore.getState().selectedBoothId) {
-        // Tapping anywhere that is not a booth deselects (Maps behavior):
-        // the tooltip clears, any facility card closes, and the mobile tray
-        // lowers back to peek.
-        useMapStore.getState().selectBooth(null);
-        useMapStore.getState().selectFacility(null);
+      } else {
+        if (useMapStore.getState().selectedBoothId) {
+          // Tapping anywhere that is not a booth deselects (Maps behavior):
+          // the tooltip clears, any facility card closes, and the mobile tray
+          // lowers back to peek.
+          useMapStore.getState().selectBooth(null);
+          useMapStore.getState().selectFacility(null);
+        }
+        if (window.matchMedia('(max-width: 767px)').matches) {
+          window.dispatchEvent(new CustomEvent('icd:tray-collapse'));
+        }
       }
     });
 
@@ -544,8 +551,9 @@ export default function MapLibreMap() {
     // iPhone 16 Pro Max reference framing (user-provided CAM JSON): the
     // selected booth sits above the detail tray, clear of the top chrome.
     // The offset is negative because MapLibre places a positive offset BELOW
-    // the container centre (verified via map.project).
-    const focusOffset = Math.round(map.getContainer().clientHeight * MOBILE_FOCUS_OFFSET_RATIO);
+    // the container centre (verified via map.project). Half the sheet's
+    // resting height centres the booth in the map area the tray leaves free.
+    const focusOffset = Math.round(trayDetailTarget() / 2);
     // NOTE: never pass `offset: undefined` — MapLibre's option validation
     // runs Point.convert(undefined) which throws "reading 'x'", killing
     // this effect and unmounting the island (the desktop black-map bug).
@@ -579,9 +587,7 @@ export default function MapLibreMap() {
       const detailOpen = useMapStore.getState().sidebarMode === 'detail';
       // Cancel any in-flight camera move first (see the booth fly-to).
       map.stop();
-      const focusOffset = Math.round(
-        map.getContainer().clientHeight * MOBILE_FOCUS_OFFSET_RATIO,
-      );
+      const focusOffset = Math.round(trayDetailTarget() / 2);
       map.easeTo({
         center: target as maplibregl.LngLatLike,
         zoom: Math.max(map.getZoom(), isMobile ? MOBILE_FOCUS_ZOOM : 19.4),
@@ -725,9 +731,8 @@ export default function MapLibreMap() {
           // not a div): opaque surface + honest shadow replaces the
           // translucent bg + backdrop-blur (less glassy, more contrast on
           // the tiles).
-          className={`${surfaceClasses(3)} flex cursor-pointer items-center gap-2 rounded-lg border border-[#34343a] px-3 py-2 text-left text-white transition-colors md:hover:border-[var(--accent-pink)] active:scale-[0.98]`}
+          className={`${surfaceClasses(3)} flex cursor-pointer items-center rounded-lg border border-[#34343a] px-3 py-2 text-left text-white transition-colors md:hover:border-[var(--accent-pink)] active:scale-[0.98]`}
         >
-          <MoveUpRight size={16} strokeWidth={2.2} className="shrink-0" />
           <div>
             <div className="text-sm leading-tight font-semibold">{areaName}</div>
             <div className="text-[11px] text-zinc-400">{trackLabel}</div>

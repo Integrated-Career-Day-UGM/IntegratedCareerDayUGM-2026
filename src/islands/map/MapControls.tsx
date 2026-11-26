@@ -38,9 +38,9 @@ function MapControls({ mapRef, compassNeedleRef, fitHall }: MapControlsProps) {
         onClick={fitHall}
         aria-label={ui.map.recenterLabel}
         title={ui.map.recenterLabel}
-        className="flex h-11 w-11 items-center justify-center rounded-full border border-[#34343a] bg-[#141416] text-white transition-[transform,colors] hover:border-[#4a4a52] active:scale-95 md:h-10 md:w-10"
+        className="flex h-9 w-9 items-center justify-center rounded-full border border-[#34343a] bg-[#141416] text-white transition-[transform,colors] hover:border-[#4a4a52] active:scale-95 md:h-9 md:w-9"
       >
-        <Crosshair size={17} strokeWidth={1.7} />
+        <Crosshair size={15} strokeWidth={1.7} />
       </button>
     </div>
   );

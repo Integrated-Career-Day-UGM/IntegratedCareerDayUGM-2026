@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useMapStore } from '../../stores/mapStore';
@@ -24,6 +25,34 @@ export default function SearchBar({ tuneFilter = false }: { tuneFilter?: boolean
   const [filtersOpen, setFiltersOpen] = useState(false);
   const filterWrapRef = useRef<HTMLDivElement>(null);
   const filterButtonRef = useRef<HTMLButtonElement>(null);
+  // Fixed anchor captured on open. A portal is required: the sheet clips its
+  // scroll viewport, so an in-flow popover gets cut off on mobile.
+  const [filterAnchor, setFilterAnchor] = useState<{
+    top: number;
+    right: number;
+    maxHeight: number;
+  } | null>(null);
+  const filtersPanelId = useId();
+
+  const toggleFilters = () => {
+    if (filtersOpen) {
+      setFiltersOpen(false);
+      return;
+    }
+    const rect = filterButtonRef.current?.getBoundingClientRect();
+    if (rect) {
+      const top = rect.bottom + 8;
+      setFilterAnchor({
+        top,
+        right: window.innerWidth - rect.right,
+        // Keep the panel inside the visual viewport on short screens so it
+        // can scroll instead of running under the keyboard/edge.
+        maxHeight: Math.max(200, (window.visualViewport?.height ?? window.innerHeight) - top - 12),
+      });
+    }
+    setSidebarTab('search');
+    setFiltersOpen(true);
+  };
 
   useKeyboardShortcut(
     'k',
@@ -50,7 +79,10 @@ export default function SearchBar({ tuneFilter = false }: { tuneFilter?: boolean
   useEffect(() => {
     if (!filtersOpen) return;
     const onPointerDown = (e: PointerEvent) => {
-      if (!filterWrapRef.current?.contains(e.target as Node)) setFiltersOpen(false);
+      const target = e.target as Node;
+      if (filterWrapRef.current?.contains(target)) return;
+      if (filterButtonRef.current?.contains(target)) return;
+      setFiltersOpen(false);
     };
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -58,11 +90,22 @@ export default function SearchBar({ tuneFilter = false }: { tuneFilter?: boolean
         filterButtonRef.current?.focus();
       }
     };
+    // The anchor is fixed: any scroll or resize outside the panel would
+    // detach it. Scrolls INSIDE the panel (its own overflow) must not close it.
+    const close = (event: Event) => {
+      if (filterWrapRef.current?.contains(event.target as Node)) return;
+      setFiltersOpen(false);
+    };
+    const closeAll = () => setFiltersOpen(false);
     document.addEventListener('pointerdown', onPointerDown);
     document.addEventListener('keydown', onKeyDown);
+    window.addEventListener('resize', closeAll);
+    window.addEventListener('scroll', close, true);
     return () => {
       document.removeEventListener('pointerdown', onPointerDown);
       document.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('resize', closeAll);
+      window.removeEventListener('scroll', close, true);
     };
   }, [filtersOpen]);
 
@@ -71,7 +114,7 @@ export default function SearchBar({ tuneFilter = false }: { tuneFilter?: boolean
     const first = filterWrapRef.current?.querySelector<HTMLElement>(
       '[role="dialog"] button:not([disabled])',
     );
-    first?.focus();
+    first?.focus({ preventScroll: true });
   }, [filtersOpen]);
 
   return (
@@ -118,18 +161,16 @@ export default function SearchBar({ tuneFilter = false }: { tuneFilter?: boolean
           )}
         </div>
 
-        <div ref={filterWrapRef} className="relative z-40 shrink-0">
+        <div className="relative z-40 shrink-0">
           <button
             type="button"
             ref={filterButtonRef}
             data-search-filter
             data-layout-tune={tuneFilter ? 'filter-button' : undefined}
-            onClick={() => {
-              setSidebarTab('search');
-              setFiltersOpen((open) => !open);
-            }}
+            onClick={toggleFilters}
             aria-label={ui.search.filters.trigger}
             aria-expanded={filtersOpen}
+            aria-controls={filtersPanelId}
             aria-haspopup="dialog"
             className={`relative flex h-14 w-14 items-center justify-center rounded-[18px] border-[3px] border-[#6a6a6a]/80 bg-[#1b1b1f]/95 text-[#d4d4d8] transition-colors md:h-8 md:w-8 md:rounded-none md:border md:border-[#6a6a6a]/60 md:bg-field/30 ${
               filtersOpen || activeFilterCount > 0
@@ -144,23 +185,36 @@ export default function SearchBar({ tuneFilter = false }: { tuneFilter?: boolean
               </span>
             )}
           </button>
-
-          <AnimatePresence>
-            {filtersOpen && (
-              <motion.div
-                key="search-filters"
-                className="absolute right-0 top-full z-[80] mt-2 w-[220px] origin-top-right md:w-[240px]"
-                initial={{ opacity: 0, scale: 0.95, y: -4 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.97, transition: spring.fast.exit }}
-                transition={spring.moderate}
-              >
-                <SearchFilters />
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
       </div>
+
+      {/* Portaled out of the sheet: the tray's scroll viewport clips
+          in-flow popovers, which cut the panel off on mobile. */}
+      {createPortal(
+        <AnimatePresence>
+          {filtersOpen && filterAnchor && (
+            <motion.div
+              key="search-filters"
+              ref={filterWrapRef}
+              id={filtersPanelId}
+              role="presentation"
+              className="fixed z-[300] w-[220px] max-w-[calc(100vw-1rem)] origin-top-right overflow-y-auto overscroll-contain md:w-[240px]"
+              style={{
+                top: filterAnchor.top,
+                right: filterAnchor.right,
+                maxHeight: filterAnchor.maxHeight,
+              }}
+              initial={{ opacity: 0, scale: 0.95, y: -4 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.97, transition: spring.fast.exit }}
+              transition={spring.moderate}
+            >
+              <SearchFilters />
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
     </MapFluidRoot>
   );
 }

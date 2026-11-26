@@ -1013,9 +1013,11 @@ category:
 desc: "Building A Better Indonesia — PT Surya Semesta Internusa Tbk (SSIA), established in 1971, leading Indonesian holding company operating across Indonesia in construction services, industrial estate development, commercial property, and hospitality (Explore Our 50+ Career Opportunities!)."
 important_dates: []
 program_links:
+  - url: https://linktr.ee/hrdssia?utm_source=qr_code
+    label: Apply via Linktree (QR code also provided on poster)
   - url: https://www.suryainternusa.com
-    label: Official website (QR code also provided on poster)
-cta: "Explore Our 50+ Career Opportunities! Scan the QR code."
+    label: Company website
+cta: "Explore Our 50+ Career Opportunities! Apply through the Linktree or scan the QR code."
 intakes:
   - program: Paid Internship Positions
     intake_count: null

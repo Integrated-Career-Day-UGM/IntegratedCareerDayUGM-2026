@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { animate, motion, useMotionValue, useReducedMotion } from 'motion/react';
 import { ChevronLeft, ChevronRight, Download, MapPin, X } from 'lucide-react';
-import HoverZoomImage from './HoverZoomImage';
 import { CategoryTag } from './CompanyProfileBlocks';
 import { surfaceClasses } from '../../lib/surface-classes';
 import { cn } from '../../lib/utils/cn';
@@ -185,7 +184,7 @@ export default function PosterGalleryModal({
   const portrait = Boolean(company);
 
   const info = (
-    <div className="flex min-h-0 flex-col gap-3 px-1 pt-1 md:pt-2">
+    <div className="flex min-h-0 flex-col gap-3 px-1 pt-2 md:pt-3">
       <div className="hidden md:block">
         <div className="text-balance font-heading text-[1.35rem] font-bold leading-tight text-white">
           {title}
@@ -211,23 +210,28 @@ export default function PosterGalleryModal({
           <button
             type="button"
             onClick={onOpenBooth}
-            className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-[10px] border border-line pl-2.5 pr-3 text-[0.75rem] font-semibold text-white transition-colors hover:border-[var(--accent-pink)]"
+            className="cta-bar group relative flex min-h-11 w-full items-center justify-center gap-2 overflow-hidden bg-white px-3 text-black transition-transform duration-150 focus-visible:bg-[var(--accent-pink)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black active:scale-[0.99]"
           >
-            <MapPin size={15} />
-            Open booth
+            <span
+              aria-hidden="true"
+              className="cta-fill pointer-events-none absolute inset-0 bg-[var(--accent-pink)]"
+            />
+            <MapPin size={15} className="cta-content relative z-10 shrink-0" />
+            <span className="cta-content relative z-10 font-heading text-[13px] font-bold leading-none tracking-[-0.1px]">
+              Open booth
+            </span>
           </button>
         )}
         <button
           type="button"
           disabled
           title="Poster downloads are coming soon"
-          className="inline-flex min-h-11 cursor-not-allowed items-center justify-center gap-1.5 rounded-[10px] border border-line pl-2.5 pr-3 text-[0.75rem] font-semibold text-[#8f8f8f] opacity-50"
+          className="inline-flex min-h-11 cursor-not-allowed items-center justify-center gap-1.5 border border-line pl-2.5 pr-3 text-[0.75rem] font-semibold text-[#8f8f8f] opacity-50"
         >
           <Download size={15} />
           Download
         </button>
-        <div className="hidden items-center justify-between text-[0.6875rem] text-[#8f8f8f] md:flex">
-          <span className="truncate">{item.title}</span>
+        <div className="hidden items-center justify-end text-[0.6875rem] text-[#8f8f8f] md:flex">
           <span className="shrink-0 tabular-nums">
             {current + 1} / {items.length}
           </span>
@@ -261,12 +265,12 @@ export default function PosterGalleryModal({
           <X size={22} />
         </button>
 
-        <div className="flex items-center justify-between border-b border-line bg-surface-2 px-3 py-2 md:hidden">
-          <div className="min-w-0">
-            <div className="truncate pr-10 font-heading text-[1rem] font-bold text-white">
+        <div className="flex items-center justify-between gap-3 border-b border-line bg-surface-2 px-3 py-2 pr-14 md:hidden">
+          <div className="min-w-0 flex-1">
+            <div className="line-clamp-2 break-words font-heading text-[1rem] font-bold leading-tight text-white">
               {title}
             </div>
-            <div className="text-[0.6875rem] text-[#8f8f8f]">
+            <div className="mt-0.5 text-[0.6875rem] text-[#8f8f8f]">
               {current + 1} of {items.length}
             </div>
           </div>
@@ -283,7 +287,7 @@ export default function PosterGalleryModal({
               className={cn(
                 'relative w-full overflow-hidden rounded-[12px] border border-[#2a2a2e] bg-[#050506] md:aspect-auto md:h-full md:max-w-full',
                 portrait
-                  ? 'aspect-[210/297] md:w-auto'
+                  ? 'aspect-[4/5] md:w-auto'
                   : 'aspect-[4/3] md:w-full',
               )}
             >
@@ -332,24 +336,15 @@ export default function PosterGalleryModal({
                     key={poster.id}
                     className={cn(
                       'flex w-full shrink-0 items-center justify-center md:aspect-auto md:h-full',
-                      portrait ? 'aspect-[210/297]' : 'aspect-[4/3]',
+                      portrait ? 'aspect-[4/5] md:aspect-[210/297]' : 'aspect-[4/3]',
                     )}
                   >
-                    {reduceMotion ? (
-                      <img
-                        src={poster.src}
-                        alt={poster.title}
-                        className="h-full w-full object-contain"
-                        draggable={false}
-                      />
-                    ) : (
-                      <HoverZoomImage
-                        src={poster.src}
-                        alt={poster.title}
-                        scale={1.12}
-                        className="h-full w-full"
-                      />
-                    )}
+                    <img
+                      src={poster.src}
+                      alt={poster.title}
+                      className="h-full w-full object-contain"
+                      draggable={false}
+                    />
                   </div>
                 ))}
               </motion.div>

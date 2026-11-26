@@ -31,8 +31,8 @@ days:
         start: "11:00"
         end: "12:00"
       - room: F5
-        company: PT Hakaaston
-        booth_ref: null
+        company: PT HAKAASTON (HKA)
+        booth_ref: C5
         start: "11:00"
         end: "12:00"
 
@@ -59,8 +59,8 @@ days:
         start: "10:00"
         end: "15:00"
       - room: F5
-        company: PT Hakaaston
-        booth_ref: null
+        company: PT HAKAASTON (HKA)
+        booth_ref: C5
         start: "11:00"
         end: "12:00"
       - room: F6

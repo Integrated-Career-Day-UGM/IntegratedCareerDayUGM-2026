@@ -74,8 +74,8 @@ export default function EmptyState({
             type="button"
             onClick={action.onClick}
             className={cn(
-              'bg-white font-semibold text-black transition-colors hover:bg-white/90 active:scale-[0.98]',
-              inline ? 'mt-2 px-2 py-1 text-[10.5px]' : 'mt-3 px-3 py-1.5 text-[11px]',
+              'bg-white font-heading font-bold text-black transition-colors hover:bg-white/90 active:scale-[0.98]',
+              inline ? 'mt-2 px-2 py-1 text-[10.5px]' : 'mt-4 px-3 py-1.5 text-[11px]',
             )}
           >
             {action.label}

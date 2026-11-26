@@ -6,9 +6,9 @@ import MapSidebar from '../islands/map/MapSidebar';
 import MapLibreMap from '../islands/map/MapLibreMap';
 import TrackSwitcher from '../islands/map/TrackSwitcher';
 import QuickFind from '../islands/map/QuickFind';
-import SearchBar from '../islands/map/SearchBar';
 import MobileBottomSheet from '../islands/map/MobileBottomSheet';
 import MobileLayoutTuner from '../islands/map/MobileLayoutTuner';
+import GeometryEditor from '../islands/map/GeometryEditor';
 import RegisterLinks from '../islands/map/RegisterLinks';
 import MapSplash from '../islands/map/MapSplash';
 import BrandLockup from '../components/map/BrandLockup';
@@ -98,17 +98,8 @@ const eventJsonLd = {
       {/* Top chrome — mobile: search → [track tabs + brand] → quick find.
           Desktop keeps search in the sidebar and the track bar as its own row. */}
       <div id="map-chrome" class="pointer-events-none absolute inset-x-0 top-0 z-30 flex flex-col items-start gap-2 p-3 md:p-4">
-        {/* Mobile search — top mode. `relative z-40` is intentional: the
-            reveal animation leaves a transform on each chrome child, so the
-            filter popover's own z-index is trapped in this row's stacking
-            context. Raising the row keeps the filter above the later
-            brand/track rows while the sheet wrapper (z-40) still wins. */}
-        <div
-          data-layout-tune="mobile-search"
-          class="pointer-events-auto relative z-40 w-full md:hidden"
-        >
-          <SearchBar tuneFilter client:only="react" />
-        </div>
+        {/* Mobile search lives in the Search tab of the bottom sheet; the map
+            stays clean by default. */}
 
         {/* Track switcher (island owns its bar chrome) — desktop top bar. */}
         <div class="pointer-events-auto hidden max-w-full md:block">
@@ -175,6 +166,8 @@ const eventJsonLd = {
 
       {/* DEV-only mobile layout tuner (drag + scale + copy values). */}
       {import.meta.env.DEV && <MobileLayoutTuner client:only="react" />}
+      {/* DEV-only frame geometry editor (booths, fixtures, Career Star/Counseling labels). */}
+      {import.meta.env.DEV && <GeometryEditor client:only="react" />}
 
       <script is:inline>
         window.addEventListener('icd:splash-done', function () {
