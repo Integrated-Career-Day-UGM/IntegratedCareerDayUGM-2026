@@ -50,6 +50,14 @@
 }
 
 @font-face {
+  font-family: 'Priego-Bold';
+  src: url('/fonts/Priego-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: 'Priego';
   src: url('/fonts/Priego-ExtraBold.otf') format('opentype');
   font-weight: 800;

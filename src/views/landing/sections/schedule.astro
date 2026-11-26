@@ -1,0 +1,45 @@
+---
+// "Company Session Rundown" section.
+// Desktop frame is 1440×1481 and scales down; mobile is native 390px matching
+// Figma node 1487:18220.
+import DesktopContent from './schedule/desktop-content.astro';
+import MobileContent from './schedule/mobile-content.astro';
+---
+
+<section class="schedule-section relative w-full overflow-clip bg-[#f3f8fc]" data-name="Schedule Section" id="rundown">
+  {/* Desktop layout */}
+  <div class="hidden md:block">
+    <div class="schedule-scale-wrapper relative mx-auto">
+      <div class="schedule-scale-inner absolute inset-0">
+        <DesktopContent />
+      </div>
+    </div>
+  </div>
+
+  {/* Mobile layout */}
+  <div class="block md:hidden">
+    <MobileContent />
+  </div>
+</section>
+
+<style>
+  .schedule-scale-wrapper {
+    width: min(1440px, 100vw);
+    aspect-ratio: 1440 / 1481;
+  }
+
+  .schedule-scale-inner {
+    --schedule-scale: min(1, 100vw / 1440);
+    width: 1440px;
+    height: 1481px;
+    transform-origin: top center;
+    transform: scale(var(--schedule-scale));
+  }
+
+  @media (min-width: 1440px) {
+    .schedule-scale-inner {
+      left: 50%;
+      transform: translateX(-50%) scale(1);
+    }
+  }
+</style>

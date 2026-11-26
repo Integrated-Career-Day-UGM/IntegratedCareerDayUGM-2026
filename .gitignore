@@ -8,6 +8,9 @@
 #      litter never gets committed by accident. Kit code belongs in
 #      src/lib, src/hooks, and src/components/ui.
 
+# ---------- Poster originals (source stays outside the repo) ----------
+posters/source/company-posters/
+
 # ---------- Dependencies ----------
 node_modules/
 .pnp
@@ -129,3 +132,5 @@ skills-lock.json
 # Promote the ones that matter into docs/screenshots/reference/ before
 # committing. The inbox itself never goes to the remote repo.
 /docs/screenshots/inbox/
+/scripts/seed
+/public/landing

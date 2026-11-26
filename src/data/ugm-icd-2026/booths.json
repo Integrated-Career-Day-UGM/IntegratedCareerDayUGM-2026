@@ -1,19 +1,11 @@
 [
   {
-    "id": "a",
-    "areaId": "hall-c1",
-    "zoneId": "zone-a",
-    "code": "A",
-    "label": "A",
-    "companyId": null
-  },
-  {
     "id": "b",
     "areaId": "hall-c1",
     "zoneId": "zone-a",
     "code": "B",
     "label": "B",
-    "companyId": null
+    "companyId": "pp-kagama"
   },
   {
     "id": "c1",
@@ -94,6 +86,14 @@
     "code": "D4",
     "label": "D4",
     "companyId": "d4-nindya"
+  },
+  {
+    "id": "e1",
+    "areaId": "hall-c1",
+    "zoneId": "zone-e",
+    "code": "E1",
+    "label": "E1",
+    "companyId": "cv-karya-hidup-sentosa-quick-traktor"
   },
   {
     "id": "e2",

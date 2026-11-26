@@ -1,0 +1,67 @@
+---
+type JsonLd = Record<string, unknown>;
+
+type Props = {
+  title: string;
+  description?: string;
+  canonicalPath?: string;
+  image?: string;
+  imageAlt?: string;
+  robots?: string;
+  openGraph?: boolean;
+  siteName?: string;
+  locale?: string;
+  type?: 'website' | 'article';
+  jsonLd?: JsonLd;
+};
+
+const {
+  title,
+  description = 'Integrated Career Day 2026',
+  canonicalPath,
+  image,
+  imageAlt,
+  robots,
+  openGraph = false,
+  siteName = 'UGM Integrated Career Days',
+  locale = 'id_ID',
+  type = 'website',
+  jsonLd,
+} = Astro.props;
+
+const site = Astro.site ?? new URL('https://www.icdugm26.app');
+const canonical = new URL(canonicalPath ?? Astro.url.pathname, site);
+const ogImage = image ? new URL(image, site) : undefined;
+const jsonLdString = jsonLd
+  ? JSON.stringify(jsonLd).replace(/</g, '\\u003c')
+  : undefined;
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical.href} />
+{robots && <meta name="robots" content={robots} />}
+
+{openGraph && (
+  <Fragment>
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content={locale} />
+    <meta property="og:title" content={title} />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:description" content={description} />
+    {ogImage && <meta property="og:image" content={ogImage.href} />}
+    {ogImage && imageAlt && <meta property="og:image:alt" content={imageAlt} />}
+    {ogImage && <meta property="og:image:width" content="1200" />}
+    {ogImage && <meta property="og:image:height" content="630" />}
+    <meta
+      name="twitter:card"
+      content={ogImage ? 'summary_large_image' : 'summary'}
+    />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {ogImage && <meta name="twitter:image" content={ogImage.href} />}
+  </Fragment>
+)}
+
+{jsonLdString && <script type="application/ld+json" set:html={jsonLdString} />}

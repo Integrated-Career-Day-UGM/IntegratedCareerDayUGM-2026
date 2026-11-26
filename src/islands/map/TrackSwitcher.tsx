@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { Store, Handshake, MessagesSquare, Route } from 'lucide-react';
+import {
+  IconBriefcase,
+  IconBriefcaseFilled,
+  IconLayoutGrid,
+  IconLayoutGridFilled,
+  IconNavigation,
+  IconNavigationFilled,
+} from '@tabler/icons-react';
 import { useMapStore } from '../../stores/mapStore';
 import { Tabs, TabsItem } from '../../components/ui/tabs';
 import { MapFluidRoot } from '../../components/map/map-fluid-root';
@@ -7,11 +14,15 @@ import { Elevated } from '@/lib/elevated';
 import { cn } from '@/lib/utils/cn';
 import { event, getVenue, getSessionsByArea, getCompany } from '../../lib/data';
 
-// One icon per track, keyed by track id from event.json.
-const trackIcons: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
-  'career-expo': Store,
-  'walk-in-interview': Handshake,
-  'career-counseling': MessagesSquare,
+// Outline + filled pair per track, keyed by track id from event.json. The
+// filled variant is the selected state; counseling has no tab (it is a
+// tooltip on the PP KAGAMA booth instead).
+const trackIcons: Record<
+  string,
+  { outline: React.ComponentType<{ size?: number; className?: string }>; filled: React.ComponentType<{ size?: number; className?: string }> }
+> = {
+  'career-expo': { outline: IconLayoutGrid, filled: IconLayoutGridFilled },
+  'walk-in-interview': { outline: IconBriefcase, filled: IconBriefcaseFilled },
 };
 
 /**
@@ -41,6 +52,7 @@ export default function TrackSwitcher() {
   }, []);
 
   const visibleTracks = event.tracks
+    .filter((track) => track.id !== 'career-counseling')
     .map((track) => ({
       track,
       areas: venue?.areas.filter((a) => a.trackId === track.id) ?? [],
@@ -65,6 +77,23 @@ export default function TrackSwitcher() {
     : activeTrackIndex >= 0
       ? activeTrackIndex
       : 0;
+
+  // Keep the selected tab visible when the strip scrolls (the mobile row is
+  // narrower than the four tabs with the active label expanded).
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    const selectedTab = container.querySelector<HTMLElement>(
+      '[role="tab"][aria-selected="true"]',
+    );
+    selectedTab?.scrollIntoView({
+      block: 'nearest',
+      inline: 'nearest',
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'auto'
+        : 'smooth',
+    });
+  }, [selectedIndex]);
 
   const onSelect = (index: number) => {
     setOpenTrackId(null);
@@ -93,14 +122,16 @@ export default function TrackSwitcher() {
           selectedIndex={selectedIndex}
           onSelect={onSelect}
           className={cn(
-            'mx-0 w-fit max-w-full overflow-visible rounded-md border border-line bg-[#0a0a0a] md:w-auto',
-            '[&_[role=tab]_span]:text-[11px] [&_[role=tab]_span]:leading-none md:[&_[role=tab]_span]:text-[13px]',
+            'mx-0 w-fit max-w-full overscroll-x-contain rounded-[18px] border border-line bg-[#0a0a0a] md:w-auto md:rounded-md',
+            'max-md:[&>div.bg-active]:rounded-[14px]',
+            '[&_[role=tab]_span]:text-[0.9375rem] [&_[role=tab]_span]:leading-none md:[&_[role=tab]_span]:text-[0.8125rem]',
           )}
           style={{ scrollbarWidth: 'none' }}
         >
           {visibleTracks.map(({ track, areas }, index) => {
-            const Icon = trackIcons[track.id];
+            const icons = trackIcons[track.id];
             const selected = selectedIndex === index;
+            const Icon = selected ? (icons?.filled ?? icons?.outline) : icons?.outline;
             const isOpen = openTrackId === track.id;
 
             return (
@@ -110,10 +141,10 @@ export default function TrackSwitcher() {
                   icon={Icon}
                   label={track.label}
                   className={cn(
-                    'relative shrink-0 text-[11px] font-semibold',
+                    'relative shrink-0 text-[11px] font-semibold max-md:h-auto max-md:min-h-10 max-md:py-1 max-md:[&_svg]:h-5 max-md:[&_svg]:w-5',
                     selected
-                      ? 'flex-none justify-start px-3'
-                      : 'w-10 justify-center px-0 md:w-auto md:px-3',
+                      ? 'flex-none justify-start px-3 max-md:px-4'
+                      : 'w-10 justify-center px-0 max-md:w-[57px] md:w-auto md:px-3',
                   )}
                 />
 
@@ -165,13 +196,13 @@ export default function TrackSwitcher() {
 
           <TabsItem
             index={visibleTracks.length}
-            icon={Route}
+            icon={gikMode ? IconNavigationFilled : IconNavigation}
             label="GIK"
             className={cn(
-              'relative shrink-0 text-[11px] font-semibold',
+              'relative shrink-0 text-[11px] font-semibold max-md:h-auto max-md:min-h-10 max-md:py-1 max-md:[&_svg]:h-5 max-md:[&_svg]:w-5',
               gikMode
-                ? 'flex-none justify-start px-3'
-                : 'w-10 justify-center px-0 md:w-auto md:px-3',
+                ? 'flex-none justify-start px-3 max-md:px-4'
+                : 'w-10 justify-center px-0 max-md:w-[57px] md:w-auto md:px-3',
             )}
           />
         </Tabs>

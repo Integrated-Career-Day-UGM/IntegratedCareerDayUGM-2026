@@ -5,13 +5,16 @@ import sharp from 'sharp';
 /**
  * Compress poster artwork for the map's Info tab.
  *
- * Drop originals in `posters/source/`, run `bun run compress:posters`, and
- * the WebP files land in `public/posters/` with the same base filename.
+ * Drop event posters in `posters/source/` and company posters in
+ * `posters/source/company-posters/`, then run `bun run compress:posters`.
+ * WebP files land in `public/posters/` and `public/posters/companies/`.
  * WebP is the right tool here — gzip only shrinks the already-compressed
  * bytes and doesn't touch pixels.
  */
 const SRC_DIR = 'posters/source';
 const OUT_DIR = 'public/posters';
+const COMPANY_SRC_DIR = 'posters/source/company-posters';
+const COMPANY_OUT_DIR = 'public/posters/companies';
 const MAX_WIDTH = 1400;
 const QUALITY = 82;
 const INPUT_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.avif', '.tif', '.tiff']);
@@ -30,15 +33,15 @@ const slugify = (value) =>
 
 const kb = (bytes) => `${(bytes / 1024).toFixed(0)} KB`;
 
-async function main() {
-  await mkdir(OUT_DIR, { recursive: true });
+async function compressDirectory(srcDir, outDir, outputNames = {}) {
+  await mkdir(outDir, { recursive: true });
 
   let entries = [];
   try {
-    entries = await readdir(SRC_DIR, { withFileTypes: true });
+    entries = await readdir(srcDir, { withFileTypes: true });
   } catch {
-    console.log(`No ${SRC_DIR}/ folder yet. Add poster originals there first.`);
-    return;
+    console.log(`No ${srcDir}/ folder yet.`);
+    return 0;
   }
 
   const files = entries
@@ -46,15 +49,15 @@ async function main() {
     .map((entry) => entry.name);
 
   if (files.length === 0) {
-    console.log(`No images in ${SRC_DIR}/. Nothing to compress.`);
-    return;
+    console.log(`No images in ${srcDir}/.`);
+    return 0;
   }
 
   for (const file of files) {
-    const input = join(SRC_DIR, file);
+    const input = join(srcDir, file);
     const sourceName = slugify(basename(file, extname(file)));
-    const name = OUTPUT_NAMES[sourceName] ?? sourceName;
-    const output = join(OUT_DIR, `${name}.webp`);
+    const name = outputNames[sourceName] ?? sourceName;
+    const output = join(outDir, `${name}.webp`);
 
     const metadata = await sharp(input).metadata();
     const width = metadata.width && metadata.width > MAX_WIDTH ? MAX_WIDTH : metadata.width;
@@ -66,8 +69,18 @@ async function main() {
       .toFile(output);
 
     const [before, after] = await Promise.all([stat(input), stat(output)]);
-    console.log(`${file}: ${kb(before.size)} → ${name}.webp: ${kb(after.size)}`);
+    console.log(`${srcDir}/${file}: ${kb(before.size)} → ${name}.webp: ${kb(after.size)}`);
   }
+
+  return files.length;
+}
+
+async function main() {
+  const eventCount = await compressDirectory(SRC_DIR, OUT_DIR, OUTPUT_NAMES);
+  const companyCount = await compressDirectory(COMPANY_SRC_DIR, COMPANY_OUT_DIR);
+  console.log(
+    `[posters] ${eventCount} event + ${companyCount} company file(s) compressed`,
+  );
 }
 
 main().catch((error) => {

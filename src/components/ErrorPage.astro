@@ -1,0 +1,227 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+type Props = {
+  code: '404' | '5XX';
+  message: string;
+  title: string;
+};
+
+const { code, message, title } = Astro.props;
+const isServerError = code === '5XX';
+---
+
+<BaseLayout title={`${code} | Integrated Career Day 2026`} description={title}>
+  <main class:list={['error-page', { 'error-page--server': isServerError }]}>
+    <section class="error-scene" aria-labelledby="error-code">
+      <img
+        class="error-art error-art--left"
+        src="/landing/error/briefcase-question.png"
+        alt=""
+        width="143"
+        height="227"
+        aria-hidden="true"
+      />
+
+      <div class="error-copy">
+        <h1
+          id="error-code"
+          class="error-code justify-start text-right font-['Priego-Bold'] font-bold text-blue-800"
+        >
+          {code}
+        </h1>
+        <p class="justify-start font-['Priego-Bold'] font-bold text-zinc-100">
+          {message}
+        </p>
+      </div>
+
+      <img
+        class="error-art error-art--right"
+        src="/landing/error/confused-mascot.png"
+        alt=""
+        width="212"
+        height="213"
+        aria-hidden="true"
+      />
+
+      <div class="error-art-mobile" aria-hidden="true">
+        <div class="error-art-mobile__slot error-art-mobile__slot--mascot">
+          <img src="/landing/error/confused-mascot.png" alt="" width="212" height="213" />
+        </div>
+        <div class="error-art-mobile__slot error-art-mobile__slot--briefcase">
+          <img src="/landing/error/briefcase-question.png" alt="" width="143" height="227" />
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .error-page {
+    display: grid;
+    min-height: 100vh;
+    min-height: 100svh;
+    place-items: center;
+    overflow-x: clip;
+    background:
+      radial-gradient(
+        ellipse 92% 94% at 56% 79%,
+        #050505 0%,
+        #1d1d1f 34%,
+        #29292a 61%,
+        #5b5c5d 100%
+      ),
+      #1e1e1e;
+    color: #eee;
+  }
+
+  .error-page--server .error-code {
+    color: #bd2428;
+  }
+
+  .error-scene {
+    display: grid;
+    width: 590px;
+    grid-template-columns: 145px 245px 200px;
+    align-items: center;
+    justify-items: center;
+  }
+
+  .error-art {
+    display: block;
+    height: auto;
+    user-select: none;
+  }
+
+  .error-art--left {
+    width: 107px;
+  }
+
+  .error-art--right {
+    width: 159px;
+    margin-left: -8px;
+  }
+
+  .error-art-mobile {
+    display: none;
+  }
+
+  .error-copy {
+    z-index: 1;
+    width: 240px;
+    margin: 0;
+    font-family: 'Priego-Bold', var(--font-heading);
+    justify-self: start;
+  }
+
+  .error-copy h1 {
+    width: 240px;
+    height: auto;
+    margin: 0;
+    font-size: 126px;
+    line-height: 1;
+    paint-order: stroke fill;
+    -webkit-text-stroke: 30px #f4f4f5;
+  }
+
+  .error-copy p {
+    width: 216px;
+    margin: 0;
+    font-size: 27px;
+    line-height: 30px;
+  }
+
+  @media (max-width: 840px) and (min-width: 641px) {
+    .error-scene {
+      transform: scale(0.9);
+    }
+  }
+
+  @media (max-width: 720px) and (min-width: 641px) {
+    .error-scene {
+      transform: scale(0.8);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .error-page {
+      padding: 24px 16px;
+    }
+
+    .error-scene {
+      display: flex;
+      width: 100%;
+      max-width: 320px;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px; /* Separates .error-art-mobile and .error-copy */
+      transform: none;
+    }
+
+    .error-art--left,
+    .error-art--right {
+      display: none;
+    }
+
+    .error-art-mobile {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 6px; /* Optional spacing between mascot and briefcase */
+      height: 73px;
+    }
+
+    .error-art-mobile__slot {
+      position: relative;
+      flex: none;
+      overflow: visible;
+    }
+
+    .error-art-mobile__slot img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      max-width: none;
+      transform: scale(0.32);
+      transform-origin: top left;
+    }
+
+    .error-art-mobile__slot--mascot {
+      width: 68px;
+      height: 68px;
+    }
+
+    .error-art-mobile__slot--briefcase {
+      width: 46px;
+      height: 73px;
+    }
+
+    .error-copy {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      margin: 0;
+      text-align: center;
+    }
+
+    .error-copy h1 {
+      width: 100%;
+      height: auto;
+      font-size: clamp(52px, 16vw, 68px);
+      line-height: 1;
+      text-align: center;
+      -webkit-text-stroke: 15px #f4f4f5;
+    }
+
+    .error-copy p {
+      width: 100%;
+      max-width: 156px; /* Encourages clean two-line break like the mockup */
+      margin: 0;
+      font-size: clamp(13px, 4vw, 16px);
+      line-height: 1.15;
+      text-align: center;
+      text-wrap: balance;
+    }
+  }
+</style>

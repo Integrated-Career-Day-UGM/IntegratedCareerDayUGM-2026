@@ -6,6 +6,7 @@ import {
   useRegisterFluidHoverItem,
 } from '../../hooks/use-fluid-hover';
 import { FluidHoverHighlight } from '../../components/ui/fluid-hover-highlight';
+import EmptyState from '../../components/map/EmptyState';
 import { event, getCompany, getTrack, ui, walkInSessions } from '../../lib/data';
 import { formatTime } from '../../lib/map/happening-carousel';
 import type { WalkInSession } from '../../types/map';
@@ -49,16 +50,19 @@ function WalkInRow({
   useRegisterFluidHoverItem(registerItem, index, ref);
   const company = booking.companyId ? getCompany(booking.companyId) : undefined;
   return (
-    <div ref={ref} className={`relative flex items-center ${rowState(selected)}`}>
+    <div
+      ref={ref}
+      className={`relative flex items-center border border-transparent transition-colors md:hover:border-[var(--accent-pink)] ${rowState(selected)}`}
+    >
       <button
         type="button"
         onClick={() => onClick(booking)}
         onFocus={() => onFocusIndex(index)}
-        className="flex min-w-0 flex-1 items-center gap-2.5 px-3 py-2 text-left text-[13px] font-semibold leading-[1.2]"
+        className="flex min-w-0 flex-1 items-center gap-2.5 px-3 py-2.5 text-left text-[0.9375rem] font-semibold leading-[1.25] md:py-2 md:text-[13px]"
         aria-pressed={selected}
       >
         <span
-          className="font-heading min-w-[30px] shrink-0 rounded-[2px] px-1 text-center text-[12px] font-bold leading-[1.5] text-white"
+          className="font-heading min-w-[30px] shrink-0 rounded-[2px] px-1 text-center text-[0.8125rem] font-bold leading-[1.5] text-white md:text-[12px]"
           style={{ backgroundColor: ROOM_ACCENT }}
         >
           {booking.room}
@@ -66,7 +70,7 @@ function WalkInRow({
         <span className="min-w-0 flex-1 truncate text-ink-body">
           {company?.name ?? booking.companyName}
         </span>
-        <span className="shrink-0 text-[11px] font-medium tabular-nums text-ink-dim">
+        <span className="shrink-0 text-[0.75rem] font-medium tabular-nums text-ink-dim md:text-[11px]">
           {formatTime(booking.start)} - {formatTime(booking.end)}
         </span>
       </button>
@@ -137,9 +141,11 @@ export default function WalkInList() {
       </div>
 
       {groups.length === 0 ? (
-        <div className="panel-list px-3 py-4 text-[13px] text-ink-dim">
-          {ui.search.emptyResults}
-        </div>
+        <EmptyState
+          className="panel-list"
+          title={ui.walkInList.emptyTitle}
+          description={ui.walkInList.emptyBody}
+        />
       ) : (
         groups.map((group) => (
           <div key={group.dayId} className="panel-list mb-2.5">

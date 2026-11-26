@@ -156,6 +156,9 @@ function getPublicEnv(key: string): string | undefined {
 }
 
 const analyticsEndpoint = getPublicEnv('PUBLIC_ANALYTICS_ENDPOINT');
+// Release gate: the in-house event pipeline is still WIP. It stays off unless
+// explicitly enabled at build time, so dev/QA consoles stay clean.
+const analyticsEnabled = getPublicEnv('PUBLIC_ANALYTICS_ENABLED') === 'true';
 
 let provider: AnalyticsProvider = analyticsEndpoint
   ? createHttpProvider(analyticsEndpoint)
@@ -174,7 +177,7 @@ export function getAnalyticsProvider(): AnalyticsProvider {
  * Failures are caught and queued for retry.
  */
 export function track(eventType: AnalyticsEventType, payload: AnalyticsPayload = {}): void {
-  if (!isBrowser()) return;
+  if (!analyticsEnabled || !isBrowser()) return;
 
   const event: AnalyticsEvent = {
     eventId: uuidv6(),
@@ -207,6 +210,7 @@ export async function flushAnalyticsQueue(): Promise<{
   failed: number;
 }> {
   if (!isBrowser()) return { attempted: 0, succeeded: 0, failed: 0 };
+  if (!analyticsEnabled) return { attempted: 0, succeeded: 0, failed: 0 };
 
   const queue = readQueue();
   if (queue.length === 0) return { attempted: 0, succeeded: 0, failed: 0 };
@@ -247,6 +251,7 @@ export async function flushAnalyticsQueue(): Promise<{
  * Get the current queue length. Useful for debug UI or health checks.
  */
 export function getAnalyticsQueueLength(): number {
+  if (!analyticsEnabled) return 0;
   return readQueue().length;
 }
 
@@ -254,6 +259,7 @@ export function getAnalyticsQueueLength(): number {
  * Track a page view once per session/page load.
  */
 export function trackPageView(): void {
+  if (!analyticsEnabled || !isBrowser()) return;
   track('page.view', {
     href: window.location.href,
     pathname: window.location.pathname,
@@ -262,7 +268,7 @@ export function trackPageView(): void {
 }
 
 // Attempt to flush any queued events when the user leaves or hides the page.
-if (isBrowser()) {
+if (analyticsEnabled && isBrowser()) {
   const flush = () => {
     flushAnalyticsQueue().catch(() => {
       // Ignore flush failures on unload.

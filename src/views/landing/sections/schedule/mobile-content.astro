@@ -1,0 +1,25 @@
+---
+// Native mobile company-session rundown matching Figma node 1487:18220.
+import ScheduleDay from './ScheduleDay.tsx';
+import { scheduleDays } from './data';
+---
+
+<div class="relative w-full overflow-clip bg-[#f8f5f1] pb-9 pt-8" data-name="mobile-schedule-content">
+  <img
+    src="/landing/schedule/backdrop-mobile.png"
+    alt=""
+    class="pointer-events-none absolute left-[-93px] top-0 w-[576px] max-w-none"
+  />
+
+  <div class="relative z-10 flex flex-col items-center gap-6 px-6">
+    <img
+      src="/landing/schedule/heading-mobile.svg"
+      alt="Company Session Rundown"
+      class="w-[254px] max-w-full"
+    />
+
+    {scheduleDays.map((day) => (
+      <ScheduleDay day={day} variant="mobile" client:visible />
+    ))}
+  </div>
+</div>

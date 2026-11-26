@@ -38,11 +38,11 @@ export default function MapTooltip({ boothId, walkIn, x, y }: MapTooltipProps) {
 
   return (
     <div
-      className="map-tooltip pointer-events-none fixed z-50 w-[240px] border border-line bg-[#141416] md:w-[280px]"
+      className="map-tooltip pointer-events-none fixed z-50 w-[266px] border border-line bg-[#141416] md:w-[280px]"
       style={{ left: x, top: y }}
     >
       <div
-        className="relative h-12 w-full overflow-hidden border-b border-line md:h-14"
+        className="relative min-h-[53px] w-full overflow-hidden border-b border-line md:h-14"
         style={{
           background: `linear-gradient(135deg, ${zone?.color ?? (walkIn ? '#6d6a16' : '#27272a')}33 0%, #141416 70%)`,
         }}
@@ -52,29 +52,29 @@ export default function MapTooltip({ boothId, walkIn, x, y }: MapTooltipProps) {
             <img
               src={company.logoUrl}
               alt=""
-              className="max-h-8 w-auto object-contain"
+              className="max-h-8 w-auto object-contain max-md:max-h-[36px]"
             />
           ) : null}
         </div>
         <span
-          className="absolute bottom-1.5 left-2 px-1.5 py-0.5 text-[10px] font-bold text-white"
+          className="absolute bottom-1.5 left-2 px-1.5 py-0.5 text-[0.6875rem] font-bold text-white md:text-[0.625rem]"
           style={{ backgroundColor: zone?.color ?? (walkIn ? '#6d6a16' : '#27272a') }}
         >
           {code}
         </span>
       </div>
 
-      <div className="px-3 py-2">
-        <div className="truncate text-[14px] font-semibold leading-tight text-white">
+      <div className="px-[13px] py-[9px] md:px-3 md:py-2">
+        <div className="truncate text-[0.96875rem] font-semibold leading-tight text-white md:text-[0.875rem]">
           {title}
         </div>
         {company?.description && (
-          <p className="mt-1 line-clamp-3 text-[10.5px] leading-snug text-[#a1a1aa]">
+          <p className="mt-1 line-clamp-3 text-[0.71875rem] leading-snug text-[#a1a1aa] md:text-[0.75rem]">
             {company.description}
           </p>
         )}
         {openings > 0 && (
-          <div className="mt-1.5 text-[10.5px] text-[#8f8f8f]">
+          <div className="mt-1.5 text-[0.71875rem] text-[#8f8f8f] md:text-[0.75rem]">
             {openings} opening{openings === 1 ? '' : 's'}
           </div>
         )}

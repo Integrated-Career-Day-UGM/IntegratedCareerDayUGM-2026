@@ -1,0 +1,100 @@
+---
+// One registration column: title, framed card grid, and CTA.
+import { type RegistrationColumn } from './data';
+import StepCard from './StepCard.astro';
+
+interface Props {
+  column: RegistrationColumn;
+  variant: 'desktop' | 'mobile';
+}
+
+const { column, variant } = Astro.props;
+const isDesktop = variant === 'desktop';
+
+const allSteps = [...column.left, ...column.right].sort(
+  (a, b) => Number(a.number) - Number(b.number),
+);
+---
+
+{isDesktop ? (
+  <div class="flex w-[515.619px] flex-col items-center gap-[10px]" data-name={`column-${column.title}`}>
+    {/* Title with lime highlight */}
+    <div class="relative flex items-center justify-center">
+      <div class="absolute left-1/2 top-1/2 h-[44px] w-[calc(100%+40px)] -translate-x-1/2 -translate-y-1/2 bg-[#d2ff58]" aria-hidden="true" />
+      <h3 class="relative font-priego text-[38.4px] font-bold capitalize leading-[24.672px] tracking-[-0.768px] text-[var(--icd-teal-dark)]">
+        {column.title}
+      </h3>
+    </div>
+
+    <div class="relative h-[591.619px] w-[515.619px]">
+      {/* Framed card area */}
+      <div class="absolute left-[28px] top-[24px] h-[540px] w-[460px] border-[3.946px] border-solid border-[var(--icd-teal)] bg-[rgba(16,75,91,0.08)]" />
+
+      {/* Corner squares */}
+      <div class="absolute left-0 top-0 size-[27.619px] bg-[#22969a]" />
+      <div class="absolute left-0 top-[564px] size-[27.619px] bg-[#22969a]" />
+      <div class="absolute left-[488px] top-0 size-[27.619px] bg-[#22969a]" />
+      <div class="absolute left-[488px] top-[562px] size-[27.619px] bg-[#22969a]" />
+
+      {/* Two interleaved sub-columns */}
+      <div class="absolute left-[61px] top-[52px] flex w-[167.534px] flex-col gap-[14px]">
+        {column.left.map((step) => <StepCard step={step} />)}
+      </div>
+      <div class="absolute left-[245px] top-[52px] flex w-[206px] flex-col gap-[11px]">
+        {column.right.map((step) => <StepCard step={step} />)}
+      </div>
+
+      {/* CTA */}
+      <a
+        href={column.ctaHref}
+        target="_blank"
+        rel="noreferrer"
+        aria-label={column.ctaLabel}
+        class="figma-link absolute bottom-0 right-[44px] flex h-[70px] items-center gap-[12.885px] bg-[#0f0f0f] px-[17.841px] py-[5.947px]"
+      >
+        <span class="flex rotate-180 items-center justify-center">
+          <img alt="" src={column.ctaIcon} class="block size-[20.294px] max-w-none" />
+        </span>
+        <span class="font-priego text-[22.776px] font-bold leading-normal text-white">
+          {column.ctaLabel}
+        </span>
+      </a>
+    </div>
+  </div>
+) : (
+  <div class="relative w-full max-w-[420px]" data-name={`column-${column.title}`}>
+    {/* Title with lime highlight */}
+    <div class="mb-4 flex justify-center">
+      <span class="relative inline-flex items-center justify-center px-4 py-1">
+        <span class="absolute inset-0 bg-[#d2ff58]" aria-hidden="true" />
+        <span class="relative font-priego text-[26px] font-bold capitalize tracking-[-0.5px] text-[var(--icd-teal-dark)]">
+          {column.title}
+        </span>
+      </span>
+    </div>
+
+    <div class="relative flex flex-col gap-3 border-[3px] border-solid border-[var(--icd-teal)] bg-[rgba(16,75,91,0.08)] p-3">
+      <div class="absolute -left-[7px] -top-[7px] size-[14px] bg-[#22969a]" />
+      <div class="absolute -right-[7px] -top-[7px] size-[14px] bg-[#22969a]" />
+      <div class="absolute -bottom-[7px] -left-[7px] size-[14px] bg-[#22969a]" />
+      <div class="absolute -bottom-[7px] -right-[7px] size-[14px] bg-[#22969a]" />
+
+      {allSteps.map((step) => <StepCard step={step} variant="mobile" />)}
+
+      <a
+        href={column.ctaHref}
+        target="_blank"
+        rel="noreferrer"
+        aria-label={column.ctaLabel}
+        class="figma-link mt-2 flex items-center justify-center gap-3 bg-[#0f0f0f] px-4 py-3"
+      >
+        <span class="flex rotate-180 items-center justify-center">
+          <img alt="" src={column.ctaIcon} class="block size-[18px] max-w-none" />
+        </span>
+        <span class="font-priego text-[18px] font-bold leading-normal text-white">
+          {column.ctaLabel}
+        </span>
+      </a>
+    </div>
+  </div>
+)}

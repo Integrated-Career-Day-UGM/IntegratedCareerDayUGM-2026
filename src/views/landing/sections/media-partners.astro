@@ -1,0 +1,24 @@
+---
+// Media partners strip (Figma nodes 1992:3730 and 1992:3729).
+import LogoBox from './bento/LogoBox.tsx';
+import { mediaPartnerLogos } from './bento/logos';
+---
+
+<section class="media-partners-section relative w-full overflow-clip bg-[#f4faff] px-4 py-12" data-name="Media Partners" id="media-partner">
+  <div class="mx-auto flex w-full max-w-[900px] flex-col items-center gap-6">
+    <h2 class="font-priego text-center text-[28px] font-bold leading-tight text-[var(--icd-ink)] md:text-[34px]">
+      Media Partners
+    </h2>
+
+    <div class="flex flex-wrap items-center justify-center gap-5">
+      {mediaPartnerLogos.map((logo) => (
+        <LogoBox
+          src={logo.src}
+          alt={logo.name}
+          className={logo.name === 'Komap UGM' ? 'h-[108px] w-[108px] p-3' : 'h-[108px] w-[240px] p-4'}
+          imgClassName="max-h-[78%]"
+        />
+      ))}
+    </div>
+  </div>
+</section>

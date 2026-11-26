@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { motion, useInView } from 'motion/react';
+import { motion, useInView, useReducedMotion } from 'motion/react';
 import { ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
 import { cn } from '../../../lib/utils/cn';
 
@@ -12,8 +12,12 @@ export type KpiData = {
   lowerIsBetter?: boolean;
   trend?: number[];
   trendLabels?: string[];
+  /** Compact x-axis labels under the bars; falls back to trendLabels. */
+  trendShortLabels?: string[];
   /** Shown under the value when no bar is hovered ("by sector", "by day"). */
   seriesLabel?: string;
+  /** Static caption for the simple stat variant. */
+  caption?: string;
   loading?: boolean;
 };
 
@@ -21,6 +25,8 @@ export interface KpiTileProps extends KpiData {
   className?: string;
   /** Bar accent; defaults to the page pink. */
   accent?: string;
+  /** `stat` is the shared label/value/caption cell; `kpi` adds the bar chart. */
+  variant?: 'stat' | 'kpi';
 }
 
 const decimal = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 });
@@ -29,29 +35,32 @@ function deltaDirection(delta: number) {
   return delta > 0 ? 'up' : delta < 0 ? 'down' : 'flat';
 }
 
-const [W, H, PAD] = [100, 40, 3];
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-function placeBars(trend: number[], labels?: string[]) {
+function placeBars(
+  trend: number[],
+  labels?: string[],
+  shortLabels?: string[],
+) {
   const kept = trend.flatMap((value, index) =>
-    Number.isFinite(value) ? [{ label: labels?.[index] ?? `${index + 1}`, value }] : []
+    Number.isFinite(value)
+      ? [
+          {
+            label: labels?.[index] ?? `${index + 1}`,
+            shortLabel: shortLabels?.[index] ?? labels?.[index] ?? `${index + 1}`,
+            value,
+          },
+        ]
+      : []
   );
   if (kept.length === 0) return [];
   const max = Math.max(...kept.map((point) => point.value), 1);
-  const slot = (W - PAD * 2) / kept.length;
-  const width = Math.max(1.5, slot * 0.58);
-  return kept.map(({ label, value }, index) => {
-    const height =
-      value > 0 ? Math.max((value / max) * (H - PAD * 2), 1.5) : 0;
-    return {
-      label,
-      value,
-      x: PAD + index * slot + (slot - width) / 2,
-      y: H - PAD - height,
-      width,
-      height,
-    };
-  });
+  return kept.map(({ label, shortLabel, value }) => ({
+    label,
+    shortLabel,
+    value,
+    heightPct: value > 0 ? Math.max((value / max) * 100, 4) : 0,
+  }));
 }
 
 export default function KpiTile({
@@ -61,16 +70,23 @@ export default function KpiTile({
   delta,
   trend = [],
   trendLabels,
+  trendShortLabels,
   seriesLabel,
+  caption: captionProp,
   loading = false,
   className,
   accent = 'var(--accent-pink)',
+  variant = 'kpi',
 }: KpiTileProps) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.4 });
+  const reduceMotion = useReducedMotion() ?? false;
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  const points = placeBars(trend, trendLabels);
+  const showChart = variant === 'kpi';
+  const points = showChart
+    ? placeBars(trend, trendLabels, trendShortLabels)
+    : [];
   const last = points.length - 1;
   const at = activeIndex === null || last < 1 ? null : Math.min(activeIndex, last);
   const point = at === null ? undefined : points[at];
@@ -78,16 +94,7 @@ export default function KpiTile({
   const hasDelta = delta !== undefined && Number.isFinite(delta) && !isEmpty;
   const direction = deltaDirection(hasDelta ? delta : 0);
   const shownValue = point ? format(point.value) : isEmpty ? '—' : format(value as number);
-
-  const handlePointer = (e: React.PointerEvent<SVGSVGElement>) => {
-    const box = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - box.left) / Math.max(box.width, 1)) * W;
-    const slot = (W - PAD * 2) / Math.max(points.length, 1);
-    const index = Math.floor((x - PAD) / slot);
-    setActiveIndex(
-      points.length < 2 ? null : Math.min(Math.max(index, 0), points.length - 1)
-    );
-  };
+  const caption = point ? point.label : (seriesLabel ?? captionProp ?? '');
 
   const Arrow = direction === 'down' ? ArrowDownRight : ArrowUpRight;
 
@@ -103,15 +110,15 @@ export default function KpiTile({
       <p className="truncate text-[11px] font-medium text-[#8f8f8f]">{label}</p>
 
       {loading ? (
-        <div className="space-y-2">
-          <div className="h-7 w-20 animate-pulse bg-[#26262b]" />
-          <div className="h-3 w-16 animate-pulse bg-[#26262b]" />
-          <div className="h-9 w-full animate-pulse bg-[#26262b]" />
-        </div>
+        <>
+          <div className="h-6 w-20 skeleton-shimmer" />
+          <div className="h-4 w-24 skeleton-shimmer" />
+          {showChart && <div className="h-11 w-full skeleton-shimmer" />}
+        </>
       ) : (
         <>
           <div className="flex h-6 flex-wrap items-baseline gap-2 overflow-hidden">
-            <span className="inline-block min-w-[4.5ch] text-left text-[22px] font-semibold leading-none tabular-nums tracking-tight text-white">
+            <span className="inline-block min-w-[4.5ch] text-left font-heading text-[24px] font-bold leading-none tabular-nums text-white">
               {shownValue}
             </span>
             {hasDelta ? (
@@ -122,59 +129,102 @@ export default function KpiTile({
             ) : null}
           </div>
 
-          {/* Only the hovered bar label; at rest it names the series. Fixed
-              height so hovering never resizes the bento cell. */}
+          {/* One shared caption slot: the KPI series/hover label, or the
+              static stat caption. Fixed height so hover never resizes the
+              bento cell. */}
           <p className="h-4 truncate text-[11px] leading-4 text-[#8f8f8f]">
-            {point ? point.label : (seriesLabel ?? '')}
+            {caption}
           </p>
 
-          <div className="relative h-9">
-            {points.length < 2 ? (
-              <div className="flex h-full w-full items-center justify-center text-xs text-[#9b9b9b]">
-                <Minus size={14} />
+          {showChart && (
+            <div className="mt-0.5">
+              <div className="relative h-11">
+                {points.length < 2 ? (
+                  <div className="flex h-full w-full items-center justify-center text-xs text-[#9b9b9b]">
+                    <Minus size={14} />
+                  </div>
+                ) : (
+                  <>
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-x-0 top-0 bottom-0"
+                    >
+                      {[0, 25, 50, 75].map((mark) => (
+                        <span
+                          key={mark}
+                          className="absolute inset-x-0 border-t border-[#232326]"
+                          style={{ top: `${mark}%` }}
+                        />
+                      ))}
+                    </div>
+                    <div
+                      className="relative flex h-full items-end gap-[2px]"
+                      onPointerLeave={() => setActiveIndex(null)}
+                    >
+                      {points.map((bar, index) => (
+                        <button
+                          key={`${bar.label}-${index}`}
+                          type="button"
+                          aria-label={`${bar.label}: ${format(bar.value)}`}
+                          className="flex h-full flex-1 items-end outline-none focus-visible:ring-1 focus-visible:ring-white/40"
+                          onPointerEnter={() => setActiveIndex(index)}
+                          onFocus={() => setActiveIndex(index)}
+                          onBlur={() => setActiveIndex(null)}
+                          onClick={() => setActiveIndex(index)}
+                        >
+                          <motion.span
+                            className="mx-auto block w-full max-w-10 rounded-t-[3px]"
+                            initial={reduceMotion ? false : { height: 0 }}
+                            animate={{
+                              height: isInView ? `${bar.heightPct}%` : 0,
+                            }}
+                            transition={
+                              reduceMotion
+                                ? { duration: 0 }
+                                : {
+                                    duration: 0.45,
+                                    ease: EASE,
+                                    delay: index * 0.045,
+                                  }
+                            }
+                            style={{
+                              backgroundColor: accent,
+                              opacity:
+                                activeIndex === null || activeIndex === index
+                                  ? 1
+                                  : 0.35,
+                            }}
+                          />
+                        </button>
+                      ))}
+                    </div>
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-[#2f2f34]"
+                    />
+                  </>
+                )}
               </div>
-            ) : (
-              <svg
-                className="block h-full w-full touch-pan-y overflow-visible"
-                viewBox={`0 0 ${W} ${H}`}
-                preserveAspectRatio="none"
-                onPointerDown={handlePointer}
-                onPointerMove={handlePointer}
-                onPointerLeave={() => setActiveIndex(null)}
-                aria-hidden="true"
-              >
-                <line
-                  x1={PAD}
-                  x2={W - PAD}
-                  y1={H - PAD}
-                  y2={H - PAD}
-                  stroke="#2f2f34"
-                  strokeWidth={1}
-                  vectorEffect="non-scaling-stroke"
-                />
-                {points.map((bar, index) => (
-                  <motion.rect
-                    key={`${bar.label}-${index}`}
-                    x={bar.x}
-                    width={bar.width}
-                    initial={{ y: H - PAD, height: 0 }}
-                    animate={
-                      isInView
-                        ? { y: bar.y, height: bar.height }
-                        : { y: H - PAD, height: 0 }
-                    }
-                    transition={{
-                      duration: 0.45,
-                      ease: EASE,
-                      delay: index * 0.045,
-                    }}
-                    fill={accent}
-                    opacity={activeIndex === null || activeIndex === index ? 1 : 0.35}
-                  />
-                ))}
-              </svg>
-            )}
-          </div>
+
+              {points.length > 1 && points.length <= 3 && (
+                <div className="mt-1 flex gap-[2px]">
+                  {points.map((bar, index) => (
+                    <span
+                      key={`${bar.label}-axis-${index}`}
+                      className={cn(
+                        'min-w-0 flex-1 truncate text-center text-[0.625rem] leading-none transition-colors',
+                        activeIndex === index
+                          ? 'text-white'
+                          : 'text-[#8f8f8f]',
+                      )}
+                    >
+                      {bar.shortLabel}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </>
       )}
     </article>

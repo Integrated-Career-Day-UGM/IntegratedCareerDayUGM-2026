@@ -1,17 +1,15 @@
-import { useLayoutEffect, useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { MoveUpRight, Crosshair } from 'lucide-react';
+import { MoveUpRight } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
 import FloorPlanOverlay from './FloorPlanOverlay';
 import WalkInFloorPlanOverlay from './WalkInFloorPlanOverlay';
-import ZoomButtons from '../../components/map/ZoomButtons';
-import MapTooltip from '../../components/map/MapTooltip';
-import FacilityTooltip from '../../components/map/FacilityTooltip';
-import CompassButton from '../../components/map/CompassButton';
-import PixelTransition from '../../components/map/PixelTransition';
+import MapControls from './MapControls';
+import MapTooltipHost from './MapTooltipHost';
+import FloorWipe from './FloorWipe';
 import { DEV_TOOLS } from '../../lib/dev-tools';
-import { ui, getVenue, getTrack, getWalkInBookings, walkInSessions } from '../../lib/data';
+import { ui, getVenue, getTrack, walkInSessions } from '../../lib/data';
 import { surfaceClasses } from '../../lib/surface-classes';
 import { SNAP_PEEK, TAB_RAIL_H } from './MobileBottomSheet';
 import {
@@ -27,6 +25,7 @@ import {
   HALL_GEOJSON,
   frameToLngLat,
   walkInRoomFrameBox,
+  boothAtFramePoint,
 } from '../../lib/map/floorplan';
 import {
   homographyToMatrix3d,
@@ -80,25 +79,6 @@ const GRANITE_PAINT: Array<[string, Record<string, string>]> = [
   ['highway_name_other', { 'text-color': '#9aa0a6', 'text-halo-color': '#17181c' }],
 ];
 
-/**
- * Hit-test a point in floor-plan frame coordinates against the rotated booth
- * boxes (each booth's inner box is centred on its wrapper and rotated by
- * `rotate` degrees).
- */
-function boothAtFramePoint(p: Point2D): string | null {
-  for (const s of BOOTH_SHAPES) {
-    const dx = p.x - (s.left + s.w / 2);
-    const dy = p.y - (s.top + s.h / 2);
-    const a = (-s.rotate * Math.PI) / 180;
-    const rx = dx * Math.cos(a) - dy * Math.sin(a);
-    const ry = dx * Math.sin(a) + dy * Math.cos(a);
-    if (Math.abs(rx) <= s.innerW / 2 + 2 && Math.abs(ry) <= s.innerH / 2 + 2) {
-      return s.id;
-    }
-  }
-  return null;
-}
-
 export default function MapLibreMap() {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const overlayRootRef = useRef<HTMLDivElement>(null);
@@ -111,59 +91,27 @@ export default function MapLibreMap() {
   const positionTooltipRef = useRef<() => void>(() => {});
   const compassNeedleRef = useRef<SVGGElement>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
-  // Field selectors, not a whole-store subscription: hoveredBoothId and
-  // mapView change at pointer/moveend rate, and a whole-store subscribe
-  // re-rendered this island (and every other island) on each — the GC churn
-  // that starved MapLibre's render loop and blacked the canvas.
+  // Field selectors, not a whole-store subscription: mapView changes at
+  // moveend rate, and hover is owned by MapTooltipHost. A whole-store
+  // subscribe re-rendered this island (and every other island) on each
+  // pointer move — the GC churn that starved MapLibre's render loop.
   const setMapView = useMapStore((s) => s.setMapView);
   const selectedBoothId = useMapStore((s) => s.selectedBoothId);
   const selectedFacilityId = useMapStore((s) => s.selectedFacilityId);
-  const hoveredBoothId = useMapStore((s) => s.hoveredBoothId);
   const selectedVenueId = useMapStore((s) => s.selectedVenueId);
   const selectedAreaId = useMapStore((s) => s.selectedAreaId);
   const selectedTrackId = useMapStore((s) => s.selectedTrackId);
-  const selectedDayId = useMapStore((s) => s.selectedDayId);
   const selectedWalkInRoomId = useMapStore((s) => s.selectedWalkInRoomId);
   const gikMode = useMapStore((s) => s.gikMode);
   const setSelectedArea = useMapStore((s) => s.setSelectedArea);
   const setGikMode = useMapStore((s) => s.setGikMode);
-  const activeBoothId = hoveredBoothId ?? selectedBoothId;
   const walkInMode = selectedTrackId === 'walk-in-interview' || selectedAreaId === 'hall-b';
   const walkInConfig = useMapStore((s) => s.walkIn2FConfig);
-  /** Bookings for the selected 2F room on the visible day — drives the
-      pinned tooltip (earliest booking; the sidebar lists every card). */
-  const walkInBooking = selectedWalkInRoomId
-    ? getWalkInBookings(selectedDayId, selectedWalkInRoomId)[0]
-    : undefined;
 
   useEffect(() => {
     // A floor swap changes the overlay root while the camera is still; force
     // one render so syncOverlay writes the existing matrix to the new root.
     mapRef.current?.triggerRepaint();
-  }, [walkInMode]);
-
-  /* Reuse the splash's PixelTransition as a short pixel veil on floor swaps
-     (career expo ↔ walk-in 2F). Same art settings as MapSplash: mounts dark,
-     flips `active` one frame later (the component only animates on a
-     false→true change), then dissolves onto the new floor. */
-  const [floorWipe, setFloorWipe] = useState<{ key: number; active: boolean } | null>(null);
-  const prevWalkInRef = useRef(walkInMode);
-  useEffect(() => {
-    if (prevWalkInRef.current === walkInMode) return;
-    prevWalkInRef.current = walkInMode;
-    const key = Date.now();
-    setFloorWipe({ key, active: false });
-    const raf = requestAnimationFrame(() =>
-      setFloorWipe((wipe) => (wipe && wipe.key === key ? { ...wipe, active: true } : wipe)),
-    );
-    const timeout = window.setTimeout(
-      () => setFloorWipe((wipe) => (wipe && wipe.key === key ? null : wipe)),
-      1400,
-    );
-    return () => {
-      cancelAnimationFrame(raf);
-      window.clearTimeout(timeout);
-    };
   }, [walkInMode]);
 
   /** Re-fit the hall into view. Mobile keeps the top chrome and the tray
@@ -222,13 +170,6 @@ export default function MapLibreMap() {
   const areaName = area?.name ?? ui.map.hallLabel;
   const trackLabel = getTrack(selectedTrackId)?.label ?? ui.map.hallSublabel;
 
-  /* Screen-space tooltip: lives OUTSIDE the floor-plan warp so it never
-     inherits the plan's skew. Positioned imperatively per rendered frame.
-     Shows for the hovered booth AND the selected one (click → bubble stays). */
-  useLayoutEffect(() => {
-    positionTooltipRef.current();
-  }, [hoveredBoothId, selectedBoothId, selectedFacilityId, selectedWalkInRoomId]);
-
   // QuickFind / facility markers: bring the facility point into view.
   useEffect(() => {
     if (!mapLoaded || !selectedFacilityId) return;
@@ -279,6 +220,18 @@ export default function MapLibreMap() {
     });
 
     mapRef.current = map;
+
+    // OpenFreeMap's dark style still points `landcover_wood` at a
+    // `wood-pattern` sprite that is no longer in their sprite sheet. We use
+    // the flat granite palette instead, so drop the stale pattern before the
+    // first wood layer paints (also stops MapLibre's missing-image warning).
+    const dropStaleWoodPattern = () => {
+      if (map.getLayer('landcover_wood')) {
+        map.setPaintProperty('landcover_wood', 'fill-pattern', null);
+      }
+    };
+    map.on('style.load', dropStaleWoodPattern);
+    if (map.isStyleLoaded()) dropStaleWoodPattern();
 
     // Clicking the map itself restores the list from a facility selection.
     // Facility markers/tooltips are DOM children above the canvas, so their
@@ -725,69 +678,26 @@ export default function MapLibreMap() {
         )}
       </div>
 
-      {/* Splash pixel-transition art reused as the floor-swap veil. */}
-      {floorWipe && (
-        <div key={floorWipe.key} className="pointer-events-none absolute inset-0 z-[12]">
-          <PixelTransition
-            firstContent={<div className="absolute inset-0 bg-[#09090b]" />}
-            secondContent={<div className="absolute inset-0" />}
-            gridSize={24}
-            pixelColor="#2a2a2a"
-            pixelFill="#2a2a2a"
-            pixelBorder="#ff2d6f"
-            mosaic={0.1}
-            animationStepDuration={0.3}
-            pattern="random"
-            randomness={0.72}
-            pixelAnimation="pop"
-            pixelShape="square"
-            gap={0.2}
-            trigger="click"
-            active={floorWipe.active}
-            once
-            onActiveChange={() => {}}
-            aspectRatio="auto"
-            className="h-full w-full"
-            style={{ width: '100%', height: '100%' }}
-            decorative
-          />
-        </div>
-      )}
+      {/* Short pixel veil on every map-shell tab/floor swap. */}
+      <FloorWipe />
 
       {/* Mobile map-centre crosshair removed — the hall card + tray already
           communicate the camera target. */}
 
-      {/* Zoom + Compass controls — right rail, vertically centered (the
-          default spot, both breakpoints; keeps top clear for the chrome
-          stack and the hall card, bottom clear for the sheet). */}
-      <div className="absolute right-3 top-1/2 z-10 flex -translate-y-1/2 flex-col gap-2">
-        <ZoomButtons
-          onZoomIn={() => mapRef.current?.zoomIn({ duration: 200 })}
-          onZoomOut={() => mapRef.current?.zoomOut({ duration: 200 })}
-          zoomInLabel={ui.map.zoomInLabel}
-          zoomOutLabel={ui.map.zoomOutLabel}
-        />
-        <CompassButton
-          onClick={() => mapRef.current?.rotateTo(0, { duration: 300 })}
-          label={ui.map.compassLabel}
-          needleRef={compassNeedleRef}
-        />
-        <button
-          type="button"
-          onClick={() => fitHall()}
-          aria-label={ui.map.recenterLabel}
-          title={ui.map.recenterLabel}
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-[#34343a] bg-[#141416] text-white transition-[transform,colors] hover:border-[#4a4a52] active:scale-95"
-        >
-          <Crosshair size={17} strokeWidth={1.7} />
-        </button>
-      </div>
+      {/* Zoom + Compass controls — memoized; hover/selection renders never
+          reconcile this subtree. */}
+      <MapControls
+        mapRef={mapRef}
+        compassNeedleRef={compassNeedleRef}
+        fitHall={fitHall}
+      />
 
       {/* Current venue / tab card. Mobile: hovers just above the tray's
           peek position — derived from the sheet's SNAP_PEEK + tab rail
           constants instead of a hard-coded 172 (§1). Desktop: sits above
           the quick-find bar. Tappable: re-fits the hall into view. */}
       <div
+        data-layout-tune="hall-card"
         className="absolute inset-x-3 z-10 flex justify-end bottom-(--hall-card-bottom) md:inset-x-auto md:bottom-0 md:left-3 md:justify-start"
         style={{ '--hall-card-bottom': `calc(${SNAP_PEEK}px + ${TAB_RAIL_H}px + 6px)` } as React.CSSProperties}
       >
@@ -815,7 +725,7 @@ export default function MapLibreMap() {
           // not a div): opaque surface + honest shadow replaces the
           // translucent bg + backdrop-blur (less glassy, more contrast on
           // the tiles).
-          className={`${surfaceClasses(3)} flex cursor-pointer items-center gap-2 rounded-lg border border-[#34343a] px-3 py-2 text-left text-white transition-colors hover:border-[#4a4a52] active:scale-[0.98]`}
+          className={`${surfaceClasses(3)} flex cursor-pointer items-center gap-2 rounded-lg border border-[#34343a] px-3 py-2 text-left text-white transition-colors md:hover:border-[var(--accent-pink)] active:scale-[0.98]`}
         >
           <MoveUpRight size={16} strokeWidth={2.2} className="shrink-0" />
           <div>
@@ -825,33 +735,13 @@ export default function MapLibreMap() {
         </button>
       </div>
 
-      {/* Screen-space booth tooltip (upright — outside the plan warp).
-          Shows on hover AND on selection, so the clicked venue keeps its
-          bubble while the sidebar shows the detail. The same bubble pins
-          above a selected 2F walk-in room. */}
-      {(activeBoothId || selectedFacilityId || selectedWalkInRoomId) && (
-        <div
-          ref={tooltipRef}
-          className="absolute top-0 left-0 z-20"
-          style={{ opacity: 0, willChange: 'transform' }}
-        >
-          {activeBoothId ? (
-            <MapTooltip boothId={activeBoothId} x={0} y={0} />
-          ) : walkInBooking ? (
-            <MapTooltip
-              walkIn={{
-                room: walkInBooking.room,
-                companyId: walkInBooking.companyId,
-                companyName: walkInBooking.companyName,
-              }}
-              x={0}
-              y={0}
-            />
-          ) : selectedFacilityId ? (
-            <FacilityTooltip facilityId={selectedFacilityId} />
-          ) : null}
-        </div>
-      )}
+      {/* Screen-space tooltip host (upright — outside the plan warp).
+          Subscribes to hover/selection itself; hovering never re-renders
+          this whole map island. */}
+      <MapTooltipHost
+        tooltipRef={tooltipRef}
+        positionTooltipRef={positionTooltipRef}
+      />
 
       {/* Basemap attribution (OSM license) */}
       <div className="pointer-events-none absolute right-3 bottom-0.5 z-10 text-[10px] leading-none text-zinc-500">

@@ -19,6 +19,7 @@
     "name": "East",
     "color": "#f0862a",
     "boothIds": [
+      "e1",
       "e2",
       "e3",
       "e4",
@@ -52,7 +53,6 @@
     "name": "Main",
     "color": "#1f7f79",
     "boothIds": [
-      "a",
       "b"
     ]
   }

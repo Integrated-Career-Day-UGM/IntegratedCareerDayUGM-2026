@@ -6,6 +6,7 @@ import { useFluidHover } from '../../hooks/use-fluid-hover';
 import { FluidHoverHighlight } from '../../components/ui/fluid-hover-highlight';
 import { MapFluidRoot } from '../../components/map/map-fluid-root';
 import { quickfind, ui } from '../../lib/data';
+import { cn } from '../../lib/utils/cn';
 
 const iconMap: Record<
   string,
@@ -29,6 +30,8 @@ const iconMap: Record<
 
 // One-key shortcuts for the first three items (ignored while typing).
 const shortcutKeys = ['T', 'M', 'H'];
+// Copy is not ready for these yet; keep the chips visible but inert.
+const DISABLED_FACILITY_IDS = new Set(['mushola', 'pusat-bantuan']);
 
 const openFacility = (id: string) => {
   const store = useMapStore.getState();
@@ -50,7 +53,7 @@ export default function QuickFind() {
       if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) return;
       const key = e.key.toUpperCase();
       const item = visible[shortcutKeys.indexOf(key)];
-      if (item) {
+      if (item && !DISABLED_FACILITY_IDS.has(item.id)) {
         track('facility.click', { facilityId: item.id, label: item.label, via: 'keyboard' });
         openFacility(item.id);
       }
@@ -71,25 +74,43 @@ export default function QuickFind() {
         {visible.map((item, i) => {
           const Icon = iconMap[item.icon] ?? Info;
           const label = ui.quickFind.items[item.id] ?? item.label;
+          const disabled = DISABLED_FACILITY_IDS.has(item.id);
           return (
             <button
               key={item.id}
               type="button"
-              ref={(el) => hover.registerItem(i, el)}
-              onFocus={() => hover.setActiveIndex(i)}
+              ref={(el) => hover.registerItem(i, disabled ? null : el)}
+              onFocus={() => {
+                if (!disabled) hover.setActiveIndex(i);
+              }}
+              disabled={disabled}
+              aria-disabled={disabled || undefined}
               onClick={() => {
+                if (disabled) return;
                 track('facility.click', { facilityId: item.id, label: item.label });
                 openFacility(item.id);
               }}
-              className="group relative flex h-6 shrink-0 items-center gap-1.5 rounded-full border border-[#4a4a4a] bg-[#2a2a2a] px-2 text-[8.5px] font-semibold text-ink-body transition-colors active:scale-[0.98] md:h-7 md:gap-1.5 md:px-2.5 md:text-[8px]"
+              className={cn(
+                'group relative flex min-h-9 shrink-0 items-center gap-2 rounded-full border px-3 py-1 text-[0.75rem] font-semibold transition-colors md:min-h-7 md:gap-1.5 md:px-2.5 md:py-0 md:text-[0.6875rem]',
+                disabled
+                  ? 'cursor-not-allowed border-[#3a3a3a] bg-[#222225] text-[#6b6b70] opacity-55'
+                  : 'border-[#4a4a4a] bg-[#2a2a2a] text-ink-body active:scale-[0.98] md:hover:border-[var(--accent-pink)]',
+              )}
             >
               <Icon
-                size={12}
+                size={14}
                 strokeWidth={1.5}
                 fill="currentColor"
-                className="h-2.5 w-2.5 shrink-0 md:h-2.5 md:w-2.5"
+                className="h-3.5 w-3.5 shrink-0 md:h-2.5 md:w-2.5"
               />
-              <span className="text-[#d4d4d8]/65 transition-colors group-hover:text-[#d4d4d8]">
+              <span
+                className={cn(
+                  'transition-colors',
+                  disabled
+                    ? 'text-[#6b6b70]'
+                    : 'text-[#d4d4d8]/65 group-hover:text-[#d4d4d8]',
+                )}
+              >
                 {label}
               </span>
             </button>

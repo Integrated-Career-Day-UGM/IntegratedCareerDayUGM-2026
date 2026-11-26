@@ -11,6 +11,9 @@
     "shortcutKey": "K",
     "resultsLabel": "{count} result{plural}",
     "emptyResults": "No companies or booths match your search.",
+    "emptyTitle": "Tidak ditemukan…",
+    "emptyBody": "Coba nama perusahaan, pekerjaan, sesi bicara.",
+    "emptyAction": "Hapus pencarian",
     "filters": {
       "trigger": "Filters",
       "title": "Filters",
@@ -55,13 +58,29 @@
     "upNext": "Up next",
     "noMoreSessions": "No more sessions today"
   },
+  "walkInList": {
+    "title": "Walk-in Interview",
+    "emptyTitle": "Belum ada walk-in interview",
+    "emptyBody": "Tidak ada jadwal untuk hari ini. Coba hari lain."
+  },
   "boothDetail": {
     "selectedLabel": "Selected company / event / venue",
     "tagsLabel": "Tags",
     "websiteCta": "Company Website",
     "programCta": "Program URL",
     "posterCta": "Company_poster",
-    "opportunitiesLabel": "Available Opportunity",
+    "opportunitiesLabel": "Openings",
+    "importantDatesLabel": "Important dates",
+    "programLinksLabel": "Program links",
+    "qualificationsLabel": "Qualifications",
+    "preferencesLabel": "Preferences",
+    "deadlineLabel": "Deadline",
+    "applyLabel": "Apply",
+    "intakeLabel": "Intake",
+    "openingsEmptyTitle": "Lowongan belum tersedia",
+    "openingsEmptyBody": "Data lowongan untuk perusahaan ini belum dipublikasikan.",
+    "openingsUnavailableTitle": "Lowongan belum bisa dimuat",
+    "openingsUnavailableBody": "Coba lagi nanti.",
     "mockDataLabel": "Mock data",
     "mockDataHint": "Job-opening data is a placeholder; final openings will be filled in later.",
     "opportunityType": "Internship",
@@ -81,12 +100,17 @@
   "companySessions": {
     "title": "Sessions",
     "stageLabel": "Main Stage",
-    "roomPrefix": "Bilik"
+    "roomPrefix": "Bilik",
+    "emptyTitle": "Belum ada sesi",
+    "emptyBody": "Jadwal sesi akan muncul di sini."
   },
   "saved": {
     "title": "saved",
     "listTitle": "Venue/company/event tersimpan",
-    "empty": "You haven’t bookmarked any booths or sessions yet."
+    "empty": "You haven’t bookmarked any booths or sessions yet.",
+    "emptyTitle": "Belum ada yang disimpan",
+    "emptyBody": "Simpan booth atau sesi untuk melihatnya di sini.",
+    "emptyAction": "Jelajahi booth"
   },
   "insights": {
     "title": "Insights",
@@ -104,7 +128,7 @@
       "openRoles": {
         "label": "Open roles",
         "value": "51",
-        "caption": "full-time + internships"
+        "caption": "all listed openings"
       },
       "sessions": {
         "label": "Sessions today",
@@ -124,7 +148,13 @@
       "sessions": "Sessions",
       "bySector": "by sector",
       "byDay": "by day",
-      "byTrack": "by track"
+      "byTrack": "by track",
+      "topCompany": "Top hiring company",
+      "topTags": "Top tags",
+      "topLocation": "Locations",
+      "ofAllOpenings": "of all open roles",
+      "managementTrainee": "Management trainee",
+      "other": "Other"
     }
   },
   "info": {
@@ -143,33 +173,33 @@
       "venue": {
         "heading": "Venue",
         "headline": "GIK",
-        "body": "Hall C1 for Career Expo; Hall B and C001-002 for sessions."
+        "subline": "UGM Yogyakarta",
+        "body": "Student Center Lt 1 for Career Expo; Student Center Lt 2 for Walk-in; PP KAGAMA Booth B for Counseling."
       },
       "hours": {
         "heading": "Event Hours",
-        "headline": "08:00–17:00 WIB",
-        "body": "Doors open 07:30, last entry 16:30 WIB."
+        "headline": "10:00–15:00 WIB",
+        "body": ""
       },
       "whatToBring": {
         "heading": "What to bring",
-        "body": "CV, portfolio, KTP/student ID, and vaccination certificate.",
+        "body": "CV, portfolio, and KTP/student ID.",
         "items": [
           "Updated CV",
           "Portfolio",
-          "KTP / student ID",
-          "Vaccination certificate"
+          "KTP / student ID"
         ],
         "note": "Smart casual dress code"
       },
       "help": {
         "heading": "Need help?",
-        "body": "Ask the Info Center or any committee member in a pink vest."
+        "body": "Ask the committee in the lanyard."
       }
     }
   },
   "posters": {
-    "title": "ICD_poster",
-    "companyTitle": "Company_poster",
+    "title": "ICD Poster",
+    "companyTitle": "Lihat Poster",
     "hint": "Tap to explore",
     "loading": "Loading posters…",
     "count": "{count} posters",
@@ -191,7 +221,7 @@
     }
   },
   "map": {
-    "hallLabel": "Hall C1",
+    "hallLabel": "Student Center Lt 1",
     "hallSublabel": "Career Expo",
     "compassLabel": "Reset bearing to north",
     "recenterLabel": "Recenter map",

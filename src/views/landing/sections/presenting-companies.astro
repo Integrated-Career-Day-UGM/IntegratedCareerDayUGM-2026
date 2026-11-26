@@ -1,0 +1,25 @@
+---
+// Presenting-companies logo wall (Figma node 2062:165), decoupled so the
+// final company PNG pack can replace `companyLogos` in one place.
+import LogoBox from './bento/LogoBox.tsx';
+import { companyLogos } from './bento/logos';
+---
+
+<section class="presenting-companies-section relative w-full overflow-clip bg-[#f4faff] px-4 py-14 sm:px-8" data-name="Presenting Companies" id="presenting-companies">
+  <div class="mx-auto flex w-full max-w-[1200px] flex-col items-center gap-8">
+    <h2 class="font-priego text-center text-[30px] font-bold leading-tight text-[var(--icd-ink)] md:text-[42px]">
+      Presenting Companies
+    </h2>
+
+    <div class="grid w-full grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6 md:gap-4">
+      {companyLogos.map((logo) => (
+        <LogoBox
+          src={logo.src}
+          alt={logo.name}
+          className="aspect-square w-full"
+          imgClassName="max-h-[70%]"
+        />
+      ))}
+    </div>
+  </div>
+</section>

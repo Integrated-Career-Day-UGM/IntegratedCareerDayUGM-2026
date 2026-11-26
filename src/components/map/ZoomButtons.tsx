@@ -18,7 +18,7 @@ export default function ZoomButtons({
       <button
         type="button"
         onClick={onZoomIn}
-        className="flex h-10 w-10 items-center justify-center text-zinc-300 transition-[transform,colors] hover:bg-zinc-800 hover:text-white active:scale-95"
+        className="flex h-11 w-11 items-center justify-center text-zinc-300 transition-[transform,colors] hover:bg-zinc-800 hover:text-white active:scale-95 md:h-10 md:w-10"
         aria-label={zoomInLabel}
       >
         <Plus size={20} strokeWidth={2} />
@@ -27,7 +27,7 @@ export default function ZoomButtons({
       <button
         type="button"
         onClick={onZoomOut}
-        className="flex h-10 w-10 items-center justify-center text-zinc-300 transition-[transform,colors] hover:bg-zinc-800 hover:text-white active:scale-95"
+        className="flex h-11 w-11 items-center justify-center text-zinc-300 transition-[transform,colors] hover:bg-zinc-800 hover:text-white active:scale-95 md:h-10 md:w-10"
         aria-label={zoomOutLabel}
       >
         <Minus size={20} strokeWidth={2} />
