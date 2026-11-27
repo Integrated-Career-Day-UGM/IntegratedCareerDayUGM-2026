@@ -409,15 +409,12 @@ export default function MapLibreMap() {
     // behind the "disappearing map" bug) used to leave the canvas black
     // with no trace. Context loss is logged so GL resets are visible.
     map.on('error', (e) => {
-      // eslint-disable-next-line no-console
       console.error('[maplibre]', e.error ?? e);
     });
     map.on('webglcontextlost', (e) => {
-      // eslint-disable-next-line no-console
       console.error('[maplibre] WebGL context lost', (e as unknown as { originalEvent?: Event }).originalEvent);
     });
     map.on('webglcontextrestored', () => {
-      // eslint-disable-next-line no-console
       console.warn('[maplibre] WebGL context restored');
     });
 
@@ -662,8 +659,7 @@ export default function MapLibreMap() {
       try {
         syncOverlay();
       } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error('[maplibre] syncOverlay failed', err);
+          console.error('[maplibre] syncOverlay failed', err);
       }
     };
     map.on('render', safeSyncOverlay);

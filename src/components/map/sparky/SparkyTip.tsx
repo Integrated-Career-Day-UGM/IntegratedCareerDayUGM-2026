@@ -55,7 +55,6 @@ export default function SparkyTip({
       window.clearInterval(timer);
       document.removeEventListener('visibilitychange', onVisibility);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messageKey, intervalMs]);
 
   const message = messages[index % messages.length] ?? messages[0];
