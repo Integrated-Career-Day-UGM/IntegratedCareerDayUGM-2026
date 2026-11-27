@@ -26,6 +26,8 @@ type Props = {
   /** Force the 4:5 frame (e.g. schedule posters) instead of deriving it from
    *  whether a company was passed. */
   portrait?: boolean;
+  /** Hide the download action (e.g. the schedule carousel). Default: shown. */
+  showDownload?: boolean;
 };
 
 function Thumbnails({
@@ -114,6 +116,7 @@ export default function PosterGalleryModal({
   onOpenBooth,
   onClose,
   portrait: portraitOverride,
+  showDownload = true,
 }: Props) {
   const [current, setCurrent] = useState(index);
   const [dragging, setDragging] = useState(false);
@@ -227,15 +230,17 @@ export default function PosterGalleryModal({
             </span>
           </button>
         )}
-        <button
-          type="button"
-          onClick={() => void downloadFullPoster(item.src, `${title} - ${item.title}`)}
-          aria-label={`Download ${item.title}`}
-          className="inline-flex min-h-11 items-center justify-center gap-1.5 border border-line pl-2.5 pr-3 text-[0.75rem] font-semibold text-white transition-colors hover:border-[#4a4a52] hover:bg-[#26262b] active:scale-[0.99]"
-        >
-          <Download size={15} />
-          Download
-        </button>
+        {showDownload && (
+          <button
+            type="button"
+            onClick={() => void downloadFullPoster(item.src, `${title} - ${item.title}`)}
+            aria-label={`Download ${item.title}`}
+            className="inline-flex min-h-11 items-center justify-center gap-1.5 border border-line pl-2.5 pr-3 text-[0.75rem] font-semibold text-white transition-colors hover:border-[#4a4a52] hover:bg-[#26262b] active:scale-[0.99]"
+          >
+            <Download size={15} />
+            Download
+          </button>
+        )}
         <div className="hidden items-center justify-end text-[0.6875rem] text-[#8f8f8f] md:flex">
           <span className="shrink-0 tabular-nums">
             {current + 1} / {items.length}

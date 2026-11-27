@@ -216,6 +216,7 @@ export default function EventInfo() {
           heading=""
           index={0}
           portrait
+          showDownload={false}
           onClose={() => setScheduleOpen(false)}
         />
       )}
