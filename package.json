@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/sync-yaml-data.mjs && astro build",
+    "build": "node scripts/sync-yaml-data.mjs && astro build && node scripts/strip-dev-assets.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check --minimumSeverity warning",

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   MapPin,
   Clock,
@@ -7,10 +8,13 @@ import {
   careerFairMeta,
   companies,
   event,
+  schedulePosters,
   ui,
 } from '../../lib/data';
 import { cn } from '../../lib/utils/cn';
+import { useMapStore } from '../../stores/mapStore';
 import RegisterCtas from '../../components/map/RegisterCtas';
+import PosterGalleryModal from '../../components/map/PosterGalleryModal';
 import SocialLinks from '../../components/map/SocialLinks';
 import CompanyBentoGrid from '../../components/map/CompanyBentoGrid';
 
@@ -23,6 +27,8 @@ const card =
  */
 export default function EventInfo() {
   const { venue, hours, whatToBring, help } = ui.info.sections;
+  const openChangelog = useMapStore((s) => s.openChangelog);
+  const [scheduleOpen, setScheduleOpen] = useState(false);
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
     ui.info.mapsQuery,
   )}`;
@@ -123,6 +129,20 @@ export default function EventInfo() {
                 {hours.body}
               </p>
             )}
+            <div className="relative z-10 mt-auto border-t border-line pt-2">
+              <button
+                type="button"
+                onClick={() => setScheduleOpen(true)}
+                className="group/cta inline-flex items-center gap-1.5 border border-line bg-[#1b1b1f] px-2.5 py-1 text-xs font-medium text-white transition-[border-color,background-color] duration-200 hover:border-[#5a5a63] hover:bg-[#232327] active:scale-[0.98]"
+              >
+                Lihat Jadwal
+                <ArrowUpRight
+                  size={12}
+                  strokeWidth={2.2}
+                  className="transition-transform duration-200 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5 motion-reduce:transform-none"
+                />
+              </button>
+            </div>
           </section>
 
           <section className={cn(card, 'info-enter')} style={{ animationDelay: '120ms' }}>
@@ -180,6 +200,26 @@ export default function EventInfo() {
         </div>
         <CompanyBentoGrid companies={companies} />
       </div>
+
+      {/* Changelog entry: bottom of the Information tab on every breakpoint. */}
+      <button
+        type="button"
+        onClick={openChangelog}
+        className="mt-4 mb-2 block text-[0.75rem] font-semibold text-[#8f8f8f] underline underline-offset-4 transition-colors hover:text-white"
+      >
+        Changelog
+      </button>
+
+      {scheduleOpen && (
+        <PosterGalleryModal
+          items={schedulePosters}
+          heading=""
+          index={0}
+          portrait
+          showDownload={false}
+          onClose={() => setScheduleOpen(false)}
+        />
+      )}
     </div>
   );
 }

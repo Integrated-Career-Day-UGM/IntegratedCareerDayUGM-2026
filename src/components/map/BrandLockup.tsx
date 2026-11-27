@@ -16,7 +16,7 @@ const lockupLine2 = lockupRest.join(' ');
 export default function BrandLockup({ compact = false }: { compact?: boolean }) {
   if (compact) {
     return (
-      <div className="flex flex-col items-start gap-1.5">
+      <div className="flex flex-col items-start gap-1.5" style={{ zoom: 0.85 }}>
         <div className="-rotate-[1.2deg] bg-[#ff2d6f] px-2 pb-[1px] pt-0 font-heading text-[0.719rem] font-bold leading-[1.15] tracking-[-0.3px] text-white shadow-[0_1px_0_rgba(0,0,0,0.25)]">
           {ui.event.exploreBadge}
         </div>

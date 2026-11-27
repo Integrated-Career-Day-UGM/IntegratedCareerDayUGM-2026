@@ -37,6 +37,22 @@ export default defineConfig({
     allowedHosts: isDev ? ['.kiri.localhost', '.kiri.local'] : [],
   },
   vite: {
+    build: {
+      rollupOptions: {
+        output: {
+          // Isolate maplibre-gl so UI edits never change its chunk hash.
+          // Must be the FUNCTION form: Astro wraps output.manualChunks and
+          // silently ignores the object form ({ 'vendor': ['pkg'] }).
+          manualChunks(id) {
+            if (!/node_modules[\\/]maplibre-gl[\\/]/.test(id)) return;
+            // Keep the stylesheet on the island chunk — moving it here would
+            // drop its <link> from map.html and collapse the container.
+            if (id.endsWith('.css')) return;
+            return 'maplibre-vendor';
+          },
+        },
+      },
+    },
     server: {
       watch: {
         usePolling: true,

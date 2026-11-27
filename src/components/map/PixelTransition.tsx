@@ -1,5 +1,4 @@
 // @ts-nocheck
-/* eslint-disable */
 import { useEffect, useRef } from 'react';
 import './PixelTransition.css';
 

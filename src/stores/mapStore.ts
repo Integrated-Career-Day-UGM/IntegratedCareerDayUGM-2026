@@ -12,7 +12,7 @@ import {
 import { WALKIN_2F, type WalkIn2FConfig } from '../lib/map/floorplan';
 import { track } from '../lib/analytics';
 
-type SidebarMode = 'list' | 'detail' | 'facility' | 'search';
+type SidebarMode = 'list' | 'detail' | 'facility' | 'search' | 'changelog';
 type SidebarTab = 'home' | 'search' | 'saved' | 'stats' | 'info';
 type SearchFilters = { tags: string[]; types: string[] };
 
@@ -75,6 +75,9 @@ interface MapState {
   setSearchKind: (kind: 'all' | 'company' | 'opening' | 'session') => void;
   setSidebarMode: (mode: SidebarMode) => void;
   setSidebarTab: (tab: SidebarTab) => void;
+  /** Changelog page (a sub-page of the sidebar/tray, not a tab). */
+  openChangelog: () => void;
+  closeChangelog: () => void;
   setGikMode: (on: boolean) => void;
   setMapView: (view: Partial<MapViewState>) => void;
   setWalkIn2FConfig: (config: WalkIn2FConfig) => void;
@@ -350,6 +353,10 @@ export const useMapStore = create<MapState>()(
       setSearchKind: (kind) => set({ searchKind: kind }),
 
       setSidebarMode: (mode) => set({ sidebarMode: mode }),
+
+      openChangelog: () => set({ sidebarMode: 'changelog' }),
+
+      closeChangelog: () => set({ sidebarMode: 'list' }),
 
       setSidebarTab: (tab) => {
         track('sidebar.tab.switch', { tab });

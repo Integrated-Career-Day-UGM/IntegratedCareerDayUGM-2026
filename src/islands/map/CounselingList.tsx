@@ -115,7 +115,6 @@ export default function CounselingList() {
 
       {groups.length === 0 ? (
         <EmptyState
-          className="panel-list"
           title="Belum ada jadwal counseling"
           description="Jadwal counseling akan tampil di sini."
         />

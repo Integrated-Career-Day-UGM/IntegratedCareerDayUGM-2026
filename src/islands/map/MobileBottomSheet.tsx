@@ -17,6 +17,7 @@ import TraySkeleton from '../../components/map/TraySkeleton';
 import BookmarkList from './BookmarkList';
 import Insights from './Insights';
 import EventInfo from './EventInfo';
+import Changelog from './Changelog';
 import { ui } from '../../lib/data';
 import { settleTrayHeight, trayDetailTarget, trayKeyboardLift, trayViewportHeight } from '../../lib/map/tray';
 
@@ -382,6 +383,7 @@ export default function MobileBottomSheet() {
   }, [sidebarMode, height, snapTo]);
 
   const renderContent = () => {
+    if (sidebarMode === 'changelog') return <Changelog />;
     // Detail is a mode, not a tab: it renders over the tab it was opened
     // from so closing returns to those results instead of Home.
     if (sidebarMode === 'facility')

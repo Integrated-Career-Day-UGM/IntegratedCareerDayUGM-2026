@@ -16,7 +16,7 @@ screen → URL, plus the transitions and invariants the UI must keep.
 | `selectedBoothId` | string \| null | `null` | no | Drives detail + camera |
 | `selectedFacilityId` | string \| null | `null` | no | Entrance / registration / photobooth / photo wall / info center / panggung |
 | `hoveredBoothId` | string \| null | `null` | no | Tooltip + glow only |
-| `sidebarMode` | `list \| detail \| facility \| search` | `list` | no | |
+| `sidebarMode` | `list \| detail \| facility \| search \| changelog` | `list` | no | `changelog` is a sub-page of the sidebar/tray |
 | `sidebarTab` | `home \| search \| saved \| stats \| info` | `home` | no | |
 | `detailOriginTab` | `SidebarTab \| null` | `null` | no | Tab a detail card opened from; closing returns there |
 | `searchQuery` | string | `""` | no | |
@@ -62,6 +62,8 @@ screen → URL, plus the transitions and invariants the UI must keep.
 | Hall C1 card | GIK: `setSelectedArea(career-expo)` + `setGikMode(false)`; else `fitHall` | one fit |
 | Map booth click | `selectBooth(id)` | booth fly-to |
 | Map empty click | `selectBooth(null)` + `selectFacility(null)`; if `sidebarTab === 'search'` → `setSidebarTab('home')` | none; mobile lowers tray |
+| `openChangelog` | `sidebarMode = 'changelog'` (tab preserved) | none; pushes one history entry |
+| `closeChangelog` | `sidebarMode = 'list'`; tab unchanged | none; pops the entry |
 | URL `?booth=id` (mount) | valid id → `selectBooth`; invalid → home | booth fly-to |
 
 ## 4. URL map
@@ -100,6 +102,10 @@ selects a booth (the share hook builds links separately).
 10. A gesture-opened detail pushes one history entry; Back closes the card.
    Card → card replaces, and a `?booth=` landing card replaces (never
    pushes) so the first Back never leaves the site.
+
+11. The changelog page always has an exit: `Kembali`, a tab switch
+    (`setSidebarTab` sets mode `list`), or browser Back. Opening it never
+    clears the selected tab; closing returns to it.
 
 ## 6. Gaps / risks (report only)
 

@@ -88,7 +88,13 @@ export default function HappeningNow() {
   };
 
   return (
-    <section className="relative border border-line bg-[#0e0e0e] px-3 pb-2.5 pt-2 shadow-[4px_4px_0_var(--accent-pink)]">
+    <section
+      className={`relative border border-line bg-[#0e0e0e] px-3 pb-2.5 pt-2 ${
+        current.ended
+          ? 'opacity-60 shadow-[4px_4px_0_#3a3a40] grayscale'
+          : 'shadow-[4px_4px_0_var(--accent-pink)]'
+      }`}
+    >
       {/* Status chip floats on the top border, like the design */}
       <span
         className={`absolute right-3 top-[-10px] px-3 py-px font-heading text-[0.8125rem] font-bold md:text-[0.75rem] ${

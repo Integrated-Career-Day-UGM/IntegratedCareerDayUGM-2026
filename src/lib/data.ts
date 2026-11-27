@@ -10,6 +10,7 @@ import quickfindJson from '../data/ugm-icd-2026/quickfind.json';
 import uiJson from '../data/ugm-icd-2026/ui.json';
 import registrationJson from '../data/ugm-icd-2026/registration.json';
 import facilitiesJson from '../data/ugm-icd-2026/facilities.json';
+import changelogJson from '../data/ugm-icd-2026/changelog.json';
 import postersJson from '../data/ugm-icd-2026/posters.json';
 import companyPostersJson from '../data/ugm-icd-2026/company-posters.json';
 import type {
@@ -46,6 +47,32 @@ for (const opening of careerFairFile.items) {
 }
 /** Compressed company gallery posters generated from the external source. */
 export const companyPosters: CompanyPoster[] = companyPostersJson as CompanyPoster[];
+
+/** Event rundown posters (WebP) shown by the Info tab schedule carousel. */
+export const schedulePosters: CompanyPoster[] = [
+  {
+    id: 'schedule-day-1',
+    companyId: '',
+    companyName: '',
+    companyShortName: '',
+    kind: 'gallery',
+    title: 'Day 1',
+    src: '/schedule/rundown-day-1.webp',
+    thumbUrl: '/schedule/rundown-day-1.webp',
+    downloadUrl: '/schedule/rundown-day-1.webp',
+  },
+  {
+    id: 'schedule-day-2',
+    companyId: '',
+    companyName: '',
+    companyShortName: '',
+    kind: 'gallery',
+    title: 'Day 2',
+    src: '/schedule/rundown-day-2.webp',
+    thumbUrl: '/schedule/rundown-day-2.webp',
+    downloadUrl: '/schedule/rundown-day-2.webp',
+  },
+];
 const postersByCompany = new Map<string, CompanyPoster[]>();
 for (const poster of companyPosters) {
   const list = postersByCompany.get(poster.companyId) ?? [];
@@ -103,6 +130,11 @@ export type RegistrationLinks = {
   nonUgm: { label: string; hint: string; url: string };
 };
 export const registration = registrationJson as RegistrationLinks;
+
+/** In-app changelog: newest first. Each version owns one level of items, so
+ *  the timeline renders as a two-level tree (version → item). */
+export type ChangelogEntry = { version: string; date: string; items: string[] };
+export const changelog = changelogJson as ChangelogEntry[];
 
 /** Facility markers on the floor plan (entrance, registration, …). */
 export const facilities: Record<string, FacilityInfo> =

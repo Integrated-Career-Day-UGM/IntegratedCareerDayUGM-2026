@@ -77,10 +77,10 @@ export default function RegisterLinks() {
           if (poster.companyId) setGalleryCompanyId(poster.companyId);
         }}
       />
-      <div className="relative mx-auto mt-1 aspect-[713/410] w-[252px] max-w-full -rotate-1">
+      <div className="relative mx-auto mt-1 aspect-[713/410] w-[252px] max-w-full origin-center -rotate-1 scale-[0.85]">
         {/* Desktop-only registration container art (paper + grid + clip). */}
         <img
-          src="/registration-container-art.png"
+          src="/registration-container-art.webp"
           alt=""
           aria-hidden="true"
           draggable={false}

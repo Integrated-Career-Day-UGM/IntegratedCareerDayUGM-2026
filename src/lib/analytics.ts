@@ -124,7 +124,6 @@ export function createHttpProvider(endpoint: string): AnalyticsProvider {
 const consoleProvider: AnalyticsProvider = {
   name: 'console',
   send(event) {
-    // eslint-disable-next-line no-console
     console.log('[analytics]', event);
   },
 };

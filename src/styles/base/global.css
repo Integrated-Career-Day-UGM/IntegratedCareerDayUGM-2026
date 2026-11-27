@@ -204,6 +204,14 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   transform-origin: center bottom;
 }
 
+/* Mobile collapses to a short code chip, where a percentage offset no longer
+   clears the 26px needle (22 stem + 4 dot) — pin the tip to the anchor. */
+@media (max-width: 767px) {
+  .map-tooltip {
+    transform: translate(-50%, calc(-100% - 26px)) scale(1);
+  }
+}
+
 @starting-style {
   .map-tooltip {
     opacity: 0;
@@ -217,8 +225,59 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   }
 }
 
-/* Tooltip pointer: keeps the diamond aimed at the venue with a tiny bob. */
-.map-tooltip-pointer {
+/* Persona-5 idle skew on the speech-bubble ART only: the text stays upright,
+   so line lengths never shift while it wobbles. Sine loop: alternate + a
+   sine in-out curve, so velocity is zero at both extremes. */
+.sparky-dialog-art {
+  animation: sparky-skew 2s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+  transform-origin: center;
+}
+@keyframes sparky-skew {
+  from {
+    transform: skew(0deg, 0deg);
+  }
+  to {
+    transform: skew(
+      calc(-2.2deg * var(--skew-amp, 1)),
+      calc(1.3deg * var(--skew-amp, 1))
+    );
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sparky-dialog-art {
+    animation: none;
+  }
+}
+
+/* Sparky tip: baked placement. The dev tuner's [data-lt-tuned] rule (two
+   attributes) overrides this while a target is being tuned. */
+.sparky-tip-part {
+  translate: var(--tip-x, 0px) var(--tip-y, 0px);
+  rotate: var(--tip-rotate, 0deg);
+  scale: var(--tip-scale, 1);
+}
+@media (width < 48rem) {
+  .sparky-tip-part {
+    translate: var(--tip-x-m, var(--tip-x, 0px)) var(--tip-y-m, var(--tip-y, 0px));
+    rotate: var(--tip-rotate-m, var(--tip-rotate, 0deg));
+    scale: var(--tip-scale-m, var(--tip-scale, 1));
+  }
+}
+.sparky-tip-text {
+  animation: sparky-tip-in 220ms var(--ease-out);
+}
+@keyframes sparky-tip-in {
+  from {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sparky-tip-text {
+    animation: none;
+  }
+}
+
+/* Tooltip pointer: keeps the diamond aimed at the venue with a tiny bob. */.map-tooltip-pointer {
   animation: tooltip-pointer 2.4s ease-in-out infinite;
 }
 
