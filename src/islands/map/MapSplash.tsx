@@ -25,13 +25,13 @@ export default function MapSplash() {
   const [gridSize, setGridSize] = useState(() =>
     typeof window !== 'undefined' &&
     window.matchMedia('(max-width: 767px)').matches
-      ? 12
+      ? 6
       : 24,
   );
 
   useEffect(() => {
     const media = window.matchMedia('(max-width: 767px)');
-    const sync = () => setGridSize(media.matches ? 12 : 24);
+    const sync = () => setGridSize(media.matches ? 6 : 24);
     sync();
     media.addEventListener('change', sync);
     return () => media.removeEventListener('change', sync);

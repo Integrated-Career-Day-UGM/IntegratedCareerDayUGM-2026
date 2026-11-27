@@ -3,6 +3,7 @@ import { useMapStore } from '../../stores/mapStore';
 import { getBooth } from '../../lib/data';
 
 const DETAIL_STATE = 'icd-detail';
+const CHANGELOG_STATE = 'icd-changelog';
 
 const isDetailMode = () => {
   const mode = useMapStore.getState().sidebarMode;
@@ -74,6 +75,40 @@ export function useSheetHistory() {
       if ((event.state as { icdSheet?: string } | null)?.icdSheet === DETAIL_STATE) return;
       pushed = false;
       useMapStore.getState().closeDetail();
+    };
+
+    const unsubscribe = useMapStore.subscribe(sync);
+    window.addEventListener('popstate', onPop);
+    return () => {
+      unsubscribe();
+      window.removeEventListener('popstate', onPop);
+    };
+  }, []);
+
+  /* The changelog page is a screen too: Back returns to the map state. */
+  useEffect(() => {
+    const isOpen = () => useMapStore.getState().sidebarMode === 'changelog';
+    let wasOpen = isOpen();
+    let pushed = false;
+
+    const sync = () => {
+      const open = isOpen();
+      if (open && !wasOpen) {
+        window.history.pushState({ icdSheet: CHANGELOG_STATE }, '');
+        pushed = true;
+      } else if (!open && wasOpen && pushed) {
+        pushed = false;
+        window.history.back();
+      }
+      wasOpen = open;
+    };
+
+    const onPop = (event: PopStateEvent) => {
+      if (!isOpen()) return;
+      if ((event.state as { icdSheet?: string } | null)?.icdSheet === CHANGELOG_STATE)
+        return;
+      pushed = false;
+      useMapStore.getState().closeChangelog();
     };
 
     const unsubscribe = useMapStore.subscribe(sync);

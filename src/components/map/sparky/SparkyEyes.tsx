@@ -5,6 +5,7 @@ import type { RefObject } from 'react';
 import type { LayerId, LayerOffset, SparkyConfig } from './config';
 import { DEFAULT_CONFIG, BROW, EYELID, SCLERA_CENTERS, SPRITE_HEIGHT, SPRITE_WIDTH } from './config';
 import SparkyDebugPanel from './SparkyDebugPanel';
+import { DEV_TOOLS } from '../../../lib/dev-tools';
 import { pupilOffset } from './tracking';
 
 const PUPIL_SIZE = 43;
@@ -63,8 +64,10 @@ export default function SparkyEyes({
   // centre/scale; the offset is un-rotated into the sclera's local axes
   // because the pupil is parented to the sclera.
   useEffect(() => {
-    const onMove = (event: PointerEvent) => {
-      if (pausedRef.current) return;
+    const aim = (
+      targetFor: (cx: number, cy: number) => [number, number],
+      commit = false,
+    ) => {
       const leftSclera = leftScleraRef.current;
       const rightSclera = rightScleraRef.current;
       if (!leftSclera || !rightSclera) return;
@@ -85,7 +88,8 @@ export default function SparkyEyes({
         if (!Number.isFinite(scale) || scale <= 0) return { x: 0, y: 0 };
         const cx = rect.left + rect.width / 2;
         const cy = rect.top + rect.height / 2;
-        const screen = pupilOffset(cx, cy, event.clientX, event.clientY, cfg.maxRadius * scale);
+        const [tx, ty] = targetFor(cx, cy);
+        const screen = pupilOffset(cx, cy, tx, ty, cfg.maxRadius * scale);
         const radians = -(stageRotate + bodyRotate + layerRotate) * DEG;
         return {
           x: (screen.x * Math.cos(radians) - screen.y * Math.sin(radians)) / scale,
@@ -96,9 +100,31 @@ export default function SparkyEyes({
       const l = measure(leftSclera, leftLayer.rotate);
       const r = measure(rightSclera, rightLayer.rotate);
       latestRef.current = { left: l, right: r };
+      // Commit immediately so the idle gaze never shows a centred frame while
+      // the 12 fps loop waits for its first tick.
+      if (commit) {
+        leftX.set(Math.round(l.x));
+        leftY.set(Math.round(l.y));
+        rightX.set(Math.round(r.x));
+        rightY.set(Math.round(r.y));
+      }
+    };
+
+    // No pointer event yet: look up-right at full radius instead of staring
+    // dead centre. Re-run on the next frame in case layout/fonts shift.
+    const idleAim = () => aim((cx, cy) => [cx + 1e4, cy - 1e4], true);
+    idleAim();
+    const raf = window.requestAnimationFrame(idleAim);
+
+    const onMove = (event: PointerEvent) => {
+      if (pausedRef.current) return;
+      aim(() => [event.clientX, event.clientY]);
     };
     window.addEventListener('pointermove', onMove, { passive: true });
-    return () => window.removeEventListener('pointermove', onMove);
+    return () => {
+      window.cancelAnimationFrame(raf);
+      window.removeEventListener('pointermove', onMove);
+    };
   }, []);
 
   // Stepped gaze: sample the latest direction at 12 fps and snap the pupils
@@ -373,7 +399,8 @@ export default function SparkyEyes({
         </div>
       </motion.div>
 
-      {debug &&
+      {DEV_TOOLS &&
+        debug &&
         typeof document !== 'undefined' &&
         createPortal(
           <SparkyDebugPanel

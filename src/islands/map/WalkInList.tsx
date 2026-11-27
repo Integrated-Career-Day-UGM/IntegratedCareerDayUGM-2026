@@ -142,7 +142,6 @@ export default function WalkInList() {
 
       {groups.length === 0 ? (
         <EmptyState
-          className="panel-list"
           title={ui.walkInList.emptyTitle}
           description={ui.walkInList.emptyBody}
         />

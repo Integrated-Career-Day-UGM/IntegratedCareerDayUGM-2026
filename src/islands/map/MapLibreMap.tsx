@@ -14,10 +14,14 @@ import {
   NPC_GEOJSON,
   SITE_AREAS_GEOJSON,
   SITE_POINTS,
+  SPARKY_EXPO_CENTER,
+  SPARKY_PARKING_CENTER,
   TOILET_CENTER,
 } from '../../lib/map/site-areas';
 import FloorWipe from './FloorWipe';
 import SparkyEyes from '../../components/map/sparky/SparkyEyes';
+import SparkyTip from '../../components/map/sparky/SparkyTip';
+import MapAnchor from '../../components/map/MapAnchor';
 import { DEV_TOOLS } from '../../lib/dev-tools';
 import { ui, getVenue, getTrack, walkInSessions } from '../../lib/data';
 import { trayDetailTarget } from '../../lib/map/tray';
@@ -67,7 +71,7 @@ const SITE_PINS: FixedPinSpec[] = [
   ...SITE_POINTS.map((point) => ({
     ...point,
     icon: PIN_ICONS[point.id as keyof typeof PIN_ICONS],
-    interactive: point.id === 'toilet',
+    interactive: point.id === 'toilet' || point.id === 'parking',
   })),
   {
     id: 'career-expo',
@@ -924,13 +928,39 @@ export default function MapLibreMap() {
           map={mapInstance}
           pins={pins}
           onSelect={(id) => {
-            if (id === 'toilet') useMapStore.getState().selectFacility('toilet');
+            if (id === 'toilet' || id === 'parking') {
+              useMapStore.getState().selectFacility(id);
+            }
           }}
         />
       )}
 
       {/* Short pixel veil on every map-shell tab/floor swap. */}
       <FloorWipe />
+
+      {/* Sparky tips live in MAP space: anchored to a lng/lat and scaled by the
+          camera, so they zoom with the map instead of sitting at a fixed
+          screen size. z-[5] keeps them under the hall card and the controls. */}
+      <div className="pointer-events-none absolute inset-0 z-[5]">
+        <MapAnchor map={mapInstance} center={SPARKY_EXPO_CENTER}>
+          <SparkyTip
+            slot="career-expo"
+            messages={[{ text: 'Ketuk salah satu venue untuk melihat detail' }]}
+          />
+        </MapAnchor>
+        <MapAnchor map={mapInstance} center={SPARKY_PARKING_CENTER}>
+          <SparkyTip
+            slot="parking"
+            messages={[
+              { text: 'Parkir mahasiswa UGM gratis, tunjukkan KTM', variant: 'dark' },
+              {
+                text: 'Akses masuk kendaraan lewat pintu Jl. Persatuan',
+                variant: 'light',
+              },
+            ]}
+          />
+        </MapAnchor>
+      </div>
 
       {/* Mobile map-centre crosshair removed — the hall card + tray already
           communicate the camera target. */}
@@ -952,7 +982,7 @@ export default function MapLibreMap() {
         className="absolute inset-x-3 z-10 flex justify-end bottom-(--hall-card-bottom) md:inset-x-auto md:bottom-4 md:left-3 md:justify-start"
         style={{ '--hall-card-bottom': `calc(${SNAP_PEEK}px + ${TAB_RAIL_H}px + 6px)` } as React.CSSProperties}
       >
-        <div className="flex flex-col items-start">
+        <div className="flex origin-bottom-right flex-col items-start max-md:scale-[0.7]">
           <div className="hidden lg:block">
             <SparkyEyes size={132} />
           </div>

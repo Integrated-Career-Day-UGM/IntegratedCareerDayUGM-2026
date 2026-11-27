@@ -23,6 +23,9 @@ type Props = {
   onIndexChange?: (index: number) => void;
   onOpenBooth?: () => void;
   onClose: () => void;
+  /** Force the 4:5 frame (e.g. schedule posters) instead of deriving it from
+   *  whether a company was passed. */
+  portrait?: boolean;
 };
 
 function Thumbnails({
@@ -110,6 +113,7 @@ export default function PosterGalleryModal({
   onIndexChange,
   onOpenBooth,
   onClose,
+  portrait: portraitOverride,
 }: Props) {
   const [current, setCurrent] = useState(index);
   const [dragging, setDragging] = useState(false);
@@ -182,7 +186,7 @@ export default function PosterGalleryModal({
   const description = company?.description ?? company?.profile?.description ?? null;
   const title = company?.name ?? heading ?? item.companyName;
   // A4 posters get an A4 frame; non-company sets (ICD) are usually landscape.
-  const portrait = Boolean(company);
+  const portrait = portraitOverride ?? Boolean(company);
 
   const info = (
     <div className="flex min-h-0 flex-col gap-3 px-1 pt-2 md:pt-3">

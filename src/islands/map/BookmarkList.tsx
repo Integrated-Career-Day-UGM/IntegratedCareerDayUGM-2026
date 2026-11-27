@@ -32,7 +32,6 @@ export default function BookmarkList() {
 
       {items.length === 0 ? (
         <EmptyState
-          className="panel-list"
           title={ui.saved.emptyTitle}
           description={ui.saved.emptyBody}
           action={{

@@ -56,6 +56,19 @@
     "items": [],
     "tip": ""
   },
+  "parking": {
+    "title": "Parking",
+    "kind": "Wayfinding",
+    "accent": "#ff2d6f",
+    "summary": "Parkir mahasiswa UGM gratis, tunjukkan KTM.",
+    "items": [
+      {
+        "heading": "Akses masuk",
+        "body": "Kendaraan masuk lewat pintu Jl. Persatuan."
+      }
+    ],
+    "tip": ""
+  },
   "mushola": {
     "title": "Mushola",
     "kind": "Facility",

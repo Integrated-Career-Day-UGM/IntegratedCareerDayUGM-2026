@@ -12,4 +12,5 @@
  * tool code tree-shakes out of the bundle.
  */
 export const DEV_TOOLS =
-  import.meta.env.DEV || import.meta.env.PUBLIC_DEV_TOOLS === 'true';
+  (import.meta.env.DEV && import.meta.env.MODE !== 'production') ||
+  import.meta.env.PUBLIC_DEV_TOOLS === 'true';

@@ -116,8 +116,11 @@ export type SiteArea = {
   ring: LngLat[];
 };
 
-export const TOILET_CENTER: LngLat = [110.3758667, -7.773959];
-export const VIP_CENTER: LngLat = [110.3755822, -7.7741375];
+/** Sparky tip anchors (hand-picked GeoJSON points, NOT the area centroids). */
+export const SPARKY_EXPO_CENTER: LngLat = [110.3764419, -7.7742694];
+export const SPARKY_PARKING_CENTER: LngLat = [110.3754648, -7.7744216];
+
+export const TOILET_CENTER: LngLat = [110.3758667, -7.773959];export const VIP_CENTER: LngLat = [110.3755822, -7.7741375];
 export const PARKING_CENTER: LngLat = [110.3754331, -7.7742829];
 /** Inside the hall (frame covered) — rendered screen-space so the plan art
  *  never hides it. */
