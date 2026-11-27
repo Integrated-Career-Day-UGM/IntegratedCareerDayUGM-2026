@@ -45,6 +45,8 @@ export default function QuickFind() {
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.ctrlKey || e.metaKey || e.altKey) return;
+      // One instance per breakpoint; only the visible one answers shortcuts.
+      if (!rootRef.current?.offsetParent) return;
       const target = e.target as HTMLElement | null;
       if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) return;
       const key = e.key.toUpperCase();
@@ -72,7 +74,7 @@ export default function QuickFind() {
         {/* Desktop keeps the labelled chip row. */}
         <div
           ref={chipsRef}
-          className="relative mt-2 hidden w-fit max-w-full grid-cols-2 items-center justify-start gap-1.5 md:grid"
+          className="relative mt-2 hidden w-fit max-w-full grid-cols-2 items-center justify-start gap-1.5 lg:grid"
           {...hover.handlers}
         >
           <FluidHoverHighlight hover={hover} className="bg-field-hover rounded-full" />
@@ -130,7 +132,7 @@ export default function QuickFind() {
         </div>
 
         {/* Mobile: one FAB; actions fan down from it. */}
-        <div className="relative md:hidden">
+        <div className="relative lg:hidden">
           <button
             type="button"
             onClick={() => setOpen((value) => !value)}

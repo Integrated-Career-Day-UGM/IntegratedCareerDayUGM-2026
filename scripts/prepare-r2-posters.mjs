@@ -34,7 +34,7 @@ const SOURCE_DIR =
   process.env.POSTER_SOURCE_DIR ??
   join(import.meta.dirname, '..', '..', 'posters');
 
-const OUT_DIR = '.tmp/r2-posters-orig';
+const OUT_DIR = "./../../r2-staging";
 const R2_MANIFEST = 'src/data/ugm-icd-2026/poster-r2-manifest.json';
 
 // Your public R2 base URL — update when you have a custom domain.

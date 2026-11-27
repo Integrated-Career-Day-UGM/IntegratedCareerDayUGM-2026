@@ -1,4 +1,466 @@
 {
   "baseUrl": "https://posters.icdugm26.app",
-  "posters": []
+  "generatedAt": "2026-11-27T02:26:07.168Z",
+  "note": "Full-resolution originals served from R2. Display WebP lives in public/posters/companies/.",
+  "posters": [
+    {
+      "id": "e9-app-poster-hiring-page-0001",
+      "companyId": "e9-app",
+      "originalFile": "APP Group/Poster Hiring_page-0001.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/e9-app/poster-hiring-page-0001-f37a6ca4.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/e9-app/poster-hiring-page-0001-f37a6ca4.jpg",
+      "bytes": 4940162
+    },
+    {
+      "id": "e9-app-poster-hiring-page-0002",
+      "companyId": "e9-app",
+      "originalFile": "APP Group/Poster Hiring_page-0002.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/e9-app/poster-hiring-page-0002-cf09e4bb.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/e9-app/poster-hiring-page-0002-cf09e4bb.jpg",
+      "bytes": 4855775
+    },
+    {
+      "id": "e9-app-poster-hiring-page-0003",
+      "companyId": "e9-app",
+      "originalFile": "APP Group/Poster Hiring_page-0003.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/e9-app/poster-hiring-page-0003-38d61055.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/e9-app/poster-hiring-page-0003-38d61055.jpg",
+      "bytes": 4954806
+    },
+    {
+      "id": "e9-app-poster-hiring-page-0004",
+      "companyId": "e9-app",
+      "originalFile": "APP Group/Poster Hiring_page-0004.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/e9-app/poster-hiring-page-0004-85f2e6de.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/e9-app/poster-hiring-page-0004-85f2e6de.jpg",
+      "bytes": 4954607
+    },
+    {
+      "id": "e9-app-poster-hiring-page-0005",
+      "companyId": "e9-app",
+      "originalFile": "APP Group/Poster Hiring_page-0005.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/e9-app/poster-hiring-page-0005-29665b03.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/e9-app/poster-hiring-page-0005-29665b03.jpg",
+      "bytes": 4673195
+    },
+    {
+      "id": "c3-astra-copy-of-1",
+      "companyId": "c3-astra",
+      "originalFile": "Astra/PT United Tractors Pandu Engineering/Copy of 1.png",
+      "ext": "png",
+      "r2Key": "orig/c3-astra/copy-of-1-860cd090.png",
+      "r2Url": "https://posters.icdugm26.app/orig/c3-astra/copy-of-1-860cd090.png",
+      "bytes": 2999045
+    },
+    {
+      "id": "c3-astra-copy-of-2",
+      "companyId": "c3-astra",
+      "originalFile": "Astra/PT United Tractors Pandu Engineering/Copy of 2.png",
+      "ext": "png",
+      "r2Key": "orig/c3-astra/copy-of-2-68e0cb6c.png",
+      "r2Url": "https://posters.icdugm26.app/orig/c3-astra/copy-of-2-68e0cb6c.png",
+      "bytes": 1552663
+    },
+    {
+      "id": "c3-astra-copy-of-3",
+      "companyId": "c3-astra",
+      "originalFile": "Astra/PT United Tractors Pandu Engineering/Copy of 3.png",
+      "ext": "png",
+      "r2Key": "orig/c3-astra/copy-of-3-d1c3c87e.png",
+      "r2Url": "https://posters.icdugm26.app/orig/c3-astra/copy-of-3-d1c3c87e.png",
+      "bytes": 2805487
+    },
+    {
+      "id": "c3-astra-copy-of-4",
+      "companyId": "c3-astra",
+      "originalFile": "Astra/PT United Tractors Pandu Engineering/Copy of 4.png",
+      "ext": "png",
+      "r2Key": "orig/c3-astra/copy-of-4-a3a26134.png",
+      "r2Url": "https://posters.icdugm26.app/orig/c3-astra/copy-of-4-a3a26134.png",
+      "bytes": 2743272
+    },
+    {
+      "id": "e12-dynapack-poster-ugm",
+      "companyId": "e12-dynapack",
+      "originalFile": "Dynapack/Poster UGM.png",
+      "ext": "png",
+      "r2Key": "orig/e12-dynapack/poster-ugm-ac6c0528.png",
+      "r2Url": "https://posters.icdugm26.app/orig/e12-dynapack/poster-ugm-ac6c0528.png",
+      "bytes": 1242963
+    },
+    {
+      "id": "e11-elnusa-poster-job-fair-ugm",
+      "companyId": "e11-elnusa",
+      "originalFile": "ELNUSA/Poster Job Fair UGM.png",
+      "ext": "png",
+      "r2Key": "orig/e11-elnusa/poster-job-fair-ugm-2d0388c1.png",
+      "r2Url": "https://posters.icdugm26.app/orig/e11-elnusa/poster-job-fair-ugm-2d0388c1.png",
+      "bytes": 1689507
+    },
+    {
+      "id": "c2-monee-slide-1",
+      "companyId": "c2-monee",
+      "originalFile": "Monee/Slide 1.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/c2-monee/slide-1-7edc52d0.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/c2-monee/slide-1-7edc52d0.jpg",
+      "bytes": 272718
+    },
+    {
+      "id": "c2-monee-slide-2",
+      "companyId": "c2-monee",
+      "originalFile": "Monee/Slide 2.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/c2-monee/slide-2-3889ca18.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/c2-monee/slide-2-3889ca18.jpg",
+      "bytes": 264503
+    },
+    {
+      "id": "c2-monee-slide-3",
+      "companyId": "c2-monee",
+      "originalFile": "Monee/Slide 3.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/c2-monee/slide-3-afd57670.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/c2-monee/slide-3-afd57670.jpg",
+      "bytes": 302425
+    },
+    {
+      "id": "c2-monee-slide-4",
+      "companyId": "c2-monee",
+      "originalFile": "Monee/Slide 4.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/c2-monee/slide-4-7bb8fdab.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/c2-monee/slide-4-7bb8fdab.jpg",
+      "bytes": 231374
+    },
+    {
+      "id": "c2-monee-slide-5",
+      "companyId": "c2-monee",
+      "originalFile": "Monee/Slide 5.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/c2-monee/slide-5-ac519783.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/c2-monee/slide-5-ac519783.jpg",
+      "bytes": 254991
+    },
+    {
+      "id": "c2-monee-slide-6",
+      "companyId": "c2-monee",
+      "originalFile": "Monee/Slide 6.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/c2-monee/slide-6-4633e029.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/c2-monee/slide-6-4633e029.jpg",
+      "bytes": 250291
+    },
+    {
+      "id": "c2-monee-slide-7",
+      "companyId": "c2-monee",
+      "originalFile": "Monee/Slide 7.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/c2-monee/slide-7-ae0f784e.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/c2-monee/slide-7-ae0f784e.jpg",
+      "bytes": 276041
+    },
+    {
+      "id": "c2-monee-slide-8",
+      "companyId": "c2-monee",
+      "originalFile": "Monee/Slide 8.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/c2-monee/slide-8-53de0501.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/c2-monee/slide-8-53de0501.jpg",
+      "bytes": 253894
+    },
+    {
+      "id": "e14-ocbc-basa-2026",
+      "companyId": "e14-ocbc",
+      "originalFile": "OCBC NEW/BASA 2026.png",
+      "ext": "png",
+      "r2Key": "orig/e14-ocbc/basa-2026-3e366f63.png",
+      "r2Url": "https://posters.icdugm26.app/orig/e14-ocbc/basa-2026-3e366f63.png",
+      "bytes": 1469395
+    },
+    {
+      "id": "e14-ocbc-banking-academy-for-it",
+      "companyId": "e14-ocbc",
+      "originalFile": "OCBC NEW/Banking Academy for IT.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/e14-ocbc/banking-academy-for-it-8e6efc61.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/e14-ocbc/banking-academy-for-it-8e6efc61.jpg",
+      "bytes": 118471
+    },
+    {
+      "id": "e14-ocbc-crayon-2026",
+      "companyId": "e14-ocbc",
+      "originalFile": "OCBC NEW/Crayon 2026.png",
+      "ext": "png",
+      "r2Key": "orig/e14-ocbc/crayon-2026-6a6683f2.png",
+      "r2Url": "https://posters.icdugm26.app/orig/e14-ocbc/crayon-2026-6a6683f2.png",
+      "bytes": 5231465
+    },
+    {
+      "id": "e14-ocbc-dscp-2026-2",
+      "companyId": "e14-ocbc",
+      "originalFile": "OCBC NEW/DSCP 2026 (2).png",
+      "ext": "png",
+      "r2Key": "orig/e14-ocbc/dscp-2026-2-c216ddf1.png",
+      "r2Url": "https://posters.icdugm26.app/orig/e14-ocbc/dscp-2026-2-c216ddf1.png",
+      "bytes": 1524266
+    },
+    {
+      "id": "e14-ocbc-graduate-talent-programme",
+      "companyId": "e14-ocbc",
+      "originalFile": "OCBC NEW/Graduate Talent Programme.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/e14-ocbc/graduate-talent-programme-dcf6bec1.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/e14-ocbc/graduate-talent-programme-dcf6bec1.jpg",
+      "bytes": 120781
+    },
+    {
+      "id": "e14-ocbc-junir-data-scientist",
+      "companyId": "e14-ocbc",
+      "originalFile": "OCBC NEW/Junir Data Scientist.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/e14-ocbc/junir-data-scientist-ccfcc328.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/e14-ocbc/junir-data-scientist-ccfcc328.jpg",
+      "bytes": 6100473
+    },
+    {
+      "id": "c4-odoo-2-lowongan-kerja-odoo-software-indonesia",
+      "companyId": "c4-odoo",
+      "originalFile": "Odoo/2. Lowongan Kerja - Odoo Software Indonesia.png",
+      "ext": "png",
+      "r2Key": "orig/c4-odoo/2-lowongan-kerja-odoo-software-indonesia-8160e5ba.png",
+      "r2Url": "https://posters.icdugm26.app/orig/c4-odoo/2-lowongan-kerja-odoo-software-indonesia-8160e5ba.png",
+      "bytes": 2362740
+    },
+    {
+      "id": "d2-bni-copy-of-ric-sosmed-apply-now-kv-job-fair-ugm-fa-261104-ig-feed",
+      "companyId": "d2-bni",
+      "originalFile": "PT Bank Negara Indonesia (Persero) Tbk/Apply Now/Copy of RIC-Sosmed Apply Now_KV JOB FAIR UGM-FA-261104_IG FEED.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/d2-bni/copy-of-ric-sosmed-apply-now-kv-job-fair-ugm-fa-261104-ig-feed-27c0222f.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/d2-bni/copy-of-ric-sosmed-apply-now-kv-job-fair-ugm-fa-261104-ig-feed-27c0222f.jpg",
+      "bytes": 6125591
+    },
+    {
+      "id": "d2-bni-copy-of-ric-sosmed-apply-now-kv-job-fair-ugm-fa-261104-square",
+      "companyId": "d2-bni",
+      "originalFile": "PT Bank Negara Indonesia (Persero) Tbk/Apply Now/Copy of RIC-Sosmed Apply Now_KV JOB FAIR UGM-FA-261104_Square.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/d2-bni/copy-of-ric-sosmed-apply-now-kv-job-fair-ugm-fa-261104-square-96de011d.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/d2-bni/copy-of-ric-sosmed-apply-now-kv-job-fair-ugm-fa-261104-square-96de011d.jpg",
+      "bytes": 5546990
+    },
+    {
+      "id": "d2-bni-copy-of-ric-sosmed-apply-now-kv-job-fair-ugm-fa-261104-story",
+      "companyId": "d2-bni",
+      "originalFile": "PT Bank Negara Indonesia (Persero) Tbk/Apply Now/Copy of RIC-Sosmed Apply Now_KV JOB FAIR UGM-FA-261104_Story.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/d2-bni/copy-of-ric-sosmed-apply-now-kv-job-fair-ugm-fa-261104-story-f7e8f0be.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/d2-bni/copy-of-ric-sosmed-apply-now-kv-job-fair-ugm-fa-261104-story-f7e8f0be.jpg",
+      "bytes": 8928963
+    },
+    {
+      "id": "d2-bni-ric-sosmed-visit-booth-job-fair-ugm-fa-261104-ig-feed",
+      "companyId": "d2-bni",
+      "originalFile": "PT Bank Negara Indonesia (Persero) Tbk/Visit Booth/RIC-Sosmed VISIT BOOTH-JOB FAIR UGM-FA-261104_IG FEED.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/d2-bni/ric-sosmed-visit-booth-job-fair-ugm-fa-261104-ig-feed-b47be3bd.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/d2-bni/ric-sosmed-visit-booth-job-fair-ugm-fa-261104-ig-feed-b47be3bd.jpg",
+      "bytes": 6343935
+    },
+    {
+      "id": "d2-bni-ric-sosmed-visit-booth-job-fair-ugm-fa-261104-igs",
+      "companyId": "d2-bni",
+      "originalFile": "PT Bank Negara Indonesia (Persero) Tbk/Visit Booth/RIC-Sosmed VISIT BOOTH-JOB FAIR UGM-FA-261104_IGS.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/d2-bni/ric-sosmed-visit-booth-job-fair-ugm-fa-261104-igs-74ecca4a.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/d2-bni/ric-sosmed-visit-booth-job-fair-ugm-fa-261104-igs-74ecca4a.jpg",
+      "bytes": 9341079
+    },
+    {
+      "id": "d2-bni-ric-sosmed-visit-booth-job-fair-ugm-fa-261104-square",
+      "companyId": "d2-bni",
+      "originalFile": "PT Bank Negara Indonesia (Persero) Tbk/Visit Booth/RIC-Sosmed VISIT BOOTH-JOB FAIR UGM-FA-261104_SQUARE.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/d2-bni/ric-sosmed-visit-booth-job-fair-ugm-fa-261104-square-07ef166b.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/d2-bni/ric-sosmed-visit-booth-job-fair-ugm-fa-261104-square-07ef166b.jpg",
+      "bytes": 5719034
+    },
+    {
+      "id": "e10-cobra-copy-of-flyer-mt-cdi-a4-fix-26y",
+      "companyId": "e10-cobra",
+      "originalFile": "PT Cobra Dental Indonesia/Copy of FLYER MT CDI A4 FIX - 26Y.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/e10-cobra/copy-of-flyer-mt-cdi-a4-fix-26y-40583c78.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/e10-cobra/copy-of-flyer-mt-cdi-a4-fix-26y-40583c78.jpg",
+      "bytes": 3993322
+    },
+    {
+      "id": "d1-paragon-jf-ugm-poster-portal-page-0001",
+      "companyId": "d1-paragon",
+      "originalFile": "Paragon Corp/JF UGM - Poster Portal_page-0001.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/d1-paragon/jf-ugm-poster-portal-page-0001-dabb7962.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/d1-paragon/jf-ugm-poster-portal-page-0001-dabb7962.jpg",
+      "bytes": 646426
+    },
+    {
+      "id": "d3-polygon-vacancy-manufacture-ugm",
+      "companyId": "d3-polygon",
+      "originalFile": "Polygon/Vacancy - Manufacture UGM.png",
+      "ext": "png",
+      "r2Key": "orig/d3-polygon/vacancy-manufacture-ugm-afc3a03c.png",
+      "r2Url": "https://posters.icdugm26.app/orig/d3-polygon/vacancy-manufacture-ugm-afc3a03c.png",
+      "bytes": 2512673
+    },
+    {
+      "id": "d3-polygon-vacancy-non-manufacture-1",
+      "companyId": "d3-polygon",
+      "originalFile": "Polygon/Vacancy - Non Manufacture 1.png",
+      "ext": "png",
+      "r2Key": "orig/d3-polygon/vacancy-non-manufacture-1-fac55a2b.png",
+      "r2Url": "https://posters.icdugm26.app/orig/d3-polygon/vacancy-non-manufacture-1-fac55a2b.png",
+      "bytes": 2533236
+    },
+    {
+      "id": "d3-polygon-vacancy-non-manufacture-2",
+      "companyId": "d3-polygon",
+      "originalFile": "Polygon/Vacancy - Non Manufacture 2.png",
+      "ext": "png",
+      "r2Key": "orig/d3-polygon/vacancy-non-manufacture-2-44b59c07.png",
+      "r2Url": "https://posters.icdugm26.app/orig/d3-polygon/vacancy-non-manufacture-2-44b59c07.png",
+      "bytes": 2562232
+    },
+    {
+      "id": "d3-polygon-vacancy-non-manufacture-3",
+      "companyId": "d3-polygon",
+      "originalFile": "Polygon/Vacancy - Non Manufacture 3.png",
+      "ext": "png",
+      "r2Key": "orig/d3-polygon/vacancy-non-manufacture-3-41856892.png",
+      "r2Url": "https://posters.icdugm26.app/orig/d3-polygon/vacancy-non-manufacture-3-41856892.png",
+      "bytes": 2471697
+    },
+    {
+      "id": "cv-karya-hidup-sentosa-quick-traktor-page-1",
+      "companyId": "cv-karya-hidup-sentosa-quick-traktor",
+      "originalFile": "Quick Traktor/PAGE 1.png",
+      "ext": "png",
+      "r2Key": "orig/cv-karya-hidup-sentosa-quick-traktor/page-1-24645892.png",
+      "r2Url": "https://posters.icdugm26.app/orig/cv-karya-hidup-sentosa-quick-traktor/page-1-24645892.png",
+      "bytes": 561078
+    },
+    {
+      "id": "cv-karya-hidup-sentosa-quick-traktor-page-2",
+      "companyId": "cv-karya-hidup-sentosa-quick-traktor",
+      "originalFile": "Quick Traktor/PAGE 2.png",
+      "ext": "png",
+      "r2Key": "orig/cv-karya-hidup-sentosa-quick-traktor/page-2-32665673.png",
+      "r2Url": "https://posters.icdugm26.app/orig/cv-karya-hidup-sentosa-quick-traktor/page-2-32665673.png",
+      "bytes": 541380
+    },
+    {
+      "id": "cv-karya-hidup-sentosa-quick-traktor-page-3",
+      "companyId": "cv-karya-hidup-sentosa-quick-traktor",
+      "originalFile": "Quick Traktor/PAGE 3.png",
+      "ext": "png",
+      "r2Key": "orig/cv-karya-hidup-sentosa-quick-traktor/page-3-ae834bd1.png",
+      "r2Url": "https://posters.icdugm26.app/orig/cv-karya-hidup-sentosa-quick-traktor/page-3-ae834bd1.png",
+      "bytes": 504915
+    },
+    {
+      "id": "cv-karya-hidup-sentosa-quick-traktor-page-4",
+      "companyId": "cv-karya-hidup-sentosa-quick-traktor",
+      "originalFile": "Quick Traktor/PAGE 4.png",
+      "ext": "png",
+      "r2Key": "orig/cv-karya-hidup-sentosa-quick-traktor/page-4-8ce1e496.png",
+      "r2Url": "https://posters.icdugm26.app/orig/cv-karya-hidup-sentosa-quick-traktor/page-4-8ce1e496.png",
+      "bytes": 508506
+    },
+    {
+      "id": "cv-karya-hidup-sentosa-quick-traktor-page-5",
+      "companyId": "cv-karya-hidup-sentosa-quick-traktor",
+      "originalFile": "Quick Traktor/PAGE 5.png",
+      "ext": "png",
+      "r2Key": "orig/cv-karya-hidup-sentosa-quick-traktor/page-5-c26ab75f.png",
+      "r2Url": "https://posters.icdugm26.app/orig/cv-karya-hidup-sentosa-quick-traktor/page-5-c26ab75f.png",
+      "bytes": 501375
+    },
+    {
+      "id": "cv-karya-hidup-sentosa-quick-traktor-page-7",
+      "companyId": "cv-karya-hidup-sentosa-quick-traktor",
+      "originalFile": "Quick Traktor/PAGE 7.png",
+      "ext": "png",
+      "r2Key": "orig/cv-karya-hidup-sentosa-quick-traktor/page-7-5575d849.png",
+      "r2Url": "https://posters.icdugm26.app/orig/cv-karya-hidup-sentosa-quick-traktor/page-7-5575d849.png",
+      "bytes": 493880
+    },
+    {
+      "id": "e2-surya-ugm-flyer-a5-print-page-0001",
+      "companyId": "e2-surya",
+      "originalFile": "SURYA INTERNUSA/UGM FLYER A5  - Print_page-0001.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/e2-surya/ugm-flyer-a5-print-page-0001-5865e296.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/e2-surya/ugm-flyer-a5-print-page-0001-5865e296.jpg",
+      "bytes": 826362
+    },
+    {
+      "id": "e13-teachfirst-copy-of-1",
+      "companyId": "e13-teachfirst",
+      "originalFile": "Teach First Indonesia/Copy of 1.jpeg",
+      "ext": "jpeg",
+      "r2Key": "orig/e13-teachfirst/copy-of-1-c2300835.jpeg",
+      "r2Url": "https://posters.icdugm26.app/orig/e13-teachfirst/copy-of-1-c2300835.jpeg",
+      "bytes": 168335
+    },
+    {
+      "id": "e13-teachfirst-copy-of-2",
+      "companyId": "e13-teachfirst",
+      "originalFile": "Teach First Indonesia/Copy of 2.jpeg",
+      "ext": "jpeg",
+      "r2Key": "orig/e13-teachfirst/copy-of-2-3c238f16.jpeg",
+      "r2Url": "https://posters.icdugm26.app/orig/e13-teachfirst/copy-of-2-3c238f16.jpeg",
+      "bytes": 110816
+    },
+    {
+      "id": "e13-teachfirst-copy-of-3",
+      "companyId": "e13-teachfirst",
+      "originalFile": "Teach First Indonesia/Copy of 3.jpeg",
+      "ext": "jpeg",
+      "r2Key": "orig/e13-teachfirst/copy-of-3-2649fcd5.jpeg",
+      "r2Url": "https://posters.icdugm26.app/orig/e13-teachfirst/copy-of-3-2649fcd5.jpeg",
+      "bytes": 117198
+    },
+    {
+      "id": "e8-torrecid-pt-torrecid-indonesia-poster-ig",
+      "companyId": "e8-torrecid",
+      "originalFile": "Torrecid/PT Torrecid Indonesia Poster IG.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/e8-torrecid/pt-torrecid-indonesia-poster-ig-15e21b6c.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/e8-torrecid/pt-torrecid-indonesia-poster-ig-15e21b6c.jpg",
+      "bytes": 1439989
+    },
+    {
+      "id": "c6-zurich-poster-hr-technology-digabungkan-page-0001",
+      "companyId": "c6-zurich",
+      "originalFile": "Zurich/Poster HR Technology-digabungkan_page-0001.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/c6-zurich/poster-hr-technology-digabungkan-page-0001-f816d2fd.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/c6-zurich/poster-hr-technology-digabungkan-page-0001-f816d2fd.jpg",
+      "bytes": 811989
+    },
+    {
+      "id": "c6-zurich-poster-hr-technology-digabungkan-page-0002",
+      "companyId": "c6-zurich",
+      "originalFile": "Zurich/Poster HR Technology-digabungkan_page-0002.jpg",
+      "ext": "jpg",
+      "r2Key": "orig/c6-zurich/poster-hr-technology-digabungkan-page-0002-a8a64c61.jpg",
+      "r2Url": "https://posters.icdugm26.app/orig/c6-zurich/poster-hr-technology-digabungkan-page-0002-a8a64c61.jpg",
+      "bytes": 695434
+    }
+  ]
 }

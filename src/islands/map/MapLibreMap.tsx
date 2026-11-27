@@ -953,7 +953,7 @@ export default function MapLibreMap() {
         style={{ '--hall-card-bottom': `calc(${SNAP_PEEK}px + ${TAB_RAIL_H}px + 6px)` } as React.CSSProperties}
       >
         <div className="flex flex-col items-start">
-          <div className="hidden md:block">
+          <div className="hidden lg:block">
             <SparkyEyes size={132} />
           </div>
           <button
