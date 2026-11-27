@@ -1,0 +1,39 @@
+[
+  {
+    "version": "1.5",
+    "date": "2026-11-28",
+    "items": [
+      "Pipeline analytics ditambahkan.",
+      "Polish antarmuka dan tip peta.",
+      "Performa peta ditingkatkan."
+    ]
+  },
+  {
+    "version": "1.4",
+    "date": "2026-11-27",
+    "items": [
+      "Penyesuaian polish antarmuka.",
+      "Konfigurasi nameserver baru.",
+      "Pemisahan dependency untuk optimasi build."
+    ]
+  },
+  {
+    "version": "1.3",
+    "date": "2026-11-26",
+    "items": [
+      "Polish UI mobile dan desktop.",
+      "Fitur Job Matcher ditambahkan.",
+      "Unduh poster ukuran penuh."
+    ]
+  },
+  {
+    "version": "1.2",
+    "date": "2026-11-25",
+    "items": ["Polish UI mobile pada Sprint 4."]
+  },
+  {
+    "version": "1.1",
+    "date": "2026-11-24",
+    "items": ["Rilis MVP pertama peta."]
+  }
+]

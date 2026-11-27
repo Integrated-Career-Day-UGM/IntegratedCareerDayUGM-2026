@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Move, RotateCcw, X } from 'lucide-react';
 import { booths } from '../../lib/data';
 import { DEV_TOOLS } from '../../lib/dev-tools';
+import { sparkyTipDefaults } from '../../lib/map/sparky-tips';
 import { useMapStore } from '../../stores/mapStore';
 
 /**
@@ -21,6 +22,8 @@ type TuneValue = {
   x: number;
   y: number;
   scale: number;
+  /** CSS rotate in degrees (composes with translate/scale). */
+  rotate: number;
   z: number;
   /** Real height for the search bar. 0 = use the baked height. */
   height: number;
@@ -62,12 +65,39 @@ const TARGETS: TuneTarget[] = [
   { id: 'hall-card', label: 'Hall card', origin: 'right bottom' },
   { id: 'map-tooltip', label: 'Tooltip', origin: 'left top' },
   { id: 'sheet-tabs', label: 'Bottom tabs', origin: 'center bottom' },
+  // Sparky tip composition: the group moves everything, the children nudge
+  // one piece (bubble / name plate / body+hand) inside it.
+  { id: 'sparky-tip-career-expo', label: 'Sparky tip (expo)', origin: 'left top' },
+  { id: 'sparky-tip-career-expo-dialog', label: 'Sparky bubble (expo)', origin: 'left top' },
+  { id: 'sparky-tip-career-expo-name', label: 'Sparky name (expo)', origin: 'left top' },
+  { id: 'sparky-tip-career-expo-body', label: 'Sparky body (expo)', origin: 'center bottom' },
+  { id: 'sparky-tip-parking', label: 'Sparky tip (parking)', origin: 'left top' },
+  { id: 'sparky-tip-parking-dialog', label: 'Sparky bubble (parking)', origin: 'left top' },
+  { id: 'sparky-tip-parking-name', label: 'Sparky name (parking)', origin: 'left top' },
+  { id: 'sparky-tip-parking-body', label: 'Sparky body (parking)', origin: 'center bottom' },
+  { id: 'sparky-tip-career-expo-text', label: 'Sparky text (expo)', origin: 'left top' },
+  { id: 'sparky-tip-parking-text', label: 'Sparky text (parking)', origin: 'left top' },
+  { id: 'profile-title', label: 'Profile title', origin: 'left top' },
+  { id: 'profile-avatar', label: 'Profile avatar', origin: 'left top' },
+  { id: 'profile-greeting', label: 'Profile greeting', origin: 'left top' },
 ];
 
 const SEARCH_DEFAULT_HEIGHT = 56;
-const DEFAULT_VALUE: TuneValue = { x: 0, y: 0, scale: 1, z: 0, height: 0 };
-const STORAGE_KEY = 'icd:layout-tune:v4';
-const LEGACY_STORAGE_KEYS = ['icd:layout-tune', 'icd:layout-tune:v2', 'icd:layout-tune:v3'];
+const DEFAULT_VALUE: TuneValue = { x: 0, y: 0, scale: 1, rotate: 0, z: 0, height: 0 };
+/** Baked Sparky placement doubles as the tuner's starting point. */
+const defaultFor = (id: string): TuneValue => {
+  const baked = sparkyTipDefaults(id);
+  return baked ? { ...DEFAULT_VALUE, ...baked } : DEFAULT_VALUE;
+};
+const STORAGE_KEY = 'icd:layout-tune:v7';
+const LEGACY_STORAGE_KEYS = [
+  'icd:layout-tune',
+  'icd:layout-tune:v2',
+  'icd:layout-tune:v3',
+  'icd:layout-tune:v4',
+  'icd:layout-tune:v5',
+  'icd:layout-tune:v6',
+];
 const STEPS = [1, 5, 10] as const;
 
 type LayoutState = Record<string, TuneValue>;
@@ -99,19 +129,26 @@ function loadLayout(): LayoutState {
     const parsed = JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? '{}') as LayoutState;
     const next: LayoutState = {};
     for (const target of TARGETS) {
+      const base = defaultFor(target.id);
       const raw = parsed[target.id];
-      if (!raw) continue;
+      if (!raw) {
+        if (base !== DEFAULT_VALUE) next[target.id] = base;
+        continue;
+      }
       next[target.id] = {
-        x: Number.isFinite(Number(raw.x)) ? Number(raw.x) : 0,
-        y: Number.isFinite(Number(raw.y)) ? Number(raw.y) : 0,
+        x: Number.isFinite(Number(raw.x)) ? Number(raw.x) : base.x,
+        y: Number.isFinite(Number(raw.y)) ? Number(raw.y) : base.y,
         // Scale is a probe; the search bar and its filter keep real sizes.
         scale:
           target.id === 'mobile-search' || target.id === 'filter-button'
             ? 1
             : Number.isFinite(Number(raw.scale))
               ? Math.min(2, Math.max(0.25, Number(raw.scale)))
-              : 1,
-        z: Number.isFinite(Number(raw.z)) ? Math.max(0, Math.round(Number(raw.z))) : 0,
+              : base.scale,
+        z: Number.isFinite(Number(raw.z)) ? Math.max(0, Math.round(Number(raw.z))) : base.z,
+        rotate: Number.isFinite(Number(raw.rotate))
+          ? Math.max(-180, Math.min(180, Number(raw.rotate)))
+          : base.rotate,
         height: Number.isFinite(Number(raw.height)) && Number(raw.height) > 0
           ? Math.min(96, Math.max(32, Number(raw.height)))
           : 0,
@@ -300,6 +337,7 @@ function buildCss(): string {
     .map(
       (target) => `[data-layout-tune="${target.id}"][data-lt-tuned] {
   translate: var(--lt-${target.id}-x, 0px) var(--lt-${target.id}-y, 0px);
+  rotate: var(--lt-${target.id}-rotate, 0deg);
   scale: var(--lt-${target.id}-scale, 1);
   transform-origin: ${target.origin};
 }`,
@@ -372,8 +410,9 @@ function syncTargetAttributes(layout: LayoutState) {
       `[data-layout-tune="${target.id}"]`,
     );
     if (!element) continue;
-    const value = layout[target.id] ?? DEFAULT_VALUE;
-    const visualProbe = value.x !== 0 || value.y !== 0 || value.scale !== 1;
+    const value = layout[target.id] ?? defaultFor(target.id);
+    const visualProbe =
+      value.x !== 0 || value.y !== 0 || value.scale !== 1 || value.rotate !== 0;
     if (visualProbe) element.dataset.ltTuned = '1';
     else delete element.dataset.ltTuned;
     if (value.z > 0) element.dataset.ltZ = '1';
@@ -401,10 +440,11 @@ export default function MobileLayoutTuner() {
   const applyLayout = useCallback((next: LayoutState) => {
     const root = document.documentElement;
     for (const target of TARGETS) {
-      const value = next[target.id] ?? DEFAULT_VALUE;
+      const value = next[target.id] ?? defaultFor(target.id);
       root.style.setProperty(`--lt-${target.id}-x`, `${round(value.x)}px`);
       root.style.setProperty(`--lt-${target.id}-y`, `${round(value.y)}px`);
       root.style.setProperty(`--lt-${target.id}-scale`, String(round(value.scale)));
+      root.style.setProperty(`--lt-${target.id}-rotate`, `${round(value.rotate)}deg`);
       root.style.setProperty(`--lt-${target.id}-z`, String(value.z));
     }
     const searchHeight = next['mobile-search']?.height || SEARCH_DEFAULT_HEIGHT;
@@ -427,7 +467,16 @@ export default function MobileLayoutTuner() {
     const retries = [0, 400, 1200, 2400].map((delay) =>
       window.setTimeout(() => syncTargetAttributes(layoutRef.current), delay),
     );
-    return () => retries.forEach((timer) => window.clearTimeout(timer));
+    // Tips and tooltips mount after hydration / tab switches; keep re-syncing
+    // the tuned attributes on the same cadence as the type overrides.
+    const interval = window.setInterval(
+      () => syncTargetAttributes(layoutRef.current),
+      1200,
+    );
+    return () => {
+      retries.forEach((timer) => window.clearTimeout(timer));
+      window.clearInterval(interval);
+    };
   }, [applyLayout, layout]);
 
   useEffect(() => {
@@ -459,7 +508,7 @@ export default function MobileLayoutTuner() {
     return () => window.removeEventListener('keydown', onKey);
   }, [open]);
 
-  const value = layout[selected] ?? DEFAULT_VALUE;
+  const value = layout[selected] ?? defaultFor(selected);
   const isSearch = selected === 'mobile-search';
   const isSized = isSearch || selected === 'filter-button';
 
@@ -519,7 +568,7 @@ export default function MobileLayoutTuner() {
   const collectLayout = (): LayoutState => {
     const snapshot: LayoutState = {};
     for (const target of TARGETS) {
-      const current = layout[target.id] ?? DEFAULT_VALUE;
+      const current = layout[target.id] ?? defaultFor(target.id);
       snapshot[target.id] = {
         ...current,
         scale:
@@ -548,6 +597,26 @@ export default function MobileLayoutTuner() {
       typeOverrides,
     };
     await copyText(JSON.stringify(payload, null, 2), 'Layout + measurements copied');
+  };
+
+  /** Only the Sparky tip targets, shaped for sparky-tips.json. */
+  const copySparkyJson = async () => {
+    const snapshot: Record<
+      string,
+      { x: number; y: number; rotate: number; scale: number; z: number }
+    > = {};
+    for (const target of TARGETS) {
+      if (!target.id.startsWith('sparky-tip-')) continue;
+      const current = layout[target.id] ?? defaultFor(target.id);
+      snapshot[target.id.replace('sparky-tip-', '')] = {
+        x: round(current.x),
+        y: round(current.y),
+        rotate: round(current.rotate),
+        scale: round(current.scale),
+        z: current.z,
+      };
+    }
+    await copyText(JSON.stringify(snapshot, null, 2), 'Sparky JSON copied');
   };
 
   const copySizes = async () => {
@@ -632,8 +701,13 @@ export default function MobileLayoutTuner() {
       const origin = event.target;
       if (!(origin instanceof Element)) return;
       if (origin.closest('[data-layout-tuner-ui]')) return;
-      const element = origin.closest<HTMLElement>('[data-layout-tune]');
-      if (!element || element.dataset.layoutTune !== selected) return;
+      // Grab anywhere inside the selected target: for a Sparky tip the group
+      // wraps the bubble, plate and body, so dragging any child moves the
+      // whole composition; selecting a child drags only that child.
+      const element = origin.closest<HTMLElement>(
+        `[data-layout-tune="${selected}"]`,
+      );
+      if (!element) return;
 
       event.preventDefault();
       event.stopPropagation();
@@ -771,7 +845,7 @@ export default function MobileLayoutTuner() {
     };
   }, [open, selected]);
 
-  if (!import.meta.env.DEV || !DEV_TOOLS) return null;
+  if (!DEV_TOOLS) return null;
 
   return (
     <>
@@ -782,11 +856,11 @@ export default function MobileLayoutTuner() {
           type="button"
           data-layout-tuner-ui
           onClick={() => setOpen(true)}
-          className="fixed left-1.5 top-1/2 z-[96] -translate-y-1/2 rounded-full border border-[#34343a] bg-[#141416] px-1.5 py-3 text-[9px] font-bold tracking-[0.14em] text-white shadow-xl active:scale-95"
-          style={{ writingMode: 'vertical-rl' }}
-          aria-label="Open mobile layout tuner"
+          className="fixed left-1.5 top-1/2 z-[96] flex size-9 -translate-y-1/2 items-center justify-center rounded-full border border-[#34343a] bg-[#141416] text-white shadow-xl active:scale-95"
+          aria-label="Open layout tuner"
+          title="Layout tuner"
         >
-          LAYOUT
+          <Move size={14} />
         </button>
       )}
 
@@ -906,6 +980,21 @@ export default function MobileLayoutTuner() {
               <span className="w-9 text-right text-white">{round(value.scale)}</span>
             </div>
           )}
+
+          <div className="mb-2 flex items-center gap-2">
+            <span className="text-zinc-500">rotate</span>
+            <input
+              type="range"
+              min="-180"
+              max="180"
+              step="1"
+              value={value.rotate}
+              onChange={(event) => updateSelected({ rotate: Number(event.target.value) })}
+              className="min-w-0 flex-1 accent-[var(--accent-pink)]"
+              aria-label="Rotate selected element"
+            />
+            <span className="w-9 text-right text-white">{round(value.rotate)}°</span>
+          </div>
 
           <div className="mb-2 flex items-center gap-2">
             <span className="text-zinc-500">z-index</span>
@@ -1121,6 +1210,13 @@ export default function MobileLayoutTuner() {
               className="rounded-sm border border-[#34343a] bg-[#1b1b1f] px-1.5 py-1 text-[9px] font-semibold text-white hover:bg-[#26262b]"
             >
               Copy sizes
+            </button>
+            <button
+              type="button"
+              onClick={() => void copySparkyJson()}
+              className="rounded-sm border border-[#34343a] bg-[#1b1b1f] px-1.5 py-1 text-[9px] font-semibold text-white hover:bg-[#26262b]"
+            >
+              Copy Sparky
             </button>
           </div>
 

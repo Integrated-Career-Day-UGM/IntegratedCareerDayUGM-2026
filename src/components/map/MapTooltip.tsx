@@ -39,10 +39,21 @@ export default function MapTooltip({ boothId, walkIn, x, y }: MapTooltipProps) {
 
   return (
     <div
-      className="map-tooltip pointer-events-none fixed z-50 w-[266px] rounded-[4px] border border-line bg-[#141416] md:w-[280px]"
+      className="map-tooltip pointer-events-none fixed z-50 w-[266px] rounded-[4px] border border-line bg-[#141416] max-md:w-auto max-md:rounded-none max-md:border-0 max-md:bg-transparent md:w-[280px]"
       style={{ left: x, top: y }}
     >
-      <div className="relative min-h-[53px] w-full overflow-hidden rounded-t-[4px] border-b border-line md:h-14"
+      {/* Mobile: company-name pill only — the tray carries the full detail,
+          so the bubble stays a pointer, not a card. Black pill + the same
+          black Uber needle below it. */}
+      {title && (
+        <div className="flex justify-center md:hidden">
+          <span className="max-w-[220px] truncate rounded-full bg-black px-3 py-1 text-[0.75rem] leading-none font-semibold text-white">
+            {title}
+          </span>
+        </div>
+      )}
+
+      <div className="relative min-h-[53px] w-full overflow-hidden rounded-t-[4px] border-b border-line max-md:hidden md:h-14"
         style={{
           background: `linear-gradient(135deg, ${zone?.color ?? (walkIn ? '#6d6a16' : '#27272a')}33 0%, #141416 70%)`,
         }}
@@ -63,7 +74,7 @@ export default function MapTooltip({ boothId, walkIn, x, y }: MapTooltipProps) {
         </span>
       </div>
 
-      <div className="px-[13px] py-[9px] md:px-3 md:py-2">
+      <div className="px-[13px] py-[9px] max-md:hidden md:px-3 md:py-2">
         <div className="truncate text-[0.96875rem] font-semibold leading-tight text-white md:text-[0.875rem]">
           {title}
         </div>

@@ -17,6 +17,7 @@ import MatchingModal from '../islands/matching/MatchingModal';
 import MobileDayPicker from '../islands/map/MobileDayPicker';
 import BrandLockup from '../components/map/BrandLockup';
 import { event, ui } from '../lib/data';
+import { DEV_TOOLS } from '../lib/dev-tools';
 import '../styles/base/global.css';
 
 const eventStartDate = event.days[0]?.date ?? '2026-11-28';
@@ -27,8 +28,8 @@ const eventJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Event',
   name: `${event.name} 2026`,
-  startDate: `${eventStartDate}T10:00:00+07:00`,
-  endDate: `${eventEndDate}T15:00:00+07:00`,
+  startDate: `${eventStartDate}T09:00:00+07:00`,
+  endDate: `${eventEndDate}T16:00:00+07:00`,
   eventStatus: 'https://schema.org/EventScheduled',
   eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
   url: canonicalUrl,
@@ -62,7 +63,7 @@ const eventJsonLd = {
       <p>
         28–29 November 2026 di Gedung Industri Kreatif (GIK) UGM, Yogyakarta. Career Expo di Student
         Center Lt 1, Walk-in Interview di Student Center Lt 2, dan Counseling di PP KAGAMA Booth B.
-        Event berlangsung 10:00–15:00 WIB.
+        Event berlangsung 09:00–16:00 WIB.
       </p>
     </section>
     {
@@ -212,11 +213,11 @@ const eventJsonLd = {
       <MatchingModal client:idle />
 
       {/* DEV-only mobile layout tuner (drag + scale + copy values). */}
-      {import.meta.env.DEV && <MobileLayoutTuner client:only="react" />}
+      {DEV_TOOLS && <MobileLayoutTuner client:only="react" />}
       {/* DEV-only frame geometry editor (booths, fixtures, Career Star/Counseling labels). */}
-      {import.meta.env.DEV && <GeometryEditor client:only="react" />}
+      {DEV_TOOLS && <GeometryEditor client:only="react" />}
       {/* DEV-only GeoJSON debug for the decoupled basemap site geometry. */}
-      {import.meta.env.DEV && <GeoJsonEditor client:only="react" />}
+      {DEV_TOOLS && <GeoJsonEditor client:only="react" />}
 
       <script is:inline>
         window.addEventListener('icd:splash-done', function () {

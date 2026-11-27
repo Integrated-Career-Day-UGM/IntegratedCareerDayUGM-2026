@@ -67,7 +67,7 @@ export default function MapFixedPins({
   }, [map, position]);
 
   return (
-    <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden">
+    <div className="pointer-events-none absolute inset-0 z-[6] overflow-hidden">
       {pins.map((pin) => (
         <div
           key={pin.id}

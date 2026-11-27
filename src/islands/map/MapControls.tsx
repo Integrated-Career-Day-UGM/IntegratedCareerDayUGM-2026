@@ -20,7 +20,7 @@ function MapControls({ mapRef, compassNeedleRef, fitHall }: MapControlsProps) {
   return (
     <div
       data-layout-tune="map-controls"
-      className="absolute right-3 z-10 flex flex-col items-center gap-2 bottom-[246px] md:bottom-auto md:top-1/2 md:-translate-y-1/2"
+      className="absolute right-3 z-10 flex origin-bottom-right flex-col items-center gap-2 bottom-[246px] max-md:scale-[0.8] md:bottom-auto md:top-1/2 md:-translate-y-1/2"
     >
       <ZoomButtons
         onZoomIn={() => mapRef.current?.zoomIn({ duration: 200 })}

@@ -10,6 +10,7 @@ import { createPortal } from 'react-dom';
 import { motion, useReducedMotion } from 'motion/react';
 import {
   ArrowLeft,
+  ArrowRight,
   Check,
   Compass,
   RotateCcw,
@@ -77,7 +78,7 @@ function QuestionArt({ id, large = false }: { id: string; large?: boolean }) {
         </div>
       ) : (
         <img
-          src={`/images/matching/${id}.png`}
+          src={`/images/matching/${id}.webp`}
           alt=""
           decoding="async"
           draggable={false}
@@ -264,6 +265,9 @@ const ResultsView = memo(function ResultsView({
   }, [result]);
 
   const aspects = active?.lineage.aspects ?? [];
+  // Flattened criteria for the selected card: the methodology chips colour
+  // each answer by this card's own gap, not a generic guess.
+  const criteria = aspects.flatMap((aspect) => aspect.criteria);
   const aspectTotal =
     aspects.reduce((sum, aspect) => sum + Math.max(0, aspect.contribution), 0) || 1;
   const axisRows = AXES.map((axis) => ({
@@ -317,10 +321,11 @@ const ResultsView = memo(function ResultsView({
         </div>
       </header>
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-3 sm:px-4">
-        <div className="grid border-b border-line sm:grid-cols-2 sm:divide-x sm:divide-line">
-          {/* Left: pie + top 3 + reserved Sparky space. */}
-          <div className="flex flex-col p-4">
+      <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-3 pb-4 sm:px-4">
+        <div className="flex flex-col gap-3 py-3">
+          {/* One card: score ring + interest mix, the picked position, then
+              the chooseable top three. */}
+          <section className={cn('min-w-0 rounded-[4px] p-3', surfaceClasses(2))}>
             <div className="flex items-center gap-3">
               <motion.div
                 className="relative size-28 shrink-0 rounded-full"
@@ -329,7 +334,7 @@ const ResultsView = memo(function ResultsView({
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: reduceMotion ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
               >
-                <div className="absolute inset-[22%] flex items-center justify-center rounded-full bg-[#0c0c0f]">
+                <div className="absolute inset-[22%] flex items-center justify-center rounded-full bg-surface-2">
                   <span className="font-heading text-[1.25rem] font-bold text-white">
                     {Math.round(active?.score ?? 0)}
                   </span>
@@ -349,8 +354,36 @@ const ResultsView = memo(function ResultsView({
               </div>
             </div>
 
-            <div className="mt-4 border-t border-line pt-2">
-              <div className="text-[0.75rem] text-[#8f8f8f]">Tiga teratas</div>
+            {/* Picked position: title, company + hall, then the slim arrow
+                CTA (44px hit area, sharp edges, icon only). */}
+            <div className="mt-3 flex items-start gap-2 border-t border-line pt-3">
+              <div className="min-w-0 flex-1">
+                <h2 className="font-heading text-[0.9375rem] leading-tight font-bold text-white">
+                  {active?.role ?? 'Belum ada rekomendasi'}
+                </h2>
+                {active && (
+                  <div className="mt-0.5 truncate text-[0.75rem] leading-tight text-[#8f8f8f]">
+                    {active.company} · Booth {active.ref}
+                  </div>
+                )}
+              </div>
+              {active && (
+                <button
+                  type="button"
+                  onClick={visitBooth}
+                  aria-label={`Buka booth ${active.ref}`}
+                  title="Visit booth"
+                  className="flex size-11 shrink-0 items-center justify-center bg-white text-black transition-colors hover:bg-[#e5e5e5] active:scale-[0.98]"
+                >
+                  <ArrowRight size={18} strokeWidth={2.4} />
+                </button>
+              )}
+            </div>
+
+            <div className="mt-3 border-t border-line pt-2">
+              <div className="text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-[#8f8f8f]">
+                Tiga teratas
+              </div>
               {top3.map((card, index) => {
                 const selected = activeIndex === index;
                 return (
@@ -377,8 +410,8 @@ const ResultsView = memo(function ResultsView({
                     className={cn(
                       '-mx-2 flex cursor-pointer items-baseline gap-2 border-l-2 py-1.5 pl-2 pr-2 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-pink)]',
                       selected
-                        ? 'border-[var(--accent-pink)] bg-[#17171a]'
-                        : 'border-transparent hover:bg-[#141416]',
+                        ? 'border-[var(--accent-pink)] bg-surface-3'
+                        : 'border-transparent hover:bg-surface-3/50',
                     )}
                   >
                     <span
@@ -418,68 +451,40 @@ const ResultsView = memo(function ResultsView({
               })}
             </div>
 
-            {/* Breathing space reserved for the Sparky art. */}
-            <div className="mt-4 flex-1 border-t border-line pt-3" aria-hidden="true">
-              <div className="h-24 border border-dashed border-[#2a2a2e]" />
+          </section>
+
+          {/* Hex profile: diagram first, values after. */}
+          <section className={cn('min-w-0 rounded-[4px] p-3', surfaceClasses(2))}>
+            <div className="text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-[#8f8f8f]">
+              Sebaran minat · 3 teratas
             </div>
-          </div>
-
-          {/* Right: recommended role, booth, CTA, result stats. */}
-          <div className="min-w-0 p-4">
-            <h2 className="text-balance font-heading text-[1.25rem] font-bold leading-tight text-white">
-              {active?.role ?? 'Belum ada rekomendasi'}
-            </h2>
-            {active && (
-              <div className="mt-0.5 text-[0.8125rem] leading-snug text-[#d4d4d8]">
-                {active.company} · Booth {active.ref}
-              </div>
-            )}
-            {active && active.why.length > 0 && (
-              <p className="mt-2 text-[0.75rem] leading-snug text-[#a1a1aa]">
-                {active.why.slice(0, 2).join(' · ')}
-              </p>
-            )}
-            <button
-              type="button"
-              onClick={visitBooth}
-              className="mt-3 inline-flex min-h-9 items-center gap-1.5 bg-white px-3 font-heading text-[0.75rem] font-bold text-black transition-colors hover:bg-[#e5e5e5]"
-            >
-              Visit booth
-            </button>
-
-            <div className="mt-4 grid grid-cols-3 gap-px border border-line bg-[#232326]">
-              {[
-                ['Skor', String(Math.round(active?.score ?? 0))],
-                ['Kelengkapan', `${Math.round(result.coverage * 100)}%`],
-                ['Kejelasan', `${Math.round(result.interest.clarity * 100)}%`],
-              ].map(([label, value]) => (
-                <div key={label} className="bg-[#0e0e11] p-2">
-                  <div className="text-[0.625rem] text-[#8f8f8f]">{label}</div>
-                  <div className="mt-0.5 font-heading text-[1.125rem] font-bold text-white">
-                    {value}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-2 flex items-center justify-center border border-line p-2">
+            <div className="mt-1 flex items-center justify-center">
               <RadarChart
                 series={radarSeries}
                 activeIndex={activeIndex}
                 labels={axisRows.map((row) => row.label)}
               />
             </div>
-          </div>
-        </div>
+            <div className="mt-2 grid grid-cols-2 gap-2 border-t border-line pt-2">
+              {[
+                ['Kelengkapan', `${Math.round(result.coverage * 100)}%`],
+                ['Kejelasan', `${Math.round(result.interest.clarity * 100)}%`],
+              ].map(([label, value]) => (
+                <div key={label}>
+                  <div className="text-[0.625rem] text-[#8f8f8f]">{label}</div>
+                  <div className="mt-0.5 font-heading text-[1rem] font-bold text-white">
+                    {value}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
 
         {/* How the result was built: one stepper row per answer. */}
-        <section className="p-4">
-          <h3 className="font-heading text-[1rem] font-bold text-white">
+        <section className={cn('min-w-0 rounded-[4px] p-3', surfaceClasses(2))}>
+          <h3 className="text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-[#8f8f8f]">
             Cara hasil ini disusun
           </h3>
-          <p className="mt-1 text-[0.75rem] leading-snug text-[#8f8f8f]">
-            Setiap jawaban menambah atau mengurangi skor ke peran yang cocok.
-          </p>
           {aspects.length > 0 && (
             <div className="mt-3">
               <div className="flex h-2 w-full overflow-hidden bg-[#26262b]">
@@ -518,7 +523,15 @@ const ResultsView = memo(function ResultsView({
             </div>
           )}
           <ol className="mt-3">
-            {result.answers.map((trace, index) => (
+            {result.answers.map((trace, index) => {
+              // Green/red follows the selected card's own criteria gaps; the
+              // interest answers have no criterion, so fall back to the sign
+              // of their delta string.
+              const criterion = criteria.find((item) => item.key === trace.question);
+              const positive = criterion
+                ? criterion.gap >= 0
+                : !trace.effect.includes('-');
+              return (
               <motion.li
                 key={trace.question}
                 className="flex gap-3"
@@ -554,17 +567,26 @@ const ResultsView = memo(function ResultsView({
                   <div className="text-[0.75rem] leading-snug text-[#d4d4d8]">
                     {trace.answer}
                   </div>
-                  <div className="text-[0.6875rem] leading-snug text-[#8f8f8f]">
+                  <span
+                    className={cn(
+                      'mt-1 inline-flex rounded-[2px] px-1.5 py-0.5 font-heading text-[0.625rem] leading-none font-semibold',
+                      positive
+                        ? 'bg-[#12351f] text-[#4ade80]'
+                        : 'bg-[#3a1414] text-[#f87171]',
+                    )}
+                  >
                     {trace.effect}
-                  </div>
+                  </span>
                 </div>
               </motion.li>
-            ))}
+              );
+            })}
           </ol>
           <div className="mt-2 border-t border-line pt-3 text-[0.6875rem] leading-snug text-[#8f8f8f]">
             Hasil ini cuma buat seru-seruan, bukan penentu karier.
           </div>
         </section>
+        </div>
       </div>
     </>
   );
@@ -590,6 +612,7 @@ export default function MatchingModal() {
   const reduceMotion = useReducedMotion() ?? false;
   const openerRef = useRef<HTMLElement | null>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
+  const quizScrollRef = useRef<HTMLDivElement>(null);
 
   const progressInfo = useMemo(
     () => (corpus ? progress(answers, corpus.questions) : null),
@@ -744,9 +767,14 @@ export default function MatchingModal() {
     [corpus],
   );
 
-  /* Quiz keyboard: options, advance, back. */
+  /* Lanjut / Kembali / Ubah can fire while the stage is scrolled down to the
+     answer options; reset the stage so the next question starts at the top. */
   useEffect(() => {
-    if (!open || !corpus || result || computing || askClose) return;
+    quizScrollRef.current?.scrollTo({ top: 0, behavior: 'auto' });
+  }, [step]);
+
+  /* Quiz keyboard: options, advance, back. */
+  useEffect(() => {    if (!open || !corpus || result || computing || askClose) return;
     const question = corpus.questions[step];
     if (!question) return;
     const onKey = (event: KeyboardEvent) => {
@@ -913,7 +941,7 @@ export default function MatchingModal() {
                 </div>
 
                 {/* Stage: centered items, centered question. */}
-                <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-5 pt-6">
+                <div ref={quizScrollRef} className="min-h-0 flex-1 overflow-y-auto px-4 pb-5 pt-6">
                   <div
                     key={question.id}
                     className={cn(

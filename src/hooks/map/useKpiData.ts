@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { KpiData } from '../../components/map/kpi/KpiTile';
+import { DEV_TOOLS } from '../../lib/dev-tools';
 
 export interface KpiResponse {
   items: KpiData[];
@@ -51,7 +52,7 @@ const DEV_ITEMS: KpiData[] = [
  */
 export const defaultKpiProvider: KpiDataProvider = async () => {
   return {
-    items: import.meta.env.DEV ? DEV_ITEMS : [],
+    items: DEV_TOOLS ? DEV_ITEMS : [],
     updatedAt: new Date().toISOString(),
   };
 };

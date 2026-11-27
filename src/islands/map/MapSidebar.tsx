@@ -29,6 +29,7 @@ import FacilityDetail from './FacilityDetail';
 import BookmarkList from './BookmarkList';
 import Insights from './Insights';
 import EventInfo from './EventInfo';
+import Changelog from './Changelog';
 import { event, getTodayDayId, getTodayIso, ui } from '../../lib/data';
 
 const mainNavItems: { id: 'home' | 'search' | 'saved' | 'stats'; icon: typeof Home }[] = [
@@ -116,6 +117,7 @@ export default function MapSidebar() {
       : null;
 
   const renderMainContent = () => {
+    if (sidebarMode === 'changelog') return <Changelog />;
     // Detail is a mode, not a tab: it renders over whichever tab it was
     // opened from (search results, saved rows), so closing returns there.
     if (sidebarMode === 'facility') return <FacilityDetail />;
