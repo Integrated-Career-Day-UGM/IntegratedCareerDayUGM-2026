@@ -73,11 +73,13 @@ This:
 ## 4. Upload to R2
 
 ```powershell
-rclone copy .tmp\r2-posters-orig r2-icd:icd-posters `
+
+rclone copy "E:\grinding\r2-staging" r2:icd-posters `
   --progress `
   --transfers 10 `
   --s3-no-check-bucket `
   --header-upload "Cache-Control:public, max-age=31536000, immutable"
+
 ```
 
 > No `Content-Type` override — originals are mixed JPG/PNG/PDF so rclone detects

@@ -143,7 +143,19 @@ function ResultsSkeleton() {
 /* Results                                                            */
 /* ------------------------------------------------------------------ */
 
-function RadarChart({ values, labels }: { values: number[]; labels: string[] }) {
+const RADAR_COLORS = ['var(--accent-pink)', '#22c55e', '#f59e0b'] as const;
+
+type RadarSeries = { id: string; values: number[]; color: string };
+
+function RadarChart({
+  series,
+  activeIndex,
+  labels,
+}: {
+  series: RadarSeries[];
+  activeIndex: number;
+  labels: string[];
+}) {
   const size = 190;
   const center = size / 2;
   const radius = 54;
@@ -153,45 +165,51 @@ function RadarChart({ values, labels }: { values: number[]; labels: string[] }) 
     return [center + Math.cos(angle(index)) * r, center + Math.sin(angle(index)) * r] as const;
   };
   const rings = [0.25, 0.5, 0.75, 1];
-  const shape = values.map((value, index) => point(index, value).join(',')).join(' ');
+  const shapeOf = (values: number[]) =>
+    values.map((value, index) => point(index, value).join(',')).join(' ');
   const shortLabel = (label: string) => {
     const head = label.split(' dan ')[0].split(' ')[0];
     return head.charAt(0).toUpperCase() + head.slice(1);
   };
+  const activeSeries = series[activeIndex];
 
   return (
-    <svg viewBox={`0 0 ${size} ${size}`} className="size-[190px]" role="img" aria-label="Sebaran minat">
+    <svg viewBox={`0 0 ${size} ${size}`} className="size-[190px]" role="img" aria-label="Sebaran minat rekomendasi">
       {rings.map((ring) => (
         <polygon
           key={ring}
-          points={values.map((_, index) => point(index, ring * 5).join(',')).join(' ')}
+          points={AXES.map((_, index) => point(index, ring * 5).join(',')).join(' ')}
           fill="none"
           stroke="#2a2a2e"
           strokeWidth="1"
         />
       ))}
-      {values.map((_, index) => {
+      {AXES.map((_, index) => {
         const [x, y] = point(index, 5);
         return (
           <line key={index} x1={center} y1={center} x2={x} y2={y} stroke="#2a2a2e" strokeWidth="1" />
         );
       })}
-      <motion.polygon
-        points={shape}
-        fill="var(--accent-pink)"
-        fillOpacity={0.2}
-        stroke="var(--accent-pink)"
-        strokeWidth={1.5}
-        initial={{ opacity: 0, scale: 0.7 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        style={{ transformOrigin: 'center' }}
-      />
-      {values.map((value, index) => {
-        const [x, y] = point(index, value);
-        return <circle key={index} cx={x} cy={y} r={2.4} fill="#fff" />;
+      {series.map((item, index) => {
+        const active = index === activeIndex;
+        return (
+          <motion.polygon
+            key={item.id}
+            points={shapeOf(item.values)}
+            fill={item.color}
+            stroke={item.color}
+            strokeWidth={active ? 1.8 : 1}
+            initial={false}
+            animate={{ opacity: active ? 1 : 0.5, fillOpacity: active ? 0.22 : 0.08 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+          />
+        );
       })}
-      {values.map((_, index) => {
+      {activeSeries?.values.map((value, index) => {
+        const [x, y] = point(index, value);
+        return <circle key={index} cx={x} cy={y} r={2.4} fill={activeSeries.color} />;
+      })}
+      {labels.map((_, index) => {
         const lx = center + Math.cos(angle(index)) * (radius + 15);
         const ly = center + Math.sin(angle(index)) * (radius + 13);
         const anchor = lx > center + 4 ? 'start' : lx < center - 4 ? 'end' : 'middle';
@@ -228,9 +246,24 @@ const ResultsView = memo(function ResultsView({
 }) {
   const { labels } = corpus;
   const reduceMotion = useReducedMotion() ?? false;
+  const [activeIndex, setActiveIndex] = useState(0);
   const top = result.cards[0];
   const top3 = result.cards.slice(0, 3);
-  const aspects = top?.lineage.aspects ?? [];
+  const active = top3[activeIndex] ?? top;
+  const radarSeries = top3.map((card, index) => {
+    const role = corpus.roles.find((item) => item.id === card.id);
+    return {
+      id: card.id,
+      values: AXES.map((axis) => role?.ax[axis] ?? 1),
+      color: RADAR_COLORS[index] ?? '#a1a1aa',
+    };
+  });
+
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [result]);
+
+  const aspects = active?.lineage.aspects ?? [];
   const aspectTotal =
     aspects.reduce((sum, aspect) => sum + Math.max(0, aspect.contribution), 0) || 1;
   const axisRows = AXES.map((axis) => ({
@@ -251,7 +284,7 @@ const ResultsView = memo(function ResultsView({
     .join(', ');
 
   const visitBooth = () => {
-    const booth = top ? booths.find((item) => item.code === top.ref) : undefined;
+    const booth = active ? booths.find((item) => item.code === active.ref) : undefined;
     if (booth) useMapStore.getState().selectBooth(booth.id);
     onClose();
   };
@@ -298,7 +331,7 @@ const ResultsView = memo(function ResultsView({
               >
                 <div className="absolute inset-[22%] flex items-center justify-center rounded-full bg-[#0c0c0f]">
                   <span className="font-heading text-[1.25rem] font-bold text-white">
-                    {Math.round(top?.score ?? 0)}
+                    {Math.round(active?.score ?? 0)}
                   </span>
                 </div>
               </motion.div>
@@ -318,46 +351,71 @@ const ResultsView = memo(function ResultsView({
 
             <div className="mt-4 border-t border-line pt-2">
               <div className="text-[0.75rem] text-[#8f8f8f]">Tiga teratas</div>
-              {top3.map((card, index) => (
-                <motion.div
-                  key={card.id}
-                  initial={reduceMotion ? false : { opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: reduceMotion ? 0 : 0.22,
-                    delay: reduceMotion ? 0 : 0.06 + index * 0.05,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  className="flex items-baseline gap-2 py-1.5"
-                >
-                  <span className="w-4 font-heading text-[0.6875rem] font-bold text-[#8f8f8f]">
-                    {index + 1}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <div className="truncate text-[0.8125rem] font-semibold text-white">
-                      {card.role}
+              {top3.map((card, index) => {
+                const selected = activeIndex === index;
+                return (
+                  <motion.div
+                    key={card.id}
+                    initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: reduceMotion ? 0 : 0.22,
+                      delay: reduceMotion ? 0 : 0.06 + index * 0.05,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    aria-pressed={selected}
+                    aria-label={`Pilih ${card.role} di ${card.company}`}
+                    onClick={() => setActiveIndex(index)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        setActiveIndex(index);
+                      }
+                    }}
+                    className={cn(
+                      '-mx-2 flex cursor-pointer items-baseline gap-2 border-l-2 py-1.5 pl-2 pr-2 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-pink)]',
+                      selected
+                        ? 'border-[var(--accent-pink)] bg-[#17171a]'
+                        : 'border-transparent hover:bg-[#141416]',
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        'w-4 font-heading text-[0.6875rem] font-bold',
+                        selected ? 'text-white' : 'text-[#8f8f8f]',
+                      )}
+                    >
+                      {index + 1}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate text-[0.8125rem] font-semibold text-white">
+                        {card.role}
+                      </div>
+                      <div className="truncate text-[0.6875rem] text-[#8f8f8f]">
+                        {card.company} · {card.ref}
+                      </div>
+                      <div className="mt-1 h-0.5 w-full bg-[#26262b]">
+                        <motion.div
+                          className="h-full"
+                          style={{ backgroundColor: RADAR_COLORS[index] }}
+                          initial={reduceMotion ? false : { width: 0 }}
+                          animate={{ width: `${card.score}%` }}
+                          transition={{
+                            duration: reduceMotion ? 0 : 0.3,
+                            delay: reduceMotion ? 0 : 0.1 + index * 0.05,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
+                        />
+                      </div>
                     </div>
-                    <div className="truncate text-[0.6875rem] text-[#8f8f8f]">
-                      {card.company} · {card.ref}
-                    </div>
-                    <div className="mt-1 h-0.5 w-full bg-[#26262b]">
-                      <motion.div
-                        className="h-full bg-white"
-                        initial={reduceMotion ? false : { width: 0 }}
-                        animate={{ width: `${card.score}%` }}
-                        transition={{
-                          duration: reduceMotion ? 0 : 0.3,
-                          delay: reduceMotion ? 0 : 0.1 + index * 0.05,
-                          ease: [0.22, 1, 0.36, 1],
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <span className="font-heading text-[0.8125rem] font-bold tabular-nums text-white">
-                    {Math.round(card.score)}
-                  </span>
-                </motion.div>
-              ))}
+                    <span className="font-heading text-[0.8125rem] font-bold tabular-nums text-white">
+                      {Math.round(card.score)}
+                    </span>
+                  </motion.div>
+                );
+              })}
             </div>
 
             {/* Breathing space reserved for the Sparky art. */}
@@ -369,16 +427,16 @@ const ResultsView = memo(function ResultsView({
           {/* Right: recommended role, booth, CTA, result stats. */}
           <div className="min-w-0 p-4">
             <h2 className="text-balance font-heading text-[1.25rem] font-bold leading-tight text-white">
-              {top?.role ?? 'Belum ada rekomendasi'}
+              {active?.role ?? 'Belum ada rekomendasi'}
             </h2>
-            {top && (
+            {active && (
               <div className="mt-0.5 text-[0.8125rem] leading-snug text-[#d4d4d8]">
-                {top.company} · Booth {top.ref}
+                {active.company} · Booth {active.ref}
               </div>
             )}
-            {top && top.why.length > 0 && (
+            {active && active.why.length > 0 && (
               <p className="mt-2 text-[0.75rem] leading-snug text-[#a1a1aa]">
-                {top.why.slice(0, 2).join(' · ')}
+                {active.why.slice(0, 2).join(' · ')}
               </p>
             )}
             <button
@@ -391,7 +449,7 @@ const ResultsView = memo(function ResultsView({
 
             <div className="mt-4 grid grid-cols-3 gap-px border border-line bg-[#232326]">
               {[
-                ['Skor', String(Math.round(top?.score ?? 0))],
+                ['Skor', String(Math.round(active?.score ?? 0))],
                 ['Kelengkapan', `${Math.round(result.coverage * 100)}%`],
                 ['Kejelasan', `${Math.round(result.interest.clarity * 100)}%`],
               ].map(([label, value]) => (
@@ -406,7 +464,8 @@ const ResultsView = memo(function ResultsView({
 
             <div className="mt-2 flex items-center justify-center border border-line p-2">
               <RadarChart
-                values={axisRows.map((row) => row.value)}
+                series={radarSeries}
+                activeIndex={activeIndex}
                 labels={axisRows.map((row) => row.label)}
               />
             </div>
@@ -729,7 +788,7 @@ export default function MatchingModal() {
 
   return createPortal(
     <motion.div
-      className="fixed inset-0 z-[220] flex items-stretch justify-center bg-black/80 sm:items-center sm:p-4"
+      className="fixed inset-0 z-[220] flex items-stretch justify-center bg-black/80 p-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] sm:items-center sm:p-4"
       role="presentation"
       onClick={requestClose}
       initial={reduceMotion ? false : { opacity: 0 }}
@@ -752,7 +811,7 @@ export default function MatchingModal() {
             : { type: 'spring', stiffness: 420, damping: 38, mass: 0.9 }
         }
         className={cn(
-          'relative flex h-[100dvh] w-full flex-col overflow-hidden border-[8px] border-[#2a2a2e] text-white outline-none sm:h-[min(90dvh,860px)] sm:max-w-[720px] sm:rounded-[8px]',
+          'relative flex h-full w-full flex-col overflow-hidden rounded-[8px] border-[5px] border-[#2a2a2e] text-white outline-none sm:h-[min(90dvh,860px)] sm:max-w-[720px]',
           surfaceClasses(1, 6),
         )}
         onClick={(event) => event.stopPropagation()}
@@ -923,7 +982,7 @@ export default function MatchingModal() {
                 </div>
 
                 {/* Footer: full-width thumb buttons on mobile, compact on desktop. */}
-                <footer className="shrink-0 border-t border-line px-3 pb-[calc(2rem+env(safe-area-inset-bottom))] pt-2.5 sm:p-2.5">
+                <footer className="shrink-0 border-t border-line px-3 pb-4 pt-2.5 sm:p-2.5">
                   <div className="flex w-full items-center gap-2 sm:justify-center">
                     <button
                       type="button"

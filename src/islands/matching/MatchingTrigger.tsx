@@ -15,7 +15,7 @@ export default function MatchingTrigger() {
     <button
       type="button"
       onClick={open}
-      className="group relative inline-flex h-full min-h-9 items-center gap-2 rounded-full border border-[#34343a] bg-[#1c1c20] py-1 pl-1 pr-3 font-heading text-[0.75rem] font-bold text-white transition-colors hover:border-[#4a4a52] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-pink)] md:min-h-10 md:pr-4"
+      className="group relative inline-flex h-full min-h-9 items-center gap-2 rounded-full border border-[#34343a] bg-[#1c1c20] py-1 pl-1 pr-3 font-heading text-[0.75rem] font-bold text-white transition-colors hover:border-[#4a4a52] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-pink)] lg:min-h-10 lg:pr-4"
     >
       <span
         aria-hidden="true"

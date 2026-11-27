@@ -10,7 +10,7 @@
 
 # ---------- Poster originals (source stays outside the repo) ----------
 posters/source/company-posters/
-
+.tmp/
 # ---------- Dependencies ----------
 node_modules/
 .pnp

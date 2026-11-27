@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, Download, MapPin, X } from 'lucide-react';
 import { CategoryTag } from './CompanyProfileBlocks';
 import { surfaceClasses } from '../../lib/surface-classes';
 import { cn } from '../../lib/utils/cn';
+import { downloadFullPoster } from '../../lib/posters/downloadPoster';
 import type { Company, CompanyPoster } from '../../types/map';
 
 const FULL_THUMB = 120;
@@ -224,9 +225,9 @@ export default function PosterGalleryModal({
         )}
         <button
           type="button"
-          disabled
-          title="Poster downloads are coming soon"
-          className="inline-flex min-h-11 cursor-not-allowed items-center justify-center gap-1.5 border border-line pl-2.5 pr-3 text-[0.75rem] font-semibold text-[#8f8f8f] opacity-50"
+          onClick={() => void downloadFullPoster(item.src, `${title} - ${item.title}`)}
+          aria-label={`Download ${item.title}`}
+          className="inline-flex min-h-11 items-center justify-center gap-1.5 border border-line pl-2.5 pr-3 text-[0.75rem] font-semibold text-white transition-colors hover:border-[#4a4a52] hover:bg-[#26262b] active:scale-[0.99]"
         >
           <Download size={15} />
           Download
